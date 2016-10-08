@@ -30,4 +30,5 @@ dependencies {
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'com.joanzapata.iconify:android-iconify-fontawesome:2.2.2'
+    compile 'com.squareup.retrofit2:converter-gson:2.0.2'
 }
