@@ -13,8 +13,8 @@ public class User {
     @SerializedName("userId")
     @Expose
     public long userId;
-    @Expose
     @SerializedName("username")
+    @Expose
     public String username;
     @SerializedName("password")
     @Expose

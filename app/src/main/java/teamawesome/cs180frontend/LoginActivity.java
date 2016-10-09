@@ -181,7 +181,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // perform the user login attempt.
             showProgress(true);
             LoginService loginService =
-                    ServiceGenerator.createService(LoginService.class, "user", "secretpassword");
+                    ServiceGenerator.createService(LoginService.class, email, password);
             Call<User> call = loginService.basicLogin();
             call.enqueue(new Callback<User >() {
                 @Override
