@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="2" >
+
+        <!--Class and Rating-->
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1" >
+
+            <!--Class-->
+            <TextView
+                android:id="@+id/class_tv"
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:gravity="left"/>
+
+            <!--Rating-->
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:weightSum="5">
+
+                <com.joanzapata.iconify.widget.IconTextView
+                    android:id="@+id/rate_1"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:text="@string/rating_icon"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="1" />
+
+                <com.joanzapata.iconify.widget.IconTextView
+                    android:id="@+id/rate_2"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:text="@string/rating_icon"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="1" />
+
+                <com.joanzapata.iconify.widget.IconTextView
+                    android:id="@+id/rate_3"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:text="@string/rating_icon"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="1" />
+
+                <com.joanzapata.iconify.widget.IconTextView
+                    android:id="@+id/rate_4"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:text="@string/rating_icon"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="1" />
+
+                <com.joanzapata.iconify.widget.IconTextView
+                    android:id="@+id/rate_5"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:text="@string/rating_icon"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="1" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!--Review Date-->
+        <TextView
+            android:id="@+id/date_tv"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:gravity="right"/>
+        
+    </LinearLayout>
+
+    <!--Review Contents-->
+    <TextView
+        android:id="@+id/review_tv"
+        android:layout_width="match_parent"
+        android:layout_height="100dp" />
+
+</LinearLayout>
