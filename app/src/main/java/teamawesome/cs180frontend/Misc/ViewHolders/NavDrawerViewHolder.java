@@ -16,6 +16,7 @@ public class NavDrawerViewHolder {
     @Bind(R.id.text) public TextView text;
 
     public NavDrawerViewHolder(View view) {
+
         ButterKnife.bind(this, view);
     }
 }

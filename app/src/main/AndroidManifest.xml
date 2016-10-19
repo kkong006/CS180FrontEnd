@@ -24,7 +24,8 @@
         <activity android:name=".Activities.MyReviewsActivity" />
         <activity android:name=".Activities.SettingsActivity" />
         <activity android:name=".Activities.SearchResultsActivity" />
-        <activity android:name=".Activities.WriteReviewActivity"></activity>
+        <activity android:name=".Activities.WriteReviewActivity" />
+        <activity android:name=".Activities.ReadReviewActivity" />
     </application>
 
 </manifest>

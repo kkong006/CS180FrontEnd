@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     @Bind(R.id.main_layout) CoordinatorLayout mMainLayout;
     @Bind(R.id.fab) FloatingActionButton mFab;
 
-    NavDrawerAdapter adapter;
+    private NavDrawerAdapter mAdapter;
     private String[] mNavTitles;
     private String[] mIconTitles;
     private static final String TAG = "Main Activity";
@@ -50,10 +50,9 @@ public class MainActivity extends AppCompatActivity {
         mNavTitles = getResources().getStringArray(R.array.nav_drawer_array);
         mIconTitles = getResources().getStringArray(R.array.nav_drawer_icon_array);
 
-        adapter = new NavDrawerAdapter(getResources().getStringArray(R.array.nav_drawer_icon_array),
-                getResources().getStringArray(R.array.nav_drawer_array), this);
+        mAdapter = new NavDrawerAdapter(mIconTitles, mNavTitles, this);
         
-        mDrawerList.setAdapter(adapter);
+        mDrawerList.setAdapter(mAdapter);
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(

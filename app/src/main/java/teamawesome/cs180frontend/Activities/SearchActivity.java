@@ -13,13 +13,13 @@ import teamawesome.cs180frontend.R;
 
 public class SearchActivity extends AppCompatActivity {
 
-    @Bind(R.id.professor_et) EditText mProfessorName;
-    @Bind(R.id.school_et) EditText mSchoolName;
+    @Bind(R.id.search_professor_et) EditText mProfessorName;
+//    @Bind(R.id.school_et) EditText mSchoolName;
 //    @Bind(R.id.class_et) EditText mClassName;
-    @Bind(R.id.search_bt) Button mSearch;
+    @Bind(R.id.search_search_bt) Button mSearch;
 
     public static final String PROFESSOR_NAME = "PROFESSOR_NAME";
-    public static final String SCHOOL_NAME = "SCHOOL_NAME";
+//    public static final String CLASS_NAME = "CLASS_NAME";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,11 +31,11 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String professorName = mProfessorName.getText().toString();
-                String schoolName = mSchoolName.getText().toString();
+//                String schoolName = mClassName.getText().toString();
 
                 Bundle bundle = new Bundle();
                 bundle.putString(PROFESSOR_NAME, professorName);
-                bundle.putString(SCHOOL_NAME, schoolName);
+//                bundle.putString(CLASS_NAME, schoolName);
 
                 Intent i = new Intent(getApplicationContext(), SearchResultsActivity.class);
                 i.putExtras(bundle);

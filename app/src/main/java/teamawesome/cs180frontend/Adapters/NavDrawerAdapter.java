@@ -14,24 +14,24 @@ import teamawesome.cs180frontend.R;
  */
 
 public class NavDrawerAdapter extends BaseAdapter {
-    private String[] icons;
-    private String[] text;
-    Context context;
+    private String[] mIcons;
+    private String[] mText;
+    private Context mContext;
 
     public NavDrawerAdapter(String[] icons, String[] text, Context context) {
-        this.icons = icons;
-        this.text = text;
-        this.context = context;
+        this.mIcons = icons;
+        this.mText = text;
+        this.mContext = context;
     }
 
     @Override
     public int getCount() {
-        return icons.length;
+        return mIcons.length;
     }
 
     @Override
     public Object getItem(int position) {
-        return text[position];
+        return mText[position];
     }
 
     @Override
@@ -43,18 +43,18 @@ public class NavDrawerAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         NavDrawerViewHolder holder;
         if(convertView == null) {
-            LayoutInflater vi = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater vi = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = vi.inflate(R.layout.list_item_nav_drawer, parent, false);
             holder = new NavDrawerViewHolder(convertView);
             convertView.setTag(holder);
         } else {
             holder = (NavDrawerViewHolder) convertView.getTag();
         }
-        holder.icon.setText(icons[position]);
-        holder.text.setText(text[position]);
+        holder.icon.setText(mIcons[position]);
+        holder.text.setText(mText[position]);
 
         if(position == 0) {
-            convertView.setBackgroundColor(context.getResources().getColor(R.color.colorWhite));
+            convertView.setBackgroundColor(mContext.getResources().getColor(R.color.colorWhite));
         }
 
         return convertView;

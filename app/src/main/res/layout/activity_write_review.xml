@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_write_review"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
@@ -10,4 +11,116 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="teamawesome.cs180frontend.Activities.WriteReviewActivity">
 
-</RelativeLayout>
+    <EditText
+        android:id="@+id/write_professor_et"
+        android:layout_width="match_parent"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_height="40dp"
+        android:backgroundTint="@color/colorBlack"
+        android:textColorHint="@color/colorPrimary"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        android:hint="Professor" />
+
+    <EditText
+        android:id="@+id/write_class_et"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:backgroundTint="@color/colorBlack"
+        android:textColorHint="@color/colorPrimary"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        android:hint="Class Name" />
+
+    <EditText
+        android:id="@+id/write_review_et"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:background="@drawable/edittext_review"
+        android:gravity="left|top"
+        android:textColorHint="@color/colorPrimary"
+        android:textAlignment="center"
+        android:textSize="14sp"
+        android:hint="Type your review here" />
+
+    <!--Rating-->
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal">
+
+        <com.joanzapata.iconify.widget.IconButton
+            android:id="@+id/write_rate_1"
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="5dp"
+            android:background="@android:color/transparent"
+            android:gravity="center_horizontal"
+            android:textSize="22sp"
+            android:textColor="@color/colorGrey"
+            android:text="@string/rating_icon" />
+
+        <com.joanzapata.iconify.widget.IconButton
+            android:id="@+id/write_rate_2"
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="5dp"
+            android:background="@android:color/transparent"
+            android:gravity="center_horizontal"
+            android:textSize="22sp"
+            android:textColor="@color/colorGrey"
+            android:text="@string/rating_icon" />
+
+        <com.joanzapata.iconify.widget.IconButton
+            android:id="@+id/write_rate_3"
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="5dp"
+            android:background="@android:color/transparent"
+            android:gravity="center_horizontal"
+            android:textSize="22sp"
+            android:textColor="@color/colorGrey"
+            android:text="@string/rating_icon" />
+
+        <com.joanzapata.iconify.widget.IconButton
+            android:id="@+id/write_rate_4"
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="5dp"
+            android:background="@android:color/transparent"
+            android:gravity="center_horizontal"
+            android:textSize="22sp"
+            android:textColor="@color/colorGrey"
+            android:text="@string/rating_icon" />
+
+        <com.joanzapata.iconify.widget.IconButton
+            android:id="@+id/write_rate_5"
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="5dp"
+            android:background="@android:color/transparent"
+            android:gravity="center_horizontal"
+            android:textSize="22sp"
+            android:textColor="@color/colorGrey"
+            android:text="@string/rating_icon" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/write_submit_bt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_gravity="center_horizontal|center"
+        android:padding="10dp"
+        android:background="@color/colorAccent"
+        android:textColor="@color/colorWhite"
+        android:textSize="20sp"
+        android:text="Submit" />
+
+</LinearLayout>
