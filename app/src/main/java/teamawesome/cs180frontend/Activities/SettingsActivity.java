@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import org.greenrobot.eventbus.EventBus;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import teamawesome.cs180frontend.R;
@@ -19,6 +21,7 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
         ButterKnife.bind(this);
+        EventBus.getDefault().register(this);
 
         mChangeSchool.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -33,5 +36,11 @@ public class SettingsActivity extends AppCompatActivity {
                 //TODO: send request to logout
             }
         });
+    }
+
+    @Override
+    protected void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
     }
 }
