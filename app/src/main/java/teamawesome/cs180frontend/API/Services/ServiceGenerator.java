@@ -1,4 +1,4 @@
-package teamawesome.cs180frontend.services;
+package teamawesome.cs180frontend.API.Services;
 
 import android.util.Base64;
 
@@ -30,14 +30,6 @@ public class ServiceGenerator {
                     .addConverterFactory(GsonConverterFactory.create());
 
     public static <S> S createService(Class<S> serviceClass) {
-        return createService(serviceClass, null, null);
-    }
-
-    public static <S> S createService(Class<S> serviceClass, String username, String password) {
-        if (username != null && password != null) {
-            String credentials = username + ":" + password;
-            final String basic =
-                    "Basic " + Base64.encodeToString(credentials.getBytes(), Base64.NO_WRAP);
 
             httpClient.addInterceptor(new Interceptor() {
                 @Override
@@ -45,7 +37,6 @@ public class ServiceGenerator {
                     Request original = chain.request();
 
                     Request.Builder requestBuilder = original.newBuilder()
-                            .header("Authorization", basic)
                             .header("Accept", "application/json")
                             .method(original.method(), original.body());
 
@@ -53,7 +44,6 @@ public class ServiceGenerator {
                     return chain.proceed(request);
                 }
             });
-        }
 
         OkHttpClient client = httpClient.build();
         Retrofit retrofit = builder.client(client).build();

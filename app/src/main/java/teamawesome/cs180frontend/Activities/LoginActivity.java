@@ -1,10 +1,13 @@
-package teamawesome.cs180frontend;
+package teamawesome.cs180frontend.Activities;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
+import android.support.design.R;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.app.LoaderManager.LoaderCallbacks;
@@ -29,15 +32,18 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import teamawesome.cs180frontend.services.LoginService;
-import teamawesome.cs180frontend.services.ServiceGenerator;
-import teamawesome.cs180frontend.utils.User;
+import teamawesome.cs180frontend.API.Services.ServiceGenerator;
+import teamawesome.cs180frontend.API.Services.UserService;
+import teamawesome.cs180frontend.API.Models.User;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -51,7 +57,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      */
     private static final int REQUEST_READ_CONTACTS = 0;
 
-    private User myUser;
+    private User user;
 
     // UI references.
     private AutoCompleteTextView mEmailView;
@@ -84,6 +90,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             @Override
             public void onClick(View view) {
                 attemptLogin();
+            }
+        });
+
+        Button mEmailRegisterButton = (Button) findViewById(R.id.register_button);
+        mEmailRegisterButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                attemptRegister();
             }
         });
 
@@ -148,8 +162,77 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         // Store values at the time of the login attempt.
         String email = mEmailView.getText().toString();
-        //TODO: Hash/Encrypt password ?
-        String password = mPasswordView.getText().toString();
+        String password = getMD5Hash(mPasswordView.getText().toString());
+
+        boolean cancel = false;
+        View focusView = null;
+
+        // Check for a valid password, if the user entered one.
+        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
+            mPasswordView.setError(getString(R.string.error_invalid_password));
+            focusView = mPasswordView;
+            cancel = true;
+        }
+
+        // Check for a valid email address.
+        if (TextUtils.isEmpty(email)) {
+            mEmailView.setError(getString(R.string.error_field_required));
+            focusView = mEmailView;
+            cancel = true;
+        } else if (!isEmailValid(email)) {
+            mEmailView.setError(getString(R.string.error_invalid_email));
+            focusView = mEmailView;
+            cancel = true;
+        }
+
+        if (cancel) {
+            // There was an error; don't attempt login and focus the first
+            // form field with an error.
+            focusView.requestFocus();
+        } else {
+            user = new User(email, password);
+            // Show a progress spinner, and kick off a background task to
+            // perform the user login attempt.
+            showProgress(true);
+            UserService loginService =
+                    ServiceGenerator.createService(UserService.class);//, email, password);
+            Call<User> call = loginService.basicLogin(user);
+            call.enqueue(new Callback<User >() {
+                @Override
+                public void onResponse(Call<User> call, Response<User> response) {
+                    if (response.isSuccessful()) {
+                        // user object available
+                        // login?
+
+                        // sharedpreferences
+                        //SharedPreferences user_info = getSharedPreferences(USER_INFO, 0);
+
+                        Intent i = new Intent(LoginActivity.this, MainActivity.class);
+                        i.putExtra("user", user);
+                        startActivity(i);
+                    } else {
+                        // error response, no access to resource?
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<User> call, Throwable t) {
+                    // something went completely south (like no internet connection)
+                    Log.d("Error", t.getMessage());
+                }
+            });
+        }
+    }
+
+    private void attemptRegister() {
+
+        // Reset errors.
+        mEmailView.setError(null);
+        mPasswordView.setError(null);
+
+        // Store values at the time of the login attempt.
+        String email = mEmailView.getText().toString();
+        String password = getMD5Hash(mPasswordView.getText().toString());
 
         boolean cancel = false;
         View focusView = null;
@@ -180,14 +263,17 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            LoginService loginService =
-                    ServiceGenerator.createService(LoginService.class, email, password);
-            Call<User> call = loginService.basicLogin();
+            UserService registerService =
+                    ServiceGenerator.createService(UserService.class);//, email, password);
+            Call<User> call = registerService.basicRegister(user);
             call.enqueue(new Callback<User >() {
                 @Override
                 public void onResponse(Call<User> call, Response<User> response) {
                     if (response.isSuccessful()) {
                         // user object available
+                        // login?
+                        Intent i = new Intent(LoginActivity.this, MainActivity.class);
+                        startActivity(i);
                     } else {
                         // error response, no access to resource?
                     }
@@ -301,5 +387,23 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         int ADDRESS = 0;
         int IS_PRIMARY = 1;
     }
+
+    public static String getMD5Hash(String input) {
+        String hashtext = "";
+        try {
+            MessageDigest messageDigest = MessageDigest.getInstance("MD5");
+            messageDigest.reset();
+            messageDigest.update(input.getBytes());
+            byte[] digest = messageDigest.digest();
+            BigInteger bigInt = new BigInteger(1, digest);
+            hashtext = bigInt.toString(16);
+            while (hashtext.length() < 32) {
+                hashtext = "0" + hashtext;
+            }
+        } catch (NoSuchAlgorithmException ignored) {
+        }
+        return hashtext;
+    }
 }
+
 
