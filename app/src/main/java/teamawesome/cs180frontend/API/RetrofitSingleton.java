@@ -16,7 +16,7 @@ public class RetrofitSingleton {
     private static RetrofitSingleton instance;
     private UserService userService;
 
-    public static RetrofitSingleton getmInstance() {
+    public static RetrofitSingleton getInstance() {
         if(instance == null) {
             instance = new RetrofitSingleton();
         }

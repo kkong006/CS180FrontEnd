@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
-import android.support.design.R;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.app.LoaderManager.LoaderCallbacks;
@@ -44,6 +43,7 @@ import retrofit2.Response;
 import teamawesome.cs180frontend.API.Services.ServiceGenerator;
 import teamawesome.cs180frontend.API.Services.UserService;
 import teamawesome.cs180frontend.API.Models.User;
+import teamawesome.cs180frontend.R;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
