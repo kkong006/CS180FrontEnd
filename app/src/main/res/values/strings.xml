@@ -1,8 +1,10 @@
 <resources>
     <string name="app_name">Rate Your Professor</string>
 
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <!--Shared Preferences-->
+    <string name="USER_ID">USER_ID</string>
+    <string name="PASSWORD">PASSWORD</string>
+    <string name="SCHOOL_ID">SCHOOL_ID</string>
 
     <string name="action_settings">Settings</string>
     <string name="title_activity_login">Sign in</string>
@@ -42,6 +44,9 @@
         <item>{fa-paper-plane}</item>
         <item>{fa-sign-out}</item>
     </string-array>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <!--Search Activity-->
     <string name="search_by_professor">Search by Professor:</string>
