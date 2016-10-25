@@ -59,13 +59,12 @@ public class SettingsActivity extends AppCompatActivity {
 
     @OnClick(R.id.settings_school_tv)
     public void selectSchool() {
-        //TODO: send request to change school
         mSchoolName = mSchoolNameET.getText().toString();
         if(mSchoolName.length() > 0) {
             mSchoolNameET.setText("");
             mProgressDialog = new ProgressDialog(this);
             mProgressDialog.setCancelable(false);
-            mProgressDialog.setMessage("Loading...");
+            mProgressDialog.setMessage(getResources().getString(R.string.loading));
             mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             mProgressDialog.setIndeterminate(true);
             mProgressDialog.show();
@@ -74,7 +73,7 @@ public class SettingsActivity extends AppCompatActivity {
                     .getSchools()
                     .enqueue(callback);
         } else {
-                Toast.makeText(getApplicationContext(), "Enter school name", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getResources().getString(R.string.enter_school_name), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -87,20 +86,28 @@ public class SettingsActivity extends AppCompatActivity {
                 getSharedPreferences(Constants.SCHOOL_ID, Context.MODE_PRIVATE)
                         .edit().putInt(Constants.SCHOOL_ID, school.getSchoolId()).apply();
                 mCurrentUniversityName.setText(mSchoolName);
-                Toast.makeText(getApplicationContext(), "School name changed!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getResources().getString(R.string.school_name_changed), Toast.LENGTH_SHORT).show();
                 return;
             }
         }
-        Toast.makeText(getApplicationContext(), "University does not exist", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getResources().getString(R.string.university_dne), Toast.LENGTH_SHORT).show();
     }
 
     @Subscribe
     public void schoolsInt(Integer i) {
         mProgressDialog.dismiss();
         if(i == 0) {
-            Toast.makeText(getApplicationContext(), "Universities do not exist", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.universities_dne), Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(getApplicationContext(), "Error retrieving data", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.error_retrieving_data), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Subscribe
+    public void schoolsString(String s) {
+        mProgressDialog.dismiss();
+        if(s == "ERROR") {
+            Toast.makeText(this, getResources().getString(R.string.error_retrieving_data), Toast.LENGTH_SHORT).show();
         }
     }
 

@@ -51,11 +51,23 @@
     <!--Search Activity-->
     <string name="search_by_professor">Search by Professor:</string>
     <string name="search_button">Search</string>
+    <string name="enter_professor_name">Enter professor name</string>
+    <string name="professor_name">PROFESSOR_NAME</string>
+    <string name="professor_id">PROFESSOR_ID</string>
+    <string name="professor_dne">Professor does not exist</string>
+    <string name="professors_dne">Professors do not exist</string>
+    <string name="reviews_dne">Reviews do not exist</string>
 
 
     <!--Settings Activity-->
     <string name="change_school_button">Change School</string>
     <string name="logout_button">Logout</string>
+    <string name="loading">Loading...</string>
+    <string name="enter_school_name">Enter school name</string>
+    <string name="school_name_changed">School name changed!</string>
+    <string name="university_dne">University does not exist</string>
+    <string name="universities_dne">Universities do not exist</string>
+    <string name="error_retrieving_data">Error retrieving data</string>
 
     <!--Read Review Activity-->
     <string name="students_like"> students like this review</string>
