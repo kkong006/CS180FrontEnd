@@ -1,5 +1,7 @@
 package teamawesome.cs180frontend.API.Services.Callbacks;
 
+import android.util.Log;
+
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
@@ -15,6 +17,8 @@ import teamawesome.cs180frontend.Misc.Constants;
  */
 
 public class GetSchoolsCallback implements Callback<List<School>> {
+
+    private final String TAG = "GETSCHOOLSCALLBACK";
 
     @Override
     public void onResponse(Call<List<School>> call, Response<List<School>> response) {

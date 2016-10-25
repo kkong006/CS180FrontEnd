@@ -11,6 +11,14 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="teamawesome.cs180frontend.Activities.SettingsActivity">
 
+    <TextView
+        android:id="@+id/settings_current_university_tv"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="center_horizontal"
+        android:gravity="bottom|center_horizontal"
+        android:textSize="18sp" />
+
     <EditText
         android:id="@+id/settings_university_et"
         android:layout_width="match_parent"
