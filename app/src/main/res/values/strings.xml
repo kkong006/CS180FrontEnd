@@ -58,6 +58,9 @@
     <string name="professors_dne">Professors do not exist</string>
     <string name="reviews_dne">Reviews do not exist</string>
 
+    <!--Search Results Activity-->
+    <string name="REVIEW_ID">REVIEW_ID</string>
+    <string name="REVIEW_RATING">REVIEW_RATING</string>
 
     <!--Settings Activity-->
     <string name="change_school_button">Change School</string>
@@ -68,10 +71,18 @@
     <string name="university_dne">University does not exist</string>
     <string name="universities_dne">Universities do not exist</string>
     <string name="error_retrieving_data">Error retrieving data</string>
+    <string name="account_update_success">Success!</string>
 
     <!--Read Review Activity-->
     <string name="students_like"> students like this review</string>
     <string name="students_dislike"> students dislike this review</string>
+    <string name="you_like"> you like this review</string>
+    <string name="you_dislike"> you dislike this review</string>
+    <string name="REVIEW_CONTENT">REVIEW_CONTENT</string>
+    <string name="REVIEW_CLASS_NAME">REVIEW_CLASS_NAME</string>
+    <string name="REVIEW_DATE">REVIEW_DATE</string>
+    <string name="REVIEW_USER_RATING">REVIEW_USER_RATING</string>
+
 
 
     <!--Stubbed Data-->

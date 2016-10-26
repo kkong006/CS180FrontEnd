@@ -9,6 +9,7 @@ import retrofit2.http.POST;
 import retrofit2.http.Query;
 import teamawesome.cs180frontend.API.Models.Professor;
 import teamawesome.cs180frontend.API.Models.RateReview;
+import teamawesome.cs180frontend.API.Models.RatingId;
 import teamawesome.cs180frontend.API.Models.ResponseReview;
 import teamawesome.cs180frontend.API.Models.School;
 import teamawesome.cs180frontend.API.Models.User;
@@ -21,7 +22,7 @@ import teamawesome.cs180frontend.API.Models.UserReview;
 
 public interface UserService {
     @POST("/updateAccount")
-    Call<Void> createAccount(@Body UserAccount userAccount);
+    Call<Void> updateAccount(@Body UserAccount userAccount);
 
     @POST("/review")
     Call<Void> review(@Body UserReview userReview);
@@ -29,8 +30,11 @@ public interface UserService {
     @GET("/getSchools")
     Call<List<School>> getSchools();
 
+    @GET("/getClasses")
+    Call<Class> getClasses(@Body int school_id);
+
     @POST("/rateReview")
-    Call<Void> rateReview(@Body RateReview rateReview);
+    Call<RatingId> rateReview(@Body RateReview rateReview);
 
     @POST("/login")
     Call<User> basicLogin(@Body User user);

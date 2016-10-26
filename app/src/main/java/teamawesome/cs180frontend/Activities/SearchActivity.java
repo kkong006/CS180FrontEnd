@@ -64,11 +64,12 @@ public class SearchActivity extends AppCompatActivity {
                     .search(mProfessor, getSharedPreferences(Constants.SCHOOL_ID, Context.MODE_PRIVATE).getInt(Constants.SCHOOL_ID, -1))
                     .enqueue(callback);
             //TODO: remove once data is placed in the database
-//            Bundle bundle = new Bundle();
-//            bundle.putString(getResources().getString(R.string.professor_name), mProfessor);
-//            Intent i = new Intent(getApplicationContext(), SearchResultsActivity.class);
-//            i.putExtras(bundle);
-//            startActivity(i);
+            Intent i = new Intent(getApplicationContext(), SearchResultsActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putString(getResources().getString(R.string.professor_name), mProfessor);
+            bundle.putInt(getResources().getString(R.string.professor_id), 1);
+            i.putExtras(bundle);
+            startActivity(i);
         } else {
             Toast.makeText(this, getResources().getString(R.string.enter_professor_name), Toast.LENGTH_SHORT).show();
         }
@@ -79,12 +80,12 @@ public class SearchActivity extends AppCompatActivity {
         mProgressDialog.dismiss();
         mProfessors = professorList;
         for(Professor professor : professorList) {
-            if(professor.getProfessorName() == mProfessor) {
+            if(professor.getProfessorName().toLowerCase() == mProfessor.toLowerCase()) {
+
+                Intent i = new Intent(this, SearchResultsActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putString(getResources().getString(R.string.professor_name), mProfessor);
                 bundle.putInt(getResources().getString(R.string.professor_id), professor.getProfessorId());
-                //                bundle.putString(CLASS_NAME, schoolName);
-                Intent i = new Intent(this, SearchResultsActivity.class);
                 i.putExtras(bundle);
                 startActivity(i);
                 return;
@@ -109,5 +110,11 @@ public class SearchActivity extends AppCompatActivity {
         if(s == "ERROR") {
             Toast.makeText(this, getResources().getString(R.string.error_retrieving_data), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
     }
 }

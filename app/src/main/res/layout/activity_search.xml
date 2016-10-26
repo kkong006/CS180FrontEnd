@@ -29,7 +29,7 @@
         android:textColorHint="@color/colorPrimary"
         android:textAlignment="center"
         android:textSize="20sp"
-        android:hint="Professor" />
+        android:hint="First Last" />
 
     <!--<TextView-->
         <!--android:layout_width="match_parent"-->

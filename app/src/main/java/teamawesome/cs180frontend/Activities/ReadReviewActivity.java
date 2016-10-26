@@ -1,11 +1,14 @@
 package teamawesome.cs180frontend.Activities;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.greenrobot.eventbus.EventBus;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -27,29 +30,39 @@ public class ReadReviewActivity extends AppCompatActivity {
     @Bind(R.id.read_dislike_count_tv) TextView mDislikeCount;
 
     private TextView[] mRatings;
+    private int mReviewId;
+    private int mReviewRating;
+    private String mReviewContent;
+    private String mReviewClassName;
+    private String mReviewDate;
+    private int mUserRating;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_read_review);
         ButterKnife.bind(this);
+        EventBus.getDefault().register(this);
 
         mRatings = new TextView[] {mRate1, mRate2, mRate3, mRate4, mRate5};
 
-        Review r = (Review)getIntent().getSerializableExtra(SearchResultsActivity.REVIEW);
+        Bundle bundle = getIntent().getExtras();
 
-        mClassName.setText(r.mClassName);
-        try{
-            for(int i = 0; i < Integer.parseInt(r.mRating); i++) {
-                mRatings[i].setTextColor(getApplicationContext().getResources().getColor(R.color.colorGreen));
-            }
-        } catch (Exception e) {
-            Toast.makeText(getBaseContext(), "Error reading rating", Toast.LENGTH_SHORT).show();
+        mReviewId = bundle.getInt(getResources().getString(R.string.REVIEW_ID));
+        mReviewRating = bundle.getInt(getResources().getString(R.string.REVIEW_RATING));
+        mReviewContent = bundle.getString(getResources().getString(R.string.REVIEW_CONTENT));
+        mReviewClassName = bundle.getString(getResources().getString(R.string.REVIEW_CLASS_NAME));
+        mReviewDate = bundle.getString(getResources().getString(R.string.REVIEW_DATE));
+        mUserRating = bundle.getInt(getResources().getString(R.string.REVIEW_USER_RATING));
 
+        mClassName.setText(mReviewClassName);
+        mReviewText.setText(mReviewContent);
+
+        for(int i = 0; i < mReviewRating && i < 5; i++) {
+            mRatings[i].setTextColor(getApplicationContext().getResources().getColor(R.color.colorGreen));
         }
 
-        mReviewText.setText(r.mReviewContent);
-        //TODO: get likes/dislike counts
+        //TODO: if we get like/dislike count, set it
 
         mThumbsUp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,5 +79,13 @@ public class ReadReviewActivity extends AppCompatActivity {
                 //TODO: make call to update likes/dislikes
             }
         });
+    }
+    
+
+
+    @Override
+    protected void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
     }
 }

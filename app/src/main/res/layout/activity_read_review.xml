@@ -105,7 +105,7 @@
             android:layout_marginRight="5dp"
             android:gravity="right|center_vertical"
             android:textSize="10sp"
-            android:text="@string/students_like" />
+            android:text = "@string/you_like" />
 
         <com.joanzapata.iconify.widget.IconButton
             android:id="@+id/read_dislike_bt"
@@ -126,7 +126,7 @@
             android:layout_marginRight="5dp"
             android:gravity="left|center_vertical"
             android:textSize="10sp"
-            android:text="@string/students_dislike" />
+            android:text="@string/you_dislike" />
 
     </LinearLayout>
 

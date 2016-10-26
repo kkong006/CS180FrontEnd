@@ -1,5 +1,6 @@
 package teamawesome.cs180frontend.Activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
@@ -23,6 +24,7 @@ import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import teamawesome.cs180frontend.Adapters.NavDrawerAdapter;
+import teamawesome.cs180frontend.Misc.Constants;
 import teamawesome.cs180frontend.R;
 
 
@@ -74,6 +76,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        getSharedPreferences(Constants.USER_ID, Context.MODE_PRIVATE)
+            .edit().putInt(Constants.USER_ID, 2);
+
+        getSharedPreferences(Constants.PASSWORD, Context.MODE_PRIVATE)
+                .edit().putString(Constants.PASSWORD, "hello123");
+
+        getSharedPreferences(Constants.SCHOOL_ID, Context.MODE_PRIVATE)
+                .edit().putInt(Constants.SCHOOL_ID, 1);
     }
 
     @Override

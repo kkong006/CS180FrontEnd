@@ -1,6 +1,7 @@
 package teamawesome.cs180frontend.Adapters;
 
 import android.content.Context;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,14 +19,14 @@ import teamawesome.cs180frontend.R;
 public class SearchResultsAdapter extends BaseAdapter{
 
     private String[] mClassNames;
-    private String[] mRatings;
+    private int[] mRatings;
     private String[] mReviewDates;
     private String[] mReviewContents;
-    private String[] mReviewIDs;
+    private int[] mReviewIDs;
     private Context mContext;
 
     public SearchResultsAdapter(Context context, String[] classes,
-            String[] ratings, String[] reviewDates, String[] reviews, String[] reviewIDs) {
+            int[] ratings, String[] reviewDates, String[] reviews, int[] reviewIDs) {
         this.mContext = context;
         this.mClassNames = classes;
         this.mRatings = ratings;
@@ -40,8 +41,9 @@ public class SearchResultsAdapter extends BaseAdapter{
     }
 
     @Override
-    public Review getItem(int position) {
-        return new Review(mClassNames[position], mRatings[position], mReviewDates[position], mReviewContents[position], mReviewIDs[position]);
+    public int[] getItem(int position) {
+        int[] ret = {mReviewIDs[position], mRatings[position]};
+        return ret;
     }
 
     @Override
@@ -64,7 +66,7 @@ public class SearchResultsAdapter extends BaseAdapter{
 
         holder.className.setText(mClassNames[position]);
         try {
-            for(int i = 0; i < Integer.parseInt(mRatings[position]); i++) {
+            for(int i = 0; i < mRatings[position]; i++) {
                 holder.rating[i].setTextColor(mContext.getResources().getColor(R.color.colorGreen));
             }
         } catch(Exception e) {
