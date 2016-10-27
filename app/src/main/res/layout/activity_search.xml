@@ -65,7 +65,7 @@
         <!--android:layout_height="50dp"-->
         <!--android:textSize="20sp"-->
         <!--android:backgroundTint="@color/colorBlack"-->
-        <!--android:hint="Class"-->
+        <!--android:hint="ClassBundle"-->
         <!--android:textColorHint="@color/colorPrimary"/>-->
 
     <!--<TextView-->
@@ -74,7 +74,7 @@
         <!--android:textAlignment="center"-->
         <!--android:textSize="20sp"-->
         <!--android:textColor="@color/colorPrimary"-->
-        <!--android:text="Class" />-->
+        <!--android:text="ClassBundle" />-->
 
     <Button
         android:id="@+id/search_search_bt"

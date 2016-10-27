@@ -28,12 +28,6 @@ public interface UserService {
     @POST("/review")
     Call<Void> review(@Body UserReview userReview);
 
-    @GET("/getSchools")
-    Call<List<School>> getSchools();
-
-    @GET("/getClasses")
-    Call<List<Class>> getClasses(@Body int school_id);
-
     @POST("/rateReview")
     Call<RatingId> rateReview(@Body RateReview rateReview);
 

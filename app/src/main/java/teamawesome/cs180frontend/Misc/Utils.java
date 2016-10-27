@@ -7,6 +7,9 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -52,6 +55,10 @@ public class Utils {
         return SPSingleton.getInstance(context).getSp().getInt(Constants.USER_ID, 0);
     }
 
+    public static int getSchoolId(Context context) {
+        return SPSingleton.getInstance(context).getSp().getInt(Constants.SCHOOL_ID, 0);
+    }
+
     //save the user's info once they've logged in and/or registered
     public static void saveUserData(Context context, UserRespBundle userInfo, String password, String number) {
         System.out.println(userInfo.getId());
@@ -69,12 +76,19 @@ public class Utils {
     }
 
     //Good night sweet prince
-    public static void nukeUserDate(Context context) {
+    public static void nukeUserData(Context context) {
         SharedPreferences sp = SPSingleton.getInstance(context).getSp();
         sp.edit().remove(Constants.USER_ID).commit();
         sp.edit().remove(Constants.IS_ACTIVE).commit();
         sp.edit().remove(Constants.SCHOOL_ID).commit();
         sp.edit().remove(Constants.PASSWORD).commit();
         sp.edit().remove(Constants.PHONE_NUMBER).commit();
+    }
+
+    public static String getStackTrace(Throwable aThrowable) {
+        final Writer result = new StringWriter();
+        final PrintWriter printWriter = new PrintWriter(result);
+        aThrowable.printStackTrace(printWriter);
+        return result.toString();
     }
 }

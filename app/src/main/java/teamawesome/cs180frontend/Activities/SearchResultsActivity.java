@@ -18,8 +18,8 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import retrofit2.Callback;
+import teamawesome.cs180frontend.API.Models.ClassBundle;
 import teamawesome.cs180frontend.API.Models.ResponseReview;
-import teamawesome.cs180frontend.API.Models.Class;
 import teamawesome.cs180frontend.API.RetrofitSingleton;
 import teamawesome.cs180frontend.API.Services.Callbacks.GetClassesCallback;
 import teamawesome.cs180frontend.API.Services.Callbacks.GetReviewsCallback;
@@ -37,7 +37,7 @@ public class SearchResultsActivity extends AppCompatActivity {
     private SearchResultsAdapter mAdapter;
     private ProgressDialog mProgressDialog;
     private List<ResponseReview> mReviews;
-    private List<Class> mClasses;
+    private List<ClassBundle> mClasses;
     private int[] mReviewIds;
     private int[] mClassIds;
     private String[] mClassNames;
@@ -89,7 +89,7 @@ public class SearchResultsActivity extends AppCompatActivity {
             mReviewIds[i] = mReviews.get(i).getReviewId();
             mClassIds[i] = mReviews.get(i).getClassId();
             mClassNames[i] = "";
-            for(Class c : mClasses) {
+            for(ClassBundle c : mClasses) {
                 if(c.getClassId() == mClassIds[i]) {
                     mClassNames[i] = c.getClassName();
                 }
@@ -128,7 +128,7 @@ public class SearchResultsActivity extends AppCompatActivity {
 //        mProgressDialog.setIndeterminate(true);
         mProgressDialog.show();
         Callback callback = new GetClassesCallback();
-        RetrofitSingleton.getInstance().getUserService()
+        RetrofitSingleton.getInstance().getMatchingService()
                 .getClasses(getSharedPreferences(Constants.SCHOOL_ID, Context.MODE_PRIVATE).getInt(Constants.SCHOOL_ID, -1))
                 .enqueue(callback);
     }
@@ -147,7 +147,7 @@ public class SearchResultsActivity extends AppCompatActivity {
     }
 
     @Subscribe
-    public void classesResp(List<Class> classList) {
+    public void classesResp(List<ClassBundle> classList) {
         mProgressDialog.dismiss();
         mClasses = classList;
 

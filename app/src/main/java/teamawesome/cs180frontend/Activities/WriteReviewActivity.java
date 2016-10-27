@@ -1,8 +1,8 @@
 package teamawesome.cs180frontend.Activities;
 
+import android.app.ProgressDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -10,9 +10,18 @@ import android.widget.Toast;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import teamawesome.cs180frontend.API.Models.ClassBundle;
+import teamawesome.cs180frontend.API.Models.Professor;
+import teamawesome.cs180frontend.API.RetrofitSingleton;
+import teamawesome.cs180frontend.API.Services.Callbacks.GetProfessorsCallback;
+import teamawesome.cs180frontend.Misc.DataSingleton;
+import teamawesome.cs180frontend.Misc.Utils;
 import teamawesome.cs180frontend.R;
 
 public class WriteReviewActivity extends AppCompatActivity {
@@ -33,14 +42,31 @@ public class WriteReviewActivity extends AppCompatActivity {
     private int mRating;
     private String mReview;
 
+    private List<Professor> professors;
+
+    ProgressDialog progressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_write_review);
         ButterKnife.bind(this);
-        //EventBus.getDefault().register(this);
-
+        EventBus.getDefault().register(this);
         mStars = new Button[] {mStar1, mStar2, mStar3, mStar4, mStar5};
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage(getString(R.string.loading));
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
+        if (Utils.getSchoolId(this) != 0) {
+            RetrofitSingleton.getInstance()
+                    .getMatchingService()
+                    .getProfs(Utils.getSchoolId(this))
+                    .enqueue(new GetProfessorsCallback());
+        } else {
+            finish();
+        }
     }
 
     @OnClick(R.id.write_submit_bt)
@@ -58,7 +84,6 @@ public class WriteReviewActivity extends AppCompatActivity {
     }
 
     public void getClasses() {
-
     }
 
     public void getProfessors() {
@@ -99,5 +124,18 @@ public class WriteReviewActivity extends AppCompatActivity {
     protected void onDestroy() {
         EventBus.getDefault().unregister(this);
         super.onDestroy();
+    }
+
+    @Subscribe
+    public void onResponse(List<Professor> profs) {
+        progressDialog.dismiss();
+        professors = new ArrayList<>();
+        professors.addAll(profs);
+    }
+
+    @Subscribe
+    public void onFailure(Integer code) {
+        progressDialog.dismiss();
+        finish();
     }
 }

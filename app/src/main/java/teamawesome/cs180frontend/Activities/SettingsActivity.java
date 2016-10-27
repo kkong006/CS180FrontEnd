@@ -61,7 +61,7 @@ public class SettingsActivity extends AppCompatActivity {
         mProgressDialog.setIndeterminate(true);
         mProgressDialog.show();
         Callback callback = new GetSchoolsCallback();
-        RetrofitSingleton.getInstance().getUserService()
+        RetrofitSingleton.getInstance().getMatchingService()
                 .getSchools()
                 .enqueue(callback);
     }

@@ -34,7 +34,10 @@
     <string name="thumbs_up_icon">{fa-thumbs-up}</string>
     <string name="thumbs_down_icon">{fa-thumbs-down}</string>
 
-    <!--Navigation Drawer Activity-->
+    <!-- Main Activity -->
+    <string name="data_loaded">Data loaded!</string>
+
+    <!--Navigation Drawer-->
     <string-array name="nav_drawer_array">
         <item>Home</item>
         <item>Search</item>

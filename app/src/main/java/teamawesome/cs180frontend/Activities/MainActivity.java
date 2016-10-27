@@ -1,16 +1,16 @@
 package teamawesome.cs180frontend.Activities;
 
-import android.content.Context;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,11 +18,22 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
+import java.util.List;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.OnItemClick;
+import teamawesome.cs180frontend.API.Models.ClassBundle;
+import teamawesome.cs180frontend.API.Models.Professor;
+import teamawesome.cs180frontend.API.RetrofitSingleton;
+import teamawesome.cs180frontend.API.Services.Callbacks.GetClassesCallback;
+import teamawesome.cs180frontend.API.Services.Callbacks.GetProfessorsCallback;
 import teamawesome.cs180frontend.Adapters.NavDrawerAdapter;
-import teamawesome.cs180frontend.Misc.Constants;
+import teamawesome.cs180frontend.Misc.DataSingleton;
 import teamawesome.cs180frontend.Misc.Utils;
 import teamawesome.cs180frontend.R;
 
@@ -32,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
     @Bind(R.id.toolbar) Toolbar mToolbar;
     @Bind(R.id.drawer_layout) DrawerLayout mDrawerLayout;
     @Bind(R.id.drawer_list) ListView mDrawerList;
-    @Bind(R.id.main_layout) CoordinatorLayout mMainLayout;
+    @Bind(R.id.main_layout) CoordinatorLayout parent;
     @Bind(R.id.fab) FloatingActionButton mFab;
 
     private NavDrawerAdapter mAdapter;
@@ -40,11 +51,15 @@ public class MainActivity extends AppCompatActivity {
     private String[] mIconTitles;
     private static final String TAG = "Main Activity";
 
+    ProgressDialog progressDialog;
+    private Integer apiCnt = new Integer(0);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        EventBus.getDefault().register(this);
 
         setSupportActionBar(mToolbar);
 
@@ -65,23 +80,25 @@ public class MainActivity extends AppCompatActivity {
         mDrawerLayout.setDrawerListener(toggle);
         toggle.syncState();
 
-        mFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //TODO: Write review activity
-                Intent i = new Intent(getApplicationContext(), WriteReviewActivity.class);
-                startActivity(i);
-            }
-        });
+        if (Utils.getUserId(this) != 0) {
+            progressDialog = new ProgressDialog(this);
+            progressDialog.setCancelable(false);
+            progressDialog.setMessage(getString(R.string.loading));
+            progressDialog.show();
 
-        getSharedPreferences(Constants.USER_ID, Context.MODE_PRIVATE)
-                .edit().putInt(Constants.USER_ID, 2).apply();
+            System.out.println(Utils.getSchoolId(this));
+            RetrofitSingleton.getInstance().
+                    getMatchingService().
+                    getClasses(Utils.getSchoolId(this)).
+                    enqueue(new GetClassesCallback());
+        }
+    }
 
-        getSharedPreferences(Constants.PASSWORD, Context.MODE_PRIVATE)
-                .edit().putString(Constants.PASSWORD, "hello123").apply();
-
-        getSharedPreferences(Constants.SCHOOL_ID, Context.MODE_PRIVATE)
-                .edit().putInt(Constants.SCHOOL_ID, 1).apply();
+    @OnClick(R.id.fab)
+    public void onClick(View view) {
+        //TODO: Write review activity
+        Intent i = new Intent(getApplicationContext(), WriteReviewActivity.class);
+        startActivity(i);
     }
 
     @Override
@@ -149,7 +166,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
-        Toast.makeText(this, "HELLO", Toast.LENGTH_SHORT).show();
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
                 mAdapter.changeLoginElem();
@@ -157,8 +173,29 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
+    //TODO: In the future: make 1 API call to fetch all data
+    //THIS IS A BANDAID FIX
+    @Subscribe
+    public void getClasses(List<ClassBundle> classesList) {
+        DataSingleton.getInstance().cacheClasses(classesList);
+        progressDialog.dismiss();
+        Utils.showSnackbar(this, parent, getString(R.string.data_loaded));
+    }
+
+    @Subscribe
+    public void getClassesFailure(Integer code) {
+        progressDialog.dismiss();
+    }
+
+    @Subscribe
+    public void onError(String error) {
+        progressDialog.dismiss();
+        Utils.showSnackbar(this, parent, error);
+    }
+
     private void logout() {
-        Utils.nukeUserDate(this);
+        Utils.nukeUserData(this);
         mAdapter.changeLoginElem();
         //TODO: THIS TOAST MSG NEEDS TO BE CONSTANT
         //USING TOAST SINCE THEY'RE CONTEXT INSENSITIVE

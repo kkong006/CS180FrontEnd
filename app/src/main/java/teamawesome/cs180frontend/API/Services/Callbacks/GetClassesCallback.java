@@ -8,17 +8,20 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import teamawesome.cs180frontend.API.APIConstants;
+import teamawesome.cs180frontend.API.Models.ClassBundle;
 import teamawesome.cs180frontend.API.Models.Professor;
 import teamawesome.cs180frontend.Misc.Constants;
+import teamawesome.cs180frontend.Misc.Utils;
 
 /**
  * Created by KongK on 10/25/2016.
  */
 
-public class GetClassesCallback implements Callback<List<Class>> {
+public class GetClassesCallback implements Callback<List<ClassBundle>> {
 
     @Override
-    public void onResponse(Call<List<Class>> call, Response<List<Class>> response) {
+    public void onResponse(Call<List<ClassBundle>> call, Response<List<ClassBundle>> response) {
+        System.out.println(response.code());
         switch (response.code()) {
             case APIConstants.HTTP_STATUS_OK:
                 EventBus.getDefault().post(response.body());
@@ -33,7 +36,8 @@ public class GetClassesCallback implements Callback<List<Class>> {
     }
 
     @Override
-    public void onFailure(Call<List<Class>> call, Throwable t) {
+    public void onFailure(Call<List<ClassBundle>> call, Throwable t) {
+        System.out.println(Utils.getStackTrace(t));
         EventBus.getDefault().post("ERROR");
     }
 }
