@@ -4,7 +4,6 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -31,18 +30,19 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import teamawesome.cs180frontend.API.Services.ServiceGenerator;
 import teamawesome.cs180frontend.API.Services.UserService;
 import teamawesome.cs180frontend.API.Models.User;
+import teamawesome.cs180frontend.Misc.Utils;
 import teamawesome.cs180frontend.R;
 
 import static android.Manifest.permission.READ_CONTACTS;
@@ -60,20 +60,19 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private User user;
 
     // UI references.
-    private AutoCompleteTextView mEmailView;
-    private EditText mPasswordView;
-    private View mProgressView;
-    private View mLoginFormView;
+    @Bind(R.id.number) AutoCompleteTextView phoneEditText;
+    @Bind(R.id.password) EditText mPasswordView;
+    @Bind(R.id.login_progress) View mProgressView;
+    @Bind(R.id.login_form) View mLoginFormView;
+    @Bind(R.id.email_sign_in_button) Button signInButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         // Set up the login form.
-        mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
+        ButterKnife.bind(this);
         populateAutoComplete();
-
-        mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
@@ -84,25 +83,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 return false;
             }
         });
-
-        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
-        mEmailSignInButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                attemptLogin();
-            }
-        });
-
-        Button mEmailRegisterButton = (Button) findViewById(R.id.register_button);
-        mEmailRegisterButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                attemptRegister();
-            }
-        });
-
-        mLoginFormView = findViewById(R.id.login_form);
-        mProgressView = findViewById(R.id.login_progress);
     }
 
     private void populateAutoComplete() {
@@ -121,7 +101,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             return true;
         }
         if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
-            Snackbar.make(mEmailView, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
+            Snackbar.make(phoneEditText, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
                     .setAction(android.R.string.ok, new View.OnClickListener() {
                         @Override
                         @TargetApi(Build.VERSION_CODES.M)
@@ -154,15 +134,16 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * If there are form errors (invalid email, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
-    private void attemptLogin() {
+    @OnClick(R.id.email_sign_in_button)
+    public void attemptLogin() {
 
         // Reset errors.
-        mEmailView.setError(null);
+        phoneEditText.setError(null);
         mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
-        String email = mEmailView.getText().toString();
-        String password = getMD5Hash(mPasswordView.getText().toString());
+        String phoneNum = phoneEditText.getText().toString();
+        String password = Utils.getMD5Hash(mPasswordView.getText().toString());
 
         boolean cancel = false;
         View focusView = null;
@@ -175,13 +156,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
 
         // Check for a valid email address.
-        if (TextUtils.isEmpty(email)) {
-            mEmailView.setError(getString(R.string.error_field_required));
-            focusView = mEmailView;
+        if (TextUtils.isEmpty(phoneNum)) {
+            phoneEditText.setError(getString(R.string.error_field_required));
+            focusView = phoneEditText;
             cancel = true;
-        } else if (!isEmailValid(email)) {
-            mEmailView.setError(getString(R.string.error_invalid_email));
-            focusView = mEmailView;
+        } else if (!isNumberValid(phoneNum)) {
+            phoneEditText.setError(getString(R.string.error_invalid_number));
+            focusView = phoneEditText;
             cancel = true;
         }
 
@@ -190,7 +171,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // form field with an error.
             focusView.requestFocus();
         } else {
-            user = new User(email, password);
+            user = new User(phoneNum, password);
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
@@ -224,15 +205,16 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
     }
 
-    private void attemptRegister() {
+    @OnClick(R.id.register_button)
+    public void attemptRegister() {
 
         // Reset errors.
-        mEmailView.setError(null);
+        phoneEditText.setError(null);
         mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
-        String email = mEmailView.getText().toString();
-        String password = getMD5Hash(mPasswordView.getText().toString());
+        String email = phoneEditText.getText().toString();
+        String password = Utils.getMD5Hash(mPasswordView.getText().toString());
 
         boolean cancel = false;
         View focusView = null;
@@ -246,12 +228,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         // Check for a valid email address.
         if (TextUtils.isEmpty(email)) {
-            mEmailView.setError(getString(R.string.error_field_required));
-            focusView = mEmailView;
+            phoneEditText.setError(getString(R.string.error_field_required));
+            focusView = phoneEditText;
             cancel = true;
-        } else if (!isEmailValid(email)) {
-            mEmailView.setError(getString(R.string.error_invalid_email));
-            focusView = mEmailView;
+        } else if (!isNumberValid(email)) {
+            phoneEditText.setError(getString(R.string.error_invalid_number));
+            focusView = phoneEditText;
             cancel = true;
         }
 
@@ -288,14 +270,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
     }
 
-    private boolean isEmailValid(String email) {
-        //TODO: Replace this with your own logic
-        return email.contains("@");
+    private boolean isNumberValid(String number) {
+        return number.length() == 10;
     }
 
     private boolean isPasswordValid(String password) {
         //TODO: Replace this with your own logic
-        return password.length() > 4;
+        return password.length() > 8;
     }
 
     /**
@@ -374,7 +355,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 new ArrayAdapter<>(LoginActivity.this,
                         android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
 
-        mEmailView.setAdapter(adapter);
+        phoneEditText.setAdapter(adapter);
     }
 
 
@@ -386,23 +367,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         int ADDRESS = 0;
         int IS_PRIMARY = 1;
-    }
-
-    public static String getMD5Hash(String input) {
-        String hashtext = "";
-        try {
-            MessageDigest messageDigest = MessageDigest.getInstance("MD5");
-            messageDigest.reset();
-            messageDigest.update(input.getBytes());
-            byte[] digest = messageDigest.digest();
-            BigInteger bigInt = new BigInteger(1, digest);
-            hashtext = bigInt.toString(16);
-            while (hashtext.length() < 32) {
-                hashtext = "0" + hashtext;
-            }
-        } catch (NoSuchAlgorithmException ignored) {
-        }
-        return hashtext;
     }
 }
 

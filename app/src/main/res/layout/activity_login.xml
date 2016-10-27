@@ -36,11 +36,11 @@
                 android:layout_height="wrap_content">
 
                 <AutoCompleteTextView
-                    android:id="@+id/email"
+                    android:id="@+id/number"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="username/email"
-                    android:inputType="textEmailAddress"
+                    android:hint="phone number"
+                    android:inputType="phone"
                     android:maxLines="1"
                     android:singleLine="true" />
 

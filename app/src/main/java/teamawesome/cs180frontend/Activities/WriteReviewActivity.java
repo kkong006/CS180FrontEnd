@@ -38,7 +38,7 @@ public class WriteReviewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_write_review);
         ButterKnife.bind(this);
-        EventBus.getDefault().register(this);
+        //EventBus.getDefault().register(this);
 
         mStars = new Button[] {mStar1, mStar2, mStar3, mStar4, mStar5};
     }
