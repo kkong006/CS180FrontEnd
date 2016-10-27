@@ -9,24 +9,24 @@ import com.google.gson.annotations.SerializedName;
 
 public class Professor {
 
-    @SerializedName("professor_id")
+    @SerializedName("prof_id")
     @Expose
-    private int professor_id;
+    private int prof_id;
 
-    @SerializedName("professor_name")
+    @SerializedName("prof_name")
     @Expose
-    private String professor_name;
+    private String prof_name;
 
-    public Professor(int professor_id, String professor_name) {
-        this.professor_id = professor_id;
-        this.professor_name = professor_name;
+    public Professor(int prof_id, String prof_name) {
+        this.prof_id = prof_id;
+        this.prof_name = prof_name;
     }
 
     public int getProfessorId() {
-        return professor_id;
+        return prof_id;
     }
 
     public String getProfessorName() {
-        return professor_name;
+        return prof_name;
     }
 }

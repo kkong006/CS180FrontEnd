@@ -2,23 +2,20 @@ package teamawesome.cs180frontend.API.Services.Callbacks;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import teamawesome.cs180frontend.API.Models.Professor;
-import teamawesome.cs180frontend.API.Models.School;
+import teamawesome.cs180frontend.API.Models.RatingId;
 import teamawesome.cs180frontend.Misc.Constants;
 
 /**
- * Created by KongK on 10/25/2016.
+ * Created by KongK on 10/26/2016.
  */
 
-public class GetProfessorsCallback implements Callback<Professor> {
+public class PostReviewRatingCallback implements Callback<RatingId> {
 
     @Override
-    public void onResponse(Call<Professor> call, Response<Professor> response) {
+    public void onResponse(Call<RatingId> call, Response<RatingId> response) {
         switch (response.code()) {
             case Constants.HTTP_STATUS_OK:
                 EventBus.getDefault().post(response.body());
@@ -33,7 +30,7 @@ public class GetProfessorsCallback implements Callback<Professor> {
     }
 
     @Override
-    public void onFailure(Call<Professor> call, Throwable t) {
+    public void onFailure(Call<RatingId> call, Throwable t) {
         EventBus.getDefault().post("ERROR");
     }
 }

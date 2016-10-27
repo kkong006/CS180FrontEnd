@@ -33,7 +33,7 @@ public class SearchActivity extends AppCompatActivity {
 //    @Bind(R.id.search_search_bt) Button mSearch;
 
     private String mProfessor;
-    private List<Professor> mProfessors;
+    private Professor mReturnedProfessor;
     private ProgressDialog mProgressDialog;
 
 //    public static final String PROFESSOR_NAME = "PROFESSOR_NAME";
@@ -58,40 +58,36 @@ public class SearchActivity extends AppCompatActivity {
             mProgressDialog.setMessage(getResources().getString(R.string.loading));
             mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             mProgressDialog.setIndeterminate(true);
+            Toast.makeText(this, getSharedPreferences(Constants.SCHOOL_ID, Context.MODE_PRIVATE).getInt(Constants.SCHOOL_ID, -1) + " " + mProfessor, Toast.LENGTH_SHORT).show();
             mProgressDialog.show();
+
             Callback callback = new GetProfessorsCallback();
             RetrofitSingleton.getInstance().getUserService()
                     .search(mProfessor, getSharedPreferences(Constants.SCHOOL_ID, Context.MODE_PRIVATE).getInt(Constants.SCHOOL_ID, -1))
                     .enqueue(callback);
-            //TODO: remove once data is placed in the database
-            Intent i = new Intent(getApplicationContext(), SearchResultsActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putString(getResources().getString(R.string.professor_name), mProfessor);
-            bundle.putInt(getResources().getString(R.string.professor_id), 1);
-            i.putExtras(bundle);
-            startActivity(i);
+//            //TODO: remove once data is placed in the database
+//            Intent i = new Intent(getApplicationContext(), SearchResultsActivity.class);
+//            Bundle bundle = new Bundle();
+//            bundle.putString(getResources().getString(R.string.professor_name), mProfessor);
+//            bundle.putInt(getResources().getString(R.string.professor_id), 1);
+//            i.putExtras(bundle);
+//            startActivity(i);
         } else {
             Toast.makeText(this, getResources().getString(R.string.enter_professor_name), Toast.LENGTH_SHORT).show();
         }
     }
 
     @Subscribe
-    public void professorResp(List<Professor> professorList) {
+    public void professorResp(Professor p) {
         mProgressDialog.dismiss();
-        mProfessors = professorList;
-        for(Professor professor : professorList) {
-            if(professor.getProfessorName().toLowerCase() == mProfessor.toLowerCase()) {
+        mReturnedProfessor = p;
 
-                Intent i = new Intent(this, SearchResultsActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putString(getResources().getString(R.string.professor_name), mProfessor);
-                bundle.putInt(getResources().getString(R.string.professor_id), professor.getProfessorId());
-                i.putExtras(bundle);
-                startActivity(i);
-                return;
-            }
-        }
-        Toast.makeText(this, getResources().getString(R.string.professor_dne), Toast.LENGTH_SHORT).show();
+        Intent i = new Intent(this, SearchResultsActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString(getResources().getString(R.string.professor_name), mReturnedProfessor.getProfessorName());
+        bundle.putInt(getResources().getString(R.string.professor_id), mReturnedProfessor.getProfessorId());
+        i.putExtras(bundle);
+        startActivity(i);
     }
 
     @Subscribe
@@ -100,7 +96,7 @@ public class SearchActivity extends AppCompatActivity {
         if(i == 0) {
             Toast.makeText(this, getResources().getString(R.string.professors_dne), Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(this, getResources().getString(R.string.error_retrieving_data), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.error_retrieving_data) + " query", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -108,7 +104,7 @@ public class SearchActivity extends AppCompatActivity {
     public void professorString(String s) {
         mProgressDialog.dismiss();
         if(s == "ERROR") {
-            Toast.makeText(this, getResources().getString(R.string.error_retrieving_data), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.error_retrieving_data) + " ERROR", Toast.LENGTH_SHORT).show();
         }
     }
 

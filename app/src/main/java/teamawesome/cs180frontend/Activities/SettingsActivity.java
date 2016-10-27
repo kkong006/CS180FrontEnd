@@ -140,10 +140,8 @@ public class SettingsActivity extends AppCompatActivity {
         String password = getSharedPreferences(Constants.PASSWORD, Context.MODE_PRIVATE).getString(Constants.PASSWORD, "");
 
         if(mSetSchool) {
-//
-            fillSpinner();
+
             mSetSchool = false;
-//            Toast.makeText(this, "Post request", Toast.LENGTH_SHORT).show();
             mProgressDialog = new ProgressDialog(this);
             mProgressDialog.setCancelable(false);
             mProgressDialog.setMessage(getResources().getString(R.string.loading));
@@ -179,6 +177,7 @@ public class SettingsActivity extends AppCompatActivity {
             mSchoolId = mNewSchoolId;
             getSharedPreferences(Constants.SCHOOL_ID, Context.MODE_PRIVATE)
                     .edit().putInt(Constants.SCHOOL_ID, mSchoolId).apply();
+            fillSpinner();
             Toast.makeText(this, getResources().getString(R.string.account_update_success), Toast.LENGTH_SHORT).show();
         }
     }

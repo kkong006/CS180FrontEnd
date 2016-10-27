@@ -83,7 +83,8 @@
     <string name="REVIEW_DATE">REVIEW_DATE</string>
     <string name="REVIEW_USER_RATING">REVIEW_USER_RATING</string>
 
-
+    <!--Write Review Activity-->
+    <string name="review_not_long_enough">Review too short</string>
 
     <!--Stubbed Data-->
     <string-array name="class_names">

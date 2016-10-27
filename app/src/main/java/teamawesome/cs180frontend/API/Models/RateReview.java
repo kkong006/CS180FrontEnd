@@ -26,7 +26,9 @@ public class RateReview {
     @Expose
     private boolean rating;
 
-    public RateReview(int review_id, boolean rating) {
+    public RateReview(int user_id, String password, int review_id, boolean rating) {
+        this.user_id = user_id;
+        this.password = password;
         this.review_id = review_id;
         this.rating = rating;
     }

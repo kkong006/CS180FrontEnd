@@ -77,13 +77,13 @@ public class MainActivity extends AppCompatActivity {
         });
 
         getSharedPreferences(Constants.USER_ID, Context.MODE_PRIVATE)
-            .edit().putInt(Constants.USER_ID, 2);
+            .edit().putInt(Constants.USER_ID, 2).apply();
 
         getSharedPreferences(Constants.PASSWORD, Context.MODE_PRIVATE)
-                .edit().putString(Constants.PASSWORD, "hello123");
+                .edit().putString(Constants.PASSWORD, "hello123").apply();
 
         getSharedPreferences(Constants.SCHOOL_ID, Context.MODE_PRIVATE)
-                .edit().putInt(Constants.SCHOOL_ID, 1);
+                .edit().putInt(Constants.SCHOOL_ID, 1).apply();
     }
 
     @Override

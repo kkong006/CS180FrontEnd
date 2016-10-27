@@ -17,7 +17,6 @@ public class PostUpdateAccountCallback implements Callback<Void> {
     public void onResponse(Call<Void> call, Response<Void> response) {
         switch (response.code()) {
             case Constants.HTTP_STATUS_OK:
-//                EventBus.getDefault().post(response.body());
                 EventBus.getDefault().post("SUCCESS");
                 break;
             case Constants.HTTP_STATUS_DNE:

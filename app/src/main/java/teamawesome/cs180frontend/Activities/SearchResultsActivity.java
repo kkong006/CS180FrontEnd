@@ -164,7 +164,7 @@ public class SearchResultsActivity extends AppCompatActivity {
         if(i == 0) {
             Toast.makeText(this, getResources().getString(R.string.reviews_dne), Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(this, getResources().getString(R.string.error_retrieving_data), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.error_retrieving_data) + "query", Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -200,7 +200,6 @@ public class SearchResultsActivity extends AppCompatActivity {
                     i.putExtras(bundle);
                     startActivity(i);
                 }
-
             }
         }
     }

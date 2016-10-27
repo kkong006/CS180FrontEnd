@@ -1,5 +1,7 @@
 package teamawesome.cs180frontend.Activities;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,9 +11,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+import retrofit2.Callback;
+import teamawesome.cs180frontend.API.Models.RateReview;
+import teamawesome.cs180frontend.API.Models.RatingId;
+import teamawesome.cs180frontend.API.RetrofitSingleton;
+import teamawesome.cs180frontend.API.Services.Callbacks.GetReviewsCallback;
+import teamawesome.cs180frontend.API.Services.Callbacks.PostReviewRatingCallback;
+import teamawesome.cs180frontend.API.Services.Callbacks.PostUpdateAccountCallback;
+import teamawesome.cs180frontend.Misc.Constants;
 import teamawesome.cs180frontend.Misc.Review;
 import teamawesome.cs180frontend.R;
 
@@ -36,6 +48,7 @@ public class ReadReviewActivity extends AppCompatActivity {
     private String mReviewClassName;
     private String mReviewDate;
     private int mUserRating;
+    private ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,29 +72,94 @@ public class ReadReviewActivity extends AppCompatActivity {
         mReviewText.setText(mReviewContent);
 
         for(int i = 0; i < mReviewRating && i < 5; i++) {
-            mRatings[i].setTextColor(getApplicationContext().getResources().getColor(R.color.colorGreen));
+            mRatings[i].setTextColor(getResources().getColor(R.color.colorGreen));
         }
 
-        //TODO: if we get like/dislike count, set it
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.setMessage(getResources().getString(R.string.loading));
+        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        mProgressDialog.setIndeterminate(true);
 
-        mThumbsUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getBaseContext(), "Like", Toast.LENGTH_SHORT).show();
-                //TODO: make call to update likes/dislikes
-            }
-        });
-
-        mThumbsDown.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getBaseContext(), "Dislike", Toast.LENGTH_SHORT).show();
-                //TODO: make call to update likes/dislikes
-            }
-        });
+        setUserRating();
     }
-    
 
+    public void setUserRating() {
+
+        if(mUserRating == 0) {
+            mThumbsUp.setTextColor(getResources().getColor(R.color.colorGrey));
+            mThumbsDown.setTextColor(getResources().getColor(R.color.colorGrey));
+        } else if(mUserRating == 1) {
+            mThumbsUp.setTextColor(getResources().getColor(R.color.colorGreen));
+            mThumbsDown.setTextColor(getResources().getColor(R.color.colorGrey));
+        } else if(mUserRating == 2) {
+            mThumbsUp.setTextColor(getResources().getColor(R.color.colorGrey));
+            mThumbsDown.setTextColor(getResources().getColor(R.color.colorRed));
+        }
+    }
+
+    @OnClick(R.id.read_like_bt)
+    public void thumbsUp() {
+        Toast.makeText(getBaseContext(), "Like", Toast.LENGTH_SHORT).show();
+
+        if(mUserRating == 1) {
+            mUserRating = 0;
+        } else {
+            mUserRating = 1;
+        }
+
+        updateResponse();
+    }
+
+    @OnClick(R.id.read_dislike_bt)
+    public void thumbsDown() {
+        Toast.makeText(getBaseContext(), "Dislike", Toast.LENGTH_SHORT).show();
+
+        if(mUserRating == 2) {
+            mUserRating = 0;
+        } else {
+            mUserRating = 2;
+        }
+
+        updateResponse();
+    }
+
+    public void updateResponse() {
+        mProgressDialog.show();
+        setUserRating();
+        Callback callback = new PostReviewRatingCallback();
+        RetrofitSingleton.getInstance().getUserService()
+                .rateReview(new RateReview(getSharedPreferences(Constants.USER_ID, Context.MODE_PRIVATE).getInt(Constants.USER_ID, -1),
+                        getSharedPreferences(Constants.PASSWORD, Context.MODE_PRIVATE).getString(Constants.PASSWORD, ""),
+                        mReviewId,
+                        true ? mUserRating == 1 : false))
+                .enqueue(callback);
+    }
+
+    @Subscribe
+    public void likeDislikeResp(RatingId r) {
+        mProgressDialog.dismiss();
+        setUserRating();
+        Toast.makeText(this, getResources().getString(R.string.account_update_success), Toast.LENGTH_SHORT).show();
+    }
+
+    @Subscribe
+    public void likeDislikeInt(Integer i) {
+        mProgressDialog.dismiss();
+        if(i == 0) {
+            Toast.makeText(this, getResources().getString(R.string.reviews_dne), Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, getResources().getString(R.string.error_retrieving_data) + "query", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Subscribe
+    public void likeDislikeError(String s) {
+        mProgressDialog.dismiss();
+        if(s == "ERROR") {
+            Toast.makeText(this, getResources().getString(R.string.error_retrieving_data) + "ERROR", Toast.LENGTH_SHORT).show();
+        }
+    }
 
     @Override
     protected void onDestroy() {

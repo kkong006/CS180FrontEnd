@@ -31,7 +31,7 @@ public interface UserService {
     Call<List<School>> getSchools();
 
     @GET("/getClasses")
-    Call<Class> getClasses(@Body int school_id);
+    Call<List<Class>> getClasses(@Body int school_id);
 
     @POST("/rateReview")
     Call<RatingId> rateReview(@Body RateReview rateReview);
@@ -46,7 +46,7 @@ public interface UserService {
     Call<User> verifyUser(@Body User user);
 
     @GET("/search")
-    Call<List<Professor>> search(@Query("name") String name,
+    Call<Professor> search(@Query("professor_name") String name,
                                  @Query("school_id") int school_id);
 
     @GET("/reviews")
