@@ -5,6 +5,7 @@ import java.util.concurrent.TimeUnit;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import teamawesome.cs180frontend.API.Services.MatchingService;
 import teamawesome.cs180frontend.API.Services.UserService;
 import teamawesome.cs180frontend.Misc.Constants;
 
@@ -15,9 +16,10 @@ import teamawesome.cs180frontend.Misc.Constants;
 public class RetrofitSingleton {
     private static RetrofitSingleton instance;
     private UserService userService;
+    private MatchingService matchingService;
 
     public static RetrofitSingleton getInstance() {
-        if(instance == null) {
+        if (instance == null) {
             instance = new RetrofitSingleton();
         }
 
@@ -36,7 +38,14 @@ public class RetrofitSingleton {
                 .build();
 
         userService = retrofit.create(UserService.class);
+        matchingService = retrofit.create(MatchingService.class);
     }
 
-    public UserService getUserService() { return userService; }
+    public UserService getUserService() {
+        return userService;
+    }
+
+    public MatchingService getMatchingService() {
+        return matchingService;
+    }
 }

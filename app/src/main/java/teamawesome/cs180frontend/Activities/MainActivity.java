@@ -5,10 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.util.Log;
-import android.view.View;
-import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -16,13 +12,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnItemClick;
 import teamawesome.cs180frontend.Adapters.NavDrawerAdapter;
 import teamawesome.cs180frontend.Misc.Constants;
 import teamawesome.cs180frontend.R;
@@ -30,11 +27,16 @@ import teamawesome.cs180frontend.R;
 
 public class MainActivity extends AppCompatActivity {
 
-    @Bind(R.id.toolbar) Toolbar mToolbar;
-    @Bind(R.id.drawer_layout) DrawerLayout mDrawerLayout;
-    @Bind (R.id.nav_drawer) ListView mDrawerList;
-    @Bind(R.id.main_layout) CoordinatorLayout mMainLayout;
-    @Bind(R.id.fab) FloatingActionButton mFab;
+    @Bind(R.id.toolbar)
+    Toolbar mToolbar;
+    @Bind(R.id.drawer_layout)
+    DrawerLayout mDrawerLayout;
+    @Bind(R.id.drawer_list)
+    ListView mDrawerList;
+    @Bind(R.id.main_layout)
+    CoordinatorLayout mMainLayout;
+    @Bind(R.id.fab)
+    FloatingActionButton mFab;
 
     private NavDrawerAdapter mAdapter;
     private String[] mNavTitles;
@@ -53,9 +55,8 @@ public class MainActivity extends AppCompatActivity {
         mIconTitles = getResources().getStringArray(R.array.nav_drawer_icon_array);
 
         mAdapter = new NavDrawerAdapter(mIconTitles, mNavTitles, this);
-        
+
         mDrawerList.setAdapter(mAdapter);
-        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, mDrawerLayout, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
@@ -77,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         getSharedPreferences(Constants.USER_ID, Context.MODE_PRIVATE)
-            .edit().putInt(Constants.USER_ID, 2).apply();
+                .edit().putInt(Constants.USER_ID, 2).apply();
 
         getSharedPreferences(Constants.PASSWORD, Context.MODE_PRIVATE)
                 .edit().putString(Constants.PASSWORD, "hello123").apply();
@@ -116,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
             return true;
         } else {
             //Logout
-            logOut();
+            logout();
 //            return true;
         }
 
@@ -124,28 +125,30 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private class DrawerItemClickListener implements ListView.OnItemClickListener {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            if(position == 0) {
-                //Home
-                mDrawerLayout.closeDrawer(GravityCompat.START);
-            } else if(position == 1) {
-                //Search
-                Intent i = new Intent(getApplicationContext(), SearchActivity.class);
-                startActivity(i);
-            } else if(position == 2) {
-                //My Reviews
-                Intent i = new Intent(getApplicationContext(), MyReviewsActivity.class);
-                startActivity(i);
-            } else if(position == 3) {
-                //logout
-                logOut();
+    @OnItemClick(R.id.drawer_list)
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        if (position == 0) {
+            //Home
+            mDrawerLayout.closeDrawer(GravityCompat.START);
+        } else if (position == 1) {
+            //Search
+            Intent i = new Intent(getApplicationContext(), SearchActivity.class);
+            startActivity(i);
+        } else if (position == 2) {
+            //My Reviews
+            Intent i = new Intent(getApplicationContext(), MyReviewsActivity.class);
+            startActivity(i);
+        } else if (position == 3) {
+            if (mAdapter.getItem(position).equals(getString(R.string.login))) {
+                Intent intent = new Intent(this, LoginActivity.class);
+                startActivity(intent);
+            } else {
+                logout();
             }
         }
     }
 
-    private void logOut() {
+    private void logout() {
         Toast.makeText(getBaseContext(), "Logging out", Toast.LENGTH_SHORT).show();
     }
 }
