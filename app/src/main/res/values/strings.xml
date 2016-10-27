@@ -23,7 +23,7 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
-    <string name="confirm_registry">Username/email not found. Create new user?</string>
+    <string name="confirm_registry">Username/email not found. Create new userRespBundle?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="login_loading">Logging in...</string>

@@ -7,6 +7,7 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import teamawesome.cs180frontend.API.APIConstants;
 import teamawesome.cs180frontend.API.Models.UserReview;
 import teamawesome.cs180frontend.Misc.Constants;
 
@@ -19,13 +20,13 @@ public class GetReviewsCallback implements Callback<List<UserReview>> {
     @Override
     public void onResponse(Call<List<UserReview>> call, Response<List<UserReview>> response) {
         switch (response.code()) {
-            case Constants.HTTP_STATUS_OK:
+            case APIConstants.HTTP_STATUS_OK:
                 EventBus.getDefault().post(response.body());
                 break;
-            case Constants.HTTP_STATUS_DNE:
+            case APIConstants.HTTP_STATUS_DNE:
                 EventBus.getDefault().post(0);
                 break;
-            case Constants.HTTP_STATUS_ERROR:
+            case APIConstants.HTTP_STATUS_ERROR:
                 EventBus.getDefault().post(-1);
                 break;
         }

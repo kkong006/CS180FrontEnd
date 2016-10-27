@@ -22,7 +22,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import retrofit2.Callback;
 import teamawesome.cs180frontend.API.Models.School;
-import teamawesome.cs180frontend.API.Models.UserAccount;
+import teamawesome.cs180frontend.API.Models.UpdateUserBundle;
 import teamawesome.cs180frontend.API.RetrofitSingleton;
 import teamawesome.cs180frontend.API.Services.Callbacks.GetSchoolsCallback;
 import teamawesome.cs180frontend.API.Services.Callbacks.PostUpdateAccountCallback;
@@ -150,7 +150,7 @@ public class SettingsActivity extends AppCompatActivity {
             mProgressDialog.show();
             Callback callback = new PostUpdateAccountCallback();
             RetrofitSingleton.getInstance().getUserService()
-                    .updateAccount(new UserAccount(id, password, password, mSchoolId))
+                    .updateAccount(new UpdateUserBundle(id, password, password, mSchoolId))
                     .enqueue(callback);
         } else {
             Toast.makeText(this, getResources().getString(R.string.enter_school_name), Toast.LENGTH_SHORT).show();

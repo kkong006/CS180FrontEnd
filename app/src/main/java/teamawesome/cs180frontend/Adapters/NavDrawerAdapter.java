@@ -40,7 +40,12 @@ public class NavDrawerAdapter extends BaseAdapter {
         return position;
     }
 
-    public void changeLoginElem(String text) {
+    public void changeLoginElem() {
+        if (mText[3].equals(mContext.getString(R.string.login))) {
+            mText[3] = mContext.getString(R.string.logout);
+        } else {
+            mText[3] = mContext.getString(R.string.login);
+        }
         notifyDataSetChanged();
     }
 

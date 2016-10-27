@@ -115,7 +115,7 @@ public class SearchResultsActivity extends AppCompatActivity {
         mProgressDialog.setIndeterminate(true);
         mProgressDialog.show();
         Callback callback = new GetReviewsCallback();
-        RetrofitSingleton.getInstance().getUserService()
+        RetrofitSingleton.getInstance().getMatchingService()
                 .reviews(mProfessorId, getSharedPreferences(Constants.USER_ID, Context.MODE_PRIVATE).getInt(Constants.USER_ID, -1))
                 .enqueue(callback);
     }

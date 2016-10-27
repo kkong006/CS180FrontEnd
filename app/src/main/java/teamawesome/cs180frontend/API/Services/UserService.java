@@ -7,13 +7,14 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
+import teamawesome.cs180frontend.API.Models.LoginRegisterBundle;
 import teamawesome.cs180frontend.API.Models.Professor;
 import teamawesome.cs180frontend.API.Models.RateReview;
 import teamawesome.cs180frontend.API.Models.RatingId;
 import teamawesome.cs180frontend.API.Models.ResponseReview;
 import teamawesome.cs180frontend.API.Models.School;
-import teamawesome.cs180frontend.API.Models.User;
-import teamawesome.cs180frontend.API.Models.UserAccount;
+import teamawesome.cs180frontend.API.Models.UserRespBundle;
+import teamawesome.cs180frontend.API.Models.UpdateUserBundle;
 import teamawesome.cs180frontend.API.Models.UserReview;
 
 /**
@@ -22,7 +23,7 @@ import teamawesome.cs180frontend.API.Models.UserReview;
 
 public interface UserService {
     @POST("/updateAccount")
-    Call<Void> updateAccount(@Body UserAccount userAccount);
+    Call<Void> updateAccount(@Body UpdateUserBundle updateUserBundle);
 
     @POST("/review")
     Call<Void> review(@Body UserReview userReview);
@@ -37,19 +38,11 @@ public interface UserService {
     Call<RatingId> rateReview(@Body RateReview rateReview);
 
     @POST("/login")
-    Call<User> basicLogin(@Body User user);
+    Call<UserRespBundle> login(@Body LoginRegisterBundle loginRegisterBundle);
 
     @POST("/register")
-    Call<User> basicRegister(@Body User user);
+    Call<UserRespBundle> basicRegister(@Body UserRespBundle userRespBundle);
 
     @POST("/verify")
-    Call<User> verifyUser(@Body User user);
-
-    @GET("/search")
-    Call<Professor> search(@Query("professor_name") String name,
-                                 @Query("school_id") int school_id);
-
-    @GET("/reviews")
-    Call<List<ResponseReview>> reviews(@Query("prof_id") int prof_id,
-                                       @Query("user_id") int user_id);
+    Call<UserRespBundle> verifyUser(@Body UserRespBundle userRespBundle);
 }

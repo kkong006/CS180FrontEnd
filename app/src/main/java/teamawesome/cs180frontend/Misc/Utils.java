@@ -1,6 +1,7 @@
 package teamawesome.cs180frontend.Misc;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -10,6 +11,8 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import teamawesome.cs180frontend.API.Models.LoginRegisterBundle;
+import teamawesome.cs180frontend.API.Models.UserRespBundle;
 import teamawesome.cs180frontend.R;
 
 public class Utils {
@@ -47,5 +50,31 @@ public class Utils {
 
     public static int getUserId(Context context) {
         return SPSingleton.getInstance(context).getSp().getInt(Constants.USER_ID, 0);
+    }
+
+    //save the user's info once they've logged in and/or registered
+    public static void saveUserData(Context context, UserRespBundle userInfo, String password, String number) {
+        System.out.println(userInfo.getId());
+        System.out.println(userInfo.isActive());
+        System.out.println(userInfo.getSchoolId());
+        System.out.println(password);
+        System.out.println(number);
+
+        SharedPreferences sp = SPSingleton.getInstance(context).getSp();
+        sp.edit().putInt(Constants.USER_ID, userInfo.getId()).commit();
+        sp.edit().putBoolean(Constants.IS_ACTIVE, userInfo.isActive()).commit();
+        sp.edit().putInt(Constants.SCHOOL_ID, userInfo.getSchoolId()).commit();
+        sp.edit().putString(Constants.PASSWORD, password).commit();
+        sp.edit().putString(Constants.PHONE_NUMBER, number).commit();
+    }
+
+    //Good night sweet prince
+    public static void nukeUserDate(Context context) {
+        SharedPreferences sp = SPSingleton.getInstance(context).getSp();
+        sp.edit().remove(Constants.USER_ID).commit();
+        sp.edit().remove(Constants.IS_ACTIVE).commit();
+        sp.edit().remove(Constants.SCHOOL_ID).commit();
+        sp.edit().remove(Constants.PASSWORD).commit();
+        sp.edit().remove(Constants.PHONE_NUMBER).commit();
     }
 }

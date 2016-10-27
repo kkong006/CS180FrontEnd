@@ -61,10 +61,11 @@ public class SearchActivity extends AppCompatActivity {
             Toast.makeText(this, getSharedPreferences(Constants.SCHOOL_ID, Context.MODE_PRIVATE).getInt(Constants.SCHOOL_ID, -1) + " " + mProfessor, Toast.LENGTH_SHORT).show();
             mProgressDialog.show();
 
-            Callback callback = new GetProfessorsCallback();
-            RetrofitSingleton.getInstance().getUserService()
+            //TODO: Client-based sorting?
+            /*Callback callback = new GetProfessorsCallback();
+            RetrofitSingleton.getInstance().getMatchingService()
                     .search(mProfessor, getSharedPreferences(Constants.SCHOOL_ID, Context.MODE_PRIVATE).getInt(Constants.SCHOOL_ID, -1))
-                    .enqueue(callback);
+                    .enqueue(callback);*/
 //            //TODO: remove once data is placed in the database
 //            Intent i = new Intent(getApplicationContext(), SearchResultsActivity.class);
 //            Bundle bundle = new Bundle();

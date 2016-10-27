@@ -10,6 +10,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,21 +23,17 @@ import butterknife.ButterKnife;
 import butterknife.OnItemClick;
 import teamawesome.cs180frontend.Adapters.NavDrawerAdapter;
 import teamawesome.cs180frontend.Misc.Constants;
+import teamawesome.cs180frontend.Misc.Utils;
 import teamawesome.cs180frontend.R;
 
 
 public class MainActivity extends AppCompatActivity {
 
-    @Bind(R.id.toolbar)
-    Toolbar mToolbar;
-    @Bind(R.id.drawer_layout)
-    DrawerLayout mDrawerLayout;
-    @Bind(R.id.drawer_list)
-    ListView mDrawerList;
-    @Bind(R.id.main_layout)
-    CoordinatorLayout mMainLayout;
-    @Bind(R.id.fab)
-    FloatingActionButton mFab;
+    @Bind(R.id.toolbar) Toolbar mToolbar;
+    @Bind(R.id.drawer_layout) DrawerLayout mDrawerLayout;
+    @Bind(R.id.drawer_list) ListView mDrawerList;
+    @Bind(R.id.main_layout) CoordinatorLayout mMainLayout;
+    @Bind(R.id.fab) FloatingActionButton mFab;
 
     private NavDrawerAdapter mAdapter;
     private String[] mNavTitles;
@@ -139,16 +136,32 @@ public class MainActivity extends AppCompatActivity {
             Intent i = new Intent(getApplicationContext(), MyReviewsActivity.class);
             startActivity(i);
         } else if (position == 3) {
+            mDrawerLayout.closeDrawer(GravityCompat.START);
             if (mAdapter.getItem(position).equals(getString(R.string.login))) {
                 Intent intent = new Intent(this, LoginActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, 1);
             } else {
                 logout();
             }
         }
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        Toast.makeText(this, "HELLO", Toast.LENGTH_SHORT).show();
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                mAdapter.changeLoginElem();
+            }
+        }
+    }
+
     private void logout() {
+        Utils.nukeUserDate(this);
+        mAdapter.changeLoginElem();
+        //TODO: THIS TOAST MSG NEEDS TO BE CONSTANT
+        //USING TOAST SINCE THEY'RE CONTEXT INSENSITIVE
         Toast.makeText(getBaseContext(), "Logging out", Toast.LENGTH_SHORT).show();
     }
 }
