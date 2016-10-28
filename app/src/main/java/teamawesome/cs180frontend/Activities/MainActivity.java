@@ -85,10 +85,10 @@ public class MainActivity extends AppCompatActivity {
             progressDialog.show();
 
             System.out.println(Utils.getSchoolId(this));
-            RetrofitSingleton.getInstance().
-                    getMatchingService().
-                    getClasses(Utils.getSchoolId(this)).
-                    enqueue(new GetClassesCallback());
+//            RetrofitSingleton.getInstance().
+//                    getMatchingService().
+//                    getClasses(Utils.getSchoolId(this)).
+//                    enqueue(new GetClassesCallback());
         }
     }
 
@@ -172,13 +172,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-    //TODO: In the future: make 1 API call to fetch all data
-    //THIS IS A BANDAID FIX
     @Subscribe
-    public void cacheClasses(List<ClassBundle> classesList) {
-        DataSingleton.getInstance().cacheClasses(classesList);
+    public void saveData(List<ClassBundle> classes) {
         progressDialog.dismiss();
+        DataSingleton.getInstance().cacheClasses(classes);
         Utils.showSnackbar(this, parent, getString(R.string.data_loaded));
     }
 

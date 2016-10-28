@@ -15,6 +15,7 @@ public class DataSingleton {
     private static DataSingleton instance = null;
     private List<ClassBundle> classCache;
     private List<Professor> professorCache;
+    private boolean hasLoaded; //temporary measure
 
     public static DataSingleton getInstance() {
         if (instance == null) {
@@ -32,6 +33,7 @@ public class DataSingleton {
     public List<ClassBundle> cacheClasses(List<ClassBundle> classes) {
         this.classCache.clear();
         this.classCache.addAll(classes);
+        hasLoaded = false;
         return this.classCache;
     }
 
