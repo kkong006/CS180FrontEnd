@@ -55,7 +55,7 @@ public class WriteReviewActivity extends AppCompatActivity {
 
         if (Utils.getSchoolId(this) != 0) {
         } else {
-            finish();
+            //finish();
         }
     }
 
