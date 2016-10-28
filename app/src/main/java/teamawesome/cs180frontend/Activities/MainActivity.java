@@ -79,10 +79,10 @@ public class MainActivity extends AppCompatActivity {
         toggle.syncState();
 
         if (Utils.getUserId(this) != 0) {
-            progressDialog = new ProgressDialog(this);
-            progressDialog.setCancelable(false);
-            progressDialog.setMessage(getString(R.string.loading));
-            progressDialog.show();
+//            progressDialog = new ProgressDialog(this);
+//            progressDialog.setCancelable(false);
+//            progressDialog.setMessage(getString(R.string.loading));
+//            progressDialog.show();
 
             System.out.println(Utils.getSchoolId(this));
 //            RetrofitSingleton.getInstance().
