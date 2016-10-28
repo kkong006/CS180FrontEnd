@@ -42,13 +42,30 @@
         android:gravity="center"
         android:text="@string/change_school_button" />
 
+    <!--<Button-->
+        <!--android:id="@+id/settings_logout_bt"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="center_horizontal"-->
+        <!--android:layout_marginTop="50dp"-->
+        <!--android:gravity="center"-->
+        <!--android:text="@string/logout_button" />-->
+
+    <EditText
+        android:id="@+id/new_password_et"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="50dp"
+        android:gravity="center"
+        android:inputType="textPassword"
+        android:hint="Enter a new password" />
+
     <Button
-        android:id="@+id/settings_logout_bt"
+        android:id="@+id/settings_password_bt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="50dp"
         android:gravity="center"
-        android:text="@string/logout_button" />
+        android:text="@string/change_password_button" />
 
 </LinearLayout>

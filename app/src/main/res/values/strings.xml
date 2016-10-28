@@ -11,6 +11,10 @@
     <string name="login">Login</string>
     <string name="logout">Logout</string>
 
+    <!--Main Activity-->
+    <string name="data_doesnt_exist">Date doesn\'t exist</string>
+    <string name="error_getting_data">Couldn\'t get data</string>
+
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password (optional)</string>
@@ -68,6 +72,7 @@
     <!--Search Results Activity-->
     <string name="REVIEW_ID">REVIEW_ID</string>
     <string name="REVIEW_RATING">REVIEW_RATING</string>
+    <string name="not_logged_in">Please sign in</string>
 
     <!--Settings Activity-->
     <string name="change_school_button">Change School</string>
@@ -79,6 +84,7 @@
     <string name="universities_dne">Universities do not exist</string>
     <string name="error_retrieving_data">Error retrieving data</string>
     <string name="account_update_success">Success!</string>
+    <string name="change_password_button">Change Password</string>
 
     <!--Read Review Activity-->
     <string name="students_like"> students like this review</string>
@@ -92,6 +98,8 @@
 
     <!--Write Review Activity-->
     <string name="review_not_long_enough">Review too short</string>
+    <string name="failed_to_submit_review">Failed to submit review</string>
+
 
     <!--Stubbed Data-->
     <string-array name="class_names">

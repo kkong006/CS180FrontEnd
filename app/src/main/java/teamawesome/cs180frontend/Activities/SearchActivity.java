@@ -58,7 +58,6 @@ public class SearchActivity extends AppCompatActivity {
             mProgressDialog.setMessage(getResources().getString(R.string.loading));
             mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             mProgressDialog.setIndeterminate(true);
-            Toast.makeText(this, getSharedPreferences(Constants.SCHOOL_ID, Context.MODE_PRIVATE).getInt(Constants.SCHOOL_ID, -1) + " " + mProfessor, Toast.LENGTH_SHORT).show();
             mProgressDialog.show();
 
             //TODO: Client-based sorting?
@@ -97,7 +96,7 @@ public class SearchActivity extends AppCompatActivity {
         if(i == 0) {
             Toast.makeText(this, getResources().getString(R.string.professors_dne), Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(this, getResources().getString(R.string.error_retrieving_data) + " query", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.error_retrieving_data), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -105,8 +104,14 @@ public class SearchActivity extends AppCompatActivity {
     public void professorString(String s) {
         mProgressDialog.dismiss();
         if(s == "ERROR") {
-            Toast.makeText(this, getResources().getString(R.string.error_retrieving_data) + " ERROR", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.error_retrieving_data), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    protected void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
     }
 
     @Override

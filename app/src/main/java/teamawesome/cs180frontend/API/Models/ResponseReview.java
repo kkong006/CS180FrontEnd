@@ -9,69 +9,96 @@ import com.google.gson.annotations.SerializedName;
 
 public class ResponseReview {
 
+    @SerializedName("subject_id")
+    @Expose
+    private int subject_id;
+
     @SerializedName("review_id")
     @Expose
     private int review_id;
-
-    @SerializedName("class_id")
-    @Expose
-    private int class_id;
-
-    @SerializedName("prof_id")
-    @Expose
-    private int prof_id;
 
     @SerializedName("review_date")
     @Expose
     private String review_date;
 
+    @SerializedName("school_id")
+    @Expose
+    private int school_id;
+
+    @SerializedName("rating_id")
+    @Expose
+    private int rating_id;
+
+    @SerializedName("class_id")
+    @Expose
+    private int class_id;
+
     @SerializedName("rating")
     @Expose
     private int rating;
 
-    @SerializedName("msg")
+    @SerializedName("message")
     @Expose
-    private String msg;
+    private String message;
 
-    @SerializedName("user_review_rating")
+    @SerializedName("review_rating")
     @Expose
-    private int user_review_rating;
+    private int review_rating;
 
-    public ResponseReview(int review_id, String msg, int user_review_rating, String review_date, int rating, int prof_id, int class_id) {
+    @SerializedName("prof_id")
+    @Expose
+    private int prof_id;
+
+    public ResponseReview(int subject_id, int review_id, String review_date, int school_id, int rating_id, int class_id, int rating, String message, int prof_id, int review_rating) {
+        this.subject_id = subject_id;
         this.review_id = review_id;
-        this.msg = msg;
-        this.user_review_rating = user_review_rating;
         this.review_date = review_date;
-        this.rating = rating;
-        this.prof_id = prof_id;
+        this.school_id = school_id;
+        this.rating_id = rating_id;
         this.class_id = class_id;
+        this.rating = rating;
+        this.message = message;
+        this.prof_id = prof_id;
+        this.review_rating = review_rating;
+    }
+
+    public int getSubjectId() {
+        return subject_id;
     }
 
     public int getReviewId() {
         return review_id;
     }
 
-    public int getClassId() {
-        return class_id;
-    }
-
-    public int getProfId() {
-        return prof_id;
-    }
-
     public String getReviewDate() {
         return review_date;
+    }
+
+    public int getSchool_id() {
+        return school_id;
+    }
+
+    public int getRatingId() {
+        return rating_id;
+    }
+
+    public int getClassId() {
+        return class_id;
     }
 
     public int getRating() {
         return rating;
     }
 
-    public String getMsg() {
-        return msg;
+    public String getMessage() {
+        return message;
     }
 
-    public int getUserReviewRating() {
-        return user_review_rating;
+    public int getProfId() {
+        return prof_id;
+    }
+
+    public int getReviewRating() {
+        return review_rating;
     }
 }

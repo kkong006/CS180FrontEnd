@@ -25,6 +25,7 @@ import teamawesome.cs180frontend.API.Services.Callbacks.PostReviewRatingCallback
 import teamawesome.cs180frontend.API.Services.Callbacks.PostUpdateAccountCallback;
 import teamawesome.cs180frontend.Misc.Constants;
 import teamawesome.cs180frontend.Misc.Review;
+import teamawesome.cs180frontend.Misc.SPSingleton;
 import teamawesome.cs180frontend.R;
 
 public class ReadReviewActivity extends AppCompatActivity {
@@ -75,11 +76,7 @@ public class ReadReviewActivity extends AppCompatActivity {
             mRatings[i].setTextColor(getResources().getColor(R.color.colorGreen));
         }
 
-        mProgressDialog = new ProgressDialog(this);
-        mProgressDialog.setCancelable(false);
-        mProgressDialog.setMessage(getResources().getString(R.string.loading));
-        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        mProgressDialog.setIndeterminate(true);
+        mUserRating = 0;
 
         setUserRating();
     }
@@ -125,40 +122,57 @@ public class ReadReviewActivity extends AppCompatActivity {
     }
 
     public void updateResponse() {
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.setMessage(getResources().getString(R.string.loading));
+        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        mProgressDialog.setIndeterminate(true);
         mProgressDialog.show();
         setUserRating();
+//        int user_id = SPSingleton.getInstance(this).getSp().getInt(Constants.USER_ID, -1);
+        int user_id = 1;
+        String password = SPSingleton.getInstance(this).getSp().getString(Constants.PASSWORD, "");
+        Toast.makeText(this, password, Toast.LENGTH_SHORT).show();
+
+        RateReview r = new RateReview(user_id, password, mReviewId, mUserRating);
         Callback callback = new PostReviewRatingCallback();
         RetrofitSingleton.getInstance().getUserService()
-                .rateReview(new RateReview(getSharedPreferences(Constants.USER_ID, Context.MODE_PRIVATE).getInt(Constants.USER_ID, -1),
-                        getSharedPreferences(Constants.PASSWORD, Context.MODE_PRIVATE).getString(Constants.PASSWORD, ""),
-                        mReviewId,
-                        true ? mUserRating == 1 : false))
+                .rateReview(r)
                 .enqueue(callback);
     }
 
-    @Subscribe
-    public void likeDislikeResp(RatingId r) {
-        mProgressDialog.dismiss();
-        setUserRating();
-        Toast.makeText(this, getResources().getString(R.string.account_update_success), Toast.LENGTH_SHORT).show();
-    }
+//    @Subscribe
+//    public void likeDislikeResp(RatingId r) {
+//        mProgressDialog.dismiss();
+//        setUserRating();
+//        Toast.makeText(this, getResources().getString(R.string.account_update_success), Toast.LENGTH_SHORT).show();
+//    }
 
     @Subscribe
     public void likeDislikeInt(Integer i) {
         mProgressDialog.dismiss();
-        if(i == 0) {
+        if(i.equals(0)) {
             Toast.makeText(this, getResources().getString(R.string.reviews_dne), Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(this, getResources().getString(R.string.error_retrieving_data) + "query", Toast.LENGTH_SHORT).show();
+        } else if(i.equals(-1)) {
+            Toast.makeText(this, getResources().getString(R.string.error_retrieving_data), Toast.LENGTH_SHORT).show();
+        } else if(i.equals(1)) {
+            Toast.makeText(this, getResources().getString(R.string.account_update_success), Toast.LENGTH_SHORT).show();
+        } else if(i.equals(2)) {
+            Toast.makeText(this, getResources().getString(R.string.error_retrieving_data), Toast.LENGTH_SHORT).show();
         }
     }
 
     @Subscribe
     public void likeDislikeError(String s) {
         mProgressDialog.dismiss();
-        if(s == "ERROR") {
-            Toast.makeText(this, getResources().getString(R.string.error_retrieving_data) + "ERROR", Toast.LENGTH_SHORT).show();
+        if(s.equals("ERROR")) {
+            Toast.makeText(this, getResources().getString(R.string.error_retrieving_data), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
     }
 
     @Override

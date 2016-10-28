@@ -29,7 +29,7 @@ public interface UserService {
     Call<Void> review(@Body UserReview userReview);
 
     @POST("/rateReview")
-    Call<RatingId> rateReview(@Body RateReview rateReview);
+    Call<Void> rateReview(@Body RateReview rateReview);
 
     @POST("/login")
     Call<UserRespBundle> login(@Body LoginRegisterBundle loginRegisterBundle);

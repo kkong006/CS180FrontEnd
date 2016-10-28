@@ -57,9 +57,9 @@ public class SearchResultsActivity extends AppCompatActivity {
         EventBus.getDefault().register(this);
 
 
-        Bundle bundle = getIntent().getExtras();
-        mProfessorName = bundle.getString(getResources().getString(R.string.professor_name));
-        mProfessorId = bundle.getInt(getResources().getString(R.string.professor_id));
+//        Bundle bundle = getIntent().getExtras();
+//        mProfessorName = bundle.getString(getResources().getString(R.string.professor_name));
+//        mProfessorId = bundle.getInt(getResources().getString(R.string.professor_id));
 
         getSupportActionBar().setTitle(mProfessorName);
 //        mClassName = bundle.getString(SearchActivity.CLASS_NAME);
@@ -70,41 +70,41 @@ public class SearchResultsActivity extends AppCompatActivity {
     @Override
     protected void onRestart() {
         super.onRestart();
-        getReviews();
-
     }
 
     public void populateListView() {
         //TODO: pull class names and match
-        mReviewIds = new int[mReviews.size()];
-        mClassIds = new int[mReviews.size()];
-        mProfIds = new int[mReviews.size()];
-        mReviewDates = new String[mReviews.size()];
-        mRatings = new int[mReviews.size()];
-        mMsgs = new String[mReviews.size()];
-        mUserReviewRatings = new int[mReviews.size()];
-        mClassNames = new String[mReviews.size()];
+        if(mReviews != null) {
+            mReviewIds = new int[mReviews.size()];
+            mClassIds = new int[mReviews.size()];
+            mProfIds = new int[mReviews.size()];
+            mReviewDates = new String[mReviews.size()];
+            mRatings = new int[mReviews.size()];
+            mMsgs = new String[mReviews.size()];
+            mUserReviewRatings = new int[mReviews.size()];
+            mClassNames = new String[mReviews.size()];
 
-        for(int i = 0; i < mReviews.size(); i++) {
-            mReviewIds[i] = mReviews.get(i).getReviewId();
-            mClassIds[i] = mReviews.get(i).getClassId();
-            mClassNames[i] = "";
-            for(ClassBundle c : mClasses) {
-                if(c.getClassId() == mClassIds[i]) {
-                    mClassNames[i] = c.getClassName();
-                }
+            for(int i = 0; i < mReviews.size(); i++) {
+                mReviewIds[i] = mReviews.get(i).getReviewId();
+                mClassIds[i] = mReviews.get(i).getClassId();
+                mClassNames[i] = "Class Review";
+//            for(ClassBundle c : mClasses) {
+//                if(c.getClassId() == mClassIds[i]) {
+//                    mClassNames[i] = c.getClassName();
+//                }
+//            }
+                mProfIds[i] = mReviews.get(i).getProfId();
+                mReviewDates[i] = mReviews.get(i).getReviewDate();
+                mRatings[i] = mReviews.get(i).getRating();
+                mMsgs[i] = mReviews.get(i).getMessage();
+                mUserReviewRatings[i] = mReviews.get(i).getReviewRating();
             }
-            mProfIds[i] = mReviews.get(i).getProfId();
-            mReviewDates[i] = mReviews.get(i).getReviewDate();
-            mRatings[i] = mReviews.get(i).getRating();
-            mMsgs[i] = mReviews.get(i).getMsg();
-            mUserReviewRatings[i] = mReviews.get(i).getUserReviewRating();
-        }
 
-        mAdapter = new SearchResultsAdapter(this, mClassNames, mRatings, mReviewDates, mMsgs, mReviewIds);
-        mResultsList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-        mResultsList.setAdapter(mAdapter);
-        mResultsList.setOnItemClickListener(new ReviewSelectClickListener());
+            mAdapter = new SearchResultsAdapter(this, mClassNames, mRatings, mReviewDates, mMsgs, mReviewIds);
+            mResultsList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+            mResultsList.setAdapter(mAdapter);
+            mResultsList.setOnItemClickListener(new ReviewSelectClickListener());
+        }
     }
 
     public void getReviews() {
@@ -116,7 +116,7 @@ public class SearchResultsActivity extends AppCompatActivity {
         mProgressDialog.show();
         Callback callback = new GetReviewsCallback();
         RetrofitSingleton.getInstance().getMatchingService()
-                .reviews(mProfessorId, getSharedPreferences(Constants.USER_ID, Context.MODE_PRIVATE).getInt(Constants.USER_ID, -1))
+                .reviews(1, 1)
                 .enqueue(callback);
     }
 
@@ -126,11 +126,11 @@ public class SearchResultsActivity extends AppCompatActivity {
 //        mProgressDialog.setMessage(getResources().getString(R.string.loading));
 //        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 //        mProgressDialog.setIndeterminate(true);
-        mProgressDialog.show();
-        Callback callback = new GetClassesCallback();
-        RetrofitSingleton.getInstance().getMatchingService()
-                .getClasses(getSharedPreferences(Constants.SCHOOL_ID, Context.MODE_PRIVATE).getInt(Constants.SCHOOL_ID, -1))
-                .enqueue(callback);
+//        mProgressDialog.show();
+//        Callback callback = new GetClassesCallback();
+//        RetrofitSingleton.getInstance().getMatchingService()
+//                .getClasses(getSharedPreferences(Constants.SCHOOL_ID, Context.MODE_PRIVATE).getInt(Constants.SCHOOL_ID, -1))
+//                .enqueue(callback);
     }
 
     @Subscribe
@@ -144,6 +144,8 @@ public class SearchResultsActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, getResources().getString(R.string.reviews_dne), Toast.LENGTH_SHORT).show();
         }
+
+        populateListView();
     }
 
     @Subscribe
@@ -164,7 +166,7 @@ public class SearchResultsActivity extends AppCompatActivity {
         if(i == 0) {
             Toast.makeText(this, getResources().getString(R.string.reviews_dne), Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(this, getResources().getString(R.string.error_retrieving_data) + "query", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.error_retrieving_data), Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -202,6 +204,12 @@ public class SearchResultsActivity extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    @Override
+    protected void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
     }
 
     @Override
