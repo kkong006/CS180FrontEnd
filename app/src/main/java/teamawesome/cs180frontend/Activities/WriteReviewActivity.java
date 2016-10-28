@@ -51,19 +51,9 @@ public class WriteReviewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_write_review);
         ButterKnife.bind(this);
-        EventBus.getDefault().register(this);
         mStars = new Button[] {mStar1, mStar2, mStar3, mStar4, mStar5};
 
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage(getString(R.string.loading));
-        progressDialog.setCancelable(false);
-        progressDialog.show();
-
         if (Utils.getSchoolId(this) != 0) {
-            RetrofitSingleton.getInstance()
-                    .getMatchingService()
-                    .getProfs(Utils.getSchoolId(this))
-                    .enqueue(new GetProfessorsCallback());
         } else {
             finish();
         }
@@ -124,18 +114,5 @@ public class WriteReviewActivity extends AppCompatActivity {
     protected void onDestroy() {
         EventBus.getDefault().unregister(this);
         super.onDestroy();
-    }
-
-    @Subscribe
-    public void onResponse(List<Professor> profs) {
-        progressDialog.dismiss();
-        professors = new ArrayList<>();
-        professors.addAll(profs);
-    }
-
-    @Subscribe
-    public void onFailure(Integer code) {
-        progressDialog.dismiss();
-        finish();
     }
 }

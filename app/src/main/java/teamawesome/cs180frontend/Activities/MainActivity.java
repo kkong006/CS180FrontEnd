@@ -28,10 +28,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
 import teamawesome.cs180frontend.API.Models.ClassBundle;
-import teamawesome.cs180frontend.API.Models.Professor;
 import teamawesome.cs180frontend.API.RetrofitSingleton;
 import teamawesome.cs180frontend.API.Services.Callbacks.GetClassesCallback;
-import teamawesome.cs180frontend.API.Services.Callbacks.GetProfessorsCallback;
 import teamawesome.cs180frontend.Adapters.NavDrawerAdapter;
 import teamawesome.cs180frontend.Misc.DataSingleton;
 import teamawesome.cs180frontend.Misc.Utils;
@@ -94,10 +92,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
     @OnClick(R.id.fab)
     public void onClick(View view) {
         //TODO: Write review activity
-        Intent i = new Intent(getApplicationContext(), WriteReviewActivity.class);
+        Intent i = new Intent(this, WriteReviewActivity.class);
         startActivity(i);
     }
 
@@ -177,7 +176,7 @@ public class MainActivity extends AppCompatActivity {
     //TODO: In the future: make 1 API call to fetch all data
     //THIS IS A BANDAID FIX
     @Subscribe
-    public void getClasses(List<ClassBundle> classesList) {
+    public void cacheClasses(List<ClassBundle> classesList) {
         DataSingleton.getInstance().cacheClasses(classesList);
         progressDialog.dismiss();
         Utils.showSnackbar(this, parent, getString(R.string.data_loaded));
@@ -200,5 +199,11 @@ public class MainActivity extends AppCompatActivity {
         //TODO: THIS TOAST MSG NEEDS TO BE CONSTANT
         //USING TOAST SINCE THEY'RE CONTEXT INSENSITIVE
         Toast.makeText(getBaseContext(), "Logging out", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
     }
 }
