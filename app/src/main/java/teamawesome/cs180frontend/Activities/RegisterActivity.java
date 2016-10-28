@@ -28,38 +28,38 @@ import teamawesome.cs180frontend.Misc.Utils;
 import teamawesome.cs180frontend.R;
 
 /**
- * A login screen that offers login via email/password.
+ * A register screen that offers register via email/password.
  */
-public class LoginActivity extends AppCompatActivity {
+public class RegisterActivity extends AppCompatActivity {
 
     /**
      * Id to identity READ_CONTACTS permission request.
      */
     private static final int REQUEST_READ_CONTACTS = 0;
-    private LoginRegisterBundle loginRegisterBundle;
+    private LoginRegisterBundle registerRegisterBundle;
 
     // UI references.
-    @Bind(R.id.login_parent) CoordinatorLayout parent;
+    @Bind(R.id.register_parent) CoordinatorLayout parent;
     @Bind(R.id.number) EditText phoneEditText;
     @Bind(R.id.password) EditText mPasswordView;
-    @Bind(R.id.login_form) View mLoginFormView;
+    @Bind(R.id.register_form) View mRegisterFormView;
     @Bind(R.id.sign_in_button) Button signInButton;
-    @Bind(R.id.register_text) TextView registerTextView;
+    @Bind(R.id.login_text) TextView loginTextView;
 
     ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-        // Set up the login form.
+        setContentView(R.layout.activity_register);
+        // Set up the register form.
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
+                if (id == R.id.register || id == EditorInfo.IME_NULL) {
+                    attemptRegister();
                     return true;
                 }
                 return false;
@@ -73,27 +73,26 @@ public class LoginActivity extends AppCompatActivity {
         EventBus.getDefault().unregister(this);
     }
 
-    @OnClick(R.id.register_text)
-    public void startRegister() {
-        Intent intent = new Intent(this, RegisterActivity.class);
+    @OnClick(R.id.login_text)
+    public void startLogin() {
+        Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
     }
 
-
     /**
-     * Attempts to sign in or register the account specified by the login form.
+     * Attempts to sign in or register the account specified by the register form.
      * If there are form errors (invalid email, missing fields, etc.), the
-     * errors are presented and no actual login attempt is made.
+     * errors are presented and no actual register attempt is made.
      */
-    @OnClick(R.id.sign_in_button)
-    public void attemptLogin() {
+    @OnClick(R.id.register_button)
+    public void attemptRegister() {
 
         // Reset errors.
         phoneEditText.setError(null);
         mPasswordView.setError(null);
 
-        // Store values at the time of the login attempt.
-        String phoneNum = phoneEditText.getText().toString();
+        // Store values at the time of the register attempt.
+        String email = phoneEditText.getText().toString();
         String password = Utils.getMD5Hash(mPasswordView.getText().toString());
 
         boolean cancel = false;
@@ -107,35 +106,29 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         // Check for a valid email address.
-        if (TextUtils.isEmpty(phoneNum)) {
+        if (TextUtils.isEmpty(email)) {
             phoneEditText.setError(getString(R.string.error_field_required));
             focusView = phoneEditText;
             cancel = true;
-        } else if (!isNumberValid(phoneNum)) {
+        } else if (!isNumberValid(email)) {
             phoneEditText.setError(getString(R.string.error_invalid_number));
             focusView = phoneEditText;
             cancel = true;
         }
 
         if (cancel) {
-            // There was an error; don't attempt login and focus the first
+            // There was an error; don't attempt register and focus the first
             // form field with an error.
             focusView.requestFocus();
         } else {
-            Utils.hideKeyboard(parent, this);
-            loginRegisterBundle = new LoginRegisterBundle(phoneNum, password);
             // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
+            // perform the user register attempt.
+            Utils.hideKeyboard(parent, this);
             progressDialog = new ProgressDialog(this);
-            progressDialog.setMessage(getString(R.string.login_loading));
+            progressDialog.setMessage(getString(R.string.register_loading));
             progressDialog.setCancelable(false);
             progressDialog.show();
-
-            //Login & register are nearly identical => use the same callback
-            RetrofitSingleton.getInstance().
-                    getUserService().
-                    login(loginRegisterBundle)
-                    .enqueue(new LoginRegisterCallback());
+            //showProgress(true);
         }
     }
 
@@ -151,8 +144,8 @@ public class LoginActivity extends AppCompatActivity {
     @Subscribe
     public void onLoginOrRegister(UserRespBundle resp) {
         progressDialog.dismiss();
-        Utils.saveUserData(this, resp, loginRegisterBundle.getPassword(),
-                loginRegisterBundle.getPhoneNumber());
+        Utils.saveUserData(this, resp, registerRegisterBundle.getPassword(),
+                registerRegisterBundle.getPhoneNumber());
         Intent intent = new Intent();
         setResult(RESULT_OK, intent);
         System.out.println("FINISH");
@@ -160,7 +153,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     @Subscribe
-    public void onLoginResisterFailure(String msg) {
+    public void onRegisterResisterFailure(String msg) {
         progressDialog.dismiss();
         Utils.showSnackbar(this, parent, msg);
     }
