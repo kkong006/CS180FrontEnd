@@ -10,13 +10,14 @@ import java.io.Serializable;
  */
 
 public class ClassBundle implements Serializable{
-    @SerializedName("school_id")
-    @Expose
-    private int schoolId;
 
     @SerializedName("subject_id")
     @Expose
     private int subjectId;
+
+    @SerializedName("school_id")
+    @Expose
+    private int schoolId;
 
     @SerializedName("class_id")
     @Expose
@@ -25,6 +26,13 @@ public class ClassBundle implements Serializable{
     @SerializedName("class_name")
     @Expose
     private String className;
+
+    public ClassBundle(int subjectId, int classId, int schoolId, String className) {
+        this.subjectId = subjectId;
+        this.classId = classId;
+        this.schoolId = schoolId;
+        this.className = className;
+    }
 
     public int getSchoolId() {
         return schoolId;
@@ -38,9 +46,9 @@ public class ClassBundle implements Serializable{
         return subjectId;
     }
 
-    public void setSubjectId(int subjectId) {
-        this.subjectId = subjectId;
-    }
+//    public void setSubjectId(int subjectId) {
+//        this.subjectId = subjectId;
+//    }
 
     public int getClassId() {
         return classId;
@@ -54,7 +62,7 @@ public class ClassBundle implements Serializable{
         return className;
     }
 
-    public void setClassName(String className) {
-        this.className = className;
-    }
+//    public void setClassName(String className) {
+//        this.className = className;
+//    }
 }

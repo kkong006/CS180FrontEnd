@@ -16,10 +16,15 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import retrofit2.Callback;
 import teamawesome.cs180frontend.API.Models.ClassBundle;
 import teamawesome.cs180frontend.API.Models.Professor;
+import teamawesome.cs180frontend.API.Models.RatingId;
+import teamawesome.cs180frontend.API.Models.UserReview;
 import teamawesome.cs180frontend.API.RetrofitSingleton;
 import teamawesome.cs180frontend.API.Services.Callbacks.GetProfessorsCallback;
+import teamawesome.cs180frontend.API.Services.Callbacks.GetReviewsCallback;
+import teamawesome.cs180frontend.API.Services.Callbacks.PostReviewCallback;
 import teamawesome.cs180frontend.Misc.DataSingleton;
 import teamawesome.cs180frontend.Misc.Utils;
 import teamawesome.cs180frontend.R;
@@ -44,19 +49,23 @@ public class WriteReviewActivity extends AppCompatActivity {
 
     private List<Professor> professors;
 
-    ProgressDialog progressDialog;
+    ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_write_review);
         ButterKnife.bind(this);
+        EventBus.getDefault().register(this);
+
         mStars = new Button[] {mStar1, mStar2, mStar3, mStar4, mStar5};
 
         if (Utils.getSchoolId(this) != 0) {
         } else {
             //finish();
         }
+
+        mRating = 0;
     }
 
     @OnClick(R.id.write_submit_bt)
@@ -65,19 +74,13 @@ public class WriteReviewActivity extends AppCompatActivity {
         String className = mClassName.getText().toString();
         String reviewText = mReviewText.getText().toString();
         if(reviewText.length() >= 32) {
-            getClasses();
-            getProfessors();
-
+//            getClasses();
+//            getProfessors();
+            UserReview r = new UserReview(1,1,1,1,mRating,reviewText);
+            submitReview(r);
         } else {
             Toast.makeText(this, getResources().getString(R.string.review_not_long_enough), Toast.LENGTH_SHORT).show();
         }
-    }
-
-    public void getClasses() {
-    }
-
-    public void getProfessors() {
-
     }
 
     @OnClick(R.id.write_rate_2)
@@ -107,6 +110,39 @@ public class WriteReviewActivity extends AppCompatActivity {
             } else {
                 mStars[i].setTextColor(getApplicationContext().getResources().getColor(R.color.colorGrey));
             }
+        }
+    }
+
+    public void submitReview(UserReview r) {
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.setMessage(getResources().getString(R.string.loading));
+        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        mProgressDialog.setIndeterminate(true);
+        mProgressDialog.show();
+        Callback callback = new PostReviewCallback();
+        RetrofitSingleton.getInstance().getUserService()
+                .review(r)
+                .enqueue(callback);
+    }
+
+    @Subscribe
+    public void intResp(Integer i) {
+        mProgressDialog.dismiss();
+        if(i == 0) {
+            Toast.makeText(this, getResources().getString(R.string.failed_to_submit_review) + " 0", Toast.LENGTH_SHORT).show();
+        } else if(i == -1) {
+            Toast.makeText(this, getResources().getString(R.string.failed_to_submit_review) + " -1", Toast.LENGTH_SHORT).show();
+        } else if(i == 1) {
+            Toast.makeText(this, getResources().getString(R.string.account_update_success) + " 1", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Subscribe
+    public void stringResp(String s) {
+        mProgressDialog.dismiss();
+        if(s == "ERROR") {
+            Toast.makeText(this, getResources().getString(R.string.failed_to_submit_review), Toast.LENGTH_SHORT).show();
         }
     }
 

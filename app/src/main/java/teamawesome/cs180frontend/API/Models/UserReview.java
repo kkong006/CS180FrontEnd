@@ -32,8 +32,9 @@ public class UserReview {
     @Expose
     private String review;
 
-    public UserReview(int class_id, int prof_id, int rating, String review) {
-//        TODO: grab values from shared preferences for id, school id
+    public UserReview(int id, int school_id, int class_id, int prof_id, int rating, String review) {
+        this.id = id;
+        this.school_id = school_id;
         this.class_id = class_id;
         this.prof_id = prof_id;
         this.rating = rating;

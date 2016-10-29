@@ -8,6 +8,7 @@ public class APIConstants {
     public static final String BASE_URL = "http://cs180team7.herokuapp.com";
 
     public static final int HTTP_STATUS_OK = 200;
+    public static final int HTTP_STATUS_INVALID = 400;
     public static final int HTTP_STATUS_DNE = 401;
     public static final int HTTP_STATUS_ERROR = 500;
 
