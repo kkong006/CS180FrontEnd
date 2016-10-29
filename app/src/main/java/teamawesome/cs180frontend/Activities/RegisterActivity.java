@@ -21,14 +21,17 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import teamawesome.cs180frontend.API.Models.LoginRegisterBundle;
+import teamawesome.cs180frontend.API.Models.RegisterBundle;
 import teamawesome.cs180frontend.API.Models.UserRespBundle;
 import teamawesome.cs180frontend.API.RetrofitSingleton;
 import teamawesome.cs180frontend.API.Services.Callbacks.LoginRegisterCallback;
 import teamawesome.cs180frontend.Misc.Utils;
 import teamawesome.cs180frontend.R;
 
+
+//TODO: School id on register
 /**
- * A register screen that offers register via email/password.
+ * A register screen that offers register via phone number/password.
  */
 public class RegisterActivity extends AppCompatActivity {
 
@@ -81,7 +84,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     /**
      * Attempts to sign in or register the account specified by the register form.
-     * If there are form errors (invalid email, missing fields, etc.), the
+     * If there are form errors (invalid phone number, missing fields, etc.), the
      * errors are presented and no actual register attempt is made.
      */
     @OnClick(R.id.register_button)
@@ -92,7 +95,7 @@ public class RegisterActivity extends AppCompatActivity {
         mPasswordView.setError(null);
 
         // Store values at the time of the register attempt.
-        String email = phoneEditText.getText().toString();
+        String phoneNum = phoneEditText.getText().toString();
         String password = Utils.getMD5Hash(mPasswordView.getText().toString());
 
         boolean cancel = false;
@@ -105,12 +108,12 @@ public class RegisterActivity extends AppCompatActivity {
             cancel = true;
         }
 
-        // Check for a valid email address.
-        if (TextUtils.isEmpty(email)) {
+        // Check for a valid phone number.
+        if (TextUtils.isEmpty(phoneNum)) {
             phoneEditText.setError(getString(R.string.error_field_required));
             focusView = phoneEditText;
             cancel = true;
-        } else if (!isNumberValid(email)) {
+        } else if (!isNumberValid(phoneNum)) {
             phoneEditText.setError(getString(R.string.error_invalid_number));
             focusView = phoneEditText;
             cancel = true;
@@ -121,14 +124,20 @@ public class RegisterActivity extends AppCompatActivity {
             // form field with an error.
             focusView.requestFocus();
         } else {
-            // Show a progress spinner, and kick off a background task to
-            // perform the user register attempt.
             Utils.hideKeyboard(parent, this);
+            RegisterBundle RegisterBundle = new RegisterBundle(phoneNum, password);
+            // Show a progress spinner, and kick off a background task to
+            // perform the user login attempt.
             progressDialog = new ProgressDialog(this);
             progressDialog.setMessage(getString(R.string.register_loading));
             progressDialog.setCancelable(false);
             progressDialog.show();
-            //showProgress(true);
+
+            //Login & register are nearly identical => use the same callback
+            RetrofitSingleton.getInstance().
+                    getUserService().
+                    register(RegisterBundle)
+                    .enqueue(new LoginRegisterCallback());
         }
     }
 

@@ -6,10 +6,10 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 
 /**
- * Created by jman0_000 on 10/27/2016.
+ * Created by nicholas on 10/29/16.
  */
 
-public class LoginRegisterBundle implements Serializable {
+public class RegisterBundle  implements Serializable {
     @SerializedName("phone_number")
     @Expose
     String phoneNumber;
@@ -18,7 +18,7 @@ public class LoginRegisterBundle implements Serializable {
     @Expose
     String password;
 
-    public LoginRegisterBundle(String phoneNumber, String password) {
+    public RegisterBundle(String phoneNumber, String password) {
         this.phoneNumber = phoneNumber;
         this.password = password;
     }
@@ -40,3 +40,4 @@ public class LoginRegisterBundle implements Serializable {
     }
 
 }
+

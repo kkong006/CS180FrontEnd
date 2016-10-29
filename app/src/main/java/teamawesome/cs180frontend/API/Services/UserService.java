@@ -11,6 +11,7 @@ import teamawesome.cs180frontend.API.Models.LoginRegisterBundle;
 import teamawesome.cs180frontend.API.Models.Professor;
 import teamawesome.cs180frontend.API.Models.RateReview;
 import teamawesome.cs180frontend.API.Models.RatingId;
+import teamawesome.cs180frontend.API.Models.RegisterBundle;
 import teamawesome.cs180frontend.API.Models.ResponseReview;
 import teamawesome.cs180frontend.API.Models.School;
 import teamawesome.cs180frontend.API.Models.UserRespBundle;
@@ -35,7 +36,7 @@ public interface UserService {
     Call<UserRespBundle> login(@Body LoginRegisterBundle loginRegisterBundle);
 
     @POST("/register")
-    Call<UserRespBundle> basicRegister(@Body UserRespBundle userRespBundle);
+    Call<UserRespBundle> register(@Body RegisterBundle RegisterBundle);
 
     @POST("/verify")
     Call<UserRespBundle> verifyUser(@Body UserRespBundle userRespBundle);
