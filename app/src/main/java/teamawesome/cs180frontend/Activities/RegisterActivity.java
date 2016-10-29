@@ -46,7 +46,7 @@ public class RegisterActivity extends AppCompatActivity {
     @Bind(R.id.number) EditText phoneEditText;
     @Bind(R.id.password) EditText mPasswordView;
     @Bind(R.id.register_form) View mRegisterFormView;
-    @Bind(R.id.sign_in_button) Button signInButton;
+    @Bind(R.id.register_button) Button registerButton;
     @Bind(R.id.login_text) TextView loginTextView;
 
     ProgressDialog progressDialog;
@@ -78,7 +78,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     @OnClick(R.id.login_text)
     public void startLogin() {
-        Intent intent = new Intent(this, LoginActivity.class);
+        Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
         startActivity(intent);
     }
 
@@ -125,7 +125,7 @@ public class RegisterActivity extends AppCompatActivity {
             focusView.requestFocus();
         } else {
             Utils.hideKeyboard(parent, this);
-            RegisterBundle RegisterBundle = new RegisterBundle(phoneNum, password);
+            RegisterBundle RegisterBundle = new RegisterBundle(phoneNum, password, 1);
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             progressDialog = new ProgressDialog(this);

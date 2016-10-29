@@ -76,7 +76,7 @@ public class LoginActivity extends AppCompatActivity {
 
     @OnClick(R.id.register_text)
     public void startRegister() {
-        Intent intent = new Intent(this, RegisterActivity.class);
+        Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
         startActivity(intent);
     }
 
