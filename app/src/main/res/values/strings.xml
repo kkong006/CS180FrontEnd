@@ -45,7 +45,7 @@
     <string-array name="nav_drawer_array">
         <item>Home</item>
         <item>Search</item>
-        <item>My Reviews</item>
+        <item>Reviews</item>
         <item>Logout</item>
     </string-array>
 
@@ -85,6 +85,7 @@
     <string name="error_retrieving_data">Error retrieving data</string>
     <string name="account_update_success">Success!</string>
     <string name="change_password_button">Change Password</string>
+    <string name="please_sign_in">Please sign in</string>
 
     <!--Read Review Activity-->
     <string name="students_like"> students like this review</string>

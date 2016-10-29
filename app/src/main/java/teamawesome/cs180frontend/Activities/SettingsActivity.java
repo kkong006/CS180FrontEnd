@@ -141,21 +141,28 @@ public class SettingsActivity extends AppCompatActivity {
 
     @OnClick(R.id.settings_school_bt)
     public void selectSchool() {
+        int school_id = SPSingleton.getInstance(this).getSp().getInt(Constants.SCHOOL_ID, -1);
 
-        int id = getSharedPreferences(Constants.USER_ID, Context.MODE_PRIVATE).getInt(Constants.USER_ID, -1);
-        String password = getSharedPreferences(Constants.PASSWORD, Context.MODE_PRIVATE).getString(Constants.PASSWORD, "");
+        if(school_id != -1) {
+            int id = getSharedPreferences(Constants.USER_ID, Context.MODE_PRIVATE).getInt(Constants.USER_ID, -1);
+            String password = getSharedPreferences(Constants.PASSWORD, Context.MODE_PRIVATE).getString(Constants.PASSWORD, "");
 
-        if(mSetSchool) {
+            if(mSetSchool) {
 
-            mSetSchool = false;
-            mProgressDialog.show();
-            Callback callback = new PostUpdateAccountCallback();
-            RetrofitSingleton.getInstance().getUserService()
-                    .updateAccount(new UpdateUserBundle(id, password, password, mSchoolId))
-                    .enqueue(callback);
+                mSetSchool = false;
+                mProgressDialog.show();
+                Callback callback = new PostUpdateAccountCallback();
+                RetrofitSingleton.getInstance().getUserService()
+                        .updateAccount(new UpdateUserBundle(id, password, password, mSchoolId))
+                        .enqueue(callback);
+            } else {
+                Toast.makeText(this, getResources().getString(R.string.enter_school_name), Toast.LENGTH_SHORT).show();
+            }
         } else {
-            Toast.makeText(this, getResources().getString(R.string.enter_school_name), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.please_sign_in), Toast.LENGTH_SHORT).show();
         }
+
+
     }
 
     @OnClick(R.id.settings_password_bt)
@@ -169,7 +176,7 @@ public class SettingsActivity extends AppCompatActivity {
         if(id == 0) {
             Toast.makeText(this, getResources().getString(R.string.not_logged_in), Toast.LENGTH_SHORT).show();
         } else if(mNewPassword != old_password){
-            UpdateUserBundle u = new UpdateUserBundle(id, old_password, mNewPassword, school_id);
+            UpdateUserBundle u = new UpdateUserBundle(id, old_password, mNewPassword, 1);
             mProgressDialog.show();
             Callback callback = new PostUpdateAccountCallback();
             RetrofitSingleton.getInstance().getUserService()

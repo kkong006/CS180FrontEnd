@@ -35,7 +35,7 @@ public interface UserService {
     Call<UserRespBundle> login(@Body LoginRegisterBundle loginRegisterBundle);
 
     @POST("/register")
-    Call<UserRespBundle> basicRegister(@Body UserRespBundle userRespBundle);
+    Call<UserRespBundle> basicRegister(@Body LoginRegisterBundle userRespBundle);
 
     @POST("/verify")
     Call<UserRespBundle> verifyUser(@Body UserRespBundle userRespBundle);
