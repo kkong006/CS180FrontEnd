@@ -20,6 +20,7 @@ import org.greenrobot.eventbus.Subscribe;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import retrofit2.Callback;
 import teamawesome.cs180frontend.API.Models.LoginRegisterBundle;
 import teamawesome.cs180frontend.API.Models.UserRespBundle;
 import teamawesome.cs180frontend.API.RetrofitSingleton;
@@ -123,7 +124,7 @@ public class LoginActivity extends AppCompatActivity {
             focusView.requestFocus();
         } else {
             Utils.hideKeyboard(parent, this);
-            loginRegisterBundle = new LoginRegisterBundle(phoneNum, password);
+            loginRegisterBundle = new LoginRegisterBundle(phoneNum, password, 1);
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             progressDialog = new ProgressDialog(this);

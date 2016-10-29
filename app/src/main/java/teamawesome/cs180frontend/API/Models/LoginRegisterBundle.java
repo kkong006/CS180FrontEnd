@@ -18,9 +18,14 @@ public class LoginRegisterBundle implements Serializable {
     @Expose
     String password;
 
-    public LoginRegisterBundle(String phoneNumber, String password) {
+    @SerializedName("school_id")
+    @Expose
+    int school_id;
+
+    public LoginRegisterBundle(String phoneNumber, String password, int school_id) {
         this.phoneNumber = phoneNumber;
         this.password = password;
+        this.school_id = school_id;
     }
 
     public String getPhoneNumber() {
@@ -35,8 +40,6 @@ public class LoginRegisterBundle implements Serializable {
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+    public void setPassword(String password) { this.password = password; }
 
 }
