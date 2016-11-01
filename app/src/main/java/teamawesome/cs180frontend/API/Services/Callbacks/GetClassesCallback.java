@@ -9,8 +9,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import teamawesome.cs180frontend.API.APIConstants;
 import teamawesome.cs180frontend.API.Models.ClassBundle;
-import teamawesome.cs180frontend.API.Models.Professor;
-import teamawesome.cs180frontend.Misc.Constants;
 import teamawesome.cs180frontend.Misc.Utils;
 
 /**

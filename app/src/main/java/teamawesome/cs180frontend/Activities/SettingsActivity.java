@@ -3,7 +3,6 @@ package teamawesome.cs180frontend.Activities;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -22,7 +21,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import retrofit2.Callback;
-import teamawesome.cs180frontend.API.Models.School;
+import teamawesome.cs180frontend.API.Models.SchoolBundle;
 import teamawesome.cs180frontend.API.Models.UpdateUserBundle;
 import teamawesome.cs180frontend.API.RetrofitSingleton;
 import teamawesome.cs180frontend.API.Services.Callbacks.GetSchoolsCallback;
@@ -44,7 +43,7 @@ public class SettingsActivity extends AppCompatActivity {
     private int mSchoolId;
     private String mNewSchoolName;
     private int mNewSchoolId;
-    private List<School> mSchools;
+    private List<SchoolBundle> mSchools;
     private String[] mSchoolNames;
     private ArrayAdapter<String> mAdapter;
     private boolean mSetSchool;
@@ -74,7 +73,7 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     @Subscribe
-    public void schoolsResp(List<School> schoolList) {
+    public void schoolsResp(List<SchoolBundle> schoolList) {
         mProgressDialog.dismiss();
         mSchools = schoolList;
 
@@ -123,7 +122,7 @@ public class SettingsActivity extends AppCompatActivity {
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
             String result = parent.getItemAtPosition(position).toString();
             if(result != mSchoolName) {
-                for(School school : mSchools) {
+                for(SchoolBundle school : mSchools) {
                     if (school.getSchoolName() == result ) {
                         mNewSchoolName = result;
                         mNewSchoolId = school.getSchoolId();

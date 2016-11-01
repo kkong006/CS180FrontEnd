@@ -1,19 +1,11 @@
 package teamawesome.cs180frontend.API.Services;
 
-import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.http.Body;
-import retrofit2.http.GET;
 import retrofit2.http.POST;
-import retrofit2.http.Query;
 import teamawesome.cs180frontend.API.Models.LoginRegisterBundle;
-import teamawesome.cs180frontend.API.Models.Professor;
 import teamawesome.cs180frontend.API.Models.RateReview;
-import teamawesome.cs180frontend.API.Models.RatingId;
 import teamawesome.cs180frontend.API.Models.RegisterBundle;
-import teamawesome.cs180frontend.API.Models.ResponseReview;
-import teamawesome.cs180frontend.API.Models.School;
 import teamawesome.cs180frontend.API.Models.UserRespBundle;
 import teamawesome.cs180frontend.API.Models.UpdateUserBundle;
 import teamawesome.cs180frontend.API.Models.UserReview;

@@ -4,8 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import teamawesome.cs180frontend.API.Models.ClassBundle;
-import teamawesome.cs180frontend.API.Models.Professor;
-import teamawesome.cs180frontend.API.Models.School;
+import teamawesome.cs180frontend.API.Models.ProfessorBundle;
 
 /**
  * Created by jman0_000 on 10/27/2016.
@@ -14,7 +13,7 @@ import teamawesome.cs180frontend.API.Models.School;
 public class DataSingleton {
     private static DataSingleton instance = null;
     private List<ClassBundle> classCache;
-    private List<Professor> professorCache;
+    private List<ProfessorBundle> professorCache;
     private boolean hasLoaded; //temporary measure
 
     public static DataSingleton getInstance() {
@@ -37,7 +36,7 @@ public class DataSingleton {
         return this.classCache;
     }
 
-    public List<Professor> cacheProfessors(List<Professor> profs) {
+    public List<ProfessorBundle> cacheProfessors(List<ProfessorBundle> profs) {
         this.professorCache.clear();
         this.professorCache.addAll(profs);
         return this.professorCache;
@@ -47,7 +46,7 @@ public class DataSingleton {
         return classCache;
     }
 
-    public List<Professor> getProfessorCache() {
+    public List<ProfessorBundle> getProfessorCache() {
         return professorCache;
     }
 }

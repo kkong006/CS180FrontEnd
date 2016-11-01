@@ -10,22 +10,16 @@ import android.widget.Toast;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import retrofit2.Callback;
-import teamawesome.cs180frontend.API.Models.ClassBundle;
-import teamawesome.cs180frontend.API.Models.Professor;
-import teamawesome.cs180frontend.API.Models.RatingId;
+import teamawesome.cs180frontend.API.Models.ProfessorBundle;
 import teamawesome.cs180frontend.API.Models.UserReview;
 import teamawesome.cs180frontend.API.RetrofitSingleton;
-import teamawesome.cs180frontend.API.Services.Callbacks.GetProfessorsCallback;
-import teamawesome.cs180frontend.API.Services.Callbacks.GetReviewsCallback;
 import teamawesome.cs180frontend.API.Services.Callbacks.PostReviewCallback;
-import teamawesome.cs180frontend.Misc.DataSingleton;
 import teamawesome.cs180frontend.Misc.Utils;
 import teamawesome.cs180frontend.R;
 
@@ -47,7 +41,7 @@ public class WriteReviewActivity extends AppCompatActivity {
     private int mRating;
     private String mReview;
 
-    private List<Professor> professors;
+    private List<ProfessorBundle> professors;
 
     ProgressDialog mProgressDialog;
 

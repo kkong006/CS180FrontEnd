@@ -9,6 +9,7 @@ import java.io.Serializable;
  * Created by KongK on 10/25/2016.
  */
 
+//Renamed to class bundle to avoid confusion with Class object
 public class ClassBundle implements Serializable{
 
     @SerializedName("subject_id")
