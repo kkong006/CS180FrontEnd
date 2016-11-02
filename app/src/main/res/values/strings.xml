@@ -12,7 +12,7 @@
     <string name="logout">Logout</string>
 
     <!--Main Activity-->
-    <string name="data_doesnt_exist">Date doesn\'t exist</string>
+    <string name="data_doesnt_exist">Data doesn\'t exist</string>
     <string name="error_getting_data">Couldn\'t get data</string>
 
     <!-- Strings related to login -->

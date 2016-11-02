@@ -26,4 +26,36 @@ public class CacheDataBundle implements Serializable{
     @SerializedName("professors")
     @Expose
     private List<ProfessorBundle> profs;
+
+    public List<SchoolBundle> getSchools() {
+        return schools;
+    }
+
+    public void setSchools(List<SchoolBundle> schools) {
+        this.schools = schools;
+    }
+
+    public List<SubjectBundle> getSubjects() {
+        return subjects;
+    }
+
+    public void setSubjects(List<SubjectBundle> subjects) {
+        this.subjects = subjects;
+    }
+
+    public List<ClassBundle> getClasses() {
+        return classes;
+    }
+
+    public void setClasses(List<ClassBundle> classes) {
+        this.classes = classes;
+    }
+
+    public List<ProfessorBundle> getProfs() {
+        return profs;
+    }
+
+    public void setProfs(List<ProfessorBundle> profs) {
+        this.profs = profs;
+    }
 }

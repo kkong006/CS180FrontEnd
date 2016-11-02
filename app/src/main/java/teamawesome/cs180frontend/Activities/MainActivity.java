@@ -20,18 +20,13 @@ import android.widget.Toast;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.util.List;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
-import retrofit2.Callback;
 import teamawesome.cs180frontend.API.Models.CacheDataBundle;
-import teamawesome.cs180frontend.API.Models.ClassBundle;
 import teamawesome.cs180frontend.API.RetrofitSingleton;
 import teamawesome.cs180frontend.API.Services.Callbacks.GetCacheDataCallback;
-import teamawesome.cs180frontend.API.Services.Callbacks.GetReviewsCallback;
 import teamawesome.cs180frontend.Adapters.NavDrawerAdapter;
 import teamawesome.cs180frontend.Misc.Constants;
 import teamawesome.cs180frontend.Misc.DataSingleton;
@@ -52,9 +47,7 @@ public class MainActivity extends AppCompatActivity {
     private String[] mNavTitles;
     private String[] mIconTitles;
     private static final String TAG = "Main Activity";
-    private ProgressDialog mProgressDialog;
-    private ProgressDialog mProgressDialog2;
-    private int mSchoolId;
+    private int schoolId;
 
     ProgressDialog progressDialog;
     private Integer apiCnt = new Integer(0);
@@ -77,17 +70,21 @@ public class MainActivity extends AppCompatActivity {
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, mDrawerLayout, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
-//                @Override
-//                public void onDrawerStateChanged(int state) {
-//                    Utils.hideKeyboard(mainLayout, getApplicationContext());
-//                }
+                @Override
+                public void onDrawerStateChanged(int state) {
+                    Utils.hideKeyboard(parent, getApplicationContext());
+                }
         };
         mDrawerLayout.setDrawerListener(toggle);
         toggle.syncState();
 
+        //PREVENT USER FROM GETTING ACCESS TO THE WRITE REVIEW ACTIVITY
+        if (Utils.getUserId(this) == 0) {
+            mFab.setVisibility(View.GONE);
+        }
 
-        mSchoolId = SPSingleton.getInstance(this).getSp().getInt(Constants.SCHOOL_ID, -1);
-        if(mSchoolId != -1) {
+        schoolId = SPSingleton.getInstance(this).getSp().getInt(Constants.SCHOOL_ID, -1);
+        if(schoolId != -1) {
             progressDialog = new ProgressDialog(this);
             progressDialog.setMessage(getString(R.string.loading));
             progressDialog.setCancelable(false);
@@ -95,15 +92,35 @@ public class MainActivity extends AppCompatActivity {
 
             RetrofitSingleton.getInstance()
                     .getMatchingService()
-                    .getData(mSchoolId)
+                    .getData(schoolId)
                     .enqueue(new GetCacheDataCallback());
         }
     }
 
+    @Override
+    protected void onRestart() {
+        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+            mDrawerLayout.closeDrawer(GravityCompat.START);
+        }
+        super.onRestart();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    public void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
+    }
+
     @Subscribe
     public void classResp(CacheDataBundle data) {
-        mProgressDialog.dismiss();
-        //STORE CACHE DATA HERE
+        DataSingleton.getInstance().cacheDataBundle(data);
+        progressDialog.dismiss();
+        Utils.showSnackbar(this, parent, getString(R.string.data_loaded));
     }
 
     @Subscribe
@@ -164,7 +181,6 @@ public class MainActivity extends AppCompatActivity {
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if (position == 0) {
             //Home
-            mDrawerLayout.closeDrawer(GravityCompat.START);
         } else if (position == 1) {
             //Search
             Intent i = new Intent(getApplicationContext(), SearchActivity.class);
@@ -193,32 +209,19 @@ public class MainActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 mAdapter.changeLoginElem();
             }
+            System.out.println(Utils.getSchoolId(this));
+
+            //Creating a new one since progressDialog could still possibly be null
+            progressDialog = new ProgressDialog(this);
+            progressDialog.setMessage(getString(R.string.loading));
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+
+            RetrofitSingleton.getInstance()
+                    .getMatchingService()
+                    .getData(schoolId)
+                    .enqueue(new GetCacheDataCallback());
         }
-    }
-
-    @Subscribe
-    public void saveData(List<ClassBundle> classes) {
-        progressDialog.dismiss();
-        DataSingleton.getInstance().cacheClasses(classes);
-        Utils.showSnackbar(this, parent, getString(R.string.data_loaded));
-    }
-
-//    @Subscribe
-//    public void saveData(List<ClassBundle> classes) {
-//        progressDialog.dismiss();
-//        DataSingleton.getInstance().cacheClasses(classes);
-//        Utils.showSnackbar(this, parent, getString(R.string.data_loaded));
-//    }
-
-    @Subscribe
-    public void getClassesFailure(Integer code) {
-        progressDialog.dismiss();
-    }
-
-    @Subscribe
-    public void onError(String error) {
-        progressDialog.dismiss();
-        Utils.showSnackbar(this, parent, error);
     }
 
     private void logout() {
@@ -227,25 +230,5 @@ public class MainActivity extends AppCompatActivity {
         //TODO: THIS TOAST MSG NEEDS TO BE CONSTANT
         //USING TOAST SINCE THEY'RE CONTEXT INSENSITIVE
         Toast.makeText(getBaseContext(), "Logging out", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    protected void onRestart() {
-        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
-            mDrawerLayout.closeDrawer(GravityCompat.START);
-        }
-        super.onRestart();
-    }
-
-    @Override
-    protected void onStop() {
-        EventBus.getDefault().unregister(this);
-        super.onStop();
-    }
-
-    @Override
-    public void onDestroy() {
-        EventBus.getDefault().unregister(this);
-        super.onDestroy();
     }
 }

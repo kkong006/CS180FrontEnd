@@ -21,7 +21,7 @@ public interface MatchingService {
                            @Query("school_id") int school_id);*/
 
     @GET("/getData")
-    Call<CacheDataBundle> getData(@Query("school__id") int school_id);
+    Call<CacheDataBundle> getData(@Query("school_id") int school_id);
 
     @GET("/getSchools")
     Call<List<SchoolBundle>> getSchools();
