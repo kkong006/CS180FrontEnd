@@ -98,14 +98,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onRestart() {
-        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
-            mDrawerLayout.closeDrawer(GravityCompat.START);
-        }
-        super.onRestart();
-    }
-
-    @Override
     protected void onStop() {
         super.onStop();
     }
@@ -208,19 +200,19 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
                 mAdapter.changeLoginElem();
+                System.out.println(Utils.getSchoolId(this));
+
+                //Creating a new one since progressDialog could still possibly be null
+                progressDialog = new ProgressDialog(this);
+                progressDialog.setMessage(getString(R.string.loading));
+                progressDialog.setCancelable(false);
+                progressDialog.show();
+
+                RetrofitSingleton.getInstance()
+                        .getMatchingService()
+                        .getData(schoolId)
+                        .enqueue(new GetCacheDataCallback());
             }
-            System.out.println(Utils.getSchoolId(this));
-
-            //Creating a new one since progressDialog could still possibly be null
-            progressDialog = new ProgressDialog(this);
-            progressDialog.setMessage(getString(R.string.loading));
-            progressDialog.setCancelable(false);
-            progressDialog.show();
-
-            RetrofitSingleton.getInstance()
-                    .getMatchingService()
-                    .getData(schoolId)
-                    .enqueue(new GetCacheDataCallback());
         }
     }
 

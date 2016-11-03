@@ -32,6 +32,8 @@
     <string name="no">No</string>
     <string name="login_loading">Logging in...</string>
     <string name="register_loading">Registering...</string>
+    <string name="register_now">Don\'t have an account? Register now!</string>
+    <string name="sign_in">Already have an account? Sign in!</string>
 
     <!--Icons-->
     <string name="rating_icon">{fa-check-circle}</string>
@@ -167,7 +169,7 @@
         <item>9</item>
         <item>10</item>
     </string-array>
-    <string name="title_activity_register">Register</string>
+    <string name="register">Register</string>
     <string name="error_invalid_email">This email address is invalid</string>
 
 </resources>

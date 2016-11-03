@@ -45,6 +45,7 @@ public class LoginActivity extends AppCompatActivity {
     @Bind(R.id.login_form) View mLoginFormView;
     @Bind(R.id.sign_in_button) Button signInButton;
     @Bind(R.id.register_text) TextView registerTextView;
+    @Bind(R.id.school_ac_layout) TextInputLayout schoolAC;
 
     ProgressDialog progressDialog;
 
@@ -54,8 +55,9 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         // Set up the login form.
         ButterKnife.bind(this);
-
         EventBus.getDefault().register(this);
+
+        schoolAC.setVisibility(View.GONE);
     }
 
     @OnEditorAction(R.id.password)
@@ -75,10 +77,16 @@ public class LoginActivity extends AppCompatActivity {
 
     @OnClick(R.id.register_text)
     public void startRegister() {
-        Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-        startActivity(intent);
+        if (registerTextView.getText().equals(getString(R.string.register_now))) {
+            schoolAC.setVisibility(View.VISIBLE);
+            signInButton.setText(getString(R.string.register));
+            registerTextView.setText(getString(R.string.sign_in));
+        } else {
+            schoolAC.setVisibility(View.GONE);
+            signInButton.setText(getString(R.string.action_sign_in_short));
+            registerTextView.setText(getString(R.string.register_now));
+        }
     }
-
 
     /**
      * Attempts to sign in or register the account specified by the login form.
