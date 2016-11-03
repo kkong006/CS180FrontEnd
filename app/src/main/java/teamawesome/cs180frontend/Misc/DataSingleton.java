@@ -1,6 +1,7 @@
 package teamawesome.cs180frontend.Misc;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import teamawesome.cs180frontend.API.Models.CacheDataBundle;
@@ -19,6 +20,7 @@ public class DataSingleton {
     private List<SubjectBundle> subjectCache;
     private List<ClassBundle> classCache;
     private List<ProfessorBundle> professorCache;
+    private HashMap<String, Integer> schoolMap; //FOR O(1) access
 
     public static DataSingleton getInstance() {
         if (instance == null) {
@@ -33,6 +35,7 @@ public class DataSingleton {
         subjectCache = new ArrayList<>();
         classCache = new ArrayList<>();
         professorCache = new ArrayList<>();
+        schoolMap = new HashMap<>();
     }
 
     public void cacheDataBundle(CacheDataBundle data) {
@@ -40,7 +43,15 @@ public class DataSingleton {
         this.subjectCache.clear();
         this.classCache.clear();
         this.professorCache.clear();
+
+        this.schoolMap.clear();
+
         schoolCache.addAll(data.getSchools());
+
+        for (SchoolBundle s : schoolCache) {
+            schoolMap.put(s.getSchoolName(), s.getSchoolId());
+        }
+
         subjectCache.addAll(data.getSubjects());
         classCache.addAll(data.getClasses());
         professorCache.addAll(data.getProfs());
@@ -68,6 +79,11 @@ public class DataSingleton {
         this.professorCache.clear();
         this.professorCache.addAll(profs);
         return this.professorCache;
+    }
+
+    public Integer getSchoolId(String school) {
+        //NOTE: ONLY OBJECTS CAN BE NULL NOT PRIMITIVES
+        return schoolMap.get(school); //RETURNS NULL IF NO MATCH FOUND
     }
 
     public List<ClassBundle> getClassCache() {
