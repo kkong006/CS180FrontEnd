@@ -79,9 +79,7 @@ public class MainActivity extends AppCompatActivity {
         toggle.syncState();
 
         //PREVENT USER FROM GETTING ACCESS TO THE WRITE REVIEW ACTIVITY
-        if (Utils.getUserId(this) == 0) {
-            mFab.setVisibility(View.GONE);
-        }
+        set_fab();
 
         schoolId = SPSingleton.getInstance(this).getSp().getInt(Constants.SCHOOL_ID, -1);
         if(schoolId != -1) {
@@ -94,6 +92,15 @@ public class MainActivity extends AppCompatActivity {
                     .getMatchingService()
                     .getData(schoolId)
                     .enqueue(new GetCacheDataCallback());
+        }
+    }
+
+    //Show/hide the FAB
+    private void set_fab() {
+        if (Utils.getUserId(this) == 0) {
+            mFab.setVisibility(View.GONE);
+        } else {
+            mFab.setVisibility(View.VISIBLE);
         }
     }
 
@@ -171,6 +178,7 @@ public class MainActivity extends AppCompatActivity {
 
     @OnItemClick(R.id.drawer_list)
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        mDrawerLayout.closeDrawer(GravityCompat.START);
         if (position == 0) {
             //Home
         } else if (position == 1) {
@@ -184,7 +192,6 @@ public class MainActivity extends AppCompatActivity {
             Intent i = new Intent(getApplicationContext(), SearchResultsActivity.class);
             startActivity(i);
         } else if (position == 3) {
-            mDrawerLayout.closeDrawer(GravityCompat.START);
             if (mAdapter.getItem(position).equals(getString(R.string.login))) {
                 Intent intent = new Intent(this, LoginActivity.class);
                 startActivityForResult(intent, 1);
@@ -214,11 +221,13 @@ public class MainActivity extends AppCompatActivity {
                         .enqueue(new GetCacheDataCallback());
             }
         }
+        set_fab();
     }
 
     private void logout() {
         Utils.nukeUserData(this);
         mAdapter.changeLoginElem();
+        set_fab();
         //TODO: THIS TOAST MSG NEEDS TO BE CONSTANT
         //USING TOAST SINCE THEY'RE CONTEXT INSENSITIVE
         Toast.makeText(getBaseContext(), "Logging out", Toast.LENGTH_SHORT).show();
