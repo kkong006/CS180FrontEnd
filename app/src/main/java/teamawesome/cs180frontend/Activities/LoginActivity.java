@@ -148,7 +148,8 @@ public class LoginActivity extends AppCompatActivity {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             progressDialog = new ProgressDialog(this);
-            progressDialog.setMessage(getString(R.string.login_loading));
+            progressDialog.setMessage(loginMode ? getString(R.string.login_loading) :
+                    getString(R.string.register_loading));
             progressDialog.setCancelable(false);
             progressDialog.show();
 
