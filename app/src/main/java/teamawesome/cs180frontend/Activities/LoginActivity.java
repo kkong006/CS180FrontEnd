@@ -153,10 +153,17 @@ public class LoginActivity extends AppCompatActivity {
             progressDialog.show();
 
             //Login & register are nearly identical => use the same callback
-            RetrofitSingleton.getInstance().
-                    getUserService().
-                    login(loginRegisterBundle)
-                    .enqueue(new LoginRegisterCallback());
+            if (loginMode) {
+                RetrofitSingleton.getInstance()
+                        .getUserService()
+                        .login(loginRegisterBundle)
+                        .enqueue(new LoginRegisterCallback());
+            } else {
+                RetrofitSingleton.getInstance()
+                        .getUserService()
+                        .register(loginRegisterBundle)
+                        .enqueue(new LoginRegisterCallback());
+            }
         }
     }
 

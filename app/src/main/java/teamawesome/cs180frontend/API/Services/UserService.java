@@ -5,7 +5,6 @@ import retrofit2.http.Body;
 import retrofit2.http.POST;
 import teamawesome.cs180frontend.API.Models.LoginRegisterBundle;
 import teamawesome.cs180frontend.API.Models.RateReview;
-import teamawesome.cs180frontend.API.Models.RegisterBundle;
 import teamawesome.cs180frontend.API.Models.UserRespBundle;
 import teamawesome.cs180frontend.API.Models.UpdateUserBundle;
 import teamawesome.cs180frontend.API.Models.UserReview;
@@ -28,7 +27,7 @@ public interface UserService {
     Call<UserRespBundle> login(@Body LoginRegisterBundle loginRegisterBundle);
 
     @POST("/register")
-    Call<UserRespBundle> register(@Body RegisterBundle RegisterBundle);
+    Call<UserRespBundle> register(@Body LoginRegisterBundle loginRegisterBundle);
 
     @POST("/verify")
     Call<UserRespBundle> verifyUser(@Body UserRespBundle userRespBundle);
