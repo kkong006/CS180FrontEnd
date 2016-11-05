@@ -16,10 +16,10 @@ import teamawesome.cs180frontend.API.Models.SubjectBundle;
 
 public class DataSingleton {
     private static DataSingleton instance = null;
-    private List<SchoolBundle> schoolCache;
-    private List<SubjectBundle> subjectCache;
-    private List<ClassBundle> classCache;
-    private List<ProfessorBundle> professorCache;
+    private ArrayList<SchoolBundle> schoolCache;
+    private ArrayList<SubjectBundle> subjectCache;
+    private ArrayList<ClassBundle> classCache;
+    private ArrayList<ProfessorBundle> professorCache;
     private HashMap<String, Integer> schoolMap; //FOR O(1) access
     private HashMap<String, Integer> professorMap;
     private HashMap<String, Integer> classMap;
@@ -107,11 +107,15 @@ public class DataSingleton {
         return professorMap.get(professor);
     }
 
-    public List<ClassBundle> getClassCache() {
+    public ArrayList<SchoolBundle> getSchoolCache() { return schoolCache; }
+
+    public ArrayList<SubjectBundle> getSubjectCache() { return subjectCache; }
+
+    public ArrayList<ClassBundle> getClassCache() {
         return classCache;
     }
 
-    public List<ProfessorBundle> getProfessorCache() {
+    public ArrayList<ProfessorBundle> getProfessorCache() {
         return professorCache;
     }
 }

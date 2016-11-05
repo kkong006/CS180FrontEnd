@@ -2,16 +2,13 @@ package teamawesome.cs180frontend.Activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.TextInputLayout;
-import android.support.v7.app.AppCompatActivity;
-
 import android.os.Bundle;
-import android.text.Layout;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
+import android.view.animation.TranslateAnimation;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -22,12 +19,12 @@ import org.greenrobot.eventbus.Subscribe;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.OnEditorAction;
-import retrofit2.Callback;
 import teamawesome.cs180frontend.API.Models.LoginRegisterBundle;
 import teamawesome.cs180frontend.API.Models.UserRespBundle;
 import teamawesome.cs180frontend.API.RetrofitSingleton;
 import teamawesome.cs180frontend.API.Services.Callbacks.LoginRegisterCallback;
+import teamawesome.cs180frontend.Adapters.SimpleListAdapter;
+import teamawesome.cs180frontend.Misc.DataSingleton;
 import teamawesome.cs180frontend.Misc.Utils;
 import teamawesome.cs180frontend.R;
 
@@ -39,15 +36,25 @@ public class LoginActivity extends AppCompatActivity {
     private LoginRegisterBundle loginRegisterBundle;
 
     // UI references.
-    @Bind(R.id.login_parent) CoordinatorLayout parent;
-    @Bind(R.id.number) EditText phoneEditText;
-    @Bind(R.id.password) EditText mPasswordView;
-    @Bind(R.id.login_form) View mLoginFormView;
-    @Bind(R.id.sign_in_button) Button signInButton;
-    @Bind(R.id.register_text) TextView registerTextView;
-    @Bind(R.id.school_ac_layout) TextInputLayout schoolAC;
+    @Bind(R.id.login_parent)
+    CoordinatorLayout parent;
+    @Bind(R.id.number)
+    EditText phoneEditText;
+    @Bind(R.id.password)
+    EditText mPasswordView;
+    @Bind(R.id.login_form)
+    View mLoginFormView;
+    @Bind(R.id.sign_in_button)
+    Button signInButton;
+    @Bind(R.id.register_text)
+    TextView registerTextView;
+    @Bind(R.id.school_auto_complete)
+    AutoCompleteTextView acTV;
 
     ProgressDialog progressDialog;
+    SimpleListAdapter adapter;
+    TranslateAnimation animation;
+    boolean loginMode = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,16 +64,11 @@ public class LoginActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
 
-        schoolAC.setVisibility(View.GONE);
-    }
-
-    @OnEditorAction(R.id.password)
-    public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-        if (id == R.id.login || id == EditorInfo.IME_NULL) {
-            attemptLogin();
-            return true;
-        }
-        return false;
+        acTV.setVisibility(View.GONE);
+        adapter = new SimpleListAdapter(this, R.layout.simple_list_item,
+                DataSingleton.getInstance().getSchoolCache());
+        acTV.setAdapter(adapter);
+        acTV.setThreshold(1);
     }
 
     @Override
@@ -78,11 +80,13 @@ public class LoginActivity extends AppCompatActivity {
     @OnClick(R.id.register_text)
     public void startRegister() {
         if (registerTextView.getText().equals(getString(R.string.register_now))) {
-            schoolAC.setVisibility(View.VISIBLE);
+            loginMode = false;
+            acTV.setVisibility(View.VISIBLE);
             signInButton.setText(getString(R.string.register));
             registerTextView.setText(getString(R.string.sign_in));
         } else {
-            schoolAC.setVisibility(View.GONE);
+            loginMode = true;
+            acTV.setVisibility(View.GONE);
             signInButton.setText(getString(R.string.action_sign_in_short));
             registerTextView.setText(getString(R.string.register_now));
         }
@@ -105,6 +109,7 @@ public class LoginActivity extends AppCompatActivity {
         String password = Utils.getMD5Hash(mPasswordView.getText().toString());
 
         boolean cancel = false;
+        Integer schoolId = null;
         View focusView = null;
 
         // Check for a valid password, if the user entered one.
@@ -114,7 +119,7 @@ public class LoginActivity extends AppCompatActivity {
             cancel = true;
         }
 
-        // Check for a valid email address.
+        // Check for a phpne numebr  address.
         if (TextUtils.isEmpty(phoneNum)) {
             phoneEditText.setError(getString(R.string.error_field_required));
             focusView = phoneEditText;
@@ -123,6 +128,13 @@ public class LoginActivity extends AppCompatActivity {
             phoneEditText.setError(getString(R.string.error_invalid_number));
             focusView = phoneEditText;
             cancel = true;
+        } else if (!loginMode) {
+            schoolId = DataSingleton.getInstance()
+                    .getSchoolId(acTV.getText().toString());
+            if (schoolId == null) {
+                focusView = acTV;
+                cancel = true;
+            }
         }
 
         if (cancel) {
@@ -131,7 +143,8 @@ public class LoginActivity extends AppCompatActivity {
             focusView.requestFocus();
         } else {
             Utils.hideKeyboard(parent, this);
-            loginRegisterBundle = new LoginRegisterBundle(phoneNum, password, 1);
+            loginRegisterBundle = new LoginRegisterBundle(phoneNum, password,
+                    loginMode ? 1 : schoolId.intValue());
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             progressDialog = new ProgressDialog(this);

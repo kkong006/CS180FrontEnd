@@ -70,10 +70,10 @@ public class MainActivity extends AppCompatActivity {
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, mDrawerLayout, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
-                @Override
-                public void onDrawerStateChanged(int state) {
-                    Utils.hideKeyboard(parent, getApplicationContext());
-                }
+            @Override
+            public void onDrawerStateChanged(int state) {
+                Utils.hideKeyboard(parent, getApplicationContext());
+            }
         };
         mDrawerLayout.setDrawerListener(toggle);
         toggle.syncState();
@@ -82,17 +82,15 @@ public class MainActivity extends AppCompatActivity {
         set_fab();
 
         schoolId = SPSingleton.getInstance(this).getSp().getInt(Constants.SCHOOL_ID, -1);
-        if(schoolId != -1) {
-            progressDialog = new ProgressDialog(this);
-            progressDialog.setMessage(getString(R.string.loading));
-            progressDialog.setCancelable(false);
-            progressDialog.show();
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage(getString(R.string.loading));
+        progressDialog.setCancelable(false);
+        progressDialog.show();
 
-            RetrofitSingleton.getInstance()
-                    .getMatchingService()
-                    .getData(schoolId)
-                    .enqueue(new GetCacheDataCallback());
-        }
+        RetrofitSingleton.getInstance()
+                .getMatchingService()
+                .getData(schoolId)
+                .enqueue(new GetCacheDataCallback());
     }
 
     //Show/hide the FAB
@@ -116,17 +114,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Subscribe
-    public void classResp(CacheDataBundle data) {
+    public void dataResp(CacheDataBundle data) {
         DataSingleton.getInstance().cacheDataBundle(data);
+        System.out.println(DataSingleton.getInstance().getSchoolCache().size());
         progressDialog.dismiss();
         Utils.showSnackbar(this, parent, getString(R.string.data_loaded));
     }
 
     @Subscribe
     public void intResp(Integer i) {
-        if(i == 0) {
+        if (i == 0) {
             Toast.makeText(this, getResources().getString(R.string.data_doesnt_exist), Toast.LENGTH_SHORT).show();
-        } else if(i == -1) {
+        } else if (i == -1) {
             Toast.makeText(this, getResources().getString(R.string.error_getting_data), Toast.LENGTH_SHORT).show();
         }
     }
