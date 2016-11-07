@@ -26,7 +26,7 @@ public class SimpleListAdapter extends ArrayAdapter<SchoolBundle> {
 
     @SuppressWarnings("unchecked")
     public SimpleListAdapter(Context context, int viewResourceId, ArrayList<SchoolBundle> schools) {
-        super(context, viewResourceId, schools);
+        super(context, viewResourceId, new ArrayList<SchoolBundle>());
         this.mContext = context;
         this.schools = (ArrayList<SchoolBundle>) schools.clone();
         this.suggestions = new ArrayList<>();
