@@ -6,15 +6,16 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import teamawesome.cs180frontend.API.APIConstants;
-import teamawesome.cs180frontend.API.Models.ReviewRespBundle;
+import teamawesome.cs180frontend.API.Models.ReviewIDRespBundle;
 
 /**
  * Created by KongK on 10/29/2016.
  */
 
-public class PostReviewCallback implements Callback<ReviewRespBundle> {
+public class PostReviewCallback implements Callback<ReviewIDRespBundle> {
     @Override
-    public void onResponse(Call<ReviewRespBundle> call, Response<ReviewRespBundle> response) {
+    public void onResponse(Call<ReviewIDRespBundle> call, Response<ReviewIDRespBundle> response) {
+        System.out.println("POST REVIEW RESPONSE CODE " + response.code());
         switch (response.code()) {
             case APIConstants.HTTP_STATUS_OK:
                 EventBus.getDefault().post(response.body());
@@ -32,7 +33,7 @@ public class PostReviewCallback implements Callback<ReviewRespBundle> {
     }
 
     @Override
-    public void onFailure(Call<ReviewRespBundle> call, Throwable t) {
+    public void onFailure(Call<ReviewIDRespBundle> call, Throwable t) {
         EventBus.getDefault().post("ERROR");
     }
 }

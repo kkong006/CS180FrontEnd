@@ -20,13 +20,15 @@
     <string-array name="nav_drawer_array">
         <item>Home</item>
         <item>Search</item>
-        <item>Reviews</item>
+        <item>Find a Professor</item>
+        <item>My Reviews</item>
         <item>Logout</item>
     </string-array>
 
     <string-array name="nav_drawer_icon_array">
         <item>{fa-home}</item>
         <item>{fa-search}</item>
+        <item>{fa-graduation-cap}</item>
         <item>{fa-paper-plane}</item>
         <item>{fa-sign-out}</item>
     </string-array>
@@ -64,14 +66,18 @@
     <string name="data_loaded">Data loaded!</string>
 
     <!--Search Activity-->
-    <string name="search_by_professor">Search by Professor:</string>
-    <string name="search_button">Search</string>
+    <string name="search_by_professor">Search by Professor</string>
+    <string name="search_by_class">Search by Class</string>
+    <string name="search_by_school">Search by School</string>
+    <string name="search_button">Search Reviews</string>
+    <!--<string name="search_button_class">Search for Class</string>-->
     <string name="enter_professor_name">Enter professor name</string>
-    <string name="professor_name">PROFESSOR_NAME</string>
-    <string name="professor_id">PROFESSOR_ID</string>
+    <string name="PROFESSOR_NAME">PROFESSOR_NAME</string>
+    <string name="PROFESSOR_ID">PROFESSOR_ID</string>
     <string name="professor_dne">Professor does not exist</string>
     <string name="professors_dne">Professors do not exist</string>
     <string name="reviews_dne">Reviews do not exist</string>
+    <string name="search_reviews">Search Reviews</string>
 
     <!--Search Results Activity-->
     <string name="REVIEW_ID">REVIEW_ID</string>
@@ -98,6 +104,8 @@
     <string name="students_dislike"> students dislike this review</string>
     <string name="you_like"> you like this review</string>
     <string name="you_dislike"> you dislike this review</string>
+    <string name="liked">Liked!</string>
+    <string name="disliked">Disliked!</string>
     <string name="REVIEW_CONTENT">REVIEW_CONTENT</string>
     <string name="REVIEW_CLASS_NAME">REVIEW_CLASS_NAME</string>
     <string name="REVIEW_DATE">REVIEW_DATE</string>

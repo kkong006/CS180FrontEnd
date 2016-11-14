@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,7 +32,9 @@ import teamawesome.cs180frontend.R;
 
 public class ReadReviewActivity extends AppCompatActivity {
 
+    @Bind(R.id.activity_read_review) LinearLayout mParent;
     @Bind(R.id.read_class_tv) TextView mClassName;
+    @Bind(R.id.read_date_tv) TextView mReviewDate;
     @Bind(R.id.read_rate_1) TextView mRate1;
     @Bind(R.id.read_rate_2) TextView mRate2;
     @Bind(R.id.read_rate_3) TextView mRate3;
@@ -48,8 +51,11 @@ public class ReadReviewActivity extends AppCompatActivity {
     private int mReviewRating;
     private String mReviewContent;
     private String mReviewClassName;
-    private String mReviewDate;
+    private String mDate;
     private int mUserRating;
+    private int mNewUserRating;
+    private String mProfessorName;
+
     private ProgressDialog mProgressDialog;
 
     @Override
@@ -62,32 +68,42 @@ public class ReadReviewActivity extends AppCompatActivity {
         if(Utils.getUserId(this) == 0) {
             mThumbsUp.setVisibility(View.GONE);
             mThumbsDown.setVisibility(View.GONE);
+            mLikeCount.setVisibility(View.GONE);
+            mDislikeCount.setVisibility(View.GONE);
         }
+
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.setMessage(getResources().getString(R.string.loading));
+        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        mProgressDialog.setIndeterminate(true);
 
         mRatings = new TextView[] {mRate1, mRate2, mRate3, mRate4, mRate5};
 
         Bundle bundle = getIntent().getExtras();
+        mReviewId = bundle.getInt(getString(R.string.REVIEW_ID));
+        mReviewRating = bundle.getInt(getString(R.string.REVIEW_RATING));
+        mReviewContent = bundle.getString(getString(R.string.REVIEW_CONTENT));
+        mReviewClassName = bundle.getString(getString(R.string.REVIEW_CLASS_NAME));
+        mDate = bundle.getString(getString(R.string.REVIEW_DATE));
+        mUserRating = bundle.getInt(getString(R.string.REVIEW_USER_RATING));
+        mProfessorName = bundle.getString(getString(R.string.PROFESSOR_NAME));
 
-        mReviewId = bundle.getInt(getResources().getString(R.string.REVIEW_ID));
-        mReviewRating = bundle.getInt(getResources().getString(R.string.REVIEW_RATING));
-        mReviewContent = bundle.getString(getResources().getString(R.string.REVIEW_CONTENT));
-        mReviewClassName = bundle.getString(getResources().getString(R.string.REVIEW_CLASS_NAME));
-        mReviewDate = bundle.getString(getResources().getString(R.string.REVIEW_DATE));
-        mUserRating = bundle.getInt(getResources().getString(R.string.REVIEW_USER_RATING));
-
+        getSupportActionBar().setTitle(mProfessorName);
         mClassName.setText(mReviewClassName);
+        mReviewDate.setText(mDate);
         mReviewText.setText(mReviewContent);
 
         for(int i = 0; i < mReviewRating && i < 5; i++) {
             mRatings[i].setTextColor(getResources().getColor(R.color.colorGreen));
         }
 
-        mUserRating = 0;
+        mNewUserRating = 0;
 
         setUserRating();
     }
 
-    public void setUserRating() {
+    private void setUserRating() {
 
         if(mUserRating == 0) {
             mThumbsUp.setTextColor(getResources().getColor(R.color.colorGrey));
@@ -101,84 +117,67 @@ public class ReadReviewActivity extends AppCompatActivity {
         }
     }
 
+    public void updateResponse() {
+
+        if(mUserRating != mNewUserRating) {
+            mProgressDialog.show();
+            int userId = Utils.getUserId(this);
+            String password = Utils.getPassword(this);
+            System.out.println("USER ID " + userId + "\nPASSWORD " + password + "\nREVIEW ID " + mReviewId + "\nUSER RATING " + mUserRating + "\nNEW USER RATING " + mNewUserRating);
+            RateReview r = new RateReview(userId, password, mReviewId, mNewUserRating);
+            Callback callback = new PostReviewRatingCallback();
+            RetrofitSingleton.getInstance().getUserService()
+                    .rateReview(r)
+                    .enqueue(callback);
+        }
+    }
+
     @OnClick(R.id.read_like_bt)
     public void thumbsUp() {
-        Toast.makeText(getBaseContext(), "Like", Toast.LENGTH_SHORT).show();
+        Utils.showSnackbar(this, mParent, getString(R.string.liked));
 
         if(mUserRating == 1) {
-            mUserRating = 0;
+            mNewUserRating = 0;
         } else {
-            mUserRating = 1;
+            mNewUserRating = 1;
         }
-
         updateResponse();
     }
 
     @OnClick(R.id.read_dislike_bt)
     public void thumbsDown() {
-        Toast.makeText(getBaseContext(), "Dislike", Toast.LENGTH_SHORT).show();
+        Utils.showSnackbar(this, mParent, getString(R.string.disliked));
 
         if(mUserRating == 2) {
-            mUserRating = 0;
+            mNewUserRating = 0;
         } else {
-            mUserRating = 2;
+            mNewUserRating = 2;
         }
-
         updateResponse();
     }
 
-    public void updateResponse() {
-        mProgressDialog = new ProgressDialog(this);
-        mProgressDialog.setCancelable(false);
-        mProgressDialog.setMessage(getResources().getString(R.string.loading));
-        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        mProgressDialog.setIndeterminate(true);
-        mProgressDialog.show();
-        setUserRating();
-//        int user_id = SPSingleton.getInstance(this).getSp().getInt(Constants.USER_ID, -1);
-        int user_id = 1;
-        String password = SPSingleton.getInstance(this).getSp().getString(Constants.PASSWORD, "");
-        Toast.makeText(this, password, Toast.LENGTH_SHORT).show();
-
-        RateReview r = new RateReview(user_id, password, mReviewId, mUserRating);
-        Callback callback = new PostReviewRatingCallback();
-        RetrofitSingleton.getInstance().getUserService()
-                .rateReview(r)
-                .enqueue(callback);
-    }
-
-//    @Subscribe
-//    public void likeDislikeResp(RatingId r) {
-//        mProgressDialog.dismiss();
-//        setUserRating();
-//        Toast.makeText(this, getResources().getString(R.string.account_update_success), Toast.LENGTH_SHORT).show();
-//    }
-
     @Subscribe
-    public void likeDislikeInt(Integer i) {
+    public void intLikeDislikeResp(Integer i) {
         mProgressDialog.dismiss();
-        if(i.equals(0)) {
-            Toast.makeText(this, getResources().getString(R.string.reviews_dne), Toast.LENGTH_SHORT).show();
-        } else if(i.equals(-1)) {
-            Toast.makeText(this, getResources().getString(R.string.error_retrieving_data), Toast.LENGTH_SHORT).show();
-        } else if(i.equals(1)) {
-            Toast.makeText(this, getResources().getString(R.string.account_update_success), Toast.LENGTH_SHORT).show();
-        } else if(i.equals(2)) {
-            Toast.makeText(this, getResources().getString(R.string.error_retrieving_data), Toast.LENGTH_SHORT).show();
+
+        if(i.equals(1)) {
+            Utils.showSnackbar(this, mParent, getString(R.string.account_update_success));
+            mUserRating = mNewUserRating;
+            setUserRating();
+        } else if(i.equals(0)) {
+            Utils.showSnackbar(this, mParent, getString(R.string.reviews_dne));
+        } else {
+            Utils.showSnackbar(this, mParent, getString(R.string.error_retrieving_data));
         }
     }
 
     @Subscribe
-    public void likeDislikeError(String s) {
+    public void stringLikeDislikeResp(String s) {
         mProgressDialog.dismiss();
+
         if(s.equals("ERROR")) {
-            Toast.makeText(this, getResources().getString(R.string.error_retrieving_data), Toast.LENGTH_SHORT).show();
+            Utils.showSnackbar(this, mParent, getString(R.string.error_retrieving_data));
         }
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
     }
 
     @Override

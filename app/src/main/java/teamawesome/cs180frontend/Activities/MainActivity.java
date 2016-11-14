@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -48,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "Main Activity";
     private int schoolId;
 
-    ProgressDialog progressDialog;
+    ProgressDialog mProgressDialog;
     private Integer apiCnt = new Integer(0);
 
     @Override
@@ -82,26 +83,33 @@ public class MainActivity extends AppCompatActivity {
 
         schoolId = SPSingleton.getInstance(this).getSp().getInt(Constants.SCHOOL_ID, -1);
 
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage(getString(R.string.loading));
-        progressDialog.setCancelable(false);
-        progressDialog.show();
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setMessage(getString(R.string.loading));
+        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.show();
 
         RetrofitSingleton.getInstance()
                 .getMatchingService()
                 .getData(schoolId)
                 .enqueue(new GetCacheDataCallback());
+
+        System.out.println("Back to oncreate");
     }
 
     //Show/hide the FAB and tool bar
     private void setButtons() {
-        if (Utils.getUserId(this) == 0) {
+        if (Utils.getUserId(this) < 1) {
             mFab.setVisibility(View.GONE);
-//            mToolbar.setVisibility(View.GONE);
         } else {
             mFab.setVisibility(View.VISIBLE);
-//            mToolbar.setVisibility(View.VISIBLE);
         }
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -124,15 +132,15 @@ public class MainActivity extends AppCompatActivity {
         System.out.println("PROFESSOR SIZE " + DataSingleton.getInstance().getProfessorCache().size());
         System.out.println("CLASS SIZE " + DataSingleton.getInstance().getClassCache().size());
         System.out.println("SUBJECT SIZE " + DataSingleton.getInstance().getSubjectCache().size());
-        progressDialog.dismiss();
+        mProgressDialog.dismiss();
 
     }
 
     @Subscribe
     public void intResp(Integer i) {
-        if (i == 0) {
+        if (i.equals(0)) {
             Utils.showSnackbar(this, parent, getString(R.string.data_doesnt_exist));
-        } else if (i == -1) {
+        } else if (i.equals(-1)) {
             Utils.showSnackbar(this, parent, getString(R.string.error_getting_data));
         }
     }
@@ -165,6 +173,10 @@ public class MainActivity extends AppCompatActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
+        if(schoolId < 1) {
+            Utils.showSnackbar(this, parent, getString(R.string.please_sign_in));
+            return true;
+        }
         int id = item.getItemId();
 
         if (id == R.id.action_settings) {
@@ -181,18 +193,22 @@ public class MainActivity extends AppCompatActivity {
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         mDrawerLayout.closeDrawer(GravityCompat.START);
         if (position == 0) {
-            //Home
+            //Home Feed
         } else if (position == 1) {
-            //Search
+            //Search for reviews
             Intent i = new Intent(getApplicationContext(), SearchActivity.class);
             startActivity(i);
         } else if (position == 2) {
-            //My Reviews
+            //Search for professor stats
+
+        } else if (position == 3) {
+            //Show user reviews
 //            Intent i = new Intent(getApplicationContext(), MyReviewsActivity.class);
 //            startActivity(i);
             Intent i = new Intent(getApplicationContext(), SearchResultsActivity.class);
             startActivity(i);
-        } else if (position == 3) {
+        } else if (position == 4) {
+            //Login or logout
             if (mAdapter.getItem(position).equals(getString(R.string.login))) {
                 Intent intent = new Intent(this, LoginActivity.class);
                 startActivityForResult(intent, 1);
@@ -211,10 +227,10 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println(Utils.getSchoolId(this));
 
                 //Creating a new one since progressDialog could still possibly be null
-                progressDialog = new ProgressDialog(this);
-                progressDialog.setMessage(getString(R.string.loading));
-                progressDialog.setCancelable(false);
-                progressDialog.show();
+                mProgressDialog = new ProgressDialog(this);
+                mProgressDialog.setMessage(getString(R.string.loading));
+                mProgressDialog.setCancelable(false);
+                mProgressDialog.show();
 
                 RetrofitSingleton.getInstance()
                         .getMatchingService()

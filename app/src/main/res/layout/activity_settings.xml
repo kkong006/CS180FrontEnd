@@ -12,6 +12,7 @@
     tools:context="teamawesome.cs180frontend.Activities.SettingsActivity">
 
     <TextView
+        android:id="@+id/settings_university_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="University" />
@@ -28,15 +29,21 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:gravity="center"
+        android:padding="10dp"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:background="@color/colorAccent"
+        android:textColor="@color/colorWhite"
         android:text="@string/change_school_button" />
 
     <TextView
+        android:id="@+id/settings_password_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:text="Password" />
 
     <android.support.design.widget.TextInputLayout
+        android:id="@+id/settings_old_password_til"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -52,6 +59,7 @@
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
+        android:id="@+id/settings_new_password_til"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -72,6 +80,10 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:gravity="center"
+        android:padding="10dp"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:background="@color/colorAccent"
+        android:textColor="@color/colorWhite"
         android:text="@string/change_password_button" />
 
 </LinearLayout>

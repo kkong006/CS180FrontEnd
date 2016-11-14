@@ -1,12 +1,10 @@
 package teamawesome.cs180frontend.Activities;
 
 import android.app.ProgressDialog;
-import android.content.Context;
+import android.content.Intent;
 import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutCompat;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -14,31 +12,25 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.OnItemClick;
 import retrofit2.Callback;
 import teamawesome.cs180frontend.API.Models.ClassBundle;
 import teamawesome.cs180frontend.API.Models.ProfessorBundle;
-import teamawesome.cs180frontend.API.Models.ResponseReview;
-import teamawesome.cs180frontend.API.Models.ReviewRespBundle;
+import teamawesome.cs180frontend.API.Models.ReviewIDRespBundle;
 import teamawesome.cs180frontend.API.Models.UserReview;
 import teamawesome.cs180frontend.API.RetrofitSingleton;
 import teamawesome.cs180frontend.API.Services.Callbacks.PostReviewCallback;
 import teamawesome.cs180frontend.Misc.DataSingleton;
 import teamawesome.cs180frontend.Misc.Utils;
 import teamawesome.cs180frontend.R;
-
-import static teamawesome.cs180frontend.Misc.Utils.getUserId;
 
 public class WriteReviewActivity extends AppCompatActivity {
 
@@ -71,6 +63,12 @@ public class WriteReviewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_write_review);
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
+
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.setMessage(getResources().getString(R.string.loading));
+        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        mProgressDialog.setIndeterminate(true);
 
         mStars = new Button[] {mStar1, mStar2, mStar3, mStar4, mStar5};
 
@@ -120,9 +118,18 @@ public class WriteReviewActivity extends AppCompatActivity {
 
     @OnClick(R.id.write_submit_bt)
     public void submitReview() {
-//        String professorName = mProfessorName.getText().toString();
-//        String className = mClassName.getText().toString();
         String reviewText = mReviewText.getText().toString();
+
+        if(mUserProfessorName == "" || mUserClassName == "") {
+            String professorName = mProfessorName.getText().toString();
+            String className = mClassName.getText().toString();
+            Integer profId = DataSingleton.getInstance().getProfessorId(professorName);
+            Integer classId = DataSingleton.getInstance().getClassId(className);
+            if(!profId.equals(null) && !classId.equals(null)) {
+                mUserProfessorName = professorName;
+                mUserClassName = className;
+            }
+        }
 
         if(mUserProfessorName == "" || mUserClassName == "") {
             Utils.showSnackbar(this, mParent, getString(R.string.invalid_prof_class_name));
@@ -133,11 +140,10 @@ public class WriteReviewActivity extends AppCompatActivity {
 
                 int userId = Utils.getUserId(this);
 
-//                int schoolId = Utils.getSchoolId(this);
                 String password = Utils.getPassword(this);
                 System.out.println("PROF ID " + profId + "\nCLASS ID " + classId + "\nUSER ID " + userId + "\nPASSWORD " + password + "\nRATING " + mRating + "\nREVIEW " + reviewText);
                 if(profId != null && classId != null) {
-                    UserReview r = new UserReview(userId, password,/*schoolId,*/classId, profId,mRating,reviewText);
+                    UserReview r = new UserReview(userId, password, classId, profId,mRating,reviewText);
                     submitReview(r);
                 }
             } else {
@@ -178,11 +184,6 @@ public class WriteReviewActivity extends AppCompatActivity {
     }
 
     public void submitReview(UserReview r) {
-        mProgressDialog = new ProgressDialog(this);
-        mProgressDialog.setCancelable(false);
-        mProgressDialog.setMessage(getResources().getString(R.string.loading));
-        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        mProgressDialog.setIndeterminate(true);
         mProgressDialog.show();
         Callback callback = new PostReviewCallback();
         RetrofitSingleton.getInstance().getUserService()
@@ -191,7 +192,7 @@ public class WriteReviewActivity extends AppCompatActivity {
     }
 
     @Subscribe
-    public void reviewResp(ReviewRespBundle r) {
+    public void reviewResp(ReviewIDRespBundle r) {
         mProgressDialog.dismiss();
         mReviewText.setText("");
         mProfessorName.setText("");
@@ -199,6 +200,10 @@ public class WriteReviewActivity extends AppCompatActivity {
         mUserProfessorName = "";
         mUserClassName = "";
         Utils.showSnackbar(this, mParent, getString(R.string.account_update_success));
+
+        Intent i = new Intent(this, MainActivity.class);
+        startActivity(i);
+        finish();
     }
 
     @Subscribe
@@ -210,7 +215,7 @@ public class WriteReviewActivity extends AppCompatActivity {
     @Subscribe
     public void stringResp(String s) {
         mProgressDialog.dismiss();
-        if(s == "ERROR") {
+        if(s.equals("ERROR")) {
             Utils.showSnackbar(this, mParent, getString(R.string.failed_to_submit_review));
         }
     }

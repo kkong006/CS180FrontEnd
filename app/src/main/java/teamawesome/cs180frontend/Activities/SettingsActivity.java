@@ -3,6 +3,8 @@ package teamawesome.cs180frontend.Activities;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.provider.ContactsContract;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -12,12 +14,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.okhttp.internal.Util;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +33,6 @@ import retrofit2.Callback;
 import teamawesome.cs180frontend.API.Models.SchoolBundle;
 import teamawesome.cs180frontend.API.Models.UpdateUserBundle;
 import teamawesome.cs180frontend.API.RetrofitSingleton;
-import teamawesome.cs180frontend.API.Services.Callbacks.GetSchoolsCallback;
 import teamawesome.cs180frontend.API.Services.Callbacks.PostUpdateAccountCallback;
 import teamawesome.cs180frontend.Misc.Constants;
 import teamawesome.cs180frontend.Misc.DataSingleton;
@@ -40,11 +43,15 @@ import teamawesome.cs180frontend.R;
 public class SettingsActivity extends AppCompatActivity {
 
     @Bind(R.id.activity_settings) LinearLayout mParent;
+    @Bind(R.id.settings_university_tv) TextView mUniversityTV;
+    @Bind(R.id.settings_password_tv)TextView mPasswordTV;
     @Bind(R.id.settings_university_sp) Spinner mSpinner;
     @Bind(R.id.settings_school_bt) Button mSchoolButton;
     @Bind(R.id.old_password_et) EditText mOldPasswordET;
-    @Bind(R.id.settings_password_bt) Button mPasswordButton;
     @Bind(R.id.new_password_et) EditText mNewPasswordET;
+    @Bind(R.id.settings_password_bt) Button mPasswordButton;
+    @Bind(R.id.settings_old_password_til) TextInputLayout mOldPasswordTIL;
+    @Bind(R.id.settings_new_password_til) TextInputLayout mNewPasswordTIL;
 
     private String mSchoolName;
     private int mSchoolId;
@@ -56,8 +63,6 @@ public class SettingsActivity extends AppCompatActivity {
     private String mNewPassword;
     private ProgressDialog mProgressDialog;
 
-//    private boolean mSetSchool;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,13 +70,24 @@ public class SettingsActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
 
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.setMessage(getString(R.string.loading));
+        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        mProgressDialog.setIndeterminate(true);
+
         mSchoolId = Utils.getSchoolId(this);
 
         if(mSchoolId == 0) {
             mSchoolButton.setVisibility(View.GONE);
             mPasswordButton.setVisibility(View.GONE);
             mSpinner.setVisibility(View.GONE);
+            mOldPasswordET.setVisibility(View.GONE);
             mNewPasswordET.setVisibility(View.GONE);
+            mUniversityTV.setText(getString(R.string.please_sign_in));
+            mPasswordTV.setVisibility(View.GONE);
+            mOldPasswordTIL.setVisibility(View.GONE);
+            mNewPasswordTIL.setVisibility(View.GONE);
         } else {
             ArrayList<SchoolBundle> schools = DataSingleton.getInstance().getSchoolCache();
             if(schools.size() > 0) {
@@ -90,12 +106,6 @@ public class SettingsActivity extends AppCompatActivity {
                 fillSpinner();
             }
         }
-
-        mProgressDialog = new ProgressDialog(this);
-        mProgressDialog.setCancelable(false);
-        mProgressDialog.setMessage(getString(R.string.loading));
-        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        mProgressDialog.setIndeterminate(true);
     }
 
     public void fillSpinner() {
@@ -157,7 +167,7 @@ public class SettingsActivity extends AppCompatActivity {
     @Subscribe
     public void respInt(Integer i) {
         mProgressDialog.dismiss();
-        if(i == 1) {
+        if(i.equals(1)) {
             mSchoolName = mNewSchoolName;
             mSchoolId = mNewSchoolId;
             mPassword = mNewPassword;
@@ -175,7 +185,7 @@ public class SettingsActivity extends AppCompatActivity {
     @Subscribe
     public void respString(String s) {
         mProgressDialog.dismiss();
-        if(s == "ERROR") {
+        if(s.equals("ERROR")) {
             Utils.showSnackbar(this, mParent, getString(R.string.error_retrieving_data));
         }
     }

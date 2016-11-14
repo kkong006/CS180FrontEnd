@@ -182,9 +182,10 @@ public class LoginActivity extends AppCompatActivity {
         progressDialog.dismiss();
         Utils.saveUserData(this, resp, loginRegisterBundle.getPassword(),
                 loginRegisterBundle.getPhoneNumber());
-        Intent intent = new Intent();
+        Intent intent = new Intent(this, MainActivity.class);
         setResult(RESULT_OK, intent);
         System.out.println("FINISH");
+        startActivity(intent);
         finish();
     }
 

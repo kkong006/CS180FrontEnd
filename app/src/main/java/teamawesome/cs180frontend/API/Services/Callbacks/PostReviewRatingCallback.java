@@ -26,9 +26,6 @@ public class PostReviewRatingCallback implements Callback<Void> {
                 EventBus.getDefault().post(1);
                 break;
             case APIConstants.HTTP_STATUS_INVALID:
-                EventBus.getDefault().post(2);
-                break;
-            case APIConstants.HTTP_STATUS_DNE:
                 EventBus.getDefault().post(0);
                 break;
             case APIConstants.HTTP_STATUS_ERROR:

@@ -41,10 +41,11 @@ public class NavDrawerAdapter extends BaseAdapter {
     }
 
     public void changeLoginElem() {
-        if (mText[3].equals(mContext.getString(R.string.login))) {
-            mText[3] = mContext.getString(R.string.logout);
+
+        if (mText[4].equals(mContext.getString(R.string.login))) {
+            mText[4] = mContext.getString(R.string.logout);
         } else {
-            mText[3] = mContext.getString(R.string.login);
+            mText[4] = mContext.getString(R.string.login);
         }
         notifyDataSetChanged();
     }
@@ -67,12 +68,12 @@ public class NavDrawerAdapter extends BaseAdapter {
             convertView.setBackgroundColor(mContext.getResources().getColor(R.color.colorWhite));
         }
 
-        if (position == 3) {
+        if (position == 4) {
             if (Utils.getUserId(mContext) == 0) {
-                mText[3] = mContext.getString(R.string.login);
+                mText[4] = mContext.getString(R.string.login);
                 holder.text.setText(mContext.getString(R.string.login));
             } else {
-                mText[3] = mContext.getString(R.string.logout);
+                mText[4] = mContext.getString(R.string.logout);
                 holder.text.setText(mContext.getString(R.string.logout));
             }
         } else {

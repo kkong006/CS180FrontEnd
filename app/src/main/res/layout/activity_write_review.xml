@@ -67,6 +67,7 @@
 
     </android.support.design.widget.TextInputLayout>
 
+
     <!--Rating-->
     <LinearLayout
         android:orientation="horizontal"
