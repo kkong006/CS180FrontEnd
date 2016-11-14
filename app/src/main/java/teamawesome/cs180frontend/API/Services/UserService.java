@@ -5,6 +5,7 @@ import retrofit2.http.Body;
 import retrofit2.http.POST;
 import teamawesome.cs180frontend.API.Models.LoginRegisterBundle;
 import teamawesome.cs180frontend.API.Models.RateReview;
+import teamawesome.cs180frontend.API.Models.ReviewRespBundle;
 import teamawesome.cs180frontend.API.Models.UserRespBundle;
 import teamawesome.cs180frontend.API.Models.UpdateUserBundle;
 import teamawesome.cs180frontend.API.Models.UserReview;
@@ -18,7 +19,7 @@ public interface UserService {
     Call<Void> updateAccount(@Body UpdateUserBundle updateUserBundle);
 
     @POST("/review")
-    Call<Void> review(@Body UserReview userReview);
+    Call<ReviewRespBundle> review(@Body UserReview userReview);
 
     @POST("/rateReview")
     Call<Void> rateReview(@Body RateReview rateReview);

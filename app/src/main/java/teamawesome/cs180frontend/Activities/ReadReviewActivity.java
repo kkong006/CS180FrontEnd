@@ -26,6 +26,7 @@ import teamawesome.cs180frontend.API.Services.Callbacks.PostUpdateAccountCallbac
 import teamawesome.cs180frontend.Misc.Constants;
 import teamawesome.cs180frontend.Misc.Review;
 import teamawesome.cs180frontend.Misc.SPSingleton;
+import teamawesome.cs180frontend.Misc.Utils;
 import teamawesome.cs180frontend.R;
 
 public class ReadReviewActivity extends AppCompatActivity {
@@ -57,6 +58,11 @@ public class ReadReviewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_read_review);
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
+
+        if(Utils.getUserId(this) == 0) {
+            mThumbsUp.setVisibility(View.GONE);
+            mThumbsDown.setVisibility(View.GONE);
+        }
 
         mRatings = new TextView[] {mRate1, mRate2, mRate3, mRate4, mRate5};
 

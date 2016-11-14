@@ -59,6 +59,10 @@ public class Utils {
         return SPSingleton.getInstance(context).getSp().getInt(Constants.SCHOOL_ID, 0);
     }
 
+    public static String getPassword(Context context) {
+        return SPSingleton.getInstance(context).getSp().getString(Constants.PASSWORD, "");
+    }
+
     //save the user's info once they've logged in and/or registered
     public static void saveUserData(Context context, UserRespBundle userInfo, String password, String number) {
         System.out.println(userInfo.getId());

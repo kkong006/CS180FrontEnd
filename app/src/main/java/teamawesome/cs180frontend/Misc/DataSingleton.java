@@ -29,7 +29,6 @@ public class DataSingleton {
         if (instance == null) {
             instance = new DataSingleton();
         }
-
         return instance;
     }
 
@@ -39,8 +38,9 @@ public class DataSingleton {
         classCache = new ArrayList<>();
         professorCache = new ArrayList<>();
         schoolMap = new HashMap<>();
-        professorMap = new HashMap<>();
+        subjectMap = new HashMap<>();
         classMap = new HashMap<>();
+        professorMap = new HashMap<>();
     }
 
     public void cacheDataBundle(CacheDataBundle data) {
@@ -68,7 +68,6 @@ public class DataSingleton {
         }
 
         professorCache.addAll(data.getProfs());
-
         for(ProfessorBundle p : professorCache) {
             professorMap.put(p.getProfessorName(), p.getProfessorId());
         }

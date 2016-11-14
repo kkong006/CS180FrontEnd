@@ -15,7 +15,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -79,9 +78,10 @@ public class MainActivity extends AppCompatActivity {
         toggle.syncState();
 
         //PREVENT USER FROM GETTING ACCESS TO THE WRITE REVIEW ACTIVITY
-        set_fab();
+        setButtons();
 
         schoolId = SPSingleton.getInstance(this).getSp().getInt(Constants.SCHOOL_ID, -1);
+
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(getString(R.string.loading));
         progressDialog.setCancelable(false);
@@ -93,17 +93,20 @@ public class MainActivity extends AppCompatActivity {
                 .enqueue(new GetCacheDataCallback());
     }
 
-    //Show/hide the FAB
-    private void set_fab() {
+    //Show/hide the FAB and tool bar
+    private void setButtons() {
         if (Utils.getUserId(this) == 0) {
             mFab.setVisibility(View.GONE);
+//            mToolbar.setVisibility(View.GONE);
         } else {
             mFab.setVisibility(View.VISIBLE);
+//            mToolbar.setVisibility(View.VISIBLE);
         }
     }
 
     @Override
     protected void onStop() {
+        EventBus.getDefault().unregister(this);
         super.onStop();
     }
 
@@ -116,17 +119,21 @@ public class MainActivity extends AppCompatActivity {
     @Subscribe
     public void dataResp(CacheDataBundle data) {
         DataSingleton.getInstance().cacheDataBundle(data);
-        System.out.println(DataSingleton.getInstance().getSchoolCache().size());
+        System.out.println("SCHOOL ID " + schoolId);
+        System.out.println("SCHOOL SIZE " + DataSingleton.getInstance().getSchoolCache().size());
+        System.out.println("PROFESSOR SIZE " + DataSingleton.getInstance().getProfessorCache().size());
+        System.out.println("CLASS SIZE " + DataSingleton.getInstance().getClassCache().size());
+        System.out.println("SUBJECT SIZE " + DataSingleton.getInstance().getSubjectCache().size());
         progressDialog.dismiss();
-        Utils.showSnackbar(this, parent, getString(R.string.data_loaded));
+
     }
 
     @Subscribe
     public void intResp(Integer i) {
         if (i == 0) {
-            Toast.makeText(this, getResources().getString(R.string.data_doesnt_exist), Toast.LENGTH_SHORT).show();
+            Utils.showSnackbar(this, parent, getString(R.string.data_doesnt_exist));
         } else if (i == -1) {
-            Toast.makeText(this, getResources().getString(R.string.error_getting_data), Toast.LENGTH_SHORT).show();
+            Utils.showSnackbar(this, parent, getString(R.string.error_getting_data));
         }
     }
 
@@ -165,11 +172,6 @@ public class MainActivity extends AppCompatActivity {
             startActivity(i);
             return true;
         }
-//        else {
-//            //Logout
-//            logout();
-////            return true;
-//        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -220,15 +222,15 @@ public class MainActivity extends AppCompatActivity {
                         .enqueue(new GetCacheDataCallback());
             }
         }
-        set_fab();
+        setButtons();
     }
 
     private void logout() {
         Utils.nukeUserData(this);
         mAdapter.changeLoginElem();
-        set_fab();
+        setButtons();
         //TODO: THIS TOAST MSG NEEDS TO BE CONSTANT
         //USING TOAST SINCE THEY'RE CONTEXT INSENSITIVE
-        Toast.makeText(getBaseContext(), "Logging out", Toast.LENGTH_SHORT).show();
+        Utils.showSnackbar(this, parent, getString(R.string.log_out));
     }
 }

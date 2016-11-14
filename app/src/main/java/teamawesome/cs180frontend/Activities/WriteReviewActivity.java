@@ -29,6 +29,8 @@ import butterknife.OnItemClick;
 import retrofit2.Callback;
 import teamawesome.cs180frontend.API.Models.ClassBundle;
 import teamawesome.cs180frontend.API.Models.ProfessorBundle;
+import teamawesome.cs180frontend.API.Models.ResponseReview;
+import teamawesome.cs180frontend.API.Models.ReviewRespBundle;
 import teamawesome.cs180frontend.API.Models.UserReview;
 import teamawesome.cs180frontend.API.RetrofitSingleton;
 import teamawesome.cs180frontend.API.Services.Callbacks.PostReviewCallback;
@@ -40,7 +42,7 @@ import static teamawesome.cs180frontend.Misc.Utils.getUserId;
 
 public class WriteReviewActivity extends AppCompatActivity {
 
-    @Bind(R.id.activity_write_review) LinearLayout mReviewLayout;
+    @Bind(R.id.activity_write_review) LinearLayout mParent;
     @Bind(R.id.write_professor_et) AutoCompleteTextView mProfessorName;
     @Bind(R.id.write_class_et) AutoCompleteTextView mClassName;
     @Bind(R.id.write_review_et) EditText mReviewText;
@@ -56,10 +58,7 @@ public class WriteReviewActivity extends AppCompatActivity {
     private String[] mClassNames;
     private String mUserProfessorName;
     private String mUserClassName;
-    private int mClassId;
-    private int mProfId;
     private int mRating;
-    private String mReview;
 
     private List<ProfessorBundle> mProfessors;
     private List<ClassBundle> mClasses;
@@ -74,11 +73,6 @@ public class WriteReviewActivity extends AppCompatActivity {
         EventBus.getDefault().register(this);
 
         mStars = new Button[] {mStar1, mStar2, mStar3, mStar4, mStar5};
-
-        if (Utils.getSchoolId(this) != 0) {
-        } else {
-            //finish();
-        }
 
         mRating = 0;
 
@@ -111,17 +105,17 @@ public class WriteReviewActivity extends AppCompatActivity {
             }
         });
 
-        final Context context = this;
+//        final Context context = this;
         //Enter key to hide keyboard
-        mReviewText.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if(keyCode == KeyEvent.KEYCODE_ENTER) {
-                    Utils.hideKeyboard(mReviewLayout, context);
-                }
-               return false;
-            }
-        });
+//        mReviewText.setOnKeyListener(new View.OnKeyListener() {
+//            @Override
+//            public boolean onKey(View v, int keyCode, KeyEvent event) {
+//                if(keyCode == KeyEvent.KEYCODE_ENTER) {
+//                    Utils.hideKeyboard(mReviewLayout, getApplicationContext());
+//                }
+//                return true;
+//            }
+//        });
     }
 
     @OnClick(R.id.write_submit_bt)
@@ -130,17 +124,25 @@ public class WriteReviewActivity extends AppCompatActivity {
 //        String className = mClassName.getText().toString();
         String reviewText = mReviewText.getText().toString();
 
-        if(reviewText.length() >= 32) {
-            Integer profId = DataSingleton.getInstance().getProfessorId(mUserProfessorName);
-            Integer classId = DataSingleton.getInstance().getClassId(mUserClassName);
-            int userId = Utils.getUserId(this);
-            int schoolId = Utils.getSchoolId(this);
-            if(profId != null && classId != null) {
-                UserReview r = new UserReview(userId,schoolId,classId,profId,mRating,reviewText);
-                submitReview(r);
-            }
+        if(mUserProfessorName == "" || mUserClassName == "") {
+            Utils.showSnackbar(this, mParent, getString(R.string.invalid_prof_class_name));
         } else {
-            Toast.makeText(this, getResources().getString(R.string.review_not_long_enough), Toast.LENGTH_SHORT).show();
+            if(reviewText.length() >= 32) {
+                Integer profId = DataSingleton.getInstance().getProfessorId(mUserProfessorName);
+                Integer classId = DataSingleton.getInstance().getClassId(mUserClassName);
+
+                int userId = Utils.getUserId(this);
+
+//                int schoolId = Utils.getSchoolId(this);
+                String password = Utils.getPassword(this);
+                System.out.println("PROF ID " + profId + "\nCLASS ID " + classId + "\nUSER ID " + userId + "\nPASSWORD " + password + "\nRATING " + mRating + "\nREVIEW " + reviewText);
+                if(profId != null && classId != null) {
+                    UserReview r = new UserReview(userId, password,/*schoolId,*/classId, profId,mRating,reviewText);
+                    submitReview(r);
+                }
+            } else {
+                Utils.showSnackbar(this, mParent, getString(R.string.review_not_long_enough));
+            }
         }
     }
 
@@ -189,26 +191,27 @@ public class WriteReviewActivity extends AppCompatActivity {
     }
 
     @Subscribe
+    public void reviewResp(ReviewRespBundle r) {
+        mProgressDialog.dismiss();
+        mReviewText.setText("");
+        mProfessorName.setText("");
+        mClassName.setText("");
+        mUserProfessorName = "";
+        mUserClassName = "";
+        Utils.showSnackbar(this, mParent, getString(R.string.account_update_success));
+    }
+
+    @Subscribe
     public void intResp(Integer i) {
         mProgressDialog.dismiss();
-        if(i == 0) {
-            Toast.makeText(this, getResources().getString(R.string.failed_to_submit_review) + " 0", Toast.LENGTH_SHORT).show();
-        } else if(i == -1) {
-            Toast.makeText(this, getResources().getString(R.string.failed_to_submit_review) + " -1", Toast.LENGTH_SHORT).show();
-        } else if(i == 1) {
-            mProfessorName.setText("");
-            mClassName.setText("");
-            mReviewText.setText("");
-            setStarColor(0);
-            Toast.makeText(this, getResources().getString(R.string.account_update_success) + " 1", Toast.LENGTH_SHORT).show();
-        }
+        Utils.showSnackbar(this, mParent, getString(R.string.failed_to_submit_review));
     }
 
     @Subscribe
     public void stringResp(String s) {
         mProgressDialog.dismiss();
         if(s == "ERROR") {
-            Toast.makeText(this, getResources().getString(R.string.failed_to_submit_review), Toast.LENGTH_SHORT).show();
+            Utils.showSnackbar(this, mParent, getString(R.string.failed_to_submit_review));
         }
     }
 

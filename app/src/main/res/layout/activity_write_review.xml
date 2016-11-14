@@ -30,8 +30,6 @@
 
     </android.support.design.widget.TextInputLayout>
 
-
-
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -68,30 +66,6 @@
             android:hint="Type your review here" />
 
     </android.support.design.widget.TextInputLayout>
-
-    <!--<EditText-->
-        <!--android:id="@+id/write_professor_et"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_marginTop="@dimen/activity_vertical_margin"-->
-        <!--android:layout_height="40dp"-->
-        <!--android:backgroundTint="@color/colorBlack"-->
-        <!--android:textColorHint="@color/colorPrimary"-->
-        <!--android:textAlignment="center"-->
-        <!--android:textSize="18sp"-->
-        <!--android:hint="Professor" />-->
-
-    <!--<EditText-->
-        <!--android:id="@+id/write_class_et"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="40dp"-->
-        <!--android:layout_marginTop="@dimen/activity_vertical_margin"-->
-        <!--android:backgroundTint="@color/colorBlack"-->
-        <!--android:textColorHint="@color/colorPrimary"-->
-        <!--android:textAlignment="center"-->
-        <!--android:textSize="18sp"-->
-        <!--android:hint="Class Name" />-->
-
-
 
     <!--Rating-->
     <LinearLayout

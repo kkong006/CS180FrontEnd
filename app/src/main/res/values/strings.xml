@@ -11,37 +11,10 @@
     <string name="login">Login</string>
     <string name="logout">Logout</string>
 
-    <!--Main Activity-->
-    <string name="data_doesnt_exist">Data doesn\'t exist</string>
-    <string name="error_getting_data">Couldn\'t get data</string>
-
-    <!-- Strings related to login -->
-    <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password (optional)</string>
-    <string name="action_sign_in">Sign in or register</string>
-    <string name="action_sign_in_short">Sign in</string>
-    <string name="error_invalid_number">This number is invalid</string>
-    <string name="error_invalid_password">This password is too short</string>
-    <string name="error_incorrect_password">This password is incorrect</string>
-    <string name="error_field_required">This field is required</string>
-    <string name="permission_rationale">"Contacts permissions are needed for providing email
-        completions."
-    </string>
-    <string name="confirm_registry">Username/email not found. Create new userRespBundle?</string>
-    <string name="yes">Yes</string>
-    <string name="no">No</string>
-    <string name="login_loading">Logging in...</string>
-    <string name="register_loading">Registering...</string>
-    <string name="register_now">Don\'t have an account? Register now!</string>
-    <string name="sign_in">Already have an account? Sign in!</string>
-
     <!--Icons-->
     <string name="rating_icon">{fa-check-circle}</string>
     <string name="thumbs_up_icon">{fa-thumbs-up}</string>
     <string name="thumbs_down_icon">{fa-thumbs-down}</string>
-
-    <!-- Main Activity -->
-    <string name="data_loaded">Data loaded!</string>
 
     <!--Navigation Drawer-->
     <string-array name="nav_drawer_array">
@@ -60,6 +33,35 @@
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <!--Main Activity-->
+    <string name="data_doesnt_exist">Data doesn\'t exist</string>
+    <string name="error_getting_data">Couldn\'t get data</string>
+    <string name="log_out">Logging out</string>
+
+    <!-- Login Activity -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password (optional)</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_number">This number is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+    <string name="confirm_registry">Username/email not found. Create new userRespBundle?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="login_loading">Logging in...</string>
+    <string name="register_loading">Registering...</string>
+    <string name="register_now">Don\'t have an account? Register now!</string>
+    <string name="sign_in">Already have an account? Sign in!</string>
+    <string name="register">Register</string>
+
+    <!-- Main Activity -->
+    <string name="data_loaded">Data loaded!</string>
 
     <!--Search Activity-->
     <string name="search_by_professor">Search by Professor:</string>
@@ -88,6 +90,8 @@
     <string name="account_update_success">Success!</string>
     <string name="change_password_button">Change Password</string>
     <string name="please_sign_in">Please sign in</string>
+    <string name="select_new_school">Please select new school</string>
+    <string name="enter_new_password">Please enter new password</string>
 
     <!--Read Review Activity-->
     <string name="students_like"> students like this review</string>
@@ -102,74 +106,6 @@
     <!--Write Review Activity-->
     <string name="review_not_long_enough">Review too short</string>
     <string name="failed_to_submit_review">Failed to submit review</string>
-
-
-    <!--Stubbed Data-->
-    <string-array name="class_names">
-        <item>Class A</item>
-        <item>Class B</item>
-        <item>Class C</item>
-        <item>Class D</item>
-        <item>Class E</item>
-        <item>Class F</item>
-        <item>Class G</item>
-        <item>Class H</item>
-        <item>Class I</item>
-        <item>Class J</item>
-    </string-array>
-
-    <string-array name="ratings">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-    </string-array>
-
-    <string-array name="review_dates">
-        <item>2/2/16</item>
-        <item>2/3/16</item>
-        <item>4/5/16</item>
-        <item>5/6/16</item>
-        <item>7/8/16</item>
-        <item>2/2/16</item>
-        <item>2/3/16</item>
-        <item>4/5/16</item>
-        <item>5/6/16</item>
-        <item>7/8/16</item>
-    </string-array>
-
-    <string-array name="reviews">
-        <item>Class was very fun! I loved doing group projects. Be prepared to ask a lot of questions as he will go off other directions. Do participate in Vision club, States and Psych. You wont be sorry. Bring King Taco to class- :) </item>
-        <item>He was such an amazing professor I had him for bio psychology (Psych2) and also for social psychology (Psych13). You need to basically study on your own, his class is based off of group projects and tests all which are easy if you study well. His class is so much fun, you will love psychology after him. Take him! </item>
-        <item>He is a great professor. I\'m not sure why some people say he is not knowledgable. How about asking questions. He is helpful and will clarify things in a simpler way if you do not understand. He is very funny and also implements magic tricks into his lessons to make it interesting. People don\'t appreciate that he tries to inspire you with his talks. </item>
-        <item>Wonderful professor!! Super friendly yet very professional. Lectures could be tough but she helps in any way she can. Clear lecture and straightforward instructions. I recommend her 100%!!! She is a very good instructor. </item>
-        <item>Great prof. I enjoyed this class very much and the work was straight forward. Reviews a lot of the work and it helps out for exams. Overall i would reccomend </item>
-        <item>Class was a waste of time. You mainly teach yourself. While he seems like a good person who would help you if you have questions he rants and gives unnecessary speeches when he should be teaching. Flirts with the girls and when test day comes around there are questions he never covered. Would NOT recommend. Take another teacher. </item>
-        <item>Great professor. Was able to clearly explain all of the material despite it being in an online class. He encourages you to ask any questions and cares alot about his students succeeding. If you are looking to take the online version of this class make sure Miller is teaching it. Class is fairly difficult but just work hard and go to office hours </item>
-        <item>Okay first off, about a third of the class failed the midterm and probably dropped out. The midterm wasn\'t hard at all. I guess it true, CS isn\'t for everyone. Okay, Miller is an amazing teacher. Office hours are remarkable useful and boy were the labs and assignment are incredibly fun. Let just say that I had a "lit af" experience. ;) Thumbs up!!! </item>
-        <item>Very tough class for those with no prior programming experience. Be prepared to put a lot of time on the programming assignments. Kris is a very good lecturer and is passionate for his job. He is open to question and will clarify things that are confusing. This is a weeder class for CS and getting anything below a 70% will cap your grade at a C-. </item>
-        <item>He is a very nice professor but the material in 111 was tough and always explaining proofs to us that we never used until the final was definitely tough. But he is helpful and is very nice during office hours</item>
-    </string-array>
-
-    <string-array name="reviewIDs">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-        <item>6</item>
-        <item>7</item>
-        <item>8</item>
-        <item>9</item>
-        <item>10</item>
-    </string-array>
-    <string name="register">Register</string>
-    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="invalid_prof_class_name">Select valid professor and class names</string>
 
 </resources>
