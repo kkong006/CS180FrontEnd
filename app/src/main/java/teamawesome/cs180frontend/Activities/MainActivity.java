@@ -128,7 +128,6 @@ public class MainActivity extends AppCompatActivity {
         System.out.println("CLASS SIZE " + DataSingleton.getInstance().getClassCache().size());
         System.out.println("SUBJECT SIZE " + DataSingleton.getInstance().getSubjectCache().size());
         mProgressDialog.dismiss();
-
     }
 
     @Subscribe
