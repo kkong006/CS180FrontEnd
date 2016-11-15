@@ -69,6 +69,12 @@ public class LoginActivity extends AppCompatActivity {
                 DataSingleton.getInstance().getSchoolCache());
         acTV.setAdapter(adapter);
         acTV.setThreshold(1);
+
+        if(Utils.getUserId(this) > 0) {
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 
     @Override
@@ -79,7 +85,7 @@ public class LoginActivity extends AppCompatActivity {
 
     @OnClick(R.id.register_text)
     public void startRegister() {
-        if (registerTextView.getText().equals(getString(R.string.register_now))) {
+        if (registerTextView.getText().toString().equals(getString(R.string.register_now))) {
             loginMode = false;
             acTV.setVisibility(View.VISIBLE);
             signInButton.setText(getString(R.string.register));
@@ -119,7 +125,7 @@ public class LoginActivity extends AppCompatActivity {
             cancel = true;
         }
 
-        // Check for a phpne numebr  address.
+        // Check for a phone number.
         if (TextUtils.isEmpty(phoneNum)) {
             phoneEditText.setError(getString(R.string.error_field_required));
             focusView = phoneEditText;
@@ -173,7 +179,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
         return password.length() > 8;
     }
 

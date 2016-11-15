@@ -68,7 +68,6 @@ public class SearchResultsActivity extends AppCompatActivity {
             getSupportActionBar().setTitle(mProfessorName);
             getReviews();
         }
-
     }
 
     public void getReviews() {
@@ -98,8 +97,10 @@ public class SearchResultsActivity extends AppCompatActivity {
                 mProfIds[i] = mReviews.get(i).getProfId();
                 mReviewDates[i] = mReviews.get(i).getReviewDate();
                 mRatings[i] = mReviews.get(i).getRating();
+
                 mMsgs[i] = mReviews.get(i).getMessage();
                 mUserReviewRatings[i] = mReviews.get(i).getReviewRating();
+                System.out.println("USER RATING " + i + " " + mUserReviewRatings[i]);
             }
 
             mAdapter = new SearchResultsAdapter(this, mClassNames, mRatings, mReviewDates, mMsgs, mReviewIds);
@@ -169,14 +170,21 @@ public class SearchResultsActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onRestart() {
+        super.onRestart();
+        EventBus.getDefault().register(this);
+        getReviews();
+    }
+
+    @Override
     protected void onStop() {
         EventBus.getDefault().unregister(this);
         super.onStop();
     }
 
-    @Override
-    protected void onDestroy() {
-        EventBus.getDefault().unregister(this);
-        super.onDestroy();
-    }
+//    @Override
+//    protected void onDestroy() {
+//        EventBus.getDefault().unregister(this);
+//        super.onDestroy();
+//    }
 }

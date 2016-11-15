@@ -23,4 +23,8 @@ public interface MatchingService {
     @GET("/reviews")
     Call<List<ReviewRespBundle>> reviews(@Query("prof_id") int prof_id,
                                          @Query("user_id") int user_id);
+
+//    @GET("/reviews")
+//    Call<List<ReviewRespBundle>> reviews(@Query("school_id") int school_id,
+//                                         @Query("user_id") int user_id);
 }

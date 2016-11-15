@@ -3,6 +3,7 @@ package teamawesome.cs180frontend.Activities;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -16,17 +17,23 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
 import teamawesome.cs180frontend.API.Models.CacheDataBundle;
+import teamawesome.cs180frontend.API.Models.ReviewRespBundle;
 import teamawesome.cs180frontend.API.RetrofitSingleton;
 import teamawesome.cs180frontend.API.Services.Callbacks.GetCacheDataCallback;
+import teamawesome.cs180frontend.API.Services.Callbacks.GetReviewsCallback;
+import teamawesome.cs180frontend.Adapters.MainFeedAdapter;
 import teamawesome.cs180frontend.Adapters.NavDrawerAdapter;
 import teamawesome.cs180frontend.Misc.Constants;
 import teamawesome.cs180frontend.Misc.DataSingleton;
@@ -42,12 +49,15 @@ public class MainActivity extends AppCompatActivity {
     @Bind(R.id.drawer_list) ListView mDrawerList;
     @Bind(R.id.main_layout) CoordinatorLayout parent;
     @Bind(R.id.fab) FloatingActionButton mFab;
+    @Bind(R.id.feed_list_view) ListView mFeedList;
 
     private NavDrawerAdapter mAdapter;
     private String[] mNavTitles;
     private String[] mIconTitles;
     private static final String TAG = "Main Activity";
     private int schoolId;
+
+    private MainFeedAdapter mFeedAdapter;
 
     ProgressDialog mProgressDialog;
     private Integer apiCnt = new Integer(0);
@@ -94,7 +104,10 @@ public class MainActivity extends AppCompatActivity {
                 .getData(schoolId)
                 .enqueue(new GetCacheDataCallback());
 
-        System.out.println("Back to oncreate");
+//        RetrofitSingleton.getInstance()
+//                .getMatchingService()
+//                .reviews(schoolId)
+//                .enqueue(new GetReviewsCallback());
     }
 
     //Show/hide the FAB and tool bar
@@ -104,24 +117,6 @@ public class MainActivity extends AppCompatActivity {
         } else {
             mFab.setVisibility(View.VISIBLE);
         }
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    protected void onStop() {
-        EventBus.getDefault().unregister(this);
-        super.onStop();
-    }
-
-    @Override
-    public void onDestroy() {
-        EventBus.getDefault().unregister(this);
-        super.onDestroy();
     }
 
     @Subscribe
@@ -134,6 +129,69 @@ public class MainActivity extends AppCompatActivity {
         System.out.println("SUBJECT SIZE " + DataSingleton.getInstance().getSubjectCache().size());
         mProgressDialog.dismiss();
 
+    }
+
+    @Subscribe
+    public void reviewsResp(List<ReviewRespBundle> reviewList) {
+        mProgressDialog.dismiss();
+
+        if(reviewList != null) {
+            final int[] reviewIds = new int[reviewList.size()];
+            int[] classIds = new int[reviewList.size()];
+            int[] profIds = new int[reviewList.size()];
+            int[] ratings = new int[reviewList.size()];
+            final int[] userRatings = new int[reviewList.size()];
+            final String[] reviewDates = new String[reviewList.size()];
+            final String[] reviews = new String[reviewList.size()];
+            final String[] classes = new String[reviewList.size()];
+            final String[] professors = new String[reviewList.size()];
+
+            for(int i = 0; i < reviewList.size(); i++) {
+                reviewIds[i] = reviewList.get(i).getReviewId();
+                classIds[i] = reviewList.get(i).getClassId();
+                profIds[i] = reviewList.get(i).getProfId();
+                ratings[i] = reviewList.get(i).getRating();
+                userRatings[i] = reviewList.get(i).getReviewRating();
+                reviewDates[i] = reviewList.get(i).getReviewDate();
+                reviews[i] = reviewList.get(i).getMessage();
+                classes[i] = DataSingleton.getInstance().getClassName(classIds[i]);
+                professors[i] = DataSingleton.getInstance().getProfessorName(profIds[i]);
+            }
+
+            mFeedAdapter = new MainFeedAdapter(this, professors, ratings, classes, reviewDates, reviews, reviewIds);
+            mFeedList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+            mFeedList.setAdapter(mFeedAdapter);
+            mFeedList.setOnItemClickListener(new ListView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    int[] r = mFeedAdapter.getItem(position);
+                    if(r.length == 2) {
+                        int j = 0;
+                        for(; j < reviewIds.length; j++) {
+                            if(reviewIds[j] == r[0]) {
+                                break;
+                            }
+                        }
+                        if(j < reviewIds.length) {
+                            Intent intent = new Intent(getBaseContext(), ReadReviewActivity.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putInt(getString(R.string.REVIEW_RATING), r[1]);
+                            bundle.putString(getString(R.string.REVIEW_CONTENT), reviews[j]);
+                            bundle.putString(getString(R.string.REVIEW_CLASS_NAME), classes[j]);
+                            bundle.putString(getString(R.string.REVIEW_DATE), reviewDates[j]);
+                            bundle.putInt(getString(R.string.REVIEW_USER_RATING), userRatings[j]);
+                            bundle.putString(getString(R.string.PROFESSOR_NAME), professors[j]);
+                            intent.putExtras(bundle);
+                            startActivity(intent);
+                        }
+                    }
+                }
+            });
+
+            if(reviewList.size() == 0) {
+                Utils.showSnackbar(this, parent, getString(R.string.reviews_dne));
+            }
+        }
     }
 
     @Subscribe
@@ -245,8 +303,27 @@ public class MainActivity extends AppCompatActivity {
         Utils.nukeUserData(this);
         mAdapter.changeLoginElem();
         setButtons();
-        //TODO: THIS TOAST MSG NEEDS TO BE CONSTANT
-        //USING TOAST SINCE THEY'RE CONTEXT INSENSITIVE
-        Utils.showSnackbar(this, parent, getString(R.string.log_out));
+        Toast.makeText(this, getString(R.string.log_out), Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+        finish();
     }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
+    }
+
+//    @Override
+//    public void onDestroy() {
+//        EventBus.getDefault().unregister(this);
+//        super.onDestroy();
+//    }
 }

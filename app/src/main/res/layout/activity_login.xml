@@ -18,6 +18,7 @@
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
+        android:background="@drawable/login_background"
         tools:context="teamawesome.cs180frontend.Activities.LoginActivity">
 
         <ScrollView
@@ -29,17 +30,33 @@
                 android:id="@+id/email_login_form"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@color/colorTransparentWhite"
                 android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:gravity="center"
+                    android:fontFamily="cursive"
+                    android:textStyle="bold"
+                    android:textSize="38sp"
+                    android:textColor="@color/colorPrimary"
+                    android:text="@string/app_name"/>
 
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp">
 
                     <EditText
                         android:id="@+id/number"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="phone number"
+                        android:hint="Phone Number"
                         android:inputType="phone"
                         android:maxLines="1" />
 
@@ -47,13 +64,15 @@
 
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp">
 
                     <EditText
                         android:id="@+id/password"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="password"
+                        android:hint="Password"
                         android:inputType="textPassword"
                         android:maxLines="1" />
 
@@ -62,13 +81,15 @@
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/school_ac_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp">
 
                     <AutoCompleteTextView
                         android:id="@+id/school_auto_complete"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="school"
+                        android:hint="University"
                         android:maxLines="1"
                         android:layout_marginTop="10dp" />
 
@@ -76,10 +97,12 @@
 
                 <Button
                     android:id="@+id/sign_in_button"
-                    style="?android:textAppearanceSmall"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
+                    android:layout_gravity="center"
+                    android:background="@color/colorAccent"
+                    android:textColor="@color/colorWhite"
                     android:text="sign in"
                     android:textStyle="bold" />
 
@@ -87,11 +110,10 @@
                     android:id="@+id/register_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_margin="10dp"
                     android:gravity="center"
-                    android:textColor="#f00"
+                    android:textColor="@color/colorAccent"
                     android:text="Don't have an account? Register now!"/>
-
             </LinearLayout>
         </ScrollView>
     </LinearLayout>

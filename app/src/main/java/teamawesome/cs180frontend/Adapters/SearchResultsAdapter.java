@@ -42,8 +42,7 @@ public class SearchResultsAdapter extends BaseAdapter{
 
     @Override
     public int[] getItem(int position) {
-        int[] ret = {mReviewIDs[position], mRatings[position]};
-        return ret;
+        return new int[] {mReviewIDs[position], mRatings[position]};
     }
 
     @Override
@@ -65,15 +64,11 @@ public class SearchResultsAdapter extends BaseAdapter{
         }
 
         holder.className.setText(mClassNames[position]);
-        try {
-            for(int i = 0; i < mRatings[position]; i++) {
-                holder.rating[i].setTextColor(mContext.getResources().getColor(R.color.colorGreen));
-            }
-        } catch(Exception e) {
-            Toast.makeText(mContext, "Error reading rating", Toast.LENGTH_SHORT).show();
-        }
         holder.reviewDate.setText(mReviewDates[position]);
         holder.reviewContents.setText(mReviewContents[position]);
+        for(int i = 0; i < mRatings[position] && i < 5; i++) {
+            holder.rating[i].setTextColor(mContext.getResources().getColor(R.color.colorGreen));
+        }
 
         if(position == 0) {
             convertView.setBackgroundColor(mContext.getResources().getColor(R.color.colorWhite));

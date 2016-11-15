@@ -147,7 +147,7 @@ public class SettingsActivity extends AppCompatActivity {
     @OnClick(R.id.settings_password_bt)
     public void changePassword() {
         String newPassword = mNewPasswordET.getText().toString();
-        if(newPassword.length() > 8 && Utils.getMD5Hash(newPassword) != mPassword) {
+        if(newPassword.length() > 8 && !Utils.getMD5Hash(newPassword).equals(mPassword)) {
             mNewPassword = Utils.getMD5Hash(newPassword);
             UpdateUserBundle user = new UpdateUserBundle(Utils.getUserId(this), mPassword, mNewPassword, mSchoolId);
             updateUserAccount(user);
