@@ -18,7 +18,7 @@ public class GetReviewsCallback implements Callback<List<ReviewRespBundle>> {
 
     @Override
     public void onResponse(Call<List<ReviewRespBundle>> call, Response<List<ReviewRespBundle>> response) {
-        System.out.println(response.code());
+        System.out.println("GET REVIEWS " + response.code());
         switch (response.code()) {
             case APIConstants.HTTP_STATUS_OK:
                 EventBus.getDefault().post(response.body());

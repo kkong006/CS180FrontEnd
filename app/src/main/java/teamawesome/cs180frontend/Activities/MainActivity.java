@@ -19,6 +19,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.squareup.okhttp.internal.Util;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
@@ -99,15 +101,22 @@ public class MainActivity extends AppCompatActivity {
         mProgressDialog.setCancelable(false);
         mProgressDialog.show();
 
-        RetrofitSingleton.getInstance()
-                .getMatchingService()
-                .getData(schoolId)
-                .enqueue(new GetCacheDataCallback());
+        synchronized (apiCnt) {
+            apiCnt++;
+            RetrofitSingleton.getInstance()
+                    .getMatchingService()
+                    .getData(schoolId)
+                    .enqueue(new GetCacheDataCallback());
+        }
 
-//        RetrofitSingleton.getInstance()
-//                .getMatchingService()
-//                .reviews(schoolId)
-//                .enqueue(new GetReviewsCallback());
+        synchronized (apiCnt) {
+            apiCnt++;
+            System.out.println("MAKING CALL TO GET FEED REVIEWS " + schoolId + " " + Utils.getUserId(this));
+            RetrofitSingleton.getInstance()
+                    .getMatchingService()
+                    .reviewsSchool(schoolId, Utils.getUserId(this))
+                    .enqueue(new GetReviewsCallback());
+        }
     }
 
     //Show/hide the FAB and tool bar
@@ -121,19 +130,28 @@ public class MainActivity extends AppCompatActivity {
 
     @Subscribe
     public void dataResp(CacheDataBundle data) {
+        synchronized (apiCnt) {
+            if(apiCnt.equals(1)) {
+                mProgressDialog.dismiss();
+            }
+            apiCnt--;
+        }
         DataSingleton.getInstance().cacheDataBundle(data);
         System.out.println("SCHOOL ID " + schoolId);
         System.out.println("SCHOOL SIZE " + DataSingleton.getInstance().getSchoolCache().size());
         System.out.println("PROFESSOR SIZE " + DataSingleton.getInstance().getProfessorCache().size());
         System.out.println("CLASS SIZE " + DataSingleton.getInstance().getClassCache().size());
         System.out.println("SUBJECT SIZE " + DataSingleton.getInstance().getSubjectCache().size());
-        mProgressDialog.dismiss();
     }
 
     @Subscribe
     public void reviewsResp(List<ReviewRespBundle> reviewList) {
-        mProgressDialog.dismiss();
-
+        synchronized (apiCnt) {
+            if(apiCnt.equals(1)) {
+                mProgressDialog.dismiss();
+            }
+            apiCnt--;
+        }
         if(reviewList != null) {
             final int[] reviewIds = new int[reviewList.size()];
             int[] classIds = new int[reviewList.size()];
@@ -195,6 +213,12 @@ public class MainActivity extends AppCompatActivity {
 
     @Subscribe
     public void intResp(Integer i) {
+        synchronized (apiCnt) {
+            if(apiCnt.equals(1)) {
+                mProgressDialog.dismiss();
+            }
+            apiCnt--;
+        }
         if (i.equals(0)) {
             Utils.showSnackbar(this, parent, getString(R.string.data_doesnt_exist));
         } else if (i.equals(-1)) {
@@ -202,11 +226,17 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @OnClick(R.id.fab)
-    public void onClick(View view) {
-        //TODO: Write review activity
-        Intent i = new Intent(this, WriteReviewActivity.class);
-        startActivity(i);
+    @Subscribe
+    public void stringResp(String s) {
+        synchronized (apiCnt) {
+            if(apiCnt.equals(1)) {
+                mProgressDialog.dismiss();
+            }
+            apiCnt--;
+        }
+        if(s.equals("ERROR")) {
+            Utils.showSnackbar(this, parent, getString(R.string.error_getting_data));
+        }
     }
 
     @Override
@@ -306,6 +336,13 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    @OnClick(R.id.fab)
+    public void onClick(View view) {
+        //TODO: Write review activity
+        Intent i = new Intent(this, WriteReviewActivity.class);
+        startActivity(i);
     }
 
     @Override
