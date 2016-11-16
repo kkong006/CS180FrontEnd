@@ -57,7 +57,6 @@ public class MainActivity extends AppCompatActivity {
     private String[] mNavTitles;
     private String[] mIconTitles;
     private static final String TAG = "Main Activity";
-    private int schoolId;
 
     private MainFeedAdapter mFeedAdapter;
 
@@ -93,26 +92,28 @@ public class MainActivity extends AppCompatActivity {
         //PREVENT USER FROM GETTING ACCESS TO THE WRITE REVIEW ACTIVITY
 //        setButtons();
 
-        schoolId = SPSingleton.getInstance(this).getSp().getInt(Constants.SCHOOL_ID, -1);
-
         mProgressDialog = new ProgressDialog(this);
         mProgressDialog.setMessage(getString(R.string.loading));
         mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         mProgressDialog.setCancelable(false);
-        mProgressDialog.show();
 
+        getData();
+    }
+
+    private void getData() {
+        mProgressDialog.show();
         RetrofitSingleton.getInstance()
                 .getMatchingService()
-                .getData(schoolId)
+                .getData(Utils.getSchoolId(this))
                 .enqueue(new GetCacheDataCallback());
     }
 
     private void getFeed() {
-        System.out.println("MAKING CALL TO GET FEED REVIEWS " + schoolId + " " + DataSingleton.getInstance().getSchoolName(schoolId) + " " +  Utils.getUserId(this));
+        System.out.println("MAKING CALL TO GET FEED REVIEWS " + Utils.getSchoolId(this) + " " + DataSingleton.getInstance().getSchoolName(Utils.getSchoolId(this)) + " " +  Utils.getUserId(this));
         mProgressDialog.show();
         RetrofitSingleton.getInstance()
                 .getMatchingService()
-                .reviewsSchool(schoolId, Utils.getUserId(this))
+                .reviewsSchool(Utils.getSchoolId(this), Utils.getUserId(this))
                 .enqueue(new GetReviewsCallback());
     }
 
@@ -129,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
     public void dataResp(CacheDataBundle data) {
         mProgressDialog.dismiss();
         DataSingleton.getInstance().cacheDataBundle(data);
-        System.out.println("SCHOOL ID " + schoolId);
+        System.out.println("SCHOOL ID " + Utils.getSchoolId(this));
         System.out.println("SCHOOL SIZE " + DataSingleton.getInstance().getSchoolCache().size());
         System.out.println("PROFESSOR SIZE " + DataSingleton.getInstance().getProfessorCache().size());
         System.out.println("CLASS SIZE " + DataSingleton.getInstance().getClassCache().size());
@@ -158,9 +159,9 @@ public class MainActivity extends AppCompatActivity {
                 profIds[i] = reviewList.get(i).getProfId();
                 ratings[i] = reviewList.get(i).getRating();
                 userRatings[i] = reviewList.get(i).getReviewRating();
-                System.out.println("REVIEW RATING " + userRatings[i]);
                 reviewDates[i] = reviewList.get(i).getReviewDate();
                 reviews[i] = reviewList.get(i).getMessage();
+                System.out.println("REVIEW " + reviewList.get(i).getMessage());
                 classes[i] = DataSingleton.getInstance().getClassName(classIds[i]);
                 professors[i] = DataSingleton.getInstance().getProfessorName(profIds[i]);
             }
@@ -241,7 +242,7 @@ public class MainActivity extends AppCompatActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        if(schoolId < 1) {
+        if(Utils.getSchoolId(this) < 1) {
             Utils.showSnackbar(this, parent, getString(R.string.please_sign_in));
             return true;
         }
@@ -304,7 +305,7 @@ public class MainActivity extends AppCompatActivity {
 
                 RetrofitSingleton.getInstance()
                         .getMatchingService()
-                        .getData(schoolId)
+                        .getData(Utils.getSchoolId(this))
                         .enqueue(new GetCacheDataCallback());
             }
         }
@@ -332,7 +333,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onRestart() {
         super.onRestart();
         EventBus.getDefault().register(this);
-        getFeed();
+        getData();
     }
 
     @Override

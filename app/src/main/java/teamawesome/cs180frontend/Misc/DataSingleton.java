@@ -54,8 +54,13 @@ public class DataSingleton {
         this.subjectCache.clear();
         this.classCache.clear();
         this.professorCache.clear();
-
         this.schoolMap.clear();
+        this.schoolNameMap.clear();
+        this.subjectMap.clear();
+        this.classMap.clear();
+        this.classNameMap.clear();
+        this.professorMap.clear();
+        this.professorNameMap.clear();
 
         schoolCache.addAll(data.getSchools());
 

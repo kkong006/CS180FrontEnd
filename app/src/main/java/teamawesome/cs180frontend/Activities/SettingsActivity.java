@@ -173,11 +173,13 @@ public class SettingsActivity extends AppCompatActivity {
             mPassword = mNewPassword;
             SPSingleton.getInstance(this).getSp().edit().putInt(Constants.SCHOOL_ID, mSchoolId).commit();
             SPSingleton.getInstance(this).getSp().edit().putString(Constants.PASSWORD, mPassword).commit();
+            System.out.println("NEW SCHOOL ID " + Utils.getSchoolId(this) + "\nNEW PASSWORD " + Utils.getPassword(this));
             mOldPasswordET.setText("");
             mNewPasswordET.setText("");
             fillSpinner();
             Utils.showSnackbar(this, mParent, getString(R.string.account_update_success));
         } else {
+            fillSpinner();
             Utils.showSnackbar(this, mParent, getString(R.string.error_retrieving_data));
         }
     }
@@ -186,6 +188,7 @@ public class SettingsActivity extends AppCompatActivity {
     public void respString(String s) {
         mProgressDialog.dismiss();
         if(s.equals("ERROR")) {
+            fillSpinner();
             Utils.showSnackbar(this, mParent, getString(R.string.error_retrieving_data));
         }
     }
