@@ -27,9 +27,9 @@ public class ReviewRespBundle implements Serializable {
     @Expose
     private int school_id;
 
-    @SerializedName("rating_id")
-    @Expose
-    private int rating_id;
+//    @SerializedName("rating_id")
+//    @Expose
+//    private int rating_id;
 
     @SerializedName("class_id")
     @Expose
@@ -51,12 +51,12 @@ public class ReviewRespBundle implements Serializable {
     @Expose
     private int prof_id;
 
-    public ReviewRespBundle(int subject_id, int review_id, String review_date, int school_id, int rating_id, int class_id, int rating, String message, int prof_id, int review_rating) {
+    public ReviewRespBundle(int subject_id, int review_id, String review_date, int school_id, /*int rating_id,*/ int class_id, int rating, String message, int prof_id, int review_rating) {
         this.subject_id = subject_id;
         this.review_id = review_id;
         this.review_date = review_date;
         this.school_id = school_id;
-        this.rating_id = rating_id;
+//        this.rating_id = rating_id;
         this.class_id = class_id;
         this.rating = rating;
         this.message = message;
@@ -80,9 +80,9 @@ public class ReviewRespBundle implements Serializable {
         return school_id;
     }
 
-    public int getRatingId() {
-        return rating_id;
-    }
+//    public int getRatingId() {
+//        return rating_id;
+//    }
 
     public int getClassId() {
         return class_id;
