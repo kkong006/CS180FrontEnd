@@ -1,20 +1,40 @@
 package teamawesome.cs180frontend.Activities;
 
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+import retrofit2.Callback;
+import teamawesome.cs180frontend.API.Models.RateReview;
+import teamawesome.cs180frontend.API.Models.RatingId;
+import teamawesome.cs180frontend.API.RetrofitSingleton;
+import teamawesome.cs180frontend.API.Services.Callbacks.GetReviewsCallback;
+import teamawesome.cs180frontend.API.Services.Callbacks.PostReviewRatingCallback;
+import teamawesome.cs180frontend.API.Services.Callbacks.PostUpdateAccountCallback;
+import teamawesome.cs180frontend.Misc.Constants;
 import teamawesome.cs180frontend.Misc.Review;
+import teamawesome.cs180frontend.Misc.SPSingleton;
+import teamawesome.cs180frontend.Misc.Utils;
 import teamawesome.cs180frontend.R;
 
 public class ReadReviewActivity extends AppCompatActivity {
 
+    @Bind(R.id.activity_read_review) LinearLayout mParent;
     @Bind(R.id.read_class_tv) TextView mClassName;
+    @Bind(R.id.read_date_tv) TextView mReviewDate;
     @Bind(R.id.read_rate_1) TextView mRate1;
     @Bind(R.id.read_rate_2) TextView mRate2;
     @Bind(R.id.read_rate_3) TextView mRate3;
@@ -27,44 +47,142 @@ public class ReadReviewActivity extends AppCompatActivity {
     @Bind(R.id.read_dislike_count_tv) TextView mDislikeCount;
 
     private TextView[] mRatings;
+    private int mReviewId;
+    private int mReviewRating;
+    private String mReviewContent;
+    private String mReviewClassName;
+    private String mDate;
+    private int mUserRating;
+    private int mNewUserRating;
+    private String mProfessorName;
+
+    private ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_read_review);
         ButterKnife.bind(this);
+        EventBus.getDefault().register(this);
+
+        if(Utils.getUserId(this) == 0) {
+            mThumbsUp.setVisibility(View.GONE);
+            mThumbsDown.setVisibility(View.GONE);
+            mLikeCount.setVisibility(View.GONE);
+            mDislikeCount.setVisibility(View.GONE);
+        }
+
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.setMessage(getResources().getString(R.string.loading));
+        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        mProgressDialog.setIndeterminate(true);
 
         mRatings = new TextView[] {mRate1, mRate2, mRate3, mRate4, mRate5};
 
-        Review r = (Review)getIntent().getSerializableExtra(SearchResultsActivity.REVIEW);
+        Bundle bundle = getIntent().getExtras();
+        mReviewId = bundle.getInt(getString(R.string.REVIEW_ID));
+        mReviewRating = bundle.getInt(getString(R.string.REVIEW_RATING));
+        mReviewContent = bundle.getString(getString(R.string.REVIEW_CONTENT));
+        mReviewClassName = bundle.getString(getString(R.string.REVIEW_CLASS_NAME));
+        mDate = bundle.getString(getString(R.string.REVIEW_DATE));
+        mUserRating = bundle.getInt(getString(R.string.REVIEW_USER_RATING));
+        mProfessorName = bundle.getString(getString(R.string.PROFESSOR_NAME));
 
-        mClassName.setText(r.mClassName);
-        try{
-            for(int i = 0; i < Integer.parseInt(r.mRating); i++) {
-                mRatings[i].setTextColor(getApplicationContext().getResources().getColor(R.color.colorGreen));
-            }
-        } catch (Exception e) {
-            Toast.makeText(getBaseContext(), "Error reading rating", Toast.LENGTH_SHORT).show();
+        getSupportActionBar().setTitle(mProfessorName);
+        mClassName.setText(mReviewClassName);
+        mReviewDate.setText(mDate);
+        mReviewText.setText(mReviewContent);
 
+        for(int i = 0; i < mReviewRating && i < 5; i++) {
+            mRatings[i].setTextColor(getResources().getColor(R.color.colorGreen));
         }
 
-        mReviewText.setText(r.mReviewContent);
-        //TODO: get likes/dislike counts
+        mNewUserRating = 0;
 
-        mThumbsUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getBaseContext(), "Like", Toast.LENGTH_SHORT).show();
-                //TODO: make call to update likes/dislikes
-            }
-        });
+        setUserRating();
+    }
 
-        mThumbsDown.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getBaseContext(), "Dislike", Toast.LENGTH_SHORT).show();
-                //TODO: make call to update likes/dislikes
-            }
-        });
+    private void setUserRating() {
+
+        if(mUserRating == 0) {
+            mThumbsUp.setTextColor(getResources().getColor(R.color.colorGrey));
+            mThumbsDown.setTextColor(getResources().getColor(R.color.colorGrey));
+        } else if(mUserRating == 1) {
+            mThumbsUp.setTextColor(getResources().getColor(R.color.colorGreen));
+            mThumbsDown.setTextColor(getResources().getColor(R.color.colorGrey));
+        } else if(mUserRating == 2) {
+            mThumbsUp.setTextColor(getResources().getColor(R.color.colorGrey));
+            mThumbsDown.setTextColor(getResources().getColor(R.color.colorRed));
+        }
+    }
+
+    public void updateResponse() {
+
+        if(mUserRating != mNewUserRating) {
+            mProgressDialog.show();
+            int userId = Utils.getUserId(this);
+            String password = Utils.getPassword(this);
+            System.out.println("USER ID " + userId + "\nPASSWORD " + password + "\nREVIEW ID " + mReviewId + "\nUSER RATING " + mUserRating + "\nNEW USER RATING " + mNewUserRating);
+            RateReview r = new RateReview(userId, password, mReviewId, mNewUserRating);
+            Callback callback = new PostReviewRatingCallback();
+            RetrofitSingleton.getInstance().getUserService()
+                    .rateReview(r)
+                    .enqueue(callback);
+        }
+    }
+
+    @OnClick(R.id.read_like_bt)
+    public void thumbsUp() {
+        Utils.showSnackbar(this, mParent, getString(R.string.liked));
+
+        if(mUserRating == 1) {
+            mNewUserRating = 0;
+        } else {
+            mNewUserRating = 1;
+        }
+        updateResponse();
+    }
+
+    @OnClick(R.id.read_dislike_bt)
+    public void thumbsDown() {
+        Utils.showSnackbar(this, mParent, getString(R.string.disliked));
+
+        if(mUserRating == 2) {
+            mNewUserRating = 0;
+        } else {
+            mNewUserRating = 2;
+        }
+        updateResponse();
+    }
+
+    @Subscribe
+    public void intLikeDislikeResp(Integer i) {
+        mProgressDialog.dismiss();
+
+        if(i.equals(1)) {
+            Utils.showSnackbar(this, mParent, getString(R.string.account_update_success));
+            mUserRating = mNewUserRating;
+            setUserRating();
+        } else if(i.equals(0)) {
+            Utils.showSnackbar(this, mParent, getString(R.string.reviews_dne));
+        } else {
+            Utils.showSnackbar(this, mParent, getString(R.string.error_retrieving_data));
+        }
+    }
+
+    @Subscribe
+    public void stringLikeDislikeResp(String s) {
+        mProgressDialog.dismiss();
+
+        if(s.equals("ERROR")) {
+            Utils.showSnackbar(this, mParent, getString(R.string.error_retrieving_data));
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
     }
 }

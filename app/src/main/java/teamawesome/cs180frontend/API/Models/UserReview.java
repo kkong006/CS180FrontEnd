@@ -3,14 +3,21 @@ package teamawesome.cs180frontend.API.Models;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 /**
  * Created by KongK on 10/21/2016.
  */
 
-public class UserReview {
+public class UserReview implements Serializable{
+
     @SerializedName("id")
     @Expose
     private int id;
+
+    @SerializedName("password")
+    @Expose
+    private String password;
 
     @SerializedName("school_id")
     @Expose
@@ -32,12 +39,14 @@ public class UserReview {
     @Expose
     private String review;
 
-    public UserReview(int class_id, int prof_id, int rating, String review) {
-//        TODO: grab values from shared preferences for id, school id
+    public UserReview(int id, String password, int class_id, int prof_id, int rating, String review, int school_id) {
+        this.id = id;
+        this.password = password;
         this.class_id = class_id;
         this.prof_id = prof_id;
         this.rating = rating;
         this.review = review;
+        this.school_id = school_id;
     }
 
     public int getClassId() { return class_id; }

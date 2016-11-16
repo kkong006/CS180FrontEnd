@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by KongK on 10/21/2016.
  */
 
-public class UserAccount {
+public class UpdateUserBundle {
     @SerializedName("id")
     @Expose
     private int id;
@@ -24,7 +24,9 @@ public class UserAccount {
     @Expose
     private int school_id;
 
-    public UserAccount(String new_password, int school_id) {
+    public UpdateUserBundle(int id, String password, String new_password, int school_id) {
+        this.id = id;
+        this.password = password;
         this.new_password = new_password;
         this.school_id = school_id;
     }

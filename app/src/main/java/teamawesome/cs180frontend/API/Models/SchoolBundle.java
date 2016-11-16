@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by KongK on 10/21/2016.
  */
 
-public class School {
+public class SchoolBundle {
 
     @SerializedName("school_id")
     @Expose
@@ -17,7 +17,7 @@ public class School {
     @Expose
     private String school_name;
 
-    public School(int school_id, String school_name) {
+    public SchoolBundle(int school_id, String school_name) {
         this.school_id = school_id;
         this.school_name = school_name;
     }

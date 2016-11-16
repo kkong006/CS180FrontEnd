@@ -1,170 +1,121 @@
 package teamawesome.cs180frontend.Activities;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
+import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.support.annotation.NonNull;
-import android.support.design.R;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.app.LoaderManager.LoaderCallbacks;
-
-import android.content.CursorLoader;
-import android.content.Loader;
-import android.database.Cursor;
-import android.net.Uri;
-
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.ContactsContract;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.inputmethod.EditorInfo;
-import android.widget.ArrayAdapter;
+import android.view.animation.TranslateAnimation;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.List;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import teamawesome.cs180frontend.API.Services.ServiceGenerator;
-import teamawesome.cs180frontend.API.Services.UserService;
-import teamawesome.cs180frontend.API.Models.User;
-
-import static android.Manifest.permission.READ_CONTACTS;
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import teamawesome.cs180frontend.API.Models.LoginRegisterBundle;
+import teamawesome.cs180frontend.API.Models.UserRespBundle;
+import teamawesome.cs180frontend.API.RetrofitSingleton;
+import teamawesome.cs180frontend.API.Services.Callbacks.LoginRegisterCallback;
+import teamawesome.cs180frontend.Adapters.SimpleListAdapter;
+import teamawesome.cs180frontend.Misc.DataSingleton;
+import teamawesome.cs180frontend.Misc.Utils;
+import teamawesome.cs180frontend.R;
 
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
+public class LoginActivity extends AppCompatActivity {
 
-    /**
-     * Id to identity READ_CONTACTS permission request.
-     */
-    private static final int REQUEST_READ_CONTACTS = 0;
-
-    private User user;
+    private LoginRegisterBundle loginRegisterBundle;
 
     // UI references.
-    private AutoCompleteTextView mEmailView;
-    private EditText mPasswordView;
-    private View mProgressView;
-    private View mLoginFormView;
+    @Bind(R.id.login_parent)
+    CoordinatorLayout parent;
+    @Bind(R.id.number)
+    EditText phoneEditText;
+    @Bind(R.id.password)
+    EditText mPasswordView;
+    @Bind(R.id.login_form)
+    View mLoginFormView;
+    @Bind(R.id.sign_in_button)
+    Button signInButton;
+    @Bind(R.id.register_text)
+    TextView registerTextView;
+    @Bind(R.id.school_auto_complete)
+    AutoCompleteTextView acTV;
+
+    ProgressDialog progressDialog;
+    SimpleListAdapter adapter;
+    TranslateAnimation animation;
+    boolean loginMode = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         // Set up the login form.
-        mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
-        populateAutoComplete();
+        ButterKnife.bind(this);
+        EventBus.getDefault().register(this);
 
-        mPasswordView = (EditText) findViewById(R.id.password);
-        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
-                    return true;
-                }
-                return false;
-            }
-        });
+        acTV.setVisibility(View.GONE);
+        adapter = new SimpleListAdapter(this, R.layout.simple_list_item,
+                DataSingleton.getInstance().getSchoolCache());
+        acTV.setAdapter(adapter);
+        acTV.setThreshold(1);
 
-        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
-        mEmailSignInButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                attemptLogin();
-            }
-        });
-
-        Button mEmailRegisterButton = (Button) findViewById(R.id.register_button);
-        mEmailRegisterButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                attemptRegister();
-            }
-        });
-
-        mLoginFormView = findViewById(R.id.login_form);
-        mProgressView = findViewById(R.id.login_progress);
+        if(Utils.getUserId(this) > 0) {
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 
-    private void populateAutoComplete() {
-        if (!mayRequestContacts()) {
-            return;
-        }
-
-        getLoaderManager().initLoader(0, null, this);
-    }
-
-    private boolean mayRequestContacts() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            return true;
-        }
-        if (checkSelfPermission(READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        }
-        if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
-            Snackbar.make(mEmailView, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
-                    .setAction(android.R.string.ok, new View.OnClickListener() {
-                        @Override
-                        @TargetApi(Build.VERSION_CODES.M)
-                        public void onClick(View v) {
-                            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-                        }
-                    });
-        } else {
-            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-        }
-        return false;
-    }
-
-    /**
-     * Callback received when a permissions request has been completed.
-     */
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        if (requestCode == REQUEST_READ_CONTACTS) {
-            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                populateAutoComplete();
-            }
-        }
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
+    @OnClick(R.id.register_text)
+    public void startRegister() {
+        if (registerTextView.getText().toString().equals(getString(R.string.register_now))) {
+            loginMode = false;
+            acTV.setVisibility(View.VISIBLE);
+            signInButton.setText(getString(R.string.register));
+            registerTextView.setText(getString(R.string.sign_in));
+        } else {
+            loginMode = true;
+            acTV.setVisibility(View.GONE);
+            signInButton.setText(getString(R.string.action_sign_in_short));
+            registerTextView.setText(getString(R.string.register_now));
+        }
+    }
 
     /**
      * Attempts to sign in or register the account specified by the login form.
      * If there are form errors (invalid email, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
-    private void attemptLogin() {
+    @OnClick(R.id.sign_in_button)
+    public void attemptLogin() {
 
         // Reset errors.
-        mEmailView.setError(null);
+        phoneEditText.setError(null);
         mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
-        String email = mEmailView.getText().toString();
-        String password = getMD5Hash(mPasswordView.getText().toString());
+        String phoneNum = phoneEditText.getText().toString();
+        String password = Utils.getMD5Hash(mPasswordView.getText().toString());
 
         boolean cancel = false;
+        Integer schoolId = null;
         View focusView = null;
 
         // Check for a valid password, if the user entered one.
@@ -174,15 +125,22 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             cancel = true;
         }
 
-        // Check for a valid email address.
-        if (TextUtils.isEmpty(email)) {
-            mEmailView.setError(getString(R.string.error_field_required));
-            focusView = mEmailView;
+        // Check for a phone number.
+        if (TextUtils.isEmpty(phoneNum)) {
+            phoneEditText.setError(getString(R.string.error_field_required));
+            focusView = phoneEditText;
             cancel = true;
-        } else if (!isEmailValid(email)) {
-            mEmailView.setError(getString(R.string.error_invalid_email));
-            focusView = mEmailView;
+        } else if (!isNumberValid(phoneNum)) {
+            phoneEditText.setError(getString(R.string.error_invalid_number));
+            focusView = phoneEditText;
             cancel = true;
+        } else if (!loginMode) {
+            schoolId = DataSingleton.getInstance()
+                    .getSchoolId(acTV.getText().toString());
+            if (schoolId == null) {
+                focusView = acTV;
+                cancel = true;
+            }
         }
 
         if (cancel) {
@@ -190,219 +148,56 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // form field with an error.
             focusView.requestFocus();
         } else {
-            user = new User(email, password);
+            Utils.hideKeyboard(parent, this);
+            loginRegisterBundle = new LoginRegisterBundle(phoneNum, password,
+                    loginMode ? 1 : schoolId.intValue());
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-            showProgress(true);
-            UserService loginService =
-                    ServiceGenerator.createService(UserService.class);//, email, password);
-            Call<User> call = loginService.basicLogin(user);
-            call.enqueue(new Callback<User >() {
-                @Override
-                public void onResponse(Call<User> call, Response<User> response) {
-                    if (response.isSuccessful()) {
-                        // user object available
-                        // login?
+            progressDialog = new ProgressDialog(this);
+            progressDialog.setMessage(loginMode ? getString(R.string.login_loading) :
+                    getString(R.string.register_loading));
+            progressDialog.setCancelable(false);
+            progressDialog.show();
 
-                        // sharedpreferences
-                        //SharedPreferences user_info = getSharedPreferences(USER_INFO, 0);
-
-                        Intent i = new Intent(LoginActivity.this, MainActivity.class);
-                        i.putExtra("user", user);
-                        startActivity(i);
-                    } else {
-                        // error response, no access to resource?
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<User> call, Throwable t) {
-                    // something went completely south (like no internet connection)
-                    Log.d("Error", t.getMessage());
-                }
-            });
+            //Login & register are nearly identical => use the same callback
+            if (loginMode) {
+                RetrofitSingleton.getInstance()
+                        .getUserService()
+                        .login(loginRegisterBundle)
+                        .enqueue(new LoginRegisterCallback());
+            } else {
+                RetrofitSingleton.getInstance()
+                        .getUserService()
+                        .register(loginRegisterBundle)
+                        .enqueue(new LoginRegisterCallback());
+            }
         }
     }
 
-    private void attemptRegister() {
-
-        // Reset errors.
-        mEmailView.setError(null);
-        mPasswordView.setError(null);
-
-        // Store values at the time of the login attempt.
-        String email = mEmailView.getText().toString();
-        String password = getMD5Hash(mPasswordView.getText().toString());
-
-        boolean cancel = false;
-        View focusView = null;
-
-        // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
-            mPasswordView.setError(getString(R.string.error_invalid_password));
-            focusView = mPasswordView;
-            cancel = true;
-        }
-
-        // Check for a valid email address.
-        if (TextUtils.isEmpty(email)) {
-            mEmailView.setError(getString(R.string.error_field_required));
-            focusView = mEmailView;
-            cancel = true;
-        } else if (!isEmailValid(email)) {
-            mEmailView.setError(getString(R.string.error_invalid_email));
-            focusView = mEmailView;
-            cancel = true;
-        }
-
-        if (cancel) {
-            // There was an error; don't attempt login and focus the first
-            // form field with an error.
-            focusView.requestFocus();
-        } else {
-            // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
-            showProgress(true);
-            UserService registerService =
-                    ServiceGenerator.createService(UserService.class);//, email, password);
-            Call<User> call = registerService.basicRegister(user);
-            call.enqueue(new Callback<User >() {
-                @Override
-                public void onResponse(Call<User> call, Response<User> response) {
-                    if (response.isSuccessful()) {
-                        // user object available
-                        // login?
-                        Intent i = new Intent(LoginActivity.this, MainActivity.class);
-                        startActivity(i);
-                    } else {
-                        // error response, no access to resource?
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<User> call, Throwable t) {
-                    // something went completely south (like no internet connection)
-                    Log.d("Error", t.getMessage());
-                }
-            });
-        }
-    }
-
-    private boolean isEmailValid(String email) {
-        //TODO: Replace this with your own logic
-        return email.contains("@");
+    private boolean isNumberValid(String number) {
+        return number.length() == 10;
     }
 
     private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
-        return password.length() > 4;
+        return password.length() > 8;
     }
 
-    /**
-     * Shows the progress UI and hides the login form.
-     */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    private void showProgress(final boolean show) {
-        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-        // for very easy animations. If available, use these APIs to fade-in
-        // the progress spinner.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
-
-            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-            mLoginFormView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-                }
-            });
-
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mProgressView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-                }
-            });
-        } else {
-            // The ViewPropertyAnimator APIs are not available, so simply show
-            // and hide the relevant UI components.
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-        }
+    @Subscribe
+    public void onLoginOrRegister(UserRespBundle resp) {
+        progressDialog.dismiss();
+        Utils.saveUserData(this, resp, loginRegisterBundle.getPassword(),
+                loginRegisterBundle.getPhoneNumber());
+        Intent intent = new Intent(this, MainActivity.class);
+        setResult(RESULT_OK, intent);
+        System.out.println("FINISH");
+        startActivity(intent);
+        finish();
     }
 
-    @Override
-    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        return new CursorLoader(this,
-                // Retrieve data rows for the device user's 'profile' contact.
-                Uri.withAppendedPath(ContactsContract.Profile.CONTENT_URI,
-                        ContactsContract.Contacts.Data.CONTENT_DIRECTORY), ProfileQuery.PROJECTION,
-
-                // Select only email addresses.
-                ContactsContract.Contacts.Data.MIMETYPE +
-                        " = ?", new String[]{ContactsContract.CommonDataKinds.Email
-                .CONTENT_ITEM_TYPE},
-
-                // Show primary email addresses first. Note that there won't be
-                // a primary email address if the user hasn't specified one.
-                ContactsContract.Contacts.Data.IS_PRIMARY + " DESC");
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
-        List<String> emails = new ArrayList<>();
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            emails.add(cursor.getString(ProfileQuery.ADDRESS));
-            cursor.moveToNext();
-        }
-
-        addEmailsToAutoComplete(emails);
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> cursorLoader) {
-
-    }
-
-    private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
-        //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
-        ArrayAdapter<String> adapter =
-                new ArrayAdapter<>(LoginActivity.this,
-                        android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
-
-        mEmailView.setAdapter(adapter);
-    }
-
-
-    private interface ProfileQuery {
-        String[] PROJECTION = {
-                ContactsContract.CommonDataKinds.Email.ADDRESS,
-                ContactsContract.CommonDataKinds.Email.IS_PRIMARY,
-        };
-
-        int ADDRESS = 0;
-        int IS_PRIMARY = 1;
-    }
-
-    public static String getMD5Hash(String input) {
-        String hashtext = "";
-        try {
-            MessageDigest messageDigest = MessageDigest.getInstance("MD5");
-            messageDigest.reset();
-            messageDigest.update(input.getBytes());
-            byte[] digest = messageDigest.digest();
-            BigInteger bigInt = new BigInteger(1, digest);
-            hashtext = bigInt.toString(16);
-            while (hashtext.length() < 32) {
-                hashtext = "0" + hashtext;
-            }
-        } catch (NoSuchAlgorithmException ignored) {
-        }
-        return hashtext;
+    @Subscribe
+    public void onLoginResisterFailure(String msg) {
+        progressDialog.dismiss();
+        Utils.showSnackbar(this, parent, msg);
     }
 }
 

@@ -1,6 +1,7 @@
 package teamawesome.cs180frontend.Adapters;
 
 import android.content.Context;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,14 +19,14 @@ import teamawesome.cs180frontend.R;
 public class SearchResultsAdapter extends BaseAdapter{
 
     private String[] mClassNames;
-    private String[] mRatings;
+    private int[] mRatings;
     private String[] mReviewDates;
     private String[] mReviewContents;
-    private String[] mReviewIDs;
+    private int[] mReviewIDs;
     private Context mContext;
 
     public SearchResultsAdapter(Context context, String[] classes,
-            String[] ratings, String[] reviewDates, String[] reviews, String[] reviewIDs) {
+            int[] ratings, String[] reviewDates, String[] reviews, int[] reviewIDs) {
         this.mContext = context;
         this.mClassNames = classes;
         this.mRatings = ratings;
@@ -40,8 +41,8 @@ public class SearchResultsAdapter extends BaseAdapter{
     }
 
     @Override
-    public Review getItem(int position) {
-        return new Review(mClassNames[position], mRatings[position], mReviewDates[position], mReviewContents[position], mReviewIDs[position]);
+    public int[] getItem(int position) {
+        return new int[] {mReviewIDs[position], mRatings[position]};
     }
 
     @Override
@@ -63,15 +64,11 @@ public class SearchResultsAdapter extends BaseAdapter{
         }
 
         holder.className.setText(mClassNames[position]);
-        try {
-            for(int i = 0; i < Integer.parseInt(mRatings[position]); i++) {
-                holder.rating[i].setTextColor(mContext.getResources().getColor(R.color.colorGreen));
-            }
-        } catch(Exception e) {
-            Toast.makeText(mContext, "Error reading rating", Toast.LENGTH_SHORT).show();
-        }
         holder.reviewDate.setText(mReviewDates[position]);
         holder.reviewContents.setText(mReviewContents[position]);
+        for(int i = 0; i < mRatings[position] && i < 5; i++) {
+            holder.rating[i].setTextColor(mContext.getResources().getColor(R.color.colorGreen));
+        }
 
         if(position == 0) {
             convertView.setBackgroundColor(mContext.getResources().getColor(R.color.colorWhite));

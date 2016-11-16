@@ -11,81 +11,83 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="teamawesome.cs180frontend.Activities.SearchActivity">
 
-    <TextView
+    <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:textColor="@color/colorBlack"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        android:text="@string/search_by_professor" />
+        android:layout_height="wrap_content">
 
-    <EditText
-        android:id="@+id/search_professor_et"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="20dp"
-        android:backgroundTint="@color/colorBlack"
-        android:textColorHint="@color/colorPrimary"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        android:hint="Professor" />
+        <AutoCompleteTextView
+            android:id="@+id/search_professor_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColorHint="@color/colorAccent"
+            android:hint="@string/search_by_professor"
+            android:maxLines="1"
+            android:textSize="18sp"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/colorBlack"
+            android:completionThreshold="1"
+            android:dropDownHeight="50dp"/>
 
-    <!--<TextView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_gravity="center_horizontal"-->
-        <!--android:textAlignment="center"-->
-        <!--android:textSize="20sp"-->
-        <!--android:textColor="@color/colorPrimary"-->
-        <!--android:text="Professor"/>-->
-
-    <!--<EditText-->
-        <!--android:id="@+id/school_et"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:textAlignment="center"-->
-        <!--android:layout_height="50dp"-->
-        <!--android:textSize="20sp"-->
-        <!--android:backgroundTint="@color/colorBlack"-->
-        <!--android:hint="School"-->
-        <!--android:textColorHint="@color/colorPrimary" />-->
-
-    <!--<TextView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:textAlignment="center"-->
-        <!--android:textSize="20sp"-->
-        <!--android:textColor="@color/colorPrimary"-->
-        <!--android:text="School" />-->
-
-    <!--<EditText-->
-        <!--android:id="@+id/class_et"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:textAlignment="center"-->
-        <!--android:layout_height="50dp"-->
-        <!--android:textSize="20sp"-->
-        <!--android:backgroundTint="@color/colorBlack"-->
-        <!--android:hint="Class"-->
-        <!--android:textColorHint="@color/colorPrimary"/>-->
-
-    <!--<TextView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:textAlignment="center"-->
-        <!--android:textSize="20sp"-->
-        <!--android:textColor="@color/colorPrimary"-->
-        <!--android:text="Class" />-->
+    </android.support.design.widget.TextInputLayout>
 
     <Button
         android:id="@+id/search_search_bt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal|center"
-        android:layout_marginTop="50dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
         android:padding="10dp"
         android:background="@color/colorAccent"
         android:textColor="@color/colorWhite"
-        android:textSize="20sp"
         android:text="@string/search_button" />
+
+    <!--<android.support.design.widget.TextInputLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content">-->
+
+        <!--<AutoCompleteTextView-->
+            <!--android:id="@+id/search_class_et"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:textColorHint="@color/colorAccent"-->
+            <!--android:hint="@string/search_by_class"-->
+            <!--android:maxLines="1"-->
+            <!--android:textSize="18sp"-->
+            <!--android:layout_marginTop="10dp"-->
+            <!--android:textColor="@color/colorBlack"-->
+            <!--android:completionThreshold="1"-->
+            <!--android:dropDownHeight="50dp"/>-->
+
+    <!--</android.support.design.widget.TextInputLayout>-->
+
+    <!--<android.support.design.widget.TextInputLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content">-->
+
+        <!--<AutoCompleteTextView-->
+            <!--android:id="@+id/search_school_et"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:textColorHint="@color/colorAccent"-->
+            <!--android:hint="@string/search_by_school"-->
+            <!--android:maxLines="1"-->
+            <!--android:textSize="18sp"-->
+            <!--android:layout_marginTop="10dp"-->
+            <!--android:textColor="@color/colorBlack"-->
+            <!--android:completionThreshold="1"-->
+            <!--android:dropDownHeight="50dp"/>-->
+
+    <!--</android.support.design.widget.TextInputLayout>-->
+
+    <!--<Button-->
+        <!--android:id="@+id/search_search_class_bt"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="center_horizontal"-->
+        <!--android:layout_marginTop="@dimen/activity_vertical_margin"-->
+        <!--android:padding="10dp"-->
+        <!--android:background="@color/colorAccent"-->
+        <!--android:textColor="@color/colorWhite"-->
+        <!--android:text="@string/search_button" />-->
 
 </LinearLayout>

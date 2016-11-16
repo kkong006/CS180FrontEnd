@@ -9,9 +9,9 @@ import com.google.gson.annotations.SerializedName;
 
 public class RateReview {
 
-    @SerializedName("user_id")
+    @SerializedName("id")
     @Expose
-    private int user_id;
+    private int id;
 
     @SerializedName("password")
     @Expose
@@ -22,21 +22,15 @@ public class RateReview {
     @Expose
     private int review_id;
 
-    @SerializedName("rating")
+    @SerializedName("review_rating")
     @Expose
-    private boolean rating;
+    private int review_rating;
 
-    public RateReview(int review_id, boolean rating) {
+
+    public RateReview(int id, String password, int review_id, int review_rating) {
+        this.id = id;
+        this.password = password;
         this.review_id = review_id;
-        this.rating = rating;
+        this.review_rating = review_rating;
     }
-
-    public void setRating(boolean rating) {
-        this.rating = rating;
-    }
-
-    public void setReviewId(int review_id) {
-        this.review_id = review_id;
-    }
-
 }

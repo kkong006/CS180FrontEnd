@@ -14,26 +14,76 @@
     <TextView
         android:id="@+id/settings_university_tv"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_gravity="center_horizontal"
-        android:gravity="bottom|center_horizontal"
-        android:textSize="18sp" />
+        android:layout_height="wrap_content"
+        android:text="University" />
+
+    <Spinner
+        android:id="@+id/settings_university_sp"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+    </Spinner>
 
     <Button
-        android:id="@+id/settings_school_tv"
+        android:id="@+id/settings_school_bt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:gravity="center"
+        android:padding="10dp"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:background="@color/colorAccent"
+        android:textColor="@color/colorWhite"
         android:text="@string/change_school_button" />
 
+    <TextView
+        android:id="@+id/settings_password_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:text="Password" />
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/settings_old_password_til"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/old_password_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColorHint="@color/colorAccent"
+            android:inputType="textPassword"
+            android:maxLines="1"
+            android:hint="Enter current password" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/settings_new_password_til"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/new_password_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColorHint="@color/colorAccent"
+            android:inputType="textPassword"
+            android:maxLines="1"
+            android:hint="Enter new password" />
+
+    </android.support.design.widget.TextInputLayout>
+
     <Button
-        android:id="@+id/settings_logout_bt"
+        android:id="@+id/settings_password_bt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="50dp"
         android:gravity="center"
-        android:text="@string/logout_button" />
+        android:padding="10dp"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:background="@color/colorAccent"
+        android:textColor="@color/colorWhite"
+        android:text="@string/change_password_button" />
 
 </LinearLayout>

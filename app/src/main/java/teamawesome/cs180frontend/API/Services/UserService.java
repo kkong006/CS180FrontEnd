@@ -1,14 +1,13 @@
 package teamawesome.cs180frontend.API.Services;
 
-import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
+import teamawesome.cs180frontend.API.Models.LoginRegisterBundle;
 import teamawesome.cs180frontend.API.Models.RateReview;
-import teamawesome.cs180frontend.API.Models.School;
-import teamawesome.cs180frontend.API.Models.User;
-import teamawesome.cs180frontend.API.Models.UserAccount;
+import teamawesome.cs180frontend.API.Models.ReviewIDRespBundle;
+import teamawesome.cs180frontend.API.Models.UserRespBundle;
+import teamawesome.cs180frontend.API.Models.UpdateUserBundle;
 import teamawesome.cs180frontend.API.Models.UserReview;
 
 /**
@@ -17,23 +16,20 @@ import teamawesome.cs180frontend.API.Models.UserReview;
 
 public interface UserService {
     @POST("/updateAccount")
-    Call<Void> createAccount(@Body UserAccount userAccount);
+    Call<Void> updateAccount(@Body UpdateUserBundle updateUserBundle);
 
     @POST("/review")
-    Call<Void> review(@Body UserReview userReview);
-
-    @POST("/getSchools")
-    Call<List<School>> getSchools();
+    Call<ReviewIDRespBundle> review(@Body UserReview userReview);
 
     @POST("/rateReview")
     Call<Void> rateReview(@Body RateReview rateReview);
 
     @POST("/login")
-    Call<User> basicLogin(@Body User user);
+    Call<UserRespBundle> login(@Body LoginRegisterBundle loginRegisterBundle);
 
     @POST("/register")
-    Call<User> basicRegister(@Body User user);
+    Call<UserRespBundle> register(@Body LoginRegisterBundle loginRegisterBundle);
 
     @POST("/verify")
-    Call<User> verifyUser(@Body User user);
+    Call<UserRespBundle> verifyUser(@Body UserRespBundle userRespBundle);
 }

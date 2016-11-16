@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
+import teamawesome.cs180frontend.Misc.Utils;
 import teamawesome.cs180frontend.Misc.ViewHolders.NavDrawerViewHolder;
 import teamawesome.cs180frontend.R;
 
@@ -39,9 +40,20 @@ public class NavDrawerAdapter extends BaseAdapter {
         return position;
     }
 
+    public void changeLoginElem() {
+
+        if (mText[4].equals(mContext.getString(R.string.login))) {
+            mText[4] = mContext.getString(R.string.logout);
+        } else {
+            mText[4] = mContext.getString(R.string.login);
+        }
+        notifyDataSetChanged();
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         NavDrawerViewHolder holder;
+
         if(convertView == null) {
             LayoutInflater vi = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = vi.inflate(R.layout.list_item_nav_drawer, parent, false);
@@ -51,10 +63,21 @@ public class NavDrawerAdapter extends BaseAdapter {
             holder = (NavDrawerViewHolder) convertView.getTag();
         }
         holder.icon.setText(mIcons[position]);
-        holder.text.setText(mText[position]);
 
         if(position == 0) {
             convertView.setBackgroundColor(mContext.getResources().getColor(R.color.colorWhite));
+        }
+
+        if (position == 4) {
+            if (Utils.getUserId(mContext) == 0) {
+                mText[4] = mContext.getString(R.string.login);
+                holder.text.setText(mContext.getString(R.string.login));
+            } else {
+                mText[4] = mContext.getString(R.string.logout);
+                holder.text.setText(mContext.getString(R.string.logout));
+            }
+        } else {
+            holder.text.setText(mText[position]);
         }
 
         return convertView;
