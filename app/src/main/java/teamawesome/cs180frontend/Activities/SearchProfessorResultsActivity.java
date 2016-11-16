@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import butterknife.ButterKnife;
 import teamawesome.cs180frontend.R;
@@ -36,6 +37,24 @@ public class SearchProfessorResultsActivity extends AppCompatActivity {
         if(mProfessorId > 0) {
             getSupportActionBar().setTitle(mProfessorName);
             //TODO: Make API call for prof stats
+            mProgressDialog.show();
+
         }
+    }
+
+    @Subscribe
+    public void intResp(Integer i) {
+
+    }
+
+    @Subscribe
+    public void stringResp(String s) {
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
     }
 }

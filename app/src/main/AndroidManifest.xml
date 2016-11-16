@@ -50,8 +50,10 @@
         <activity
             android:name=".Activities.ReadReviewActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".Activities.SearchProfessorActivity" />
-        <activity android:name=".Activities.SearchProfessorResultsActivity"></activity>
+        <activity android:name=".Activities.SearchProfessorActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".Activities.SearchProfessorResultsActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

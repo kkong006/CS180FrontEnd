@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
         toggle.syncState();
 
         //PREVENT USER FROM GETTING ACCESS TO THE WRITE REVIEW ACTIVITY
-        setButtons();
+//        setButtons();
 
         schoolId = SPSingleton.getInstance(this).getSp().getInt(Constants.SCHOOL_ID, -1);
 
@@ -101,22 +101,19 @@ public class MainActivity extends AppCompatActivity {
         mProgressDialog.setCancelable(false);
         mProgressDialog.show();
 
-        synchronized (apiCnt) {
-            apiCnt++;
-            RetrofitSingleton.getInstance()
-                    .getMatchingService()
-                    .getData(schoolId)
-                    .enqueue(new GetCacheDataCallback());
-        }
+        RetrofitSingleton.getInstance()
+                .getMatchingService()
+                .getData(schoolId)
+                .enqueue(new GetCacheDataCallback());
+    }
 
-        synchronized (apiCnt) {
-            apiCnt++;
-            System.out.println("MAKING CALL TO GET FEED REVIEWS " + schoolId + " " + Utils.getUserId(this));
-            RetrofitSingleton.getInstance()
-                    .getMatchingService()
-                    .reviewsSchool(schoolId, Utils.getUserId(this))
-                    .enqueue(new GetReviewsCallback());
-        }
+    private void getFeed() {
+        System.out.println("MAKING CALL TO GET FEED REVIEWS " + schoolId + " " + DataSingleton.getInstance().getSchoolName(schoolId) + " " +  Utils.getUserId(this));
+        mProgressDialog.show();
+        RetrofitSingleton.getInstance()
+                .getMatchingService()
+                .reviewsSchool(schoolId, Utils.getUserId(this))
+                .enqueue(new GetReviewsCallback());
     }
 
     //Show/hide the FAB and tool bar
@@ -130,28 +127,20 @@ public class MainActivity extends AppCompatActivity {
 
     @Subscribe
     public void dataResp(CacheDataBundle data) {
-        synchronized (apiCnt) {
-            if(apiCnt.equals(1)) {
-                mProgressDialog.dismiss();
-            }
-            apiCnt--;
-        }
+        mProgressDialog.dismiss();
         DataSingleton.getInstance().cacheDataBundle(data);
         System.out.println("SCHOOL ID " + schoolId);
         System.out.println("SCHOOL SIZE " + DataSingleton.getInstance().getSchoolCache().size());
         System.out.println("PROFESSOR SIZE " + DataSingleton.getInstance().getProfessorCache().size());
         System.out.println("CLASS SIZE " + DataSingleton.getInstance().getClassCache().size());
         System.out.println("SUBJECT SIZE " + DataSingleton.getInstance().getSubjectCache().size());
+        getFeed();
     }
 
     @Subscribe
     public void reviewsResp(List<ReviewRespBundle> reviewList) {
-        synchronized (apiCnt) {
-            if(apiCnt.equals(1)) {
-                mProgressDialog.dismiss();
-            }
-            apiCnt--;
-        }
+        mProgressDialog.dismiss();
+        System.out.println("REVIEW COUNT " + reviewList.size());
         if(reviewList != null) {
             final int[] reviewIds = new int[reviewList.size()];
             int[] classIds = new int[reviewList.size()];
@@ -169,6 +158,7 @@ public class MainActivity extends AppCompatActivity {
                 profIds[i] = reviewList.get(i).getProfId();
                 ratings[i] = reviewList.get(i).getRating();
                 userRatings[i] = reviewList.get(i).getReviewRating();
+                System.out.println("REVIEW RATING " + userRatings[i]);
                 reviewDates[i] = reviewList.get(i).getReviewDate();
                 reviews[i] = reviewList.get(i).getMessage();
                 classes[i] = DataSingleton.getInstance().getClassName(classIds[i]);
@@ -192,6 +182,7 @@ public class MainActivity extends AppCompatActivity {
                         if(j < reviewIds.length) {
                             Intent intent = new Intent(getBaseContext(), ReadReviewActivity.class);
                             Bundle bundle = new Bundle();
+                            bundle.putInt(getString(R.string.REVIEW_ID), r[0]);
                             bundle.putInt(getString(R.string.REVIEW_RATING), r[1]);
                             bundle.putString(getString(R.string.REVIEW_CONTENT), reviews[j]);
                             bundle.putString(getString(R.string.REVIEW_CLASS_NAME), classes[j]);
@@ -213,12 +204,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Subscribe
     public void intResp(Integer i) {
-        synchronized (apiCnt) {
-            if(apiCnt.equals(1)) {
-                mProgressDialog.dismiss();
-            }
-            apiCnt--;
-        }
+        mProgressDialog.dismiss();
         if (i.equals(0)) {
             Utils.showSnackbar(this, parent, getString(R.string.data_doesnt_exist));
         } else if (i.equals(-1)) {
@@ -228,12 +214,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Subscribe
     public void stringResp(String s) {
-        synchronized (apiCnt) {
-            if(apiCnt.equals(1)) {
-                mProgressDialog.dismiss();
-            }
-            apiCnt--;
-        }
+        mProgressDialog.dismiss();
         if(s.equals("ERROR")) {
             Utils.showSnackbar(this, parent, getString(R.string.error_getting_data));
         }
@@ -287,6 +268,8 @@ public class MainActivity extends AppCompatActivity {
             startActivity(i);
         } else if (position == 2) {
             //Search for professor stats
+            Intent intent = new Intent(getApplicationContext(), SearchProfessorActivity.class);
+            startActivity(intent);
 
         } else if (position == 3) {
             //Show user reviews
@@ -349,6 +332,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onRestart() {
         super.onRestart();
         EventBus.getDefault().register(this);
+        getFeed();
     }
 
     @Override
