@@ -37,7 +37,7 @@ public class SearchProfessorResultsActivity extends AppCompatActivity {
         if(mProfessorId > 0) {
             getSupportActionBar().setTitle(mProfessorName);
             //TODO: Make API call for prof stats
-            mProgressDialog.show();
+//            mProgressDialog.show();
 
         }
     }

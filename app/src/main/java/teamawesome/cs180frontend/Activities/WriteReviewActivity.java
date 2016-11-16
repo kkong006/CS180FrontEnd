@@ -139,11 +139,11 @@ public class WriteReviewActivity extends AppCompatActivity {
                 Integer classId = DataSingleton.getInstance().getClassId(mUserClassName);
 
                 int userId = Utils.getUserId(this);
-
+                int schoolId = Utils.getSchoolId(this);
                 String password = Utils.getPassword(this);
-                System.out.println("PROF ID " + profId + "\nCLASS ID " + classId + "\nUSER ID " + userId + "\nPASSWORD " + password + "\nRATING " + mRating + "\nREVIEW " + reviewText);
+                System.out.println("PROF ID " + profId + "\nCLASS ID " + classId + "\nSCHOOL_ID " + schoolId + "\nUSER ID " + userId + "\nPASSWORD " + password + "\nRATING " + mRating + "\nREVIEW " + reviewText);
                 if(profId != null && classId != null) {
-                    UserReview r = new UserReview(userId, password, classId, profId,mRating,reviewText);
+                    UserReview r = new UserReview(userId, password, classId, profId, mRating, reviewText, schoolId);
                     submitReview(r);
                 }
             } else {
@@ -209,7 +209,11 @@ public class WriteReviewActivity extends AppCompatActivity {
     @Subscribe
     public void intResp(Integer i) {
         mProgressDialog.dismiss();
-        Utils.showSnackbar(this, mParent, getString(R.string.failed_to_submit_review));
+        if(i.equals(500)) {
+            Utils.showSnackbar(this, mParent, getString(R.string.already_submitted_review));
+        } else {
+            Utils.showSnackbar(this, mParent, getString(R.string.failed_to_submit_review));
+        }
     }
 
     @Subscribe

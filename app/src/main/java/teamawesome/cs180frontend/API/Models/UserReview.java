@@ -19,9 +19,9 @@ public class UserReview implements Serializable{
     @Expose
     private String password;
 
-//    @SerializedName("school_id")
-//    @Expose
-//    private int school_id;
+    @SerializedName("school_id")
+    @Expose
+    private int school_id;
 
     @SerializedName("class_id")
     @Expose
@@ -39,14 +39,14 @@ public class UserReview implements Serializable{
     @Expose
     private String review;
 
-    public UserReview(int id, String password,/*int school_id,*/ int class_id, int prof_id, int rating, String review) {
+    public UserReview(int id, String password, int class_id, int prof_id, int rating, String review, int school_id) {
         this.id = id;
         this.password = password;
-//        this.school_id = school_id;
         this.class_id = class_id;
         this.prof_id = prof_id;
         this.rating = rating;
         this.review = review;
+        this.school_id = school_id;
     }
 
     public int getClassId() { return class_id; }

@@ -115,5 +115,6 @@
     <string name="review_not_long_enough">Review too short</string>
     <string name="failed_to_submit_review">Failed to submit review</string>
     <string name="invalid_prof_class_name">Select valid professor and class names</string>
+    <string name="already_submitted_review">Review exists already</string>
 
 </resources>
