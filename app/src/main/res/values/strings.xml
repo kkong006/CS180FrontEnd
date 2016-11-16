@@ -117,4 +117,9 @@
     <string name="invalid_prof_class_name">Select valid professor and class names</string>
     <string name="already_submitted_review">Review exists already</string>
 
+    <!--Search Professor Results-->
+    <string name="search_professor_results_classes">Classes Taught</string>
+    <string name="search_professor_results_schools">Associated Schools</string>
+    <string name="search_professor_results_review">See Reviews</string>
+
 </resources>

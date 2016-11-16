@@ -109,6 +109,12 @@
 
                 </LinearLayout>
 
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dip"
+                    android:layout_marginBottom="5dp"
+                    android:background="@color/colorGrey" />
+
                 <!--Review Contents-->
                 <TextView
                     android:id="@+id/result_review_tv"
