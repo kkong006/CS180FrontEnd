@@ -64,6 +64,7 @@ public class ReadReviewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_read_review);
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         if(Utils.getUserId(this) == 0) {
             mThumbsUp.setVisibility(View.GONE);

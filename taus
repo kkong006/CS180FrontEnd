@@ -1,0 +1,257 @@
+[1mdiff --git a/app/build.gradle b/app/build.gradle[m
+[1mindex 4a66aec..086c9f8 100644[m
+[1m--- a/app/build.gradle[m
+[1m+++ b/app/build.gradle[m
+[36m@@ -22,18 +22,18 @@[m [mandroid {[m
+ [m
+ dependencies {[m
+     compile fileTree(dir: 'libs', include: ['*.jar'])[m
+[31m-    testCompile 'junit:junit:4.12'[m
+[31m-    compile 'com.android.support:appcompat-v7:24.2.+'[m
+[31m-    compile 'com.android.support:design:24.2.+'[m
+[31m-    compile 'com.android.support:cardview-v7:24.+'[m
+[32m+[m[32m    // retrofit dependencies[m
+[32m+[m[32m    compile 'com.squareup.retrofit2:retrofit:2.1.0'[m
+[32m+[m[32m    compile 'com.android.support:appcompat-v7:24.2.0'[m
+[32m+[m[32m    compile 'com.android.support:design:24.2.0'[m
+[32m+[m[32m    compile 'com.android.support:cardview-v7:24.2.0'[m
+     compile 'com.jakewharton:butterknife:7.0.1'[m
+     compile 'com.squareup.retrofit2:retrofit:2.1.0'[m
+     compile 'org.greenrobot:eventbus:3.0.0'[m
+     compile 'com.joanzapata.iconify:android-iconify-fontawesome:2.2.2'[m
+[31m-    compile 'com.squareup.retrofit2:converter-gson:2.0.2'[m
+[31m-    // retrofit dependencies[m
+[31m-    compile 'com.squareup.retrofit2:retrofit:2.1.0'[m
+[31m-    compile 'com.google.code.gson:gson:2.7'[m
+     compile 'com.squareup.retrofit2:converter-gson:2.1.0'[m
+[32m+[m[32m    compile 'com.google.code.gson:gson:2.7'[m
+     compile 'com.squareup.okhttp:okhttp:2.7.2'[m
+[32m+[m[32m    compile 'com.android.support:support-v4:24.2.0'[m
+[32m+[m[32m    testCompile 'junit:junit:4.12'[m
+ }[m
+[1mdiff --git a/app/src/main/java/teamawesome/cs180frontend/Activities/LoginActivity.java b/app/src/main/java/teamawesome/cs180frontend/Activities/LoginActivity.java[m
+[1mindex 0448c82..c017812 100644[m
+[1m--- a/app/src/main/java/teamawesome/cs180frontend/Activities/LoginActivity.java[m
+[1m+++ b/app/src/main/java/teamawesome/cs180frontend/Activities/LoginActivity.java[m
+[36m@@ -124,14 +124,15 @@[m [mpublic class LoginActivity extends AppCompatActivity {[m
+ [m
+         // Store values at the time of the login attempt.[m
+         String phoneNum = phoneEditText.getText().toString();[m
+[31m-        String password = Utils.getMD5Hash(mPasswordView.getText().toString());[m
+[32m+[m[32m        String rawPassword = mPasswordView.getText().toString();[m
+[32m+[m[32m        String password = Utils.getMD5Hash(rawPassword);[m
+ [m
+         boolean cancel = false;[m
+         Integer schoolId = null;[m
+         View focusView = null;[m
+ [m
+         // Check for a valid password, if the user entered one.[m
+[31m-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {[m
+[32m+[m[32m        if (!TextUtils.isEmpty(rawPassword) && !isPasswordValid(rawPassword)) {[m
+             mPasswordView.setError(getString(R.string.error_invalid_password));[m
+             focusView = mPasswordView;[m
+             cancel = true;[m
+[1mdiff --git a/app/src/main/res/layout/activity_settings.xml b/app/src/main/res/layout/activity_settings.xml[m
+[1mindex 50484a7..e0727b9 100644[m
+[1m--- a/app/src/main/res/layout/activity_settings.xml[m
+[1m+++ b/app/src/main/res/layout/activity_settings.xml[m
+[36m@@ -1,89 +1,98 @@[m
+ <?xml version="1.0" encoding="utf-8"?>[m
+[31m-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"[m
+[32m+[m
+[32m+[m[32m<android.support.design.widget.CoordinatorLayout[m
+[32m+[m[32m    xmlns:android="http://schemas.android.com/apk/res/android"[m
+     xmlns:tools="http://schemas.android.com/tools"[m
+[31m-    android:orientation="vertical"[m
+[31m-    android:id="@+id/activity_settings"[m
+     android:layout_width="match_parent"[m
+     android:layout_height="match_parent"[m
+[31m-    android:paddingBottom="@dimen/activity_vertical_margin"[m
+[31m-    android:paddingLeft="@dimen/activity_horizontal_margin"[m
+[31m-    android:paddingRight="@dimen/activity_horizontal_margin"[m
+[31m-    android:paddingTop="@dimen/activity_vertical_margin"[m
+[31m-    tools:context="teamawesome.cs180frontend.Activities.SettingsActivity">[m
+[32m+[m[32m    android:id="@+id/activity_settings">[m
+ [m
+[31m-    <TextView[m
+[31m-        android:id="@+id/settings_university_tv"[m
+[32m+[m[32m    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"[m
+[32m+[m[32m        xmlns:tools="http://schemas.android.com/tools"[m
+[32m+[m[32m        android:orientation="vertical"[m
+         android:layout_width="match_parent"[m
+[31m-        android:layout_height="wrap_content"[m
+[31m-        android:text="University" />[m
+[32m+[m[32m        android:layout_height="match_parent"[m
+[32m+[m[32m        android:paddingBottom="@dimen/activity_vertical_margin"[m
+[32m+[m[32m        android:paddingLeft="@dimen/activity_horizontal_margin"[m
+[32m+[m[32m        android:paddingRight="@dimen/activity_horizontal_margin"[m
+[32m+[m[32m        android:paddingTop="@dimen/activity_vertical_margin"[m
+[32m+[m[32m        tools:context="teamawesome.cs180frontend.Activities.SettingsActivity">[m
+ [m
+[31m-    <Spinner[m
+[31m-        android:id="@+id/settings_university_sp"[m
+[31m-        android:layout_width="match_parent"[m
+[31m-        android:layout_height="50dp">[m
+[31m-    </Spinner>[m
+[31m-[m
+[31m-    <Button[m
+[31m-        android:id="@+id/settings_school_bt"[m
+[31m-        android:layout_width="wrap_content"[m
+[31m-        android:layout_height="wrap_content"[m
+[31m-        android:layout_gravity="center_horizontal"[m
+[31m-        android:gravity="center"[m
+[31m-        android:padding="10dp"[m
+[31m-        android:layout_marginTop="@dimen/activity_vertical_margin"[m
+[31m-        android:background="@color/colorAccent"[m
+[31m-        android:textColor="@color/colorWhite"[m
+[31m-        android:text="@string/change_school_button" />[m
+[31m-[m
+[31m-    <TextView[m
+[31m-        android:id="@+id/settings_password_tv"[m
+[31m-        android:layout_width="match_parent"[m
+[31m-        android:layout_height="wrap_content"[m
+[31m-        android:layout_marginTop="@dimen/activity_vertical_margin"[m
+[31m-        android:text="Password" />[m
+[31m-[m
+[31m-    <android.support.design.widget.TextInputLayout[m
+[31m-        android:id="@+id/settings_old_password_til"[m
+[31m-        android:layout_width="match_parent"[m
+[31m-        android:layout_height="wrap_content">[m
+[31m-[m
+[31m-        <EditText[m
+[31m-            android:id="@+id/old_password_et"[m
+[32m+[m[32m        <TextView[m
+[32m+[m[32m            android:id="@+id/settings_university_tv"[m
+             android:layout_width="match_parent"[m
+             android:layout_height="wrap_content"[m
+[31m-            android:textColorHint="@color/colorAccent"[m
+[31m-            android:inputType="textPassword"[m
+[31m-            android:maxLines="1"[m
+[31m-            android:hint="Enter current password" />[m
+[32m+[m[32m            android:text="University" />[m
+ [m
+[31m-    </android.support.design.widget.TextInputLayout>[m
+[32m+[m[32m        <Spinner[m
+[32m+[m[32m            android:id="@+id/settings_university_sp"[m
+[32m+[m[32m            android:layout_width="match_parent"[m
+[32m+[m[32m            android:layout_height="50dp">[m
+[32m+[m[32m        </Spinner>[m
+ [m
+[31m-    <android.support.design.widget.TextInputLayout[m
+[31m-        android:id="@+id/settings_new_password_til"[m
+[31m-        android:layout_width="match_parent"[m
+[31m-        android:layout_height="wrap_content">[m
+[32m+[m[32m        <Button[m
+[32m+[m[32m            android:id="@+id/settings_school_bt"[m
+[32m+[m[32m            android:layout_width="wrap_content"[m
+[32m+[m[32m            android:layout_height="wrap_content"[m
+[32m+[m[32m            android:layout_gravity="center_horizontal"[m
+[32m+[m[32m            android:gravity="center"[m
+[32m+[m[32m            android:padding="10dp"[m
+[32m+[m[32m            android:layout_marginTop="@dimen/activity_vertical_margin"[m
+[32m+[m[32m            android:background="@color/colorAccent"[m
+[32m+[m[32m            android:textColor="@color/colorWhite"[m
+[32m+[m[32m            android:text="@string/change_school_button" />[m
+ [m
+[31m-        <EditText[m
+[31m-            android:id="@+id/new_password_et"[m
+[32m+[m[32m        <TextView[m
+[32m+[m[32m            android:id="@+id/settings_password_tv"[m
+             android:layout_width="match_parent"[m
+             android:layout_height="wrap_content"[m
+[31m-            android:textColorHint="@color/colorAccent"[m
+[31m-            android:inputType="textPassword"[m
+[31m-            android:maxLines="1"[m
+[31m-            android:hint="Enter new password" />[m
+[32m+[m[32m            android:layout_marginTop="@dimen/activity_vertical_margin"[m
+[32m+[m[32m            android:text="Password" />[m
+ [m
+[31m-    </android.support.design.widget.TextInputLayout>[m
+[32m+[m[32m        <android.support.design.widget.TextInputLayout[m
+[32m+[m[32m            android:id="@+id/settings_old_password_til"[m
+[32m+[m[32m            android:layout_width="match_parent"[m
+[32m+[m[32m            android:layout_height="wrap_content">[m
+ [m
+[31m-    <Button[m
+[31m-        android:id="@+id/settings_password_bt"[m
+[31m-        android:layout_width="wrap_content"[m
+[31m-        android:layout_height="wrap_content"[m
+[31m-        android:layout_gravity="center_horizontal"[m
+[31m-        android:gravity="center"[m
+[31m-        android:padding="10dp"[m
+[31m-        android:layout_marginTop="@dimen/activity_vertical_margin"[m
+[31m-        android:background="@color/colorAccent"[m
+[31m-        android:textColor="@color/colorWhite"[m
+[31m-        android:text="@string/change_password_button" />[m
+[32m+[m[32m            <EditText[m
+[32m+[m[32m                android:id="@+id/old_password_et"[m
+[32m+[m[32m                android:layout_width="match_parent"[m
+[32m+[m[32m                android:layout_height="wrap_content"[m
+[32m+[m[32m                android:textColorHint="@color/colorAccent"[m
+[32m+[m[32m                android:inputType="textPassword"[m
+[32m+[m[32m                android:maxLines="1"[m
+[32m+[m[32m                android:hint="Enter current password" />[m
+ [m
+[31m-</LinearLayout>[m
+[32m+[m[32m        </android.support.design.widget.TextInputLayout>[m
+[32m+[m
+[32m+[m[32m        <android.support.design.widget.TextInputLayout[m
+[32m+[m[32m            android:id="@+id/settings_new_password_til"[m
+[32m+[m[32m            android:layout_width="match_parent"[m
+[32m+[m[32m            android:layout_height="wrap_content">[m
+[32m+[m
+[32m+[m[32m            <EditText[m
+[32m+[m[32m                android:id="@+id/new_password_et"[m
+[32m+[m[32m                android:layout_width="match_parent"[m
+[32m+[m[32m                android:layout_height="wrap_content"[m
+[32m+[m[32m                android:textColorHint="@color/colorAccent"[m
+[32m+[m[32m                android:inputType="textPassword"[m
+[32m+[m[32m                android:maxLines="1"[m
+[32m+[m[32m                android:hint="Enter new password" />[m
+[32m+[m
+[32m+[m[32m        </android.support.design.widget.TextInputLayout>[m
+[32m+[m
+[32m+[m[32m        <Button[m
+[32m+[m[32m            android:id="@+id/settings_password_bt"[m
+[32m+[m[32m            android:layout_width="wrap_content"[m
+[32m+[m[32m            android:layout_height="wrap_content"[m
+[32m+[m[32m            android:layout_gravity="center_horizontal"[m
+[32m+[m[32m            android:gravity="center"[m
+[32m+[m[32m            android:padding="10dp"[m
+[32m+[m[32m            android:layout_marginTop="@dimen/activity_vertical_margin"[m
+[32m+[m[32m            android:background="@color/colorAccent"[m
+[32m+[m[32m            android:textColor="@color/colorWhite"[m
+[32m+[m[32m            android:text="@string/change_password_button" />[m
+[32m+[m
+[32m+[m[32m    </LinearLayout>[m
+[32m+[m
+[32m+[m[32m</android.support.design.widget.CoordinatorLayout>[m
+\ No newline at end of file[m
+[1mdiff --git a/app/src/main/res/layout/content_main.xml b/app/src/main/res/layout/content_main.xml[m
+[1mindex e934141..1a3286c 100644[m
+[1m--- a/app/src/main/res/layout/content_main.xml[m
+[1m+++ b/app/src/main/res/layout/content_main.xml[m
+[36m@@ -12,4 +12,11 @@[m
+     tools:context="teamawesome.cs180frontend.Activities.MainActivity"[m
+     tools:showIn="@layout/app_bar_main">[m
+ [m
+[32m+[m[32m    <RelativeLayout[m
+[32m+[m[32m        android:id="@+id/fragment_layout"[m
+[32m+[m[32m        android:layout_gravity="top"[m
+[32m+[m[32m        android:layout_width="match_parent"[m
+[32m+[m[32m        android:layout_height="match_parent">[m
+[32m+[m[32m    </RelativeLayout>[m
+[32m+[m
+ </RelativeLayout>[m
+[1mdiff --git a/app/src/main/res/values/strings.xml b/app/src/main/res/values/strings.xml[m
+[1mindex 6416a73..abcfc52 100644[m
+[1m--- a/app/src/main/res/values/strings.xml[m
+[1m+++ b/app/src/main/res/values/strings.xml[m
+[36m@@ -122,4 +122,7 @@[m
+     <string name="search_professor_results_schools">Associated Schools</string>[m
+     <string name="search_professor_results_review">See Reviews</string>[m
+ [m
+[32m+[m[32m    <!-- TODO: Remove or change this placeholder text -->[m
+[32m+[m[32m    <string name="hello_blank_fragment">Hello blank fragment</string>[m
+[32m+[m
+ </resources>[m

@@ -124,14 +124,15 @@ public class LoginActivity extends AppCompatActivity {
 
         // Store values at the time of the login attempt.
         String phoneNum = phoneEditText.getText().toString();
-        String password = Utils.getMD5Hash(mPasswordView.getText().toString());
+        String rawPassword = mPasswordView.getText().toString();
+        String password = Utils.getMD5Hash(rawPassword);
 
         boolean cancel = false;
         Integer schoolId = null;
         View focusView = null;
 
         // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
+        if (!TextUtils.isEmpty(rawPassword) && !isPasswordValid(rawPassword)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
             cancel = true;

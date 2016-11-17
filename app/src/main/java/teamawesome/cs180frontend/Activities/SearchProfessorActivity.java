@@ -39,6 +39,7 @@ public class SearchProfessorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_professor);
         ButterKnife.bind(this);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mSearchProfessorName = "";
 

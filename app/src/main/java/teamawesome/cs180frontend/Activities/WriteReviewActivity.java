@@ -63,6 +63,7 @@ public class WriteReviewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_write_review);
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mProgressDialog = new ProgressDialog(this);
         mProgressDialog.setCancelable(false);

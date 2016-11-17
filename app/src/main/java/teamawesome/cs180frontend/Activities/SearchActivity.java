@@ -55,6 +55,7 @@ public class SearchActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         getSupportActionBar().setTitle(getString(R.string.search_reviews));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mUserProfessorName = "";
 //        mUserClassName = "";

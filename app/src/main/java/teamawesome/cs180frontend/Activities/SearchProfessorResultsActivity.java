@@ -54,6 +54,7 @@ public class SearchProfessorResultsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search_professor_results);
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mProgressDialog = new ProgressDialog(this);
         mProgressDialog.setCancelable(false);
@@ -71,6 +72,8 @@ public class SearchProfessorResultsActivity extends AppCompatActivity {
         Intent intent = getIntent();
         mProfessorName = intent.getStringExtra(getString(R.string.PROFESSOR_NAME));
         mProfessorId = intent.getIntExtra(getString(R.string.PROFESSOR_ID), 0);
+
+        System.out.println("PROFESOR RESULTS PROFESSOR ID " + mProfessorId);
 
         if(mProfessorId > 0) {
             getSupportActionBar().setTitle(mProfessorName);

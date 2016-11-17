@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.provider.ContactsContract;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -42,7 +43,7 @@ import teamawesome.cs180frontend.R;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    @Bind(R.id.activity_settings) LinearLayout mParent;
+    @Bind(R.id.activity_settings) CoordinatorLayout mParent;
     @Bind(R.id.settings_university_tv) TextView mUniversityTV;
     @Bind(R.id.settings_password_tv)TextView mPasswordTV;
     @Bind(R.id.settings_university_sp) Spinner mSpinner;
@@ -69,6 +70,7 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mProgressDialog = new ProgressDialog(this);
         mProgressDialog.setCancelable(false);

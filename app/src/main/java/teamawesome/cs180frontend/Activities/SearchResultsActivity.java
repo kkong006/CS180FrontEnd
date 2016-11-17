@@ -53,6 +53,7 @@ public class SearchResultsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search_results);
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mProgressDialog = new ProgressDialog(this);
         mProgressDialog.setCancelable(false);
