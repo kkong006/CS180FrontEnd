@@ -146,13 +146,27 @@ public class SettingsActivity extends AppCompatActivity {
 
     @OnClick(R.id.settings_password_bt)
     public void changePassword() {
-        String newPassword = mNewPasswordET.getText().toString();
-        if(newPassword.length() > 8 && !Utils.getMD5Hash(newPassword).equals(mPassword)) {
-            mNewPassword = Utils.getMD5Hash(newPassword);
+        mOldPasswordET.setError(null);
+        mNewPasswordET.setError(null);
+        View focusView = null;
+        String oldPassword = Utils.getMD5Hash(mOldPasswordET.getText().toString());
+        String rawPassword = mNewPasswordET.getText().toString();
+        String newPassword = Utils.getMD5Hash(rawPassword);
+        if(!oldPassword.equals(Utils.getPassword(this))) {
+            mOldPasswordET.setError(getString(R.string.error_incorrect_password));
+            focusView = mOldPasswordET;
+        } else if(rawPassword.length() <= 8) {
+            mNewPasswordET.setError(getString(R.string.error_invalid_password));
+            focusView = mNewPasswordET;
+        } else if(oldPassword.equals(Utils.getPassword(this))) {
+            mNewPassword = newPassword;
             UpdateUserBundle user = new UpdateUserBundle(Utils.getUserId(this), mPassword, mNewPassword, mSchoolId);
             updateUserAccount(user);
         } else {
             Utils.showSnackbar(this, mParent, getString(R.string.enter_new_password));
+        }
+        if(!focusView.equals(null)) {
+            focusView.requestFocus();
         }
     }
 

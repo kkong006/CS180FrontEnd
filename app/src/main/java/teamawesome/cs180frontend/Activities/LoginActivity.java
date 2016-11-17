@@ -87,6 +87,8 @@ public class LoginActivity extends AppCompatActivity {
         getData();
     }
 
+//    private void
+
     @Override
     public void onDestroy() {
         super.onDestroy();
