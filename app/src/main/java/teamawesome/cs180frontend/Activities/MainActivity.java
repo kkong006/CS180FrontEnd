@@ -58,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
     private String[] mIconTitles;
     private static final String TAG = "Main Activity";
 
+    private int mPosition;
+
     private MainFeedAdapter mFeedAdapter;
 
     ProgressDialog mProgressDialog;
@@ -96,6 +98,8 @@ public class MainActivity extends AppCompatActivity {
         mProgressDialog.setMessage(getString(R.string.loading));
         mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         mProgressDialog.setCancelable(false);
+
+        mPosition = 0;
 
         getData();
     }
@@ -181,6 +185,7 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                         if(j < reviewIds.length) {
+                            mPosition = j;
                             Intent intent = new Intent(getBaseContext(), ReadReviewActivity.class);
                             Bundle bundle = new Bundle();
                             bundle.putInt(getString(R.string.REVIEW_ID), r[0]);
@@ -197,6 +202,10 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             });
+            if(mPosition >= 0 && mPosition < reviewList.size()) {
+                mFeedList.setSelection(mPosition);
+                mPosition = 0;
+            }
 
             if(reviewList.size() == 0) {
                 Utils.showSnackbar(this, parent, getString(R.string.reviews_dne));

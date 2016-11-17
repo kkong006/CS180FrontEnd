@@ -45,6 +45,7 @@ public class SearchResultsActivity extends AppCompatActivity {
     private String[] mClassNames;
     private String[] mReviewDates;
     private String[] mMsgs;
+    private int mPosition;
 
     public static final String REVIEW = "REVIEW";
 
@@ -55,6 +56,8 @@ public class SearchResultsActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        mPosition = 0;
 
         mProgressDialog = new ProgressDialog(this);
         mProgressDialog.setCancelable(false);
@@ -109,6 +112,12 @@ public class SearchResultsActivity extends AppCompatActivity {
             mResultsList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
             mResultsList.setAdapter(mAdapter);
             mResultsList.setOnItemClickListener(new ReviewSelectClickListener());
+
+            if(mPosition >= 0 && mPosition < mReviews.size()) {
+                System.out.println("POSITION IN SETUP " + mPosition);
+                mResultsList.setSelection(mPosition);
+                mPosition = 0;
+            }
         }
     }
 
@@ -124,6 +133,8 @@ public class SearchResultsActivity extends AppCompatActivity {
                     }
                 }
                 if(j < mReviewIds.length) {
+                    System.out.println("POSITION BEFORE INTENT " + j);
+                    mPosition = j;
                     Intent i = new Intent(getBaseContext(), ReadReviewActivity.class);
                     Bundle bundle = new Bundle();
                     bundle.putInt(getString(R.string.REVIEW_ID), r[0]);

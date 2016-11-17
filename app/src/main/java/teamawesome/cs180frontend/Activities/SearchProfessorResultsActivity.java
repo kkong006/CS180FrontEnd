@@ -97,15 +97,20 @@ public class SearchProfessorResultsActivity extends AppCompatActivity {
 
     @Subscribe
     public void profSummaryResp(ProfessorRespBundle resp) {
+        System.out.println("SCHOOL NAME" + resp.getSchoolName());
         mProgressDialog.dismiss();
         mRating = resp.getAvgRating();
-        List<SchoolBundle> schools = resp.getSchools();
+        String school = resp.getSchoolName();
         List<ProfessorClassBundle> classes = resp.getClasses();
-        mSchoolNames = new String[schools.size()];
+//        mSchoolNames = new String[schools.size()];
         mClassNames = new String[classes.size()];
-        ArrayAdapter<String> schoolAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mSchoolNames);
+        for(int i = 0; i < classes.size(); i++) {
+            mClassNames[i] = classes.get(i).getClassName();
+            System.out.println("\tCLASS NAME " + classes.get(i).getClassName());
+        }
+//      ArrayAdapter<String> schoolAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mSchoolNames);
         ArrayAdapter<String> classAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mClassNames);
-        mSchools.setAdapter(schoolAdapter);
+//        mSchools.setAdapter(schoolAdapter);
         mClasses.setAdapter(classAdapter);
         for(int i = 0; i < mRating && i < 5; i++) {
             mRatings[i].setTextColor(getResources().getColor(R.color.colorGreen));

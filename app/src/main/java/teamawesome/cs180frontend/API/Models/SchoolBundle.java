@@ -3,11 +3,13 @@ package teamawesome.cs180frontend.API.Models;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 /**
  * Created by KongK on 10/21/2016.
  */
 
-public class SchoolBundle {
+public class SchoolBundle implements Serializable {
 
     @SerializedName("school_id")
     @Expose

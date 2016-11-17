@@ -20,13 +20,24 @@ public class ProfessorRespBundle implements Serializable {
     @Expose
     private int avg_rating;
 
-    @SerializedName("schools")
+//    @SerializedName("schools")
+//    @Expose
+//    List<ProfessorSchoolBundle> schools;
+
+    @SerializedName("school_name")
     @Expose
-    List<SchoolBundle> schools;
+    private String schoolName;
 
     @SerializedName("classes")
     @Expose
     List<ProfessorClassBundle> classes;
+
+    public ProfessorRespBundle(String prof_name, int avg_rating, String schoolName, List<ProfessorClassBundle> classes) {
+        this.prof_name = prof_name;
+        this.avg_rating = avg_rating;
+        this.schoolName = schoolName;
+        this.classes = classes;
+    }
 
     public String getProfName() {
         return prof_name;
@@ -36,8 +47,8 @@ public class ProfessorRespBundle implements Serializable {
         return avg_rating;
     }
 
-    public List<SchoolBundle> getSchools() {
-        return schools;
+    public String getSchoolName() {
+        return schoolName;
     }
 
     public List<ProfessorClassBundle> getClasses() {
