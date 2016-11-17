@@ -125,4 +125,6 @@
     <string name="search_professor_results_schools">Associated Schools</string>
     <string name="search_professor_results_review">See Reviews</string>
 
+    <!--Admob-->
+    <string name="banner_ad_unit_id">ca-app-pub-9554227058186629~9225396990</string>
 </resources>

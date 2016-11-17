@@ -1,0 +1,38 @@
+{
+  "project_info": {
+    "project_number": "783227828067",
+    "project_id": "de-classify"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:783227828067:android:ee7887bbeccd8a25",
+        "android_client_info": {
+          "package_name": "teamawesome.cs180frontend"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCsOCHK4crqaiH99YR0Z7w55YJ8uOa2ie8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 2,
+          "analytics_property": {
+            "tracking_id": "UA-87640312-1"
+          }
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

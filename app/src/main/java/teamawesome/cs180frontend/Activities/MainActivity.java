@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.provider.Settings;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -19,6 +20,9 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.squareup.okhttp.internal.Util;
 
 import org.greenrobot.eventbus.EventBus;
@@ -42,7 +46,6 @@ import teamawesome.cs180frontend.Misc.DataSingleton;
 import teamawesome.cs180frontend.Misc.SPSingleton;
 import teamawesome.cs180frontend.Misc.Utils;
 import teamawesome.cs180frontend.R;
-
 
 public class MainActivity extends AppCompatActivity {
 
@@ -73,6 +76,14 @@ public class MainActivity extends AppCompatActivity {
         EventBus.getDefault().register(this);
 
         setSupportActionBar(mToolbar);
+
+        MobileAds.initialize(getApplicationContext(), "ca-app-pub-9554227058186629~9225396990");
+        AdView ad = (AdView) findViewById(R.id.adView);
+        AdRequest request = new AdRequest.Builder()
+                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                .addTestDevice(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID))
+                .build();
+        ad.loadAd(request);
 
         mNavTitles = getResources().getStringArray(R.array.nav_drawer_array);
         mIconTitles = getResources().getStringArray(R.array.nav_drawer_icon_array);
