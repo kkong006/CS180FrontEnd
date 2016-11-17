@@ -19,9 +19,12 @@ import org.greenrobot.eventbus.Subscribe;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import teamawesome.cs180frontend.API.Models.CacheDataBundle;
 import teamawesome.cs180frontend.API.Models.LoginRegisterBundle;
 import teamawesome.cs180frontend.API.Models.UserRespBundle;
 import teamawesome.cs180frontend.API.RetrofitSingleton;
+import teamawesome.cs180frontend.API.Services.Callbacks.GetCacheDataCallback;
+import teamawesome.cs180frontend.API.Services.Callbacks.GetReviewsCallback;
 import teamawesome.cs180frontend.API.Services.Callbacks.LoginRegisterCallback;
 import teamawesome.cs180frontend.Adapters.SimpleListAdapter;
 import teamawesome.cs180frontend.Misc.DataSingleton;
@@ -64,17 +67,24 @@ public class LoginActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
 
+        if(Utils.getUserId(this) > 0) {
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
+
         acTV.setVisibility(View.GONE);
         adapter = new SimpleListAdapter(this, R.layout.simple_list_item,
                 DataSingleton.getInstance().getSchoolCache());
         acTV.setAdapter(adapter);
         acTV.setThreshold(1);
 
-        if(Utils.getUserId(this) > 0) {
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
-            finish();
-        }
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage(getString(R.string.loading));
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setCancelable(false);
+
+        getData();
     }
 
     @Override
@@ -153,10 +163,8 @@ public class LoginActivity extends AppCompatActivity {
                     loginMode ? 1 : schoolId.intValue());
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-            progressDialog = new ProgressDialog(this);
             progressDialog.setMessage(loginMode ? getString(R.string.login_loading) :
                     getString(R.string.register_loading));
-            progressDialog.setCancelable(false);
             progressDialog.show();
 
             //Login & register are nearly identical => use the same callback
@@ -182,6 +190,41 @@ public class LoginActivity extends AppCompatActivity {
         return password.length() > 8;
     }
 
+    private void getData() {
+        progressDialog.show();
+        RetrofitSingleton.getInstance()
+                .getMatchingService()
+                .getData(Utils.getSchoolId(this))
+                .enqueue(new GetCacheDataCallback());
+    }
+
+    @Subscribe
+    public void dataResp(CacheDataBundle data) {
+        progressDialog.dismiss();
+        DataSingleton.getInstance().cacheDataBundle(data);
+        System.out.println("SCHOOL ID " + Utils.getSchoolId(this));
+        System.out.println("SCHOOL SIZE " + DataSingleton.getInstance().getSchoolCache().size());
+        System.out.println("PROFESSOR SIZE " + DataSingleton.getInstance().getProfessorCache().size());
+        System.out.println("CLASS SIZE " + DataSingleton.getInstance().getClassCache().size());
+        System.out.println("SUBJECT SIZE " + DataSingleton.getInstance().getSubjectCache().size());
+
+        acTV.setVisibility(View.GONE);
+        adapter = new SimpleListAdapter(this, R.layout.simple_list_item,
+                DataSingleton.getInstance().getSchoolCache());
+        acTV.setAdapter(adapter);
+        acTV.setThreshold(1);
+    }
+
+    @Subscribe
+    public void intResp(Integer i) {
+        progressDialog.dismiss();
+        if (i.equals(0)) {
+            Utils.showSnackbar(this, parent, getString(R.string.data_doesnt_exist));
+        } else if (i.equals(-1)) {
+            Utils.showSnackbar(this, parent, getString(R.string.error_getting_data));
+        }
+    }
+
     @Subscribe
     public void onLoginOrRegister(UserRespBundle resp) {
         progressDialog.dismiss();
@@ -200,5 +243,3 @@ public class LoginActivity extends AppCompatActivity {
         Utils.showSnackbar(this, parent, msg);
     }
 }
-
-
