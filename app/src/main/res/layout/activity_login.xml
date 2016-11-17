@@ -92,7 +92,9 @@
                         android:layout_height="wrap_content"
                         android:hint="University"
                         android:maxLines="1"
-                        android:layout_marginTop="10dp" />
+                        android:completionThreshold="1"
+                        android:layout_marginTop="10dp"
+                        android:dropDownHeight="wrap_content"/>
 
                 </android.support.design.widget.TextInputLayout>
 

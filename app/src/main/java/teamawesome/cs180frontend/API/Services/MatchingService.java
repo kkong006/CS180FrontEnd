@@ -30,5 +30,5 @@ public interface MatchingService {
                                          @Query("user_id") int user_id);
 
     @GET("/professor")
-    Call<ProfessorRespBundle> getProfessorSummary(@Query("id") int prof_id);
+    Call<ProfessorRespBundle> getProfessorSummary(@Query("prof_id") int prof_id);
 }
