@@ -3,6 +3,7 @@ package teamawesome.cs180frontend.Activities;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.provider.ContactsContract;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -32,7 +33,7 @@ import teamawesome.cs180frontend.Misc.DataSingleton;
 import teamawesome.cs180frontend.Misc.Utils;
 import teamawesome.cs180frontend.R;
 
-public class WriteReviewActivity extends AppCompatActivity {
+public class WriteReviewActivity extends FragmentActivity {
 
     @Bind(R.id.activity_write_review) LinearLayout mParent;
     @Bind(R.id.write_professor_et) AutoCompleteTextView mProfessorName;
