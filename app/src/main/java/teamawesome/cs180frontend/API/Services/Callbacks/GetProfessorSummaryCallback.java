@@ -17,6 +17,8 @@ public class GetProfessorSummaryCallback implements Callback<ProfessorRespBundle
     @Override
     public void onResponse(Call<ProfessorRespBundle> call, Response<ProfessorRespBundle> response) {
         System.out.println("PROFESSOR SUMMARY RESPONSE " + response.code());
+        System.out.println(response.toString());
+        System.out.println(response.body().toString());
         switch (response.code()) {
             case APIConstants.HTTP_STATUS_OK:
                 EventBus.getDefault().post(response.body());

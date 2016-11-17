@@ -65,13 +65,15 @@ public class SearchProfessorActivity extends AppCompatActivity {
         if(mSearchProfessorName == "") {
             String professorName = mProfessorET.getText().toString();
             Integer profId = DataSingleton.getInstance().getProfessorId(professorName);
-            if(!profId.equals(null)) {
+            if(profId != null) {
                 mSearchProfessorName = professorName;
+            } else {
+                mProfessorET.setError(getString(R.string.professor_dne));
             }
         }
 
         if(mSearchProfessorName == "") {
-            Utils.showSnackbar(this, mParent, getString(R.string.professor_dne));
+            mProfessorET.setError(getString(R.string.professor_dne));
         } else {
             Integer profId = DataSingleton.getInstance().getProfessorId(mSearchProfessorName);
             System.out.println("PROFESSOR " + mSearchProfessorName + " " + profId + "\nUSER ID " + Utils.getUserId(this));

@@ -8,12 +8,14 @@ import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.joanzapata.iconify.Icon;
 import com.joanzapata.iconify.widget.IconTextView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -34,6 +36,7 @@ public class SearchProfessorResultsActivity extends AppCompatActivity {
     @Bind(R.id.activity_search_professor_results) CoordinatorLayout mParent;
     @Bind(R.id.search_professor_school_list) ListView mSchools;
     @Bind(R.id.search_professor_class_list) ListView mClasses;
+    @Bind(R.id.search_professor_university) TextView mUniversity;
     @Bind(R.id.prof_rate_1) IconTextView mOne;
     @Bind(R.id.prof_rate_2) IconTextView mTwo;
     @Bind(R.id.prof_rate_3) IconTextView mThree;
@@ -111,6 +114,8 @@ public class SearchProfessorResultsActivity extends AppCompatActivity {
 //      ArrayAdapter<String> schoolAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mSchoolNames);
         ArrayAdapter<String> classAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mClassNames);
 //        mSchools.setAdapter(schoolAdapter);
+        mUniversity.setText(school);
+        System.out.println("RATING " + mRating);
         mClasses.setAdapter(classAdapter);
         for(int i = 0; i < mRating && i < 5; i++) {
             mRatings[i].setTextColor(getResources().getColor(R.color.colorGreen));

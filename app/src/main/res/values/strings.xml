@@ -118,11 +118,9 @@
     <string name="already_submitted_review">Review exists already</string>
 
     <!--Search Professor Results-->
+    <string name="search_professor_button">Get Professor Statistics</string>
     <string name="search_professor_results_classes">Classes Taught</string>
     <string name="search_professor_results_schools">Associated Schools</string>
     <string name="search_professor_results_review">See Reviews</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
