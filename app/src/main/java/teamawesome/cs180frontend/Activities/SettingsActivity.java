@@ -167,7 +167,7 @@ public class SettingsActivity extends AppCompatActivity {
         } else {
             Utils.showSnackbar(this, mParent, getString(R.string.enter_new_password));
         }
-        if(!focusView.equals(null)) {
+        if(focusView != null) {
             focusView.requestFocus();
         }
     }
