@@ -161,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
                 userRatings[i] = reviewList.get(i).getReviewRating();
                 reviewDates[i] = reviewList.get(i).getReviewDate();
                 reviews[i] = reviewList.get(i).getMessage();
-                System.out.println("REVIEW " + reviewList.get(i).getMessage());
+                System.out.println("RATING " + reviewList.get(i).getReviewRating() + " REVIEW " + reviewList.get(i).getMessage());
                 classes[i] = DataSingleton.getInstance().getClassName(classIds[i]);
                 professors[i] = DataSingleton.getInstance().getProfessorName(profIds[i]);
             }
@@ -185,6 +185,7 @@ public class MainActivity extends AppCompatActivity {
                             Bundle bundle = new Bundle();
                             bundle.putInt(getString(R.string.REVIEW_ID), r[0]);
                             bundle.putInt(getString(R.string.REVIEW_RATING), r[1]);
+                            System.out.println("PASSING USER RATING " + r[1]);
                             bundle.putString(getString(R.string.REVIEW_CONTENT), reviews[j]);
                             bundle.putString(getString(R.string.REVIEW_CLASS_NAME), classes[j]);
                             bundle.putString(getString(R.string.REVIEW_DATE), reviewDates[j]);
@@ -272,13 +273,15 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(getApplicationContext(), SearchProfessorActivity.class);
             startActivity(intent);
 
-        } else if (position == 3) {
-            //Show user reviews
-//            Intent i = new Intent(getApplicationContext(), MyReviewsActivity.class);
+        }
+//        else if (position == 3) {
+//            //Show user reviews
+////            Intent i = new Intent(getApplicationContext(), MyReviewsActivity.class);
+////            startActivity(i);
+//            Intent i = new Intent(getApplicationContext(), SearchResultsActivity.class);
 //            startActivity(i);
-            Intent i = new Intent(getApplicationContext(), SearchResultsActivity.class);
-            startActivity(i);
-        } else if (position == 4) {
+//        }
+        else if (position == 3) {
             //Login or logout
             if (mAdapter.getItem(position).equals(getString(R.string.login))) {
                 Intent intent = new Intent(this, LoginActivity.class);

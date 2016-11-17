@@ -67,8 +67,12 @@ public class MainFeedAdapter extends BaseAdapter{
         holder.classNameTV.setText(mClassNames[position]);
         holder.dateTV.setText(mReviewDates[position]);
         holder.reviewTV.setText(mReviews[position]);
-        for(int i = 0; i < mRatings[position] && i < 5; i++) {
-            holder.ratings[i].setTextColor(mContext.getResources().getColor(R.color.colorGreen));
+        for(int i = 0; i < 5; i++) {
+            if(i < mRatings[position]) {
+                holder.ratings[i].setTextColor(mContext.getResources().getColor(R.color.colorGreen));
+            } else {
+                holder.ratings[i].setTextColor(mContext.getResources().getColor(R.color.colorGrey));
+            }
         }
 
         if(position == 0) {

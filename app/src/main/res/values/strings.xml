@@ -21,7 +21,7 @@
         <item>Home</item>
         <item>Search</item>
         <item>Find a Professor</item>
-        <item>My Reviews</item>
+        <!--<item>My Reviews</item>-->
         <item>Logout</item>
     </string-array>
 
@@ -29,7 +29,7 @@
         <item>{fa-home}</item>
         <item>{fa-search}</item>
         <item>{fa-graduation-cap}</item>
-        <item>{fa-paper-plane}</item>
+        <!--<item>{fa-paper-plane}</item>-->
         <item>{fa-sign-out}</item>
     </string-array>
 

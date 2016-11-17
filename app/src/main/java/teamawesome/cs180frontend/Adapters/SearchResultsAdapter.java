@@ -66,8 +66,12 @@ public class SearchResultsAdapter extends BaseAdapter{
         holder.className.setText(mClassNames[position]);
         holder.reviewDate.setText(mReviewDates[position]);
         holder.reviewContents.setText(mReviewContents[position]);
-        for(int i = 0; i < mRatings[position] && i < 5; i++) {
-            holder.rating[i].setTextColor(mContext.getResources().getColor(R.color.colorGreen));
+        for(int i = 0; i < 5; i++) {
+            if(i < mRatings[position]) {
+                holder.rating[i].setTextColor(mContext.getResources().getColor(R.color.colorGreen));
+            } else {
+                holder.rating[i].setTextColor(mContext.getResources().getColor(R.color.colorGrey));
+            }
         }
 
         if(position == 0) {

@@ -89,6 +89,8 @@ public class ReadReviewActivity extends AppCompatActivity {
         mUserRating = bundle.getInt(getString(R.string.REVIEW_USER_RATING));
         mProfessorName = bundle.getString(getString(R.string.PROFESSOR_NAME));
 
+        System.out.println("READ REVIEW USER RATING " + mUserRating);
+
         getSupportActionBar().setTitle(mProfessorName);
         mClassName.setText(mReviewClassName);
         mReviewDate.setText(mDate);
