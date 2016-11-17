@@ -2,6 +2,7 @@ package teamawesome.cs180frontend.Activities;
 
 import android.content.Intent;
 import android.provider.ContactsContract;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -26,7 +27,7 @@ import teamawesome.cs180frontend.R;
 
 public class SearchProfessorActivity extends AppCompatActivity {
 
-    @Bind(R.id.activity_search_professor) LinearLayout mParent;
+    @Bind(R.id.activity_search_professor) CoordinatorLayout mParent;
     @Bind(R.id.search_professor_professor_et) AutoCompleteTextView mProfessorET;
     @Bind(R.id.search_professor_search_bt) Button mSearchBT;
 
@@ -39,6 +40,7 @@ public class SearchProfessorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_professor);
         ButterKnife.bind(this);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mSearchProfessorName = "";
 

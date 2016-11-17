@@ -34,26 +34,34 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activities.SearchActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:parentActivityName=".Activities.MainActivity"/>
         <activity
             android:name=".Activities.MyReviewsActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:parentActivityName=".Activities.MainActivity"/>
         <activity
             android:name=".Activities.SettingsActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:parentActivityName=".Activities.MainActivity"/>
         <activity
             android:name=".Activities.SearchResultsActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:parentActivityName=".Activities.MainActivity"/>
         <activity
             android:name=".Activities.WriteReviewActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:parentActivityName=".Activities.MainActivity"/>
         <activity
             android:name=".Activities.ReadReviewActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:parentActivityName=".Activities.SearchResultsActivity"/>
         <activity android:name=".Activities.SearchProfessorActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:parentActivityName=".Activities.MainActivity"/>
         <activity android:name=".Activities.SearchProfessorResultsActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:parentActivityName=".Activities.SearchProfessorActivity"/>
     </application>
 
 </manifest>

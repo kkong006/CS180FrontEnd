@@ -3,6 +3,7 @@ package teamawesome.cs180frontend.Activities;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -32,7 +33,7 @@ import teamawesome.cs180frontend.R;
 
 public class ReadReviewActivity extends AppCompatActivity {
 
-    @Bind(R.id.activity_read_review) LinearLayout mParent;
+    @Bind(R.id.activity_read_review) CoordinatorLayout mParent;
     @Bind(R.id.read_class_tv) TextView mClassName;
     @Bind(R.id.read_date_tv) TextView mReviewDate;
     @Bind(R.id.read_rate_1) TextView mRate1;
@@ -64,6 +65,7 @@ public class ReadReviewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_read_review);
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         if(Utils.getUserId(this) == 0) {
             mThumbsUp.setVisibility(View.GONE);

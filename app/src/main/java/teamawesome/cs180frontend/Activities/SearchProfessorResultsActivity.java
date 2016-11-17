@@ -2,6 +2,7 @@ package teamawesome.cs180frontend.Activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
@@ -30,7 +31,7 @@ import teamawesome.cs180frontend.R;
 
 public class SearchProfessorResultsActivity extends AppCompatActivity {
 
-    @Bind(R.id.activity_search_professor_results) LinearLayout mParent;
+    @Bind(R.id.activity_search_professor_results) CoordinatorLayout mParent;
     @Bind(R.id.search_professor_school_list) ListView mSchools;
     @Bind(R.id.search_professor_class_list) ListView mClasses;
     @Bind(R.id.prof_rate_1) IconTextView mOne;
@@ -54,6 +55,7 @@ public class SearchProfessorResultsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search_professor_results);
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mProgressDialog = new ProgressDialog(this);
         mProgressDialog.setCancelable(false);
@@ -71,6 +73,8 @@ public class SearchProfessorResultsActivity extends AppCompatActivity {
         Intent intent = getIntent();
         mProfessorName = intent.getStringExtra(getString(R.string.PROFESSOR_NAME));
         mProfessorId = intent.getIntExtra(getString(R.string.PROFESSOR_ID), 0);
+
+        System.out.println("PROFESOR RESULTS PROFESSOR ID " + mProfessorId);
 
         if(mProfessorId > 0) {
             getSupportActionBar().setTitle(mProfessorName);

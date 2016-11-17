@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.animation.TranslateAnimation;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,11 +17,14 @@ import android.widget.TextView;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.List;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import teamawesome.cs180frontend.API.Models.CacheDataBundle;
 import teamawesome.cs180frontend.API.Models.LoginRegisterBundle;
+import teamawesome.cs180frontend.API.Models.SchoolBundle;
 import teamawesome.cs180frontend.API.Models.UserRespBundle;
 import teamawesome.cs180frontend.API.RetrofitSingleton;
 import teamawesome.cs180frontend.API.Services.Callbacks.GetCacheDataCallback;
@@ -73,11 +77,12 @@ public class LoginActivity extends AppCompatActivity {
             finish();
         }
 
-        acTV.setVisibility(View.GONE);
-        adapter = new SimpleListAdapter(this, R.layout.simple_list_item,
-                DataSingleton.getInstance().getSchoolCache());
-        acTV.setAdapter(adapter);
-        acTV.setThreshold(1);
+        setSchoolOptions();
+//        acTV.setVisibility(View.GONE);
+//        adapter = new SimpleListAdapter(this, android.R.layout.simple_dropdown_item_1line,
+//                DataSingleton.getInstance().getSchoolCache());
+//        acTV.setAdapter(adapter);
+//        acTV.setThreshold(1);
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(getString(R.string.loading));
@@ -85,6 +90,18 @@ public class LoginActivity extends AppCompatActivity {
         progressDialog.setCancelable(false);
 
         getData();
+
+    }
+
+    private void setSchoolOptions() {
+        acTV.setVisibility(View.GONE);
+        List<SchoolBundle> schools = DataSingleton.getInstance().getSchoolCache();
+        String[] schoolNames = new String[schools.size()];
+        for(int i = 0; i < schools.size(); i++) {
+            schoolNames[i] = schools.get(i).getSchoolName();
+        }
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, schoolNames);
+        acTV.setAdapter(adapter);
     }
 
     @Override
@@ -122,14 +139,15 @@ public class LoginActivity extends AppCompatActivity {
 
         // Store values at the time of the login attempt.
         String phoneNum = phoneEditText.getText().toString();
-        String password = Utils.getMD5Hash(mPasswordView.getText().toString());
+        String rawPassword = mPasswordView.getText().toString();
+        String password = Utils.getMD5Hash(rawPassword);
 
         boolean cancel = false;
         Integer schoolId = null;
         View focusView = null;
 
         // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
+        if (!TextUtils.isEmpty(rawPassword) && !isPasswordValid(rawPassword)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
             cancel = true;
@@ -208,11 +226,12 @@ public class LoginActivity extends AppCompatActivity {
         System.out.println("CLASS SIZE " + DataSingleton.getInstance().getClassCache().size());
         System.out.println("SUBJECT SIZE " + DataSingleton.getInstance().getSubjectCache().size());
 
-        acTV.setVisibility(View.GONE);
-        adapter = new SimpleListAdapter(this, R.layout.simple_list_item,
-                DataSingleton.getInstance().getSchoolCache());
-        acTV.setAdapter(adapter);
-        acTV.setThreshold(1);
+        setSchoolOptions();
+//        acTV.setVisibility(View.GONE);
+//        adapter = new SimpleListAdapter(this, R.layout.simple_list_item,
+//                DataSingleton.getInstance().getSchoolCache());
+//        acTV.setAdapter(adapter);
+//        acTV.setThreshold(1);
     }
 
     @Subscribe
@@ -243,5 +262,3 @@ public class LoginActivity extends AppCompatActivity {
         Utils.showSnackbar(this, parent, msg);
     }
 }
-
-

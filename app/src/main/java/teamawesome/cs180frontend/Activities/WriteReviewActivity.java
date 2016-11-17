@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.provider.ContactsContract;
 import android.support.v4.app.FragmentActivity;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -35,7 +36,7 @@ import teamawesome.cs180frontend.R;
 
 public class WriteReviewActivity extends FragmentActivity {
 
-    @Bind(R.id.activity_write_review) LinearLayout mParent;
+    @Bind(R.id.activity_write_review) CoordinatorLayout mParent;
     @Bind(R.id.write_professor_et) AutoCompleteTextView mProfessorName;
     @Bind(R.id.write_class_et) AutoCompleteTextView mClassName;
     @Bind(R.id.write_review_et) EditText mReviewText;
@@ -64,6 +65,7 @@ public class WriteReviewActivity extends FragmentActivity {
         setContentView(R.layout.activity_write_review);
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
 
         mProgressDialog = new ProgressDialog(this);
         mProgressDialog.setCancelable(false);
@@ -152,6 +154,9 @@ public class WriteReviewActivity extends FragmentActivity {
             }
         }
     }
+
+    @OnClick(R.id.write_rate_1)
+    public void writeRating1() { setStarColor(1); }
 
     @OnClick(R.id.write_rate_2)
     public void writeRating2() {
