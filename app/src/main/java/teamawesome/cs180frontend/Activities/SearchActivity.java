@@ -99,8 +99,10 @@ public class SearchActivity extends AppCompatActivity {
 //            String className = mClassName.getText().toString();
             Integer profId = DataSingleton.getInstance().getProfessorId(professorName);
 //            Integer classId = DataSingleton.getInstance().getClassId(className);
-            if(!profId.equals(null)) {
+            if(profId != null) {
                 mUserProfessorName = professorName;
+            } else {
+                mProfessorName.setError(getString(R.string.professor_dne));
             }
 //            if(!classId.equals(null)) {
 //                mUserClassName = className;
@@ -108,7 +110,7 @@ public class SearchActivity extends AppCompatActivity {
         }
 
         if(mUserProfessorName == "") {
-            Utils.showSnackbar(this, mParent, getString(R.string.professor_dne));
+            mProfessorName.setError(getString(R.string.professor_dne));
         } else {
             Integer profId = DataSingleton.getInstance().getProfessorId(mUserProfessorName);
             System.out.println("PROFESSOR " + mUserProfessorName + " " + profId + "\nUSER ID " + Utils.getUserId(this));

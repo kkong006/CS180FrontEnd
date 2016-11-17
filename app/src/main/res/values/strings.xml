@@ -116,6 +116,8 @@
     <string name="failed_to_submit_review">Failed to submit review</string>
     <string name="invalid_prof_class_name">Select valid professor and class names</string>
     <string name="already_submitted_review">Review exists already</string>
+    <string name="select_valid_class">Class name does not exist</string>
+    <string name="invalid_rating">Select rating for professor</string>
 
     <!--Search Professor Results-->
     <string name="search_professor_button">Get Professor Statistics</string>

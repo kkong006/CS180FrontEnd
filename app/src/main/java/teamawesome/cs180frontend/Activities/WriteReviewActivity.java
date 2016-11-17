@@ -120,37 +120,45 @@ public class WriteReviewActivity extends AppCompatActivity {
 
     @OnClick(R.id.write_submit_bt)
     public void submitReview() {
+
+        String professorName = mProfessorName.getText().toString();
+        Integer profId = DataSingleton.getInstance().getProfessorId(professorName);
+
+        String className = mClassName.getText().toString();
+        Integer classId = DataSingleton.getInstance().getClassId(className);
+
         String reviewText = mReviewText.getText().toString();
 
-        if(mUserProfessorName == "" || mUserClassName == "") {
-            String professorName = mProfessorName.getText().toString();
-            String className = mClassName.getText().toString();
-            Integer profId = DataSingleton.getInstance().getProfessorId(professorName);
-            Integer classId = DataSingleton.getInstance().getClassId(className);
-            if(!profId.equals(null) && !classId.equals(null)) {
-                mUserProfessorName = professorName;
-                mUserClassName = className;
-            }
-        }
+        View focusView = null;
 
-        if(mUserProfessorName == "" || mUserClassName == "") {
-            Utils.showSnackbar(this, mParent, getString(R.string.invalid_prof_class_name));
-        } else {
-            if(reviewText.length() >= 32) {
-                Integer profId = DataSingleton.getInstance().getProfessorId(mUserProfessorName);
-                Integer classId = DataSingleton.getInstance().getClassId(mUserClassName);
-
-                int userId = Utils.getUserId(this);
-                int schoolId = Utils.getSchoolId(this);
-                String password = Utils.getPassword(this);
-                System.out.println("PROF ID " + profId + "\nCLASS ID " + classId + "\nSCHOOL_ID " + schoolId + "\nUSER ID " + userId + "\nPASSWORD " + password + "\nRATING " + mRating + "\nREVIEW " + reviewText);
-                if(profId != null && classId != null) {
-                    UserReview r = new UserReview(userId, password, classId, profId, mRating, reviewText, schoolId);
-                    submitReview(r);
-                }
+        if(profId != null) {
+            if(classId != null) {
+               if(reviewText.length() >= 32) {
+                   if(mRating > 0) {
+                       mUserProfessorName = professorName;
+                       mUserClassName = className;
+                       int userId = Utils.getUserId(this);
+                       int schoolId = Utils.getSchoolId(this);
+                       String password = Utils.getPassword(this);
+                       System.out.println("PROF ID " + profId + "\nCLASS ID " + classId + "\nSCHOOL_ID " + schoolId + "\nUSER ID " + userId + "\nPASSWORD " + password + "\nRATING " + mRating + "\nREVIEW " + reviewText);
+                       UserReview r = new UserReview(userId, password, classId, profId, mRating, reviewText, schoolId);
+                       submitReview(r);
+                   } else {
+                       Utils.showSnackbar(this, mParent, getString(R.string.invalid_rating));
+                   }
+               } else {
+                   Utils.showSnackbar(this, mParent, getString(R.string.review_not_long_enough));
+               }
             } else {
-                Utils.showSnackbar(this, mParent, getString(R.string.review_not_long_enough));
+                mClassName.setError(getString(R.string.select_valid_class));
+                focusView = mClassName;
             }
+        } else {
+            mProfessorName.setError(getString(R.string.professor_dne));
+            focusView = mProfessorName;
+        }
+        if(focusView != null) {
+            focusView.requestFocus();
         }
     }
 
