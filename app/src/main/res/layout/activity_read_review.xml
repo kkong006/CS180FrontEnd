@@ -1,141 +1,150 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_read_review"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="teamawesome.cs180frontend.Activities.ReadReviewActivity">
+    android:id="@+id/activity_read_review">
 
-    <TextView
-        android:id="@+id/read_class_tv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:textSize="22sp" />
-
-    <TextView
-        android:id="@+id/read_date_tv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal" />
-
-    <!--Rating-->
     <LinearLayout
-        android:orientation="horizontal"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_gravity="center_horizontal"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:layout_marginTop="@dimen/activity_vertical_margin">
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        tools:context="teamawesome.cs180frontend.Activities.ReadReviewActivity">
 
-        <com.joanzapata.iconify.widget.IconTextView
-            android:id="@+id/read_rate_1"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginRight="2dp"
+        <TextView
+            android:id="@+id/read_class_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:textSize="22sp"
-            android:text="@string/rating_icon" />
+            android:textSize="22sp" />
 
-        <com.joanzapata.iconify.widget.IconTextView
-            android:id="@+id/read_rate_2"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginRight="5dp"
-            android:gravity="center_horizontal"
-            android:textSize="22sp"
-            android:text="@string/rating_icon" />
+        <TextView
+            android:id="@+id/read_date_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" />
 
-        <com.joanzapata.iconify.widget.IconTextView
-            android:id="@+id/read_rate_3"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginRight="5dp"
+        <!--Rating-->
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:textSize="22sp"
-            android:text="@string/rating_icon" />
+            android:layout_marginTop="@dimen/activity_vertical_margin">
 
-        <com.joanzapata.iconify.widget.IconTextView
-            android:id="@+id/read_rate_4"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginRight="5dp"
-            android:gravity="center_horizontal"
-            android:textSize="22sp"
-            android:text="@string/rating_icon" />
+            <com.joanzapata.iconify.widget.IconTextView
+                android:id="@+id/read_rate_1"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginRight="2dp"
+                android:gravity="center_horizontal"
+                android:textSize="22sp"
+                android:text="@string/rating_icon" />
 
-        <com.joanzapata.iconify.widget.IconTextView
-            android:id="@+id/read_rate_5"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginRight="5dp"
-            android:gravity="center_horizontal"
-            android:textSize="22sp"
-            android:text="@string/rating_icon" />
+            <com.joanzapata.iconify.widget.IconTextView
+                android:id="@+id/read_rate_2"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginRight="5dp"
+                android:gravity="center_horizontal"
+                android:textSize="22sp"
+                android:text="@string/rating_icon" />
+
+            <com.joanzapata.iconify.widget.IconTextView
+                android:id="@+id/read_rate_3"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginRight="5dp"
+                android:gravity="center_horizontal"
+                android:textSize="22sp"
+                android:text="@string/rating_icon" />
+
+            <com.joanzapata.iconify.widget.IconTextView
+                android:id="@+id/read_rate_4"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginRight="5dp"
+                android:gravity="center_horizontal"
+                android:textSize="22sp"
+                android:text="@string/rating_icon" />
+
+            <com.joanzapata.iconify.widget.IconTextView
+                android:id="@+id/read_rate_5"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginRight="5dp"
+                android:gravity="center_horizontal"
+                android:textSize="22sp"
+                android:text="@string/rating_icon" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/read_review_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_vertical_margin" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal">
+
+            <com.joanzapata.iconify.widget.IconButton
+                android:id="@+id/read_like_bt"
+                android:layout_width="30dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="right"
+                android:gravity="right"
+                android:background="@android:color/transparent"
+                android:textColor="@color/colorGreen"
+                android:textSize="28sp"
+                android:text="@string/thumbs_up_icon" />
+
+            <TextView
+                android:id="@+id/read_like_count_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:gravity="right|center_vertical"
+                android:textSize="10sp"
+                android:text = "@string/you_like" />
+
+            <com.joanzapata.iconify.widget.IconButton
+                android:id="@+id/read_dislike_bt"
+                android:layout_width="30dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="left"
+                android:gravity="left"
+                android:background="@android:color/transparent"
+                android:textColor="@color/colorRed"
+                android:textSize="28sp"
+                android:text="@string/thumbs_down_icon" />
+
+            <TextView
+                android:id="@+id/read_dislike_count_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:gravity="left|center_vertical"
+                android:textSize="10sp"
+                android:text="@string/you_dislike" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/read_review_tv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/activity_vertical_margin" />
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_gravity="center_horizontal"
-        android:gravity="center_horizontal">
-
-        <com.joanzapata.iconify.widget.IconButton
-            android:id="@+id/read_like_bt"
-            android:layout_width="30dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="right"
-            android:gravity="right"
-            android:background="@android:color/transparent"
-            android:textColor="@color/colorGreen"
-            android:textSize="28sp"
-            android:text="@string/thumbs_up_icon" />
-
-        <TextView
-            android:id="@+id/read_like_count_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:gravity="right|center_vertical"
-            android:textSize="10sp"
-            android:text = "@string/you_like" />
-
-        <com.joanzapata.iconify.widget.IconButton
-            android:id="@+id/read_dislike_bt"
-            android:layout_width="30dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="left"
-            android:gravity="left"
-            android:background="@android:color/transparent"
-            android:textColor="@color/colorRed"
-            android:textSize="28sp"
-            android:text="@string/thumbs_down_icon" />
-
-        <TextView
-            android:id="@+id/read_dislike_count_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:gravity="left|center_vertical"
-            android:textSize="10sp"
-            android:text="@string/you_dislike" />
-
-    </LinearLayout>
-
-</LinearLayout>
+</android.support.design.widget.CoordinatorLayout>

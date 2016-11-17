@@ -2,6 +2,7 @@ package teamawesome.cs180frontend.Activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -27,7 +28,7 @@ import teamawesome.cs180frontend.R;
 
 public class SearchResultsActivity extends AppCompatActivity {
 
-    @Bind(R.id.activity_search_results) LinearLayout mParent;
+    @Bind(R.id.activity_search_results) CoordinatorLayout mParent;
     @Bind(R.id.results_list_view) ListView mResultsList;
 
     private String mProfessorName;
