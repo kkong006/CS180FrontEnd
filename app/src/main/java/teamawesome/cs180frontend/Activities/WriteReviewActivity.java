@@ -152,6 +152,9 @@ public class WriteReviewActivity extends AppCompatActivity {
         }
     }
 
+    @OnClick(R.id.write_rate_1)
+    public void writeRating1() { setStarColor(1); }
+
     @OnClick(R.id.write_rate_2)
     public void writeRating2() {
         setStarColor(2);
