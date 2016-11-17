@@ -20,6 +20,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
@@ -56,6 +57,8 @@ public class MainActivity extends AppCompatActivity {
     @Bind(R.id.fab) FloatingActionButton mFab;
     @Bind(R.id.feed_list_view) ListView mFeedList;
 
+    AdView ad;
+
     private NavDrawerAdapter mAdapter;
     private String[] mNavTitles;
     private String[] mIconTitles;
@@ -77,12 +80,9 @@ public class MainActivity extends AppCompatActivity {
 
         setSupportActionBar(mToolbar);
 
-        MobileAds.initialize(getApplicationContext(), "ca-app-pub-9554227058186629~9225396990");
-        AdView ad = (AdView) findViewById(R.id.adView);
-        AdRequest request = new AdRequest.Builder()
-                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-                .addTestDevice(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID))
-                .build();
+        MobileAds.initialize(getApplicationContext(), getString(R.string.banner_ad_unit_id));
+        ad = (AdView) findViewById(R.id.adView);
+        AdRequest request = new AdRequest.Builder().build();
         ad.loadAd(request);
 
         mNavTitles = getResources().getStringArray(R.array.nav_drawer_array);
