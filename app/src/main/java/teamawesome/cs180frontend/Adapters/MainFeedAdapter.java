@@ -6,6 +6,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
+import java.util.List;
+import java.util.ResourceBundle;
+
+import teamawesome.cs180frontend.API.Models.ReviewRespBundle;
+import teamawesome.cs180frontend.Misc.DataSingleton;
 import teamawesome.cs180frontend.Misc.ViewHolders.MainFeedViewHolder;
 import teamawesome.cs180frontend.Misc.ViewHolders.SearchResultsViewHolder;
 import teamawesome.cs180frontend.R;
@@ -16,34 +21,24 @@ import teamawesome.cs180frontend.R;
 
 public class MainFeedAdapter extends BaseAdapter{
 
-    private String[] mProfessorNames;
-    private int[] mRatings;
-    private String[] mClassNames;
-    private String[] mReviewDates;
-    private String[] mReviews;
-    private int[] mReviewIDs;
-
+    private List<ReviewRespBundle> reviewList;
     private Context mContext;
+    private DataSingleton data;
 
-    public MainFeedAdapter( Context mContext, String[] mProfessorNames, int[] mRatings, String[] mClassNames, String[] mReviewDates, String[] mReviews, int[] mReviewIDs) {
+    public MainFeedAdapter( Context mContext, List<ReviewRespBundle> reviewList) {
         this.mContext = mContext;
-        this.mProfessorNames = mProfessorNames;
-        this.mRatings = mRatings;
-        this.mClassNames = mClassNames;
-        this.mReviewDates = mReviewDates;
-        this.mReviewIDs = mReviewIDs;
-        this.mReviews = mReviews;
+        this.reviewList = reviewList;
+        this.data = DataSingleton.getInstance();
     }
-
 
     @Override
     public int getCount() {
-        return mProfessorNames.length;
+        return reviewList.size();
     }
 
     @Override
-    public int[] getItem(int position) {
-        return new int[] {mReviewIDs[position], mRatings[position]};
+    public ReviewRespBundle getItem(int position) {
+        return reviewList.get(position);
     }
 
     @Override
@@ -63,12 +58,12 @@ public class MainFeedAdapter extends BaseAdapter{
             holder = (MainFeedViewHolder) convertView.getTag();
         }
 
-        holder.professorTV.setText(mProfessorNames[position]);
-        holder.classNameTV.setText(mClassNames[position]);
-        holder.dateTV.setText(mReviewDates[position]);
-        holder.reviewTV.setText(mReviews[position]);
+        holder.professorTV.setText(data.getProfessorName(reviewList.get(position).getProfId()));
+        holder.classNameTV.setText(data.getClassName(reviewList.get(position).getClassId()));
+        holder.dateTV.setText(reviewList.get(position).getReviewDate());
+        holder.reviewTV.setText(reviewList.get(position).getMessage());
         for(int i = 0; i < 5; i++) {
-            if(i < mRatings[position]) {
+            if(i < reviewList.get(position).getRating()) {
                 holder.ratings[i].setTextColor(mContext.getResources().getColor(R.color.colorGreen));
             } else {
                 holder.ratings[i].setTextColor(mContext.getResources().getColor(R.color.colorGrey));

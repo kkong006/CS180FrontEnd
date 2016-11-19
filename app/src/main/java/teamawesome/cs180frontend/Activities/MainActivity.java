@@ -69,6 +69,8 @@ public class MainActivity extends AppCompatActivity {
     private MainFeedAdapter mFeedAdapter;
 
     ProgressDialog mProgressDialog;
+    DataSingleton data;
+
     private Integer apiCnt = new Integer(0);
 
     @Override
@@ -76,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        data = DataSingleton.getInstance();
         EventBus.getDefault().register(this);
 
         setSupportActionBar(mToolbar);
@@ -158,61 +161,11 @@ public class MainActivity extends AppCompatActivity {
         mProgressDialog.dismiss();
         System.out.println("REVIEW COUNT " + reviewList.size());
         if(reviewList != null) {
-            final int[] reviewIds = new int[reviewList.size()];
-            int[] classIds = new int[reviewList.size()];
-            int[] profIds = new int[reviewList.size()];
-            int[] ratings = new int[reviewList.size()];
-            final int[] userRatings = new int[reviewList.size()];
-            final String[] reviewDates = new String[reviewList.size()];
-            final String[] reviews = new String[reviewList.size()];
-            final String[] classes = new String[reviewList.size()];
-            final String[] professors = new String[reviewList.size()];
 
-            for(int i = 0; i < reviewList.size(); i++) {
-                reviewIds[i] = reviewList.get(i).getReviewId();
-                classIds[i] = reviewList.get(i).getClassId();
-                profIds[i] = reviewList.get(i).getProfId();
-                ratings[i] = reviewList.get(i).getRating();
-                userRatings[i] = reviewList.get(i).getReviewRating();
-                reviewDates[i] = reviewList.get(i).getReviewDate();
-                reviews[i] = reviewList.get(i).getMessage();
-                System.out.println("RATING " + reviewList.get(i).getReviewRating() + " REVIEW " + reviewList.get(i).getMessage());
-                classes[i] = DataSingleton.getInstance().getClassName(classIds[i]);
-                professors[i] = DataSingleton.getInstance().getProfessorName(profIds[i]);
-            }
-
-            mFeedAdapter = new MainFeedAdapter(this, professors, ratings, classes, reviewDates, reviews, reviewIds);
+            mFeedAdapter = new MainFeedAdapter(this, reviewList);
             mFeedList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
             mFeedList.setAdapter(mFeedAdapter);
-            mFeedList.setOnItemClickListener(new ListView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    int[] r = mFeedAdapter.getItem(position);
-                    if(r.length == 2) {
-                        int j = 0;
-                        for(; j < reviewIds.length; j++) {
-                            if(reviewIds[j] == r[0]) {
-                                break;
-                            }
-                        }
-                        if(j < reviewIds.length) {
-                            mPosition = j;
-                            Intent intent = new Intent(getBaseContext(), ReadReviewActivity.class);
-                            Bundle bundle = new Bundle();
-                            bundle.putInt(getString(R.string.REVIEW_ID), r[0]);
-                            bundle.putInt(getString(R.string.REVIEW_RATING), r[1]);
-                            System.out.println("PASSING USER RATING " + r[1]);
-                            bundle.putString(getString(R.string.REVIEW_CONTENT), reviews[j]);
-                            bundle.putString(getString(R.string.REVIEW_CLASS_NAME), classes[j]);
-                            bundle.putString(getString(R.string.REVIEW_DATE), reviewDates[j]);
-                            bundle.putInt(getString(R.string.REVIEW_USER_RATING), userRatings[j]);
-                            bundle.putString(getString(R.string.PROFESSOR_NAME), professors[j]);
-                            intent.putExtras(bundle);
-                            startActivity(intent);
-                        }
-                    }
-                }
-            });
+
             if(mPosition >= 0 && mPosition < reviewList.size()) {
                 mFeedList.setSelection(mPosition);
                 mPosition = 0;
@@ -222,6 +175,23 @@ public class MainActivity extends AppCompatActivity {
                 Utils.showSnackbar(this, parent, getString(R.string.reviews_dne));
             }
         }
+    }
+
+    @OnItemClick(R.id.feed_list_view)
+    public void onReviewClick(AdapterView<?> parent, View view, int position, long id) {
+        ReviewRespBundle review = mFeedAdapter.getItem(position);
+        Intent intent = new Intent(getBaseContext(), ReadReviewActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putInt(getString(R.string.REVIEW_ID), review.getReviewId());
+        bundle.putInt(getString(R.string.REVIEW_RATING), review.getRating());
+        System.out.println("PASSING USER RATING " + review.getReviewRating());
+        bundle.putString(getString(R.string.REVIEW_CONTENT), review.getMessage());
+        bundle.putString(getString(R.string.REVIEW_CLASS_NAME), data.getClassName(review.getClassId()));
+        bundle.putString(getString(R.string.REVIEW_DATE), review.getReviewDate());
+        bundle.putInt(getString(R.string.REVIEW_USER_RATING), review.getReviewRating());
+        bundle.putString(getString(R.string.PROFESSOR_NAME), data.getProfessorName(review.getProfId()));
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 
     @Subscribe
