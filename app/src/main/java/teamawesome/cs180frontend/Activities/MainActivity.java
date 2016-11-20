@@ -56,8 +56,7 @@ public class MainActivity extends AppCompatActivity {
     @Bind(R.id.main_layout) CoordinatorLayout parent;
     @Bind(R.id.fab) FloatingActionButton mFab;
     @Bind(R.id.feed_list_view) ListView mFeedList;
-
-    AdView ad;
+    @Bind(R.id.adView) AdView ad;
 
     private NavDrawerAdapter mAdapter;
     private String[] mNavTitles;
@@ -84,7 +83,6 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(mToolbar);
 
         MobileAds.initialize(getApplicationContext(), getString(R.string.banner_ad_unit_id));
-        ad = (AdView) findViewById(R.id.adView);
         AdRequest request = new AdRequest.Builder().build();
         ad.loadAd(request);
 
@@ -315,12 +313,12 @@ public class MainActivity extends AppCompatActivity {
         finish();
     }
 
-    @OnClick(R.id.fab)
-    public void onClick(View view) {
-        //TODO: Write review activity
-        Intent i = new Intent(this, WriteReviewActivity.class);
-        startActivity(i);
-    }
+//    @OnClick(R.id.fab)
+//    public void onClick(View view) {
+//        //TODO: Write review activity
+//        Intent i = new Intent(this, WriteReviewActivity.class);
+//        startActivity(i);
+//    }
 
     @Override
     protected void onRestart() {
