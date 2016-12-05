@@ -10,6 +10,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -55,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
     @Bind(R.id.drawer_list) ListView mDrawerList;
     @Bind(R.id.main_layout) CoordinatorLayout parent;
     @Bind(R.id.fab) FloatingActionButton mFab;
+    @Bind(R.id.main_srl) SwipeRefreshLayout mainSWL;
     @Bind(R.id.feed_list_view) ListView mFeedList;
     @Bind(R.id.adView) AdView ad;
 
@@ -85,6 +87,13 @@ public class MainActivity extends AppCompatActivity {
         MobileAds.initialize(getApplicationContext(), getString(R.string.banner_ad_unit_id));
         AdRequest request = new AdRequest.Builder().build();
         ad.loadAd(request);
+
+        mainSWL.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                //TO-DO: Implement refreshing
+            }
+        });
 
         mNavTitles = getResources().getStringArray(R.array.nav_drawer_array);
         mIconTitles = getResources().getStringArray(R.array.nav_drawer_icon_array);
