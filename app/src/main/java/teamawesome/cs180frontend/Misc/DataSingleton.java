@@ -21,12 +21,9 @@ public class DataSingleton {
     private ArrayList<ClassBundle> classCache;
     private ArrayList<ProfessorBundle> professorCache;
     private HashMap<String, Integer> schoolMap; //FOR O(1) access
-    private HashMap<Integer, String> schoolNameMap;
     private HashMap<String, Integer> subjectMap;
     private HashMap<String, Integer> classMap;
-    private HashMap<Integer, String> classNameMap;
     private HashMap<String, Integer> professorMap;
-    private HashMap<Integer, String> professorNameMap;
 
     public static DataSingleton getInstance() {
         if (instance == null) {
@@ -41,12 +38,9 @@ public class DataSingleton {
         classCache = new ArrayList<>();
         professorCache = new ArrayList<>();
         schoolMap = new HashMap<>();
-        schoolNameMap = new HashMap<>();
         subjectMap = new HashMap<>();
         classMap = new HashMap<>();
-        classNameMap = new HashMap<>();
         professorMap = new HashMap<>();
-        professorNameMap = new HashMap<>();
     }
 
     public void cacheDataBundle(CacheDataBundle data) {
@@ -55,18 +49,14 @@ public class DataSingleton {
         this.classCache.clear();
         this.professorCache.clear();
         this.schoolMap.clear();
-        this.schoolNameMap.clear();
         this.subjectMap.clear();
         this.classMap.clear();
-        this.classNameMap.clear();
         this.professorMap.clear();
-        this.professorNameMap.clear();
 
         schoolCache.addAll(data.getSchools());
 
         for (SchoolBundle s : schoolCache) {
             schoolMap.put(s.getSchoolName(), s.getSchoolId());
-            schoolNameMap.put(s.getSchoolId(), s.getSchoolName());
         }
 
         subjectCache.addAll(data.getSubjects());
@@ -77,13 +67,11 @@ public class DataSingleton {
         classCache.addAll(data.getClasses());
         for(ClassBundle c : classCache) {
             classMap.put(c.getClassName(), c.getClassId());
-            classNameMap.put(c.getClassId(), c.getClassName());
         }
 
         professorCache.addAll(data.getProfs());
         for(ProfessorBundle p : professorCache) {
             professorMap.put(p.getProfessorName(), p.getProfessorId());
-            professorNameMap.put(p.getProfessorId(), p.getProfessorName());
         }
     }
 
@@ -116,19 +104,13 @@ public class DataSingleton {
         return schoolMap.get(schoolName); //RETURNS NULL IF NO MATCH FOUND
     }
 
-    public String getSchoolName(Integer schoolId) { return schoolNameMap.get(schoolId); }
-
     public Integer getSubjectId(String subjectName) { return subjectMap.get(subjectName); }
 
     public Integer getClassId(String className) { return classMap.get(className); }
 
-    public String getClassName(Integer classId) { return classNameMap.get(classId); }
-
     public Integer getProfessorId(String profName) {
         return professorMap.get(profName);
     }
-
-    public String getProfessorName(Integer profId) { return professorNameMap.get(profId); }
 
     public ArrayList<SchoolBundle> getSchoolCache() { return schoolCache; }
 

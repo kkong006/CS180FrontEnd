@@ -58,10 +58,10 @@ public class MainFeedAdapter extends BaseAdapter{
             holder = (MainFeedViewHolder) convertView.getTag();
         }
 
-        holder.professorTV.setText(data.getProfessorName(reviewList.get(position).getProfId()));
-        holder.classNameTV.setText(data.getClassName(reviewList.get(position).getClassId()));
+        holder.professorTV.setText(reviewList.get(position).getProfName());
+        holder.classNameTV.setText(reviewList.get(position).getClassName());
         holder.dateTV.setText(reviewList.get(position).getReviewDate());
-        holder.reviewTV.setText(reviewList.get(position).getMessage());
+        holder.reviewTV.setText(reviewList.get(position).getReviewMsg());
         for(int i = 0; i < 5; i++) {
             if(i < reviewList.get(position).getRating()) {
                 holder.ratings[i].setTextColor(mContext.getResources().getColor(R.color.colorGreen));

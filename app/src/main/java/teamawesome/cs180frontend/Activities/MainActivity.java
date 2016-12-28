@@ -184,6 +184,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //TODO: Parcelate object instead
     @OnItemClick(R.id.feed_list_view)
     public void onReviewClick(AdapterView<?> parent, View view, int position, long id) {
         ReviewRespBundle review = mFeedAdapter.getItem(position);
@@ -191,12 +192,11 @@ public class MainActivity extends AppCompatActivity {
         Bundle bundle = new Bundle();
         bundle.putInt(getString(R.string.REVIEW_ID), review.getReviewId());
         bundle.putInt(getString(R.string.REVIEW_RATING), review.getRating());
-        System.out.println("PASSING USER RATING " + review.getReviewRating());
-        bundle.putString(getString(R.string.REVIEW_CONTENT), review.getMessage());
-        bundle.putString(getString(R.string.REVIEW_CLASS_NAME), data.getClassName(review.getClassId()));
+        bundle.putString(getString(R.string.REVIEW_CONTENT), review.getReviewMsg());
+        bundle.putString(getString(R.string.REVIEW_CLASS_NAME), review.getClassName());
         bundle.putString(getString(R.string.REVIEW_DATE), review.getReviewDate());
-        bundle.putInt(getString(R.string.REVIEW_USER_RATING), review.getReviewRating());
-        bundle.putString(getString(R.string.PROFESSOR_NAME), data.getProfessorName(review.getProfId()));
+        bundle.putInt(getString(R.string.REVIEW_USER_RATING), 0);
+        bundle.putString(getString(R.string.PROFESSOR_NAME), review.getProfName());
         intent.putExtras(bundle);
         startActivity(intent);
     }

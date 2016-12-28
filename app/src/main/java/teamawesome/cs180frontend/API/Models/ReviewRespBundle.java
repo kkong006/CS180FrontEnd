@@ -11,96 +11,67 @@ import java.io.Serializable;
 
 public class ReviewRespBundle implements Serializable {
 
-    @SerializedName("subject_id")
-    @Expose
-    private int subject_id;
-
     @SerializedName("review_id")
     @Expose
-    private int review_id;
+    private int reviewId;
 
     @SerializedName("review_date")
     @Expose
-    private String review_date;
+    private String reviewDate;
 
-    @SerializedName("school_id")
+    @SerializedName("prof_name")
     @Expose
-    private int school_id;
-
-//    @SerializedName("rating_id")
-//    @Expose
-//    private int rating_id;
-
-    @SerializedName("class_id")
-    @Expose
-    private int class_id;
+    private String profName;
 
     @SerializedName("rating")
     @Expose
     private int rating;
 
+    @SerializedName("school_name")
+    @Expose
+    private String schoolName;
+
+    @SerializedName("id")
+    @Expose
+    private String accountId;
+
     @SerializedName("message")
     @Expose
-    private String message;
+    private String reviewMsg;
 
-    @SerializedName("review_rating")
+    @SerializedName("class_name")
     @Expose
-    private int review_rating;
-
-    @SerializedName("prof_id")
-    @Expose
-    private int prof_id;
-
-    public ReviewRespBundle(int subject_id, int review_id, String review_date, int school_id, /*int rating_id,*/ int class_id, int rating, String message, int prof_id, int review_rating) {
-        this.subject_id = subject_id;
-        this.review_id = review_id;
-        this.review_date = review_date;
-        this.school_id = school_id;
-//        this.rating_id = rating_id;
-        this.class_id = class_id;
-        this.rating = rating;
-        this.message = message;
-        this.prof_id = prof_id;
-        this.review_rating = review_rating;
-    }
-
-    public int getSubjectId() {
-        return subject_id;
-    }
+    private String className;
 
     public int getReviewId() {
-        return review_id;
+        return reviewId;
     }
 
     public String getReviewDate() {
-        return review_date;
+        return reviewDate;
     }
 
-    public int getSchool_id() {
-        return school_id;
-    }
-
-//    public int getRatingId() {
-//        return rating_id;
-//    }
-
-    public int getClassId() {
-        return class_id;
+    public String getProfName() {
+        return profName;
     }
 
     public int getRating() {
         return rating;
     }
 
-    public String getMessage() {
-        return message;
+    public String getSchoolName() {
+        return schoolName;
     }
 
-    public int getProfId() {
-        return prof_id;
+    public String getAccountId() {
+        return accountId;
     }
 
-    public int getReviewRating() {
-        return review_rating;
+    public String getReviewMsg() {
+        return reviewMsg;
+    }
+
+    public String getClassName() {
+        return className;
     }
 }
