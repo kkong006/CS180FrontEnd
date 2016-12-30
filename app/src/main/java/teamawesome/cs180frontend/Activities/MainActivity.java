@@ -3,6 +3,7 @@ package teamawesome.cs180frontend.Activities;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.provider.ContactsContract;
 import android.provider.Settings;
 import android.support.design.widget.CoordinatorLayout;
@@ -134,7 +135,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getFeed() {
-        System.out.println("MAKING CALL TO GET FEED REVIEWS " + Utils.getSchoolId(this) + " " + DataSingleton.getInstance().getSchoolName(Utils.getSchoolId(this)) + " " +  Utils.getUserId(this));
         mProgressDialog.show();
         RetrofitSingleton.getInstance()
                 .getMatchingService()
@@ -189,15 +189,16 @@ public class MainActivity extends AppCompatActivity {
     public void onReviewClick(AdapterView<?> parent, View view, int position, long id) {
         ReviewRespBundle review = mFeedAdapter.getItem(position);
         Intent intent = new Intent(getBaseContext(), ReadReviewActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putInt(getString(R.string.REVIEW_ID), review.getReviewId());
-        bundle.putInt(getString(R.string.REVIEW_RATING), review.getRating());
-        bundle.putString(getString(R.string.REVIEW_CONTENT), review.getReviewMsg());
-        bundle.putString(getString(R.string.REVIEW_CLASS_NAME), review.getClassName());
-        bundle.putString(getString(R.string.REVIEW_DATE), review.getReviewDate());
-        bundle.putInt(getString(R.string.REVIEW_USER_RATING), 0);
-        bundle.putString(getString(R.string.PROFESSOR_NAME), review.getProfName());
-        intent.putExtras(bundle);
+//        Bundle bundle = new Bundle();
+//        bundle.putInt(getString(R.string.REVIEW_ID), review.getReviewId());
+//        bundle.putInt(getString(R.string.REVIEW_RATING), review.getRating());
+//        bundle.putString(getString(R.string.REVIEW_CONTENT), review.getReviewMsg());
+//        bundle.putString(getString(R.string.REVIEW_CLASS_NAME), review.getClassName());
+//        bundle.putString(getString(R.string.REVIEW_DATE), review.getReviewDate());
+//        bundle.putInt(getString(R.string.REVIEW_USER_RATING), 0);
+//        bundle.putString(getString(R.string.PROFESSOR_NAME), review.getProfName());
+        //Switching to parcelation. Parcelable tag needed to resolve ambiguity.
+        intent.putExtra("review", (Parcelable) review);
         startActivity(intent);
     }
 

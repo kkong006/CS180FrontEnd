@@ -1,5 +1,8 @@
 package teamawesome.cs180frontend.API.Models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -9,7 +12,7 @@ import java.io.Serializable;
  * Created by KongK on 10/24/2016.
  */
 
-public class ReviewRespBundle implements Serializable {
+public class ReviewRespBundle implements Serializable, Parcelable {
 
     @SerializedName("review_id")
     @Expose
@@ -33,7 +36,7 @@ public class ReviewRespBundle implements Serializable {
 
     @SerializedName("id")
     @Expose
-    private String accountId;
+    private int accountId;
 
     @SerializedName("message")
     @Expose
@@ -63,7 +66,7 @@ public class ReviewRespBundle implements Serializable {
         return schoolName;
     }
 
-    public String getAccountId() {
+    public int getAccountId() {
         return accountId;
     }
 
@@ -74,4 +77,44 @@ public class ReviewRespBundle implements Serializable {
     public String getClassName() {
         return className;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.reviewId);
+        dest.writeString(this.reviewDate);
+        dest.writeString(this.profName);
+        dest.writeInt(this.rating);
+        dest.writeString(this.schoolName);
+        dest.writeInt(this.accountId);
+        dest.writeString(this.reviewMsg);
+        dest.writeString(this.className);
+    }
+
+    protected ReviewRespBundle(Parcel p) {
+        this.reviewId = p.readInt();
+        this.reviewDate = p.readString();
+        this.profName = p.readString();
+        this.rating = p.readInt();
+        this.schoolName = p.readString();
+        this.accountId = p.readInt();
+        this.reviewMsg = p.readString();
+        this.className = p.readString();
+    }
+
+    public static final Parcelable.Creator<ReviewRespBundle> CREATOR = new Parcelable.Creator<ReviewRespBundle>() {
+        public ReviewRespBundle createFromParcel(Parcel source) {
+            return new ReviewRespBundle(source);
+        }
+
+        public ReviewRespBundle[] newArray(int size) {
+            return new ReviewRespBundle[size];
+        }
+    };
+
+
 }

@@ -21,6 +21,7 @@ import butterknife.OnClick;
 import retrofit2.Callback;
 import teamawesome.cs180frontend.API.Models.RateReview;
 import teamawesome.cs180frontend.API.Models.RatingId;
+import teamawesome.cs180frontend.API.Models.ReviewRespBundle;
 import teamawesome.cs180frontend.API.RetrofitSingleton;
 import teamawesome.cs180frontend.API.Services.Callbacks.GetReviewsCallback;
 import teamawesome.cs180frontend.API.Services.Callbacks.PostReviewRatingCallback;
@@ -48,14 +49,9 @@ public class ReadReviewActivity extends AppCompatActivity {
     @Bind(R.id.read_dislike_count_tv) TextView mDislikeCount;
 
     private TextView[] mRatings;
-    private int mReviewId;
-    private int mReviewRating;
-    private String mReviewContent;
-    private String mReviewClassName;
-    private String mDate;
-    private int mUserRating;
+    ReviewRespBundle review;
+    private int mUserRating = 0;
     private int mNewUserRating;
-    private String mProfessorName;
 
     private ProgressDialog mProgressDialog;
 
@@ -83,22 +79,21 @@ public class ReadReviewActivity extends AppCompatActivity {
         mRatings = new TextView[] {mRate1, mRate2, mRate3, mRate4, mRate5};
 
         Bundle bundle = getIntent().getExtras();
-        mReviewId = bundle.getInt(getString(R.string.REVIEW_ID));
-        mReviewRating = bundle.getInt(getString(R.string.REVIEW_RATING));
-        mReviewContent = bundle.getString(getString(R.string.REVIEW_CONTENT));
-        mReviewClassName = bundle.getString(getString(R.string.REVIEW_CLASS_NAME));
-        mDate = bundle.getString(getString(R.string.REVIEW_DATE));
-        mUserRating = bundle.getInt(getString(R.string.REVIEW_USER_RATING));
-        mProfessorName = bundle.getString(getString(R.string.PROFESSOR_NAME));
+        review = bundle.getParcelable("review");
+//        mReviewId = bundle.getInt(getString(R.string.REVIEW_ID));
+//        mReviewRating = bundle.getInt(getString(R.string.REVIEW_RATING));
+//        mReviewContent = bundle.getString(getString(R.string.REVIEW_CONTENT));
+//        mReviewClassName = bundle.getString(getString(R.string.REVIEW_CLASS_NAME));
+//        mDate = bundle.getString(getString(R.string.REVIEW_DATE));
+//        mUserRating = bundle.getInt(getString(R.string.REVIEW_USER_RATING));
+//        mProfessorName = bundle.getString(getString(R.string.PROFESSOR_NAME));
 
-        System.out.println("READ REVIEW USER RATING " + mUserRating);
+        getSupportActionBar().setTitle(review.getProfName());
+        mClassName.setText(review.getClassName());
+        mReviewDate.setText(review.getReviewDate());
+        mReviewText.setText(review.getReviewMsg());
 
-        getSupportActionBar().setTitle(mProfessorName);
-        mClassName.setText(mReviewClassName);
-        mReviewDate.setText(mDate);
-        mReviewText.setText(mReviewContent);
-
-        for(int i = 0; i < mReviewRating && i < 5; i++) {
+        for(int i = 0; i < review.getRating() && i < 5; i++) {
             mRatings[i].setTextColor(getResources().getColor(R.color.colorGreen));
         }
 
@@ -122,13 +117,12 @@ public class ReadReviewActivity extends AppCompatActivity {
     }
 
     public void updateResponse() {
-
         if(mUserRating != mNewUserRating) {
             mProgressDialog.show();
             int userId = Utils.getUserId(this);
             String password = Utils.getPassword(this);
-            System.out.println("USER ID " + userId + "\nPASSWORD " + password + "\nREVIEW ID " + mReviewId + "\nUSER RATING " + mUserRating + "\nNEW USER RATING " + mNewUserRating);
-            RateReview r = new RateReview(userId, password, mReviewId, mNewUserRating);
+            //System.out.println("USER ID " + userId + "\nPASSWORD " + password + "\nREVIEW ID " + mReviewId + "\nUSER RATING " + mUserRating + "\nNEW USER RATING " + mNewUserRating);
+            RateReview r = new RateReview(userId, password, review.getReviewId(), mNewUserRating);
             Callback callback = new PostReviewRatingCallback();
             RetrofitSingleton.getInstance().getUserService()
                     .rateReview(r)
