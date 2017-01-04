@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">De-Classify</string>
+    <string name="app_name">de-classify</string>
 
     <!--Shared Preferences-->
     <string name="USER_ID">USER_ID</string>

@@ -8,6 +8,9 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Toast;
 
+import java.util.List;
+
+import teamawesome.cs180frontend.API.Models.ReviewRespBundle;
 import teamawesome.cs180frontend.Misc.Review;
 import teamawesome.cs180frontend.Misc.ViewHolders.SearchResultsViewHolder;
 import teamawesome.cs180frontend.R;
@@ -18,31 +21,22 @@ import teamawesome.cs180frontend.R;
 
 public class SearchResultsAdapter extends BaseAdapter{
 
-    private String[] mClassNames;
-    private int[] mRatings;
-    private String[] mReviewDates;
-    private String[] mReviewContents;
-    private int[] mReviewIDs;
-    private Context mContext;
+    private Context context;
+    private List<ReviewRespBundle> reviews;
 
-    public SearchResultsAdapter(Context context, String[] classes,
-            int[] ratings, String[] reviewDates, String[] reviews, int[] reviewIDs) {
-        this.mContext = context;
-        this.mClassNames = classes;
-        this.mRatings = ratings;
-        this.mReviewDates = reviewDates;
-        this.mReviewContents = reviews;
-        this.mReviewIDs = reviewIDs;
+    public SearchResultsAdapter(Context context, List<ReviewRespBundle> reviews) {
+        this.context = context;
+        this.reviews = reviews;
     }
 
     @Override
     public int getCount() {
-        return mClassNames.length;
+        return reviews.size();
     }
 
     @Override
-    public int[] getItem(int position) {
-        return new int[] {mReviewIDs[position], mRatings[position]};
+    public ReviewRespBundle getItem(int position) {
+        return reviews.get(position);
     }
 
     @Override
@@ -54,7 +48,7 @@ public class SearchResultsAdapter extends BaseAdapter{
     public View getView(int position, View convertView, ViewGroup parent) {
         SearchResultsViewHolder holder;
         if(convertView == null) {
-            LayoutInflater vi = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater vi = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = vi.inflate(R.layout.list_item_search_results, parent, false);
             holder = new SearchResultsViewHolder(convertView);
             convertView.setTag(holder);
@@ -63,19 +57,19 @@ public class SearchResultsAdapter extends BaseAdapter{
             holder = (SearchResultsViewHolder) convertView.getTag();
         }
 
-        holder.className.setText(mClassNames[position]);
-        holder.reviewDate.setText(mReviewDates[position]);
-        holder.reviewContents.setText(mReviewContents[position]);
+        holder.className.setText(reviews.get(position).getClassName());
+        holder.reviewDate.setText(reviews.get(position).getReviewDate());
+        holder.reviewContents.setText(reviews.get(position).getReviewMsg());
         for(int i = 0; i < 5; i++) {
-            if(i < mRatings[position]) {
-                holder.rating[i].setTextColor(mContext.getResources().getColor(R.color.colorGreen));
+            if(i < reviews.get(position).getRating()) {
+                holder.rating[i].setTextColor(context.getResources().getColor(R.color.colorGreen));
             } else {
-                holder.rating[i].setTextColor(mContext.getResources().getColor(R.color.colorGrey));
+                holder.rating[i].setTextColor(context.getResources().getColor(R.color.colorGrey));
             }
         }
 
         if(position == 0) {
-            convertView.setBackgroundColor(mContext.getResources().getColor(R.color.colorWhite));
+            convertView.setBackgroundColor(context.getResources().getColor(R.color.colorWhite));
         }
 
         return convertView;

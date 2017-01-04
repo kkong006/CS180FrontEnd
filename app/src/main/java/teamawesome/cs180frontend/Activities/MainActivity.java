@@ -153,7 +153,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Subscribe
     public void dataResp(CacheDataBundle data) {
-        mProgressDialog.dismiss();
         DataSingleton.getInstance().cacheDataBundle(data);
         System.out.println("SCHOOL ID " + Utils.getSchoolId(this));
         System.out.println("SCHOOL SIZE " + DataSingleton.getInstance().getSchoolCache().size());
@@ -188,16 +187,7 @@ public class MainActivity extends AppCompatActivity {
     @OnItemClick(R.id.feed_list_view)
     public void onReviewClick(AdapterView<?> parent, View view, int position, long id) {
         ReviewRespBundle review = mFeedAdapter.getItem(position);
-        Intent intent = new Intent(getBaseContext(), ReadReviewActivity.class);
-//        Bundle bundle = new Bundle();
-//        bundle.putInt(getString(R.string.REVIEW_ID), review.getReviewId());
-//        bundle.putInt(getString(R.string.REVIEW_RATING), review.getRating());
-//        bundle.putString(getString(R.string.REVIEW_CONTENT), review.getReviewMsg());
-//        bundle.putString(getString(R.string.REVIEW_CLASS_NAME), review.getClassName());
-//        bundle.putString(getString(R.string.REVIEW_DATE), review.getReviewDate());
-//        bundle.putInt(getString(R.string.REVIEW_USER_RATING), 0);
-//        bundle.putString(getString(R.string.PROFESSOR_NAME), review.getProfName());
-        //Switching to parcelation. Parcelable tag needed to resolve ambiguity.
+        Intent intent = new Intent(this, ReadReviewActivity.class);
         intent.putExtra("review", (Parcelable) review);
         startActivity(intent);
     }
@@ -291,6 +281,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    //pretty sure something's wrong with the onActivityResult logic.
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
         if (requestCode == 1) {
@@ -323,12 +314,6 @@ public class MainActivity extends AppCompatActivity {
         finish();
     }
 
-//    @OnClick(R.id.fab)
-//    public void onClick(View view) {
-//        //TODO: Write review activity
-//        Intent i = new Intent(this, WriteReviewActivity.class);
-//        startActivity(i);
-//    }
 
     @Override
     protected void onRestart() {
