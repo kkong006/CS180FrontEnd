@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -25,29 +26,11 @@ public class SearchActivity extends AppCompatActivity {
 
     @Bind(R.id.activity_search) CoordinatorLayout mParent;
     @Bind(R.id.search_professor_et) AutoCompleteTextView mProfessorName;
-//    @Bind(R.id.search_class_et) AutoCompleteTextView mClassName;
-//    @Bind(R.id.search_school_et) AutoCompleteTextView mSchoolName;
     @Bind(R.id.search_search_bt) Button mSearch;
 
     private List<ProfessorBundle> mProfessors;
-//    private List<ClassBundle> mClasses;
-//    private List<SchoolBundle> mSchools;
-
     private String[] mProfessorNames;
-//    private String[] mClassNames;
-//    private String[] mSchoolNames;
-
     private String mUserProfessorName;
-//    private String mUserClassName;
-//    private String mUserSchoolName;
-
-//    private ProgressDialog mProgressDialog;
-
-//    private String mProfessor;
-//    private ProfessorBundle mReturnedProfessor;
-
-//    public static final String PROFESSOR_NAME = "PROFESSOR_NAME";
-//    public static final String CLASS_NAME = "CLASS_NAME";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,20 +58,6 @@ public class SearchActivity extends AppCompatActivity {
                 mUserProfessorName = parent.getItemAtPosition(position).toString();
             }
         });
-
-//        mClasses = DataSingleton.getInstance().getClassCache();
-//        mClassNames = new String[mClasses.size()];
-//        for(int i = 0; i < mClasses.size(); i++) {
-//            mClassNames[i] = mClasses.get(i).getClassName();
-//        }
-//        ArrayAdapter<String> classAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, mClassNames);
-//        mClassName.setAdapter(classAdapter);
-//        mClassName.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                mUserClassName = parent.getItemAtPosition(position).toString();
-//            }
-//        });
     }
 
     @OnClick(R.id.search_search_bt)
@@ -104,9 +73,6 @@ public class SearchActivity extends AppCompatActivity {
             } else {
                 mProfessorName.setError(getString(R.string.professor_dne));
             }
-//            if(!classId.equals(null)) {
-//                mUserClassName = className;
-//            }
         }
 
         if(mUserProfessorName == "") {
@@ -118,6 +84,17 @@ public class SearchActivity extends AppCompatActivity {
             i.putExtra(getString(R.string.PROFESSOR_NAME), mUserProfessorName);
             i.putExtra(getString(R.string.PROFESSOR_ID), profId);
             startActivity(i);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                return true;
         }
     }
 }

@@ -5,6 +5,7 @@ import android.provider.ContactsContract;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -81,6 +82,17 @@ public class SearchProfessorActivity extends AppCompatActivity {
             intent.putExtra(getString(R.string.PROFESSOR_NAME), mSearchProfessorName);
             intent.putExtra(getString(R.string.PROFESSOR_ID), profId);
             startActivity(intent);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                return true;
         }
     }
 }

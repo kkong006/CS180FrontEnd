@@ -43,20 +43,13 @@ public class LoginActivity extends AppCompatActivity {
     private LoginRegisterBundle loginRegisterBundle;
 
     // UI references.
-    @Bind(R.id.login_parent)
-    CoordinatorLayout parent;
-    @Bind(R.id.number)
-    EditText phoneEditText;
-    @Bind(R.id.password)
-    EditText mPasswordView;
-    @Bind(R.id.login_form)
-    View mLoginFormView;
-    @Bind(R.id.sign_in_button)
-    Button signInButton;
-    @Bind(R.id.register_text)
-    TextView registerTextView;
-    @Bind(R.id.school_auto_complete)
-    AutoCompleteTextView acTV;
+    @Bind(R.id.login_parent) CoordinatorLayout parent;
+    @Bind(R.id.number) EditText phoneEditText;
+    @Bind(R.id.password) EditText mPasswordView;
+    @Bind(R.id.login_form) View mLoginFormView;
+    @Bind(R.id.sign_in_button) Button signInButton;
+    @Bind(R.id.register_text) TextView registerTextView;
+    @Bind(R.id.school_auto_complete) AutoCompleteTextView acTV;
 
     ProgressDialog progressDialog;
     SimpleListAdapter adapter;

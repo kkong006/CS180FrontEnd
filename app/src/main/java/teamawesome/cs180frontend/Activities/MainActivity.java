@@ -154,11 +154,6 @@ public class MainActivity extends AppCompatActivity {
     @Subscribe
     public void dataResp(CacheDataBundle data) {
         DataSingleton.getInstance().cacheDataBundle(data);
-        System.out.println("SCHOOL ID " + Utils.getSchoolId(this));
-        System.out.println("SCHOOL SIZE " + DataSingleton.getInstance().getSchoolCache().size());
-        System.out.println("PROFESSOR SIZE " + DataSingleton.getInstance().getProfessorCache().size());
-        System.out.println("CLASS SIZE " + DataSingleton.getInstance().getClassCache().size());
-        System.out.println("SUBJECT SIZE " + DataSingleton.getInstance().getSubjectCache().size());
         getFeed();
     }
 
@@ -251,24 +246,16 @@ public class MainActivity extends AppCompatActivity {
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         mDrawerLayout.closeDrawer(GravityCompat.START);
         if (position == 0) {
-            //Home Feed
-        } else if (position == 1) {
+            return;
+        } /*else if (position == 1) {
             //Search for reviews
             Intent i = new Intent(getApplicationContext(), SearchActivity.class);
             startActivity(i);
-        } else if (position == 2) {
+        }*/ else if (position == 2) {
             //Search for professor stats
             Intent intent = new Intent(getApplicationContext(), SearchProfessorActivity.class);
             startActivity(intent);
-
         }
-//        else if (position == 3) {
-//            //Show user reviews
-////            Intent i = new Intent(getApplicationContext(), MyReviewsActivity.class);
-////            startActivity(i);
-//            Intent i = new Intent(getApplicationContext(), SearchResultsActivity.class);
-//            startActivity(i);
-//        }
         else if (position == 3) {
             //Login or logout
             if (mAdapter.getItem(position).equals(getString(R.string.login))) {
@@ -287,7 +274,7 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
                 mAdapter.changeLoginElem();
-                System.out.println(Utils.getSchoolId(this));
+                System.out.println("ONACTIITYRESULT");
 
                 //Creating a new one since progressDialog could still possibly be null
                 mProgressDialog = new ProgressDialog(this);
@@ -314,23 +301,9 @@ public class MainActivity extends AppCompatActivity {
         finish();
     }
 
-
     @Override
-    protected void onRestart() {
-        super.onRestart();
-        EventBus.getDefault().register(this);
-        getData();
-    }
-
-    @Override
-    protected void onStop() {
+    public void onDestroy() {
         EventBus.getDefault().unregister(this);
-        super.onStop();
+        super.onDestroy();
     }
-
-//    @Override
-//    public void onDestroy() {
-//        EventBus.getDefault().unregister(this);
-//        super.onDestroy();
-//    }
 }
