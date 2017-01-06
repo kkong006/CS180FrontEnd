@@ -14,20 +14,14 @@ import teamawesome.cs180frontend.API.Models.ReviewRespBundle;
  */
 
 public interface MatchingService {
-    /*@GET("/search")
-    Call<Professor> search(@Query("professor_name") String name,
-                           @Query("school_id") int school_id);*/
 
     @GET("/getData")
     Call<CacheDataBundle> getData(@Query("school_id") int school_id);
 
     @GET("/reviews")
-    Call<List<ReviewRespBundle>> reviewsProfessor(@Query("prof_id") int prof_id,
-                                         @Query("user_id") int user_id);
-
-    @GET("/reviews")
-    Call<List<ReviewRespBundle>> reviewsSchool(@Query("school_id") int school_id,
-                                         @Query("user_id") int user_id);
+    Call<List<ReviewRespBundle>> reviews(@Query("prof_id") Integer prof_id,
+                                         @Query("school_id") Integer school_id,
+                                         @Query("user_id") Integer user_id);
 
     @GET("/professor")
     Call<ProfessorRespBundle> getProfessorSummary(@Query("prof_id") int prof_id);

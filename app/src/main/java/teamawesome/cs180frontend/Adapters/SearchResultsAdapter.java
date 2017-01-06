@@ -1,17 +1,14 @@
 package teamawesome.cs180frontend.Adapters;
 
 import android.content.Context;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Toast;
 
 import java.util.List;
 
 import teamawesome.cs180frontend.API.Models.ReviewRespBundle;
-import teamawesome.cs180frontend.Misc.Review;
 import teamawesome.cs180frontend.Misc.ViewHolders.SearchResultsViewHolder;
 import teamawesome.cs180frontend.R;
 

@@ -73,7 +73,7 @@ public class SearchResultsActivity extends AppCompatActivity {
         mProgressDialog.show();
         Callback callback = new GetReviewsCallback();
         RetrofitSingleton.getInstance().getMatchingService()
-                .reviewsProfessor(mProfessorId, Utils.getUserId(this))
+                .reviews(mProfessorId, null, Utils.getUserId(this))
                 .enqueue(callback);
     }
 

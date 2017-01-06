@@ -4,11 +4,8 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.provider.ContactsContract;
-import android.provider.Settings;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -22,11 +19,9 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
-import com.squareup.okhttp.internal.Util;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -35,7 +30,6 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import butterknife.OnItemClick;
 import teamawesome.cs180frontend.API.Models.CacheDataBundle;
 import teamawesome.cs180frontend.API.Models.ReviewRespBundle;
@@ -44,9 +38,7 @@ import teamawesome.cs180frontend.API.Services.Callbacks.GetCacheDataCallback;
 import teamawesome.cs180frontend.API.Services.Callbacks.GetReviewsCallback;
 import teamawesome.cs180frontend.Adapters.MainFeedAdapter;
 import teamawesome.cs180frontend.Adapters.NavDrawerAdapter;
-import teamawesome.cs180frontend.Misc.Constants;
 import teamawesome.cs180frontend.Misc.DataSingleton;
-import teamawesome.cs180frontend.Misc.SPSingleton;
 import teamawesome.cs180frontend.Misc.Utils;
 import teamawesome.cs180frontend.R;
 
@@ -138,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
         mProgressDialog.show();
         RetrofitSingleton.getInstance()
                 .getMatchingService()
-                .reviewsSchool(Utils.getSchoolId(this), Utils.getUserId(this))
+                .reviews(null, Utils.getSchoolId(this), Utils.getUserId(this))
                 .enqueue(new GetReviewsCallback());
     }
 

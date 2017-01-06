@@ -1,16 +1,12 @@
 package teamawesome.cs180frontend.Activities;
 
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -20,15 +16,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import retrofit2.Callback;
 import teamawesome.cs180frontend.API.Models.RateReview;
-import teamawesome.cs180frontend.API.Models.RatingId;
 import teamawesome.cs180frontend.API.Models.ReviewRespBundle;
 import teamawesome.cs180frontend.API.RetrofitSingleton;
-import teamawesome.cs180frontend.API.Services.Callbacks.GetReviewsCallback;
 import teamawesome.cs180frontend.API.Services.Callbacks.PostReviewRatingCallback;
-import teamawesome.cs180frontend.API.Services.Callbacks.PostUpdateAccountCallback;
-import teamawesome.cs180frontend.Misc.Constants;
-import teamawesome.cs180frontend.Misc.Review;
-import teamawesome.cs180frontend.Misc.SPSingleton;
 import teamawesome.cs180frontend.Misc.Utils;
 import teamawesome.cs180frontend.R;
 
@@ -80,15 +70,12 @@ public class ReadReviewActivity extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
         review = bundle.getParcelable("review");
-//        mReviewId = bundle.getInt(getString(R.string.REVIEW_ID));
-//        mReviewRating = bundle.getInt(getString(R.string.REVIEW_RATING));
-//        mReviewContent = bundle.getString(getString(R.string.REVIEW_CONTENT));
-//        mReviewClassName = bundle.getString(getString(R.string.REVIEW_CLASS_NAME));
-//        mDate = bundle.getString(getString(R.string.REVIEW_DATE));
-//        mUserRating = bundle.getInt(getString(R.string.REVIEW_USER_RATING));
-//        mProfessorName = bundle.getString(getString(R.string.PROFESSOR_NAME));
 
         getSupportActionBar().setTitle(review.getProfName());
+        loadReview();
+    }
+
+    public void loadReview() {
         mClassName.setText(review.getClassName());
         mReviewDate.setText(review.getReviewDate());
         mReviewText.setText(review.getReviewMsg());
@@ -100,6 +87,7 @@ public class ReadReviewActivity extends AppCompatActivity {
         mNewUserRating = 0;
 
         setUserRating();
+
     }
 
     private void setUserRating() {
