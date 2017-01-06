@@ -65,9 +65,7 @@ public class SearchActivity extends AppCompatActivity {
 
         if(mUserProfessorName == "") {
             String professorName = mProfessorName.getText().toString();
-//            String className = mClassName.getText().toString();
             Integer profId = DataSingleton.getInstance().getProfessorId(professorName);
-//            Integer classId = DataSingleton.getInstance().getClassId(className);
             if(profId != null) {
                 mUserProfessorName = professorName;
             } else {

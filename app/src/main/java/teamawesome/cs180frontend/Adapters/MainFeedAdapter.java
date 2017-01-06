@@ -31,6 +31,18 @@ public class MainFeedAdapter extends BaseAdapter{
         this.data = DataSingleton.getInstance();
     }
 
+    public void append(List<ReviewRespBundle> reviewPage) {
+        if (reviewList.size() != 0 && reviewList.get(reviewList.size() - 1) == null) {
+            reviewList.remove(reviewList.size() - 1);
+        }
+
+        reviewList.addAll(reviewPage);
+        if (reviewPage.size() >= 10) {
+            reviewList.add(null);
+        }
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getCount() {
         return reviewList.size();
@@ -58,20 +70,28 @@ public class MainFeedAdapter extends BaseAdapter{
             holder = (MainFeedViewHolder) convertView.getTag();
         }
 
-        holder.professorTV.setText(reviewList.get(position).getProfName());
-        holder.classNameTV.setText(reviewList.get(position).getClassName());
-        holder.dateTV.setText(reviewList.get(position).getReviewDate());
-        holder.reviewTV.setText(reviewList.get(position).getReviewMsg());
-        for(int i = 0; i < 5; i++) {
-            if(i < reviewList.get(position).getRating()) {
-                holder.ratings[i].setTextColor(mContext.getResources().getColor(R.color.colorGreen));
-            } else {
-                holder.ratings[i].setTextColor(mContext.getResources().getColor(R.color.colorGrey));
-            }
-        }
+        if (reviewList.get(position) != null) {
+            holder.cardView.setVisibility(View.VISIBLE);
+            holder.loadingLayout.setVisibility(View.GONE);
 
-        if(position == 0) {
-            convertView.setBackgroundColor(mContext.getResources().getColor(R.color.colorWhite));
+            holder.professorTV.setText(reviewList.get(position).getProfName());
+            holder.classNameTV.setText(reviewList.get(position).getClassName());
+            holder.dateTV.setText(reviewList.get(position).getReviewDate());
+            holder.reviewTV.setText(reviewList.get(position).getReviewMsg());
+            for (int i = 0; i < 5; i++) {
+                if (i < reviewList.get(position).getRating()) {
+                    holder.ratings[i].setTextColor(mContext.getResources().getColor(R.color.colorGreen));
+                } else {
+                    holder.ratings[i].setTextColor(mContext.getResources().getColor(R.color.colorGrey));
+                }
+            }
+
+            if (position == 0) {
+                convertView.setBackgroundColor(mContext.getResources().getColor(R.color.colorWhite));
+            }
+        } else {
+            holder.loadingLayout.setVisibility(View.GONE);
+            holder.loadingLayout.setVisibility(View.VISIBLE);
         }
 
         return convertView;

@@ -18,12 +18,6 @@ public interface UserService {
     @POST("/updateAccount")
     Call<Void> updateAccount(@Body UpdateUserBundle updateUserBundle);
 
-    @POST("/review")
-    Call<ReviewIDRespBundle> review(@Body UserReview userReview);
-
-    @POST("/rateReview")
-    Call<Void> rateReview(@Body RateReview rateReview);
-
     @POST("/login")
     Call<UserRespBundle> login(@Body LoginRegisterBundle loginRegisterBundle);
 

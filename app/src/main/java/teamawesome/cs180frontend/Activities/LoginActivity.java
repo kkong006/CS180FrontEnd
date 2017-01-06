@@ -52,8 +52,6 @@ public class LoginActivity extends AppCompatActivity {
     @Bind(R.id.school_auto_complete) AutoCompleteTextView acTV;
 
     ProgressDialog progressDialog;
-    SimpleListAdapter adapter;
-    TranslateAnimation animation;
     boolean loginMode = true;
 
     @Override
@@ -219,11 +217,6 @@ public class LoginActivity extends AppCompatActivity {
         System.out.println("SUBJECT SIZE " + DataSingleton.getInstance().getSubjectCache().size());
 
         setSchoolOptions();
-//        acTV.setVisibility(View.GONE);
-//        adapter = new SimpleListAdapter(this, R.layout.simple_list_item,
-//                DataSingleton.getInstance().getSchoolCache());
-//        acTV.setAdapter(adapter);
-//        acTV.setThreshold(1);
     }
 
     @Subscribe

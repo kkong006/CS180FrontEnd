@@ -199,7 +199,7 @@ public class WriteReviewActivity extends AppCompatActivity {
     public void submitReview(UserReview r) {
         mProgressDialog.show();
         Callback callback = new PostReviewCallback();
-        RetrofitSingleton.getInstance().getUserService()
+        RetrofitSingleton.getInstance().getMatchingService()
                 .review(r)
                 .enqueue(callback);
     }

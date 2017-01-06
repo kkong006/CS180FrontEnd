@@ -6,6 +6,7 @@
     <string name="PASSWORD">PASSWORD</string>
     <string name="SCHOOL_ID">SCHOOL_ID</string>
 
+    <string name="home">Home</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_login">Sign in</string>
     <string name="login">Login</string>
@@ -19,9 +20,8 @@
     <!--Navigation Drawer-->
     <string-array name="nav_drawer_array">
         <item>Home</item>
-        <item>Search</item>
+        <item>My Reviews</item>
         <item>Find a Professor</item>
-        <!--<item>My Reviews</item>-->
         <item>Logout</item>
     </string-array>
 

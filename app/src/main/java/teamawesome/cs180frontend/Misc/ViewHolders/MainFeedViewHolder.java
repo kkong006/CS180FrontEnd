@@ -1,6 +1,8 @@
 package teamawesome.cs180frontend.Misc.ViewHolders;
 
+import android.support.v7.widget.CardView;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import butterknife.Bind;
@@ -21,6 +23,8 @@ public class MainFeedViewHolder {
     @Bind(R.id.main_feed_rate_4) public TextView fourTV;
     @Bind(R.id.main_feed_rate_5) public TextView fiveTV;
     @Bind(R.id.main_feed_review_tv) public TextView reviewTV;
+    @Bind(R.id.card_view) public CardView cardView;
+    @Bind(R.id.loadingLayout) public LinearLayout loadingLayout;
 
     public TextView[] ratings;
 

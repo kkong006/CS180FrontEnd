@@ -15,6 +15,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -26,6 +28,7 @@ import com.google.android.gms.ads.MobileAds;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -51,21 +54,20 @@ public class MainActivity extends AppCompatActivity {
     @Bind(R.id.fab) FloatingActionButton mFab;
     @Bind(R.id.main_srl) SwipeRefreshLayout mainSWL;
     @Bind(R.id.feed_list_view) ListView mFeedList;
-    @Bind(R.id.adView) AdView ad;
 
     private NavDrawerAdapter mAdapter;
     private String[] mNavTitles;
     private String[] mIconTitles;
     private static final String TAG = "Main Activity";
 
-    private int mPosition;
-
-    private MainFeedAdapter mFeedAdapter;
+    private MainFeedAdapter mainFeedAdapter;
 
     ProgressDialog mProgressDialog;
     DataSingleton data;
 
     private Integer apiCnt = new Integer(0);
+    int offset = 0;
+    int lastSelected = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,15 +78,38 @@ public class MainActivity extends AppCompatActivity {
         EventBus.getDefault().register(this);
 
         setSupportActionBar(mToolbar);
+        getSupportActionBar().setTitle(getString(R.string.home));
 
-        MobileAds.initialize(getApplicationContext(), getString(R.string.banner_ad_unit_id));
-        AdRequest request = new AdRequest.Builder().build();
-        ad.loadAd(request);
+//        MobileAds.initialize(getApplicationContext(), getString(R.string.banner_ad_unit_id));
+//        AdRequest request = new AdRequest.Builder().build();
+//        ad.loadAd(request);
 
-        mainSWL.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+/*        mainSWL.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 //TO-DO: Implement refreshing
+            }
+        });*/
+
+        mFeedList.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {}
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                int lastVisibleIndex = firstVisibleItem + visibleItemCount - 1;
+                if ((lastVisibleIndex == (totalItemCount - 1)) && totalItemCount != 0 &&
+                        mainFeedAdapter.getItem(lastVisibleIndex) == null) {
+                    if (lastSelected != lastVisibleIndex) {
+                        lastSelected = lastVisibleIndex;
+
+                        RetrofitSingleton.getInstance()
+                                .getMatchingService()
+                                .reviews(null, Utils.getSchoolId(getApplicationContext()),
+                                        Utils.getUserId(getApplicationContext()), offset)
+                                .enqueue(new GetReviewsCallback());
+                    }
+                }
             }
         });
 
@@ -113,8 +138,7 @@ public class MainActivity extends AppCompatActivity {
         mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         mProgressDialog.setCancelable(false);
 
-        mPosition = 0;
-
+        mainFeedAdapter = new MainFeedAdapter(this, new ArrayList<ReviewRespBundle>());
         getData();
     }
 
@@ -126,11 +150,11 @@ public class MainActivity extends AppCompatActivity {
                 .enqueue(new GetCacheDataCallback());
     }
 
-    private void getFeed() {
+    private void getFeed(int offset) {
         mProgressDialog.show();
         RetrofitSingleton.getInstance()
                 .getMatchingService()
-                .reviews(null, Utils.getSchoolId(this), Utils.getUserId(this))
+                .reviews(null, Utils.getSchoolId(this), Utils.getUserId(this), offset)
                 .enqueue(new GetReviewsCallback());
     }
 
@@ -146,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
     @Subscribe
     public void dataResp(CacheDataBundle data) {
         DataSingleton.getInstance().cacheDataBundle(data);
-        getFeed();
+        getFeed(offset);
     }
 
     @Subscribe
@@ -154,29 +178,29 @@ public class MainActivity extends AppCompatActivity {
         mProgressDialog.dismiss();
         System.out.println("REVIEW COUNT " + reviewList.size());
         if(reviewList != null) {
-
-            mFeedAdapter = new MainFeedAdapter(this, reviewList);
+            offset += reviewList.size();
+            System.out.println("offset: " + offset);
+            mainFeedAdapter.append(reviewList);
             mFeedList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-            mFeedList.setAdapter(mFeedAdapter);
+            mFeedList.setAdapter(mainFeedAdapter);
 
-            if(mPosition >= 0 && mPosition < reviewList.size()) {
-                mFeedList.setSelection(mPosition);
-                mPosition = 0;
-            }
+            mFeedList.setVisibility(View.VISIBLE);
 
-            if(reviewList.size() == 0) {
+            /*if(reviewList.size() == 0) {
                 Utils.showSnackbar(this, parent, getString(R.string.reviews_dne));
-            }
+            }*/
         }
     }
 
-    //TODO: Parcelate object instead
     @OnItemClick(R.id.feed_list_view)
     public void onReviewClick(AdapterView<?> parent, View view, int position, long id) {
-        ReviewRespBundle review = mFeedAdapter.getItem(position);
-        Intent intent = new Intent(this, ReadReviewActivity.class);
-        intent.putExtra("review", (Parcelable) review);
-        startActivity(intent);
+        System.out.println(position);
+        ReviewRespBundle review = mainFeedAdapter.getItem(position);
+        if (review != null) {
+            Intent intent = new Intent(this, ReadReviewActivity.class);
+            intent.putExtra("review", (Parcelable) review);
+            startActivity(intent);
+        }
     }
 
     @Subscribe
@@ -260,7 +284,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    //pretty sure something's wrong with the onActivityResult logic.
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
         if (requestCode == 1) {

@@ -112,7 +112,7 @@ public class ReadReviewActivity extends AppCompatActivity {
             //System.out.println("USER ID " + userId + "\nPASSWORD " + password + "\nREVIEW ID " + mReviewId + "\nUSER RATING " + mUserRating + "\nNEW USER RATING " + mNewUserRating);
             RateReview r = new RateReview(userId, password, review.getReviewId(), mNewUserRating);
             Callback callback = new PostReviewRatingCallback();
-            RetrofitSingleton.getInstance().getUserService()
+            RetrofitSingleton.getInstance().getMatchingService()
                     .rateReview(r)
                     .enqueue(callback);
         }
