@@ -77,15 +77,9 @@ public class MainFeedAdapter extends BaseAdapter{
             renderReview(holder, position);
         } else if ((reviewList.get(position) == null) &&
                 (position == reviewList.size() - 1)){
-            holder.cardView.setVisibility(View.GONE);
-            holder.loadingLayout.setVisibility(View.VISIBLE);
-            holder.adLayout.setVisibility(View.GONE);
+            renderLoading(holder);
         } else {
-            holder.cardView.setVisibility(View.GONE);
-            holder.loadingLayout.setVisibility(View.GONE);
-            holder.adLayout.setVisibility(View.VISIBLE);
-
-            holder.adView.loadAd(this.adRequest);
+            renderAdLayout(holder);
         }
 
         return convertView;
@@ -111,5 +105,19 @@ public class MainFeedAdapter extends BaseAdapter{
 //        if (position == 0) {
 //            convertView.setBackgroundColor(mContext.getResources().getColor(R.color.colorWhite));
 //        }
+    }
+
+    public void renderLoading(MainFeedViewHolder holder) {
+        holder.cardView.setVisibility(View.GONE);
+        holder.loadingLayout.setVisibility(View.VISIBLE);
+        holder.adLayout.setVisibility(View.GONE);
+    }
+
+    public void renderAdLayout(MainFeedViewHolder holder) {
+        holder.cardView.setVisibility(View.GONE);
+        holder.loadingLayout.setVisibility(View.GONE);
+        holder.adLayout.setVisibility(View.VISIBLE);
+
+        holder.adView.loadAd(this.adRequest);
     }
 }
