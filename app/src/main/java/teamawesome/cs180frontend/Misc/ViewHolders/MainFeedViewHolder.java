@@ -5,6 +5,8 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdView;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import teamawesome.cs180frontend.R;
@@ -23,8 +25,10 @@ public class MainFeedViewHolder {
     @Bind(R.id.main_feed_rate_4) public TextView fourTV;
     @Bind(R.id.main_feed_rate_5) public TextView fiveTV;
     @Bind(R.id.main_feed_review_tv) public TextView reviewTV;
+    @Bind(R.id.adView) public AdView adView;
     @Bind(R.id.card_view) public CardView cardView;
     @Bind(R.id.loadingLayout) public LinearLayout loadingLayout;
+    @Bind(R.id.adLayout) public LinearLayout adLayout;
 
     public TextView[] ratings;
 

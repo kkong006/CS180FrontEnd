@@ -69,6 +69,8 @@ public class MainActivity extends AppCompatActivity {
     int offset = 0;
     int lastSelected = 0;
 
+    AdRequest adRequest = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -117,7 +119,6 @@ public class MainActivity extends AppCompatActivity {
         mIconTitles = getResources().getStringArray(R.array.nav_drawer_icon_array);
 
         mAdapter = new NavDrawerAdapter(mIconTitles, mNavTitles, this);
-
         mDrawerList.setAdapter(mAdapter);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -138,7 +139,10 @@ public class MainActivity extends AppCompatActivity {
         mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         mProgressDialog.setCancelable(false);
 
-        mainFeedAdapter = new MainFeedAdapter(this, new ArrayList<ReviewRespBundle>());
+        adRequest = new AdRequest.Builder().build();
+        mainFeedAdapter = new MainFeedAdapter(this, adRequest, new ArrayList<ReviewRespBundle>());
+        mFeedList.setAdapter(mainFeedAdapter);
+
         getData();
     }
 
@@ -178,12 +182,15 @@ public class MainActivity extends AppCompatActivity {
         mProgressDialog.dismiss();
         System.out.println("REVIEW COUNT " + reviewList.size());
         if(reviewList != null) {
+            if (reviewList.size() > 2) {
+                reviewList.add(2, null);
+            }
+
             offset += reviewList.size();
             System.out.println("offset: " + offset);
+
             mainFeedAdapter.append(reviewList);
             mFeedList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-            mFeedList.setAdapter(mainFeedAdapter);
-
             mFeedList.setVisibility(View.VISIBLE);
 
             /*if(reviewList.size() == 0) {

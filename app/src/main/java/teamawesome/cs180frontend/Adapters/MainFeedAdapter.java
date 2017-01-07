@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
+import com.google.android.gms.ads.AdRequest;
+
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -21,14 +23,14 @@ import teamawesome.cs180frontend.R;
 
 public class MainFeedAdapter extends BaseAdapter{
 
-    private List<ReviewRespBundle> reviewList;
     private Context mContext;
-    private DataSingleton data;
+    private AdRequest adRequest;
+    private List<ReviewRespBundle> reviewList;
 
-    public MainFeedAdapter( Context mContext, List<ReviewRespBundle> reviewList) {
+    public MainFeedAdapter(Context mContext, AdRequest adRequest, List<ReviewRespBundle> reviewList) {
         this.mContext = mContext;
+        this.adRequest = adRequest;
         this.reviewList = reviewList;
-        this.data = DataSingleton.getInstance();
     }
 
     public void append(List<ReviewRespBundle> reviewPage) {
@@ -73,6 +75,7 @@ public class MainFeedAdapter extends BaseAdapter{
         if (reviewList.get(position) != null) {
             holder.cardView.setVisibility(View.VISIBLE);
             holder.loadingLayout.setVisibility(View.GONE);
+            holder.adLayout.setVisibility(View.GONE);
 
             holder.professorTV.setText(reviewList.get(position).getProfName());
             holder.classNameTV.setText(reviewList.get(position).getClassName());
@@ -89,9 +92,17 @@ public class MainFeedAdapter extends BaseAdapter{
             if (position == 0) {
                 convertView.setBackgroundColor(mContext.getResources().getColor(R.color.colorWhite));
             }
-        } else {
-            holder.loadingLayout.setVisibility(View.GONE);
+        } else if ((reviewList.get(position) == null) &&
+                (position == reviewList.size() - 1)){
+            holder.cardView.setVisibility(View.GONE);
             holder.loadingLayout.setVisibility(View.VISIBLE);
+            holder.adLayout.setVisibility(View.GONE);
+        } else {
+            holder.cardView.setVisibility(View.GONE);
+            holder.loadingLayout.setVisibility(View.GONE);
+            holder.adLayout.setVisibility(View.VISIBLE);
+
+            holder.adView.loadAd(this.adRequest);
         }
 
         return convertView;
