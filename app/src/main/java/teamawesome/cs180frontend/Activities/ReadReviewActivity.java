@@ -77,7 +77,7 @@ public class ReadReviewActivity extends AppCompatActivity {
 
     public void loadReview() {
         mClassName.setText(review.getClassName());
-        mReviewDate.setText(review.getReviewDate());
+        mReviewDate.setText(Utils.getLocalTimeString(review.getReviewDate()));
         mReviewText.setText(review.getReviewMsg());
 
         for(int i = 0; i < review.getRating() && i < 5; i++) {

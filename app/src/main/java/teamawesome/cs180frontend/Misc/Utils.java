@@ -13,6 +13,11 @@ import java.io.Writer;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
 
 import teamawesome.cs180frontend.API.Models.LoginRegisterBundle;
 import teamawesome.cs180frontend.API.Models.UserRespBundle;
@@ -94,5 +99,18 @@ public class Utils {
         final PrintWriter printWriter = new PrintWriter(result);
         aThrowable.printStackTrace(printWriter);
         return result.toString();
+    }
+
+    public static String getLocalTimeString(String timestamp) {
+        try {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+            format.setTimeZone(TimeZone.getTimeZone("UTC"));
+            Date utcDate = format.parse(timestamp);
+            format = new SimpleDateFormat("MM/dd/yyyy");
+            format.setTimeZone(Calendar.getInstance().getTimeZone());
+            return format.format(utcDate);
+        } catch (ParseException e) {
+            return null;
+        }
     }
 }

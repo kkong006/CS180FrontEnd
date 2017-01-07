@@ -60,12 +60,14 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         // Set up the login form.
         ButterKnife.bind(this);
+
         EventBus.getDefault().register(this);
 
         if(Utils.getUserId(this) > 0) {
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
             finish();
+            return;
         }
 
         setSchoolOptions();

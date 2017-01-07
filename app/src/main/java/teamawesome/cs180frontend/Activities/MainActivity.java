@@ -82,16 +82,12 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle(getString(R.string.home));
 
-//        MobileAds.initialize(getApplicationContext(), getString(R.string.banner_ad_unit_id));
-//        AdRequest request = new AdRequest.Builder().build();
-//        ad.loadAd(request);
-
-/*        mainSWL.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        mainSWL.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 //TO-DO: Implement refreshing
             }
-        });*/
+        });
 
         mFeedList.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
@@ -143,6 +139,7 @@ public class MainActivity extends AppCompatActivity {
         mainFeedAdapter = new MainFeedAdapter(this, adRequest, new ArrayList<ReviewRespBundle>());
         mFeedList.setAdapter(mainFeedAdapter);
 
+        System.out.println("GETTING DATA");
         getData();
     }
 
@@ -182,11 +179,12 @@ public class MainActivity extends AppCompatActivity {
         mProgressDialog.dismiss();
         System.out.println("REVIEW COUNT " + reviewList.size());
         if(reviewList != null) {
+            offset += reviewList.size();
+
             if (reviewList.size() > 2) {
                 reviewList.add(2, null);
             }
 
-            offset += reviewList.size();
             System.out.println("offset: " + offset);
 
             mainFeedAdapter.append(reviewList);
@@ -304,6 +302,7 @@ public class MainActivity extends AppCompatActivity {
                 mProgressDialog.setCancelable(false);
                 mProgressDialog.show();
 
+                System.out.println("OnActivityResult");
                 RetrofitSingleton.getInstance()
                         .getMatchingService()
                         .getData(Utils.getSchoolId(this))

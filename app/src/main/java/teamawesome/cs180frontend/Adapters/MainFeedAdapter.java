@@ -13,6 +13,7 @@ import java.util.ResourceBundle;
 
 import teamawesome.cs180frontend.API.Models.ReviewRespBundle;
 import teamawesome.cs180frontend.Misc.DataSingleton;
+import teamawesome.cs180frontend.Misc.Utils;
 import teamawesome.cs180frontend.Misc.ViewHolders.MainFeedViewHolder;
 import teamawesome.cs180frontend.Misc.ViewHolders.SearchResultsViewHolder;
 import teamawesome.cs180frontend.R;
@@ -73,25 +74,7 @@ public class MainFeedAdapter extends BaseAdapter{
         }
 
         if (reviewList.get(position) != null) {
-            holder.cardView.setVisibility(View.VISIBLE);
-            holder.loadingLayout.setVisibility(View.GONE);
-            holder.adLayout.setVisibility(View.GONE);
-
-            holder.professorTV.setText(reviewList.get(position).getProfName());
-            holder.classNameTV.setText(reviewList.get(position).getClassName());
-            holder.dateTV.setText(reviewList.get(position).getReviewDate());
-            holder.reviewTV.setText(reviewList.get(position).getReviewMsg());
-            for (int i = 0; i < 5; i++) {
-                if (i < reviewList.get(position).getRating()) {
-                    holder.ratings[i].setTextColor(mContext.getResources().getColor(R.color.colorGreen));
-                } else {
-                    holder.ratings[i].setTextColor(mContext.getResources().getColor(R.color.colorGrey));
-                }
-            }
-
-            if (position == 0) {
-                convertView.setBackgroundColor(mContext.getResources().getColor(R.color.colorWhite));
-            }
+            renderReview(holder, position);
         } else if ((reviewList.get(position) == null) &&
                 (position == reviewList.size() - 1)){
             holder.cardView.setVisibility(View.GONE);
@@ -106,5 +89,27 @@ public class MainFeedAdapter extends BaseAdapter{
         }
 
         return convertView;
+    }
+
+    public void renderReview(MainFeedViewHolder holder, int position) {
+        holder.cardView.setVisibility(View.VISIBLE);
+        holder.loadingLayout.setVisibility(View.GONE);
+        holder.adLayout.setVisibility(View.GONE);
+
+        holder.professorTV.setText(reviewList.get(position).getProfName());
+        holder.classNameTV.setText(reviewList.get(position).getClassName());
+        holder.dateTV.setText(Utils.getLocalTimeString(reviewList.get(position).getReviewDate()));
+        holder.reviewTV.setText(reviewList.get(position).getReviewMsg());
+        for (int i = 0; i < 5; i++) {
+            if (i < reviewList.get(position).getRating()) {
+                holder.ratings[i].setTextColor(mContext.getResources().getColor(R.color.colorGreen));
+            } else {
+                holder.ratings[i].setTextColor(mContext.getResources().getColor(R.color.colorGrey));
+            }
+        }
+
+//        if (position == 0) {
+//            convertView.setBackgroundColor(mContext.getResources().getColor(R.color.colorWhite));
+//        }
     }
 }
