@@ -17,11 +17,14 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.TimeZone;
 
-import teamawesome.cs180frontend.API.Models.LoginRegisterBundle;
-import teamawesome.cs180frontend.API.Models.UserRespBundle;
+import io.realm.Realm;
+import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewRatingBundle;
+import teamawesome.cs180frontend.API.Models.UserModel.UserRespBundle;
 import teamawesome.cs180frontend.R;
+import teamawesome.cs180frontend.Realm.ReviewRating;
 
 public class Utils {
     public static void hideKeyboard(View v, Context context) {
@@ -112,5 +115,14 @@ public class Utils {
         } catch (ParseException e) {
             return null;
         }
+    }
+
+    public static void storeReviewRatingList(Realm realm, List<ReviewRatingBundle> reviewRatings) {
+        realm.beginTransaction();
+        for (ReviewRatingBundle r : reviewRatings) {
+            realm.copyToRealm(new ReviewRating(r.getReviewId(),
+                    r.isReviewRating()));
+        }
+        realm.commitTransaction();
     }
 }

@@ -2,8 +2,6 @@ package teamawesome.cs180frontend.Activities;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.provider.ContactsContract;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -14,26 +12,20 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.squareup.okhttp.internal.Util;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import retrofit2.Callback;
-import teamawesome.cs180frontend.API.Models.SchoolBundle;
-import teamawesome.cs180frontend.API.Models.UpdateUserBundle;
+import teamawesome.cs180frontend.API.Models.DataModel.SchoolBundle;
+import teamawesome.cs180frontend.API.Models.UserModel.UpdateUserBundle;
 import teamawesome.cs180frontend.API.RetrofitSingleton;
 import teamawesome.cs180frontend.API.Services.Callbacks.PostUpdateAccountCallback;
 import teamawesome.cs180frontend.Misc.Constants;

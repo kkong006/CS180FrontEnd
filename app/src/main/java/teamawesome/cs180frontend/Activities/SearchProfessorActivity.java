@@ -1,7 +1,6 @@
 package teamawesome.cs180frontend.Activities;
 
 import android.content.Intent;
-import android.provider.ContactsContract;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,17 +10,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import teamawesome.cs180frontend.API.Models.ProfessorBundle;
+import teamawesome.cs180frontend.API.Models.DataModel.ProfessorBundle;
 import teamawesome.cs180frontend.Misc.DataSingleton;
 import teamawesome.cs180frontend.Misc.Utils;
 import teamawesome.cs180frontend.R;

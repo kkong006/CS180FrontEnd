@@ -3,12 +3,9 @@ package teamawesome.cs180frontend.API.Services;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
-import teamawesome.cs180frontend.API.Models.LoginRegisterBundle;
-import teamawesome.cs180frontend.API.Models.RateReview;
-import teamawesome.cs180frontend.API.Models.ReviewIDRespBundle;
-import teamawesome.cs180frontend.API.Models.UserRespBundle;
-import teamawesome.cs180frontend.API.Models.UpdateUserBundle;
-import teamawesome.cs180frontend.API.Models.UserReview;
+import teamawesome.cs180frontend.API.Models.UserModel.LoginRegisterBundle;
+import teamawesome.cs180frontend.API.Models.UserModel.UserRespBundle;
+import teamawesome.cs180frontend.API.Models.UserModel.UpdateUserBundle;
 
 /**
  * Created by KongK on 10/21/2016.

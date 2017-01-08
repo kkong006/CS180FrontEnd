@@ -15,8 +15,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import retrofit2.Callback;
-import teamawesome.cs180frontend.API.Models.RateReview;
-import teamawesome.cs180frontend.API.Models.ReviewRespBundle;
+import teamawesome.cs180frontend.API.Models.ReviewModel.RateReview;
+import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewRespBundle;
 import teamawesome.cs180frontend.API.RetrofitSingleton;
 import teamawesome.cs180frontend.API.Services.Callbacks.PostReviewRatingCallback;
 import teamawesome.cs180frontend.Misc.Utils;
@@ -40,7 +40,7 @@ public class ReadReviewActivity extends AppCompatActivity {
 
     private TextView[] mRatings;
     ReviewRespBundle review;
-    private int mUserRating = 0;
+    private int userRating = 0;
     private int mNewUserRating;
 
     private ProgressDialog mProgressDialog;
@@ -70,6 +70,7 @@ public class ReadReviewActivity extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
         review = bundle.getParcelable("review");
+        userRating = bundle.getInt("yourRating");
 
         getSupportActionBar().setTitle(review.getProfName());
         loadReview();
@@ -92,24 +93,24 @@ public class ReadReviewActivity extends AppCompatActivity {
 
     private void setUserRating() {
 
-        if(mUserRating == 0) {
+        if(userRating == 0) {
             mThumbsUp.setTextColor(getResources().getColor(R.color.colorGrey));
             mThumbsDown.setTextColor(getResources().getColor(R.color.colorGrey));
-        } else if(mUserRating == 1) {
+        } else if(userRating == 1) {
             mThumbsUp.setTextColor(getResources().getColor(R.color.colorGreen));
             mThumbsDown.setTextColor(getResources().getColor(R.color.colorGrey));
-        } else if(mUserRating == 2) {
+        } else if(userRating == 2) {
             mThumbsUp.setTextColor(getResources().getColor(R.color.colorGrey));
             mThumbsDown.setTextColor(getResources().getColor(R.color.colorRed));
         }
     }
 
     public void updateResponse() {
-        if(mUserRating != mNewUserRating) {
+        if(userRating != mNewUserRating) {
             mProgressDialog.show();
             int userId = Utils.getUserId(this);
             String password = Utils.getPassword(this);
-            //System.out.println("USER ID " + userId + "\nPASSWORD " + password + "\nREVIEW ID " + mReviewId + "\nUSER RATING " + mUserRating + "\nNEW USER RATING " + mNewUserRating);
+            //System.out.println("USER ID " + userId + "\nPASSWORD " + password + "\nREVIEW ID " + mReviewId + "\nUSER RATING " + userRating + "\nNEW USER RATING " + mNewUserRating);
             RateReview r = new RateReview(userId, password, review.getReviewId(), mNewUserRating);
             Callback callback = new PostReviewRatingCallback();
             RetrofitSingleton.getInstance().getMatchingService()
@@ -122,7 +123,7 @@ public class ReadReviewActivity extends AppCompatActivity {
     public void thumbsUp() {
         Utils.showSnackbar(this, mParent, getString(R.string.liked));
 
-        if(mUserRating == 1) {
+        if(userRating == 1) {
             mNewUserRating = 0;
         } else {
             mNewUserRating = 1;
@@ -134,7 +135,7 @@ public class ReadReviewActivity extends AppCompatActivity {
     public void thumbsDown() {
         Utils.showSnackbar(this, mParent, getString(R.string.disliked));
 
-        if(mUserRating == 2) {
+        if(userRating == 2) {
             mNewUserRating = 0;
         } else {
             mNewUserRating = 2;
@@ -148,7 +149,7 @@ public class ReadReviewActivity extends AppCompatActivity {
 
         if(i.equals(1)) {
             Utils.showSnackbar(this, mParent, getString(R.string.account_update_success));
-            mUserRating = mNewUserRating;
+            userRating = mNewUserRating;
             setUserRating();
         } else if(i.equals(0)) {
             Utils.showSnackbar(this, mParent, getString(R.string.reviews_dne));

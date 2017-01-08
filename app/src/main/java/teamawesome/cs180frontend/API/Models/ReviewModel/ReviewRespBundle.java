@@ -1,4 +1,4 @@
-package teamawesome.cs180frontend.API.Models;
+package teamawesome.cs180frontend.API.Models.ReviewModel;
 
 import android.os.Parcel;
 import android.os.Parcelable;

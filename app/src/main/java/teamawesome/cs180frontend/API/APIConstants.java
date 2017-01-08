@@ -14,5 +14,7 @@ public class APIConstants {
 
     public static final String LOGIN_FAILURE = "Unable to login. Please check your phone number/password.";
     public static final String LOGIN_ERROR = "Something went wrong. Please try again later.";
+    public static final String DATA_FAILURE = "Unable to fetch data. Please try again later.";
+    public static final String BAD_API_CALL = "Bad call made to fetch data. Please contact the developer.";
 
 }

@@ -10,14 +10,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.LinearLayout;
 
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import teamawesome.cs180frontend.API.Models.ProfessorBundle;
+import teamawesome.cs180frontend.API.Models.DataModel.ProfessorBundle;
 import teamawesome.cs180frontend.Misc.DataSingleton;
 import teamawesome.cs180frontend.Misc.Utils;
 import teamawesome.cs180frontend.R;

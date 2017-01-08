@@ -8,7 +8,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import teamawesome.cs180frontend.API.APIConstants;
-import teamawesome.cs180frontend.API.Models.ReviewRespBundle;
+import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewRespBundle;
 
 /**
  * Created by KongK on 10/25/2016.

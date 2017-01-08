@@ -6,7 +6,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import teamawesome.cs180frontend.API.APIConstants;
-import teamawesome.cs180frontend.API.Models.UserRespBundle;
+import teamawesome.cs180frontend.API.Models.UserModel.UserRespBundle;
 
 /**
  * Created by jman0_000 on 10/27/2016.

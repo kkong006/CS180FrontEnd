@@ -19,7 +19,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnItemClick;
 import retrofit2.Callback;
-import teamawesome.cs180frontend.API.Models.ReviewRespBundle;
+import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewRespBundle;
 import teamawesome.cs180frontend.API.RetrofitSingleton;
 import teamawesome.cs180frontend.API.Services.Callbacks.GetReviewsCallback;
 import teamawesome.cs180frontend.Adapters.SearchResultsAdapter;

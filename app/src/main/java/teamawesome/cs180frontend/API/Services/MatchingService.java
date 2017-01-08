@@ -7,12 +7,12 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
-import teamawesome.cs180frontend.API.Models.CacheDataBundle;
-import teamawesome.cs180frontend.API.Models.ProfessorRespBundle;
-import teamawesome.cs180frontend.API.Models.RateReview;
-import teamawesome.cs180frontend.API.Models.ReviewIDRespBundle;
-import teamawesome.cs180frontend.API.Models.ReviewRespBundle;
-import teamawesome.cs180frontend.API.Models.UserReview;
+import teamawesome.cs180frontend.API.Models.DataModel.CacheDataBundle;
+import teamawesome.cs180frontend.API.Models.DataModel.ProfessorRespBundle;
+import teamawesome.cs180frontend.API.Models.ReviewModel.RateReview;
+import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewIDRespBundle;
+import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewRespBundle;
+import teamawesome.cs180frontend.API.Models.ReviewModel.UserReview;
 
 /**
  * Created by jman0_000 on 10/27/2016.
@@ -32,10 +32,13 @@ public interface MatchingService {
     @POST("/review")
     Call<ReviewIDRespBundle> review(@Body UserReview userReview);
 
+    @GET("/reviewRatings")
+    Call<Void> reviewRatings(@Query("id") Integer userId);
+
     @GET("/reviews")
-    Call<List<ReviewRespBundle>> reviews(@Query("prof_id") Integer prof_id,
-                                         @Query("school_id") Integer school_id,
-                                         @Query("user_id") Integer user_id,
+    Call<List<ReviewRespBundle>> reviews(@Query("prof_id") Integer profId,
+                                         @Query("school_id") Integer schoolId,
+                                         @Query("user_id") Integer userId,
                                          @Query("offset") Integer offset);
 
 }

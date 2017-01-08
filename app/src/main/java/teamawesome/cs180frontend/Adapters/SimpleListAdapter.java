@@ -5,13 +5,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.Filter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import teamawesome.cs180frontend.API.Models.SchoolBundle;
+import teamawesome.cs180frontend.API.Models.DataModel.SchoolBundle;
 import teamawesome.cs180frontend.Misc.ViewHolders.SimpleViewHolder;
 import teamawesome.cs180frontend.R;
 

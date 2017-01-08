@@ -1,14 +1,12 @@
 package teamawesome.cs180frontend.API.Services.Callbacks;
 
-import android.app.usage.UsageEvents;
-
 import org.greenrobot.eventbus.EventBus;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import teamawesome.cs180frontend.API.APIConstants;
-import teamawesome.cs180frontend.API.Models.CacheDataBundle;
+import teamawesome.cs180frontend.API.Models.DataModel.CacheDataBundle;
 import teamawesome.cs180frontend.Misc.Utils;
 
 /**

@@ -6,26 +6,21 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.joanzapata.iconify.Icon;
 import com.joanzapata.iconify.widget.IconTextView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import org.w3c.dom.Text;
 
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import teamawesome.cs180frontend.API.Models.ClassBundle;
-import teamawesome.cs180frontend.API.Models.ProfessorClassBundle;
-import teamawesome.cs180frontend.API.Models.ProfessorRespBundle;
-import teamawesome.cs180frontend.API.Models.SchoolBundle;
+import teamawesome.cs180frontend.API.Models.DataModel.ProfessorClassBundle;
+import teamawesome.cs180frontend.API.Models.DataModel.ProfessorRespBundle;
 import teamawesome.cs180frontend.API.RetrofitSingleton;
 import teamawesome.cs180frontend.API.Services.Callbacks.GetProfessorSummaryCallback;
 import teamawesome.cs180frontend.Misc.Utils;

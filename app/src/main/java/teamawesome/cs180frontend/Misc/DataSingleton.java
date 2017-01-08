@@ -4,11 +4,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import teamawesome.cs180frontend.API.Models.CacheDataBundle;
-import teamawesome.cs180frontend.API.Models.ClassBundle;
-import teamawesome.cs180frontend.API.Models.ProfessorBundle;
-import teamawesome.cs180frontend.API.Models.SchoolBundle;
-import teamawesome.cs180frontend.API.Models.SubjectBundle;
+import io.realm.Realm;
+import teamawesome.cs180frontend.API.Models.DataModel.CacheDataBundle;
+import teamawesome.cs180frontend.API.Models.DataModel.ClassBundle;
+import teamawesome.cs180frontend.API.Models.DataModel.ProfessorBundle;
+import teamawesome.cs180frontend.API.Models.DataModel.SchoolBundle;
+import teamawesome.cs180frontend.API.Models.DataModel.SubjectBundle;
 
 /**
  * Created by jman0_000 on 10/27/2016.
@@ -16,10 +17,12 @@ import teamawesome.cs180frontend.API.Models.SubjectBundle;
 
 public class DataSingleton {
     private static DataSingleton instance = null;
+
     private ArrayList<SchoolBundle> schoolCache;
     private ArrayList<SubjectBundle> subjectCache;
     private ArrayList<ClassBundle> classCache;
     private ArrayList<ProfessorBundle> professorCache;
+
     private HashMap<String, Integer> schoolMap; //FOR O(1) access
     private HashMap<String, Integer> subjectMap;
     private HashMap<String, Integer> classMap;

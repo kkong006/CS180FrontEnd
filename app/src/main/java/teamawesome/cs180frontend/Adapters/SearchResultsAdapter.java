@@ -8,7 +8,7 @@ import android.widget.BaseAdapter;
 
 import java.util.List;
 
-import teamawesome.cs180frontend.API.Models.ReviewRespBundle;
+import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewRespBundle;
 import teamawesome.cs180frontend.Misc.ViewHolders.SearchResultsViewHolder;
 import teamawesome.cs180frontend.R;
 
