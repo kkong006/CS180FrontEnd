@@ -31,7 +31,6 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnItemClick;
-import io.realm.Realm;
 import teamawesome.cs180frontend.API.Models.DataModel.CacheDataBundle;
 import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewRespBundle;
 import teamawesome.cs180frontend.API.RetrofitSingleton;
@@ -42,7 +41,6 @@ import teamawesome.cs180frontend.Adapters.NavDrawerAdapter;
 import teamawesome.cs180frontend.Misc.DataSingleton;
 import teamawesome.cs180frontend.Misc.Utils;
 import teamawesome.cs180frontend.R;
-import teamawesome.cs180frontend.Realm.ReviewRating;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -64,21 +62,18 @@ public class MainActivity extends AppCompatActivity {
     ProgressDialog mProgressDialog;
     DataSingleton data;
 
-    private Integer apiCnt = new Integer(0);
+    //private Integer apiCnt = new Integer(0);
     int offset = 0;
     int lastSelected = 0;
 
     AdRequest adRequest = null;
 
-    Realm realm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Realm.init(this);
-        realm = Realm.getDefaultInstance();
         ButterKnife.bind(this);
         data = DataSingleton.getInstance();
         EventBus.getDefault().register(this);
@@ -213,15 +208,6 @@ public class MainActivity extends AppCompatActivity {
         if (review != null) {
             Intent intent = new Intent(this, ReadReviewActivity.class);
             intent.putExtra("review", (Parcelable) review);
-
-            ReviewRating reviewRating = realm.where(ReviewRating.class)
-                    .equalTo("reviewId", review.getReviewId())
-                    .findFirst();
-            if (reviewRating == null) {
-                intent.putExtra("yourRating", 0);
-            } else {
-                intent.putExtra("yourRating", reviewRating.val ? 1 : 2);
-            }
             startActivity(intent);
         }
     }
@@ -286,11 +272,11 @@ public class MainActivity extends AppCompatActivity {
         mDrawerLayout.closeDrawer(GravityCompat.START);
         if (position == 0) {
             return;
-        } /*else if (position == 1) {
-            //Search for reviews
+        } else if (position == 1) {
+            /*Search for reviews
             Intent i = new Intent(getApplicationContext(), SearchActivity.class);
-            startActivity(i);
-        }*/ else if (position == 2) {
+            startActivity(i);*/
+        } else if (position == 2) {
             //Search for professor stats
             Intent intent = new Intent(getApplicationContext(), SearchProfessorActivity.class);
             startActivity(intent);
@@ -342,7 +328,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onDestroy() {
-        realm.close();
         EventBus.getDefault().unregister(this);
         super.onDestroy();
     }

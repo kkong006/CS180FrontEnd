@@ -1,19 +1,18 @@
 package teamawesome.cs180frontend.Misc;
 
+import android.content.Context;
+
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-import io.realm.Realm;
 import teamawesome.cs180frontend.API.Models.DataModel.CacheDataBundle;
 import teamawesome.cs180frontend.API.Models.DataModel.ClassBundle;
 import teamawesome.cs180frontend.API.Models.DataModel.ProfessorBundle;
 import teamawesome.cs180frontend.API.Models.DataModel.SchoolBundle;
 import teamawesome.cs180frontend.API.Models.DataModel.SubjectBundle;
-
-/**
- * Created by jman0_000 on 10/27/2016.
- */
 
 public class DataSingleton {
     private static DataSingleton instance = null;
@@ -28,6 +27,9 @@ public class DataSingleton {
     private HashMap<String, Integer> classMap;
     private HashMap<String, Integer> professorMap;
 
+    private HashSet<Integer> likedSet;
+    private HashSet<Integer> dislikedSet;
+
     public static DataSingleton getInstance() {
         if (instance == null) {
             instance = new DataSingleton();
@@ -36,17 +38,21 @@ public class DataSingleton {
     }
 
     private DataSingleton() {
-        schoolCache = new ArrayList<>();
-        subjectCache = new ArrayList<>();
-        classCache = new ArrayList<>();
-        professorCache = new ArrayList<>();
-        schoolMap = new HashMap<>();
-        subjectMap = new HashMap<>();
-        classMap = new HashMap<>();
-        professorMap = new HashMap<>();
+        this.schoolCache = new ArrayList<>();
+        this.subjectCache = new ArrayList<>();
+        this.classCache = new ArrayList<>();
+        this.professorCache = new ArrayList<>();
+
+        this.schoolMap = new HashMap<>();
+        this.subjectMap = new HashMap<>();
+        this.classMap = new HashMap<>();
+        this.professorMap = new HashMap<>();
+
+        this.likedSet = new HashSet<>();
+        this.dislikedSet = new HashSet<>();
     }
 
-    public void cacheDataBundle(CacheDataBundle data) {
+    public void cacheDataBundle(Context context, CacheDataBundle data) {
         this.schoolCache.clear();
         this.subjectCache.clear();
         this.classCache.clear();
@@ -55,9 +61,10 @@ public class DataSingleton {
         this.subjectMap.clear();
         this.classMap.clear();
         this.professorMap.clear();
+        this.likedSet.clear();
+        this.dislikedSet.clear();
 
         schoolCache.addAll(data.getSchools());
-
         for (SchoolBundle s : schoolCache) {
             schoolMap.put(s.getSchoolName(), s.getSchoolId());
         }
@@ -68,12 +75,12 @@ public class DataSingleton {
         }
 
         classCache.addAll(data.getClasses());
-        for(ClassBundle c : classCache) {
+        for (ClassBundle c : classCache) {
             classMap.put(c.getClassName(), c.getClassId());
         }
 
         professorCache.addAll(data.getProfs());
-        for(ProfessorBundle p : professorCache) {
+        for (ProfessorBundle p : professorCache) {
             professorMap.put(p.getProfessorName(), p.getProfessorId());
         }
     }
@@ -102,22 +109,70 @@ public class DataSingleton {
         return this.professorCache;
     }
 
+    public void cacheReviewRatings(Context context, List<Integer> liked, Set<Integer> disliked) {
+        Set<String> cachedLiked = SPSingleton.getInstance(context)
+                .getSp()
+                .getStringSet(Constants.LIKED, null);
+        Set<String> cachedDisliked = SPSingleton.getInstance(context)
+                .getSp()
+                .getStringSet(Constants.DISLIKED, null);
+
+        //SHORT CIRCUITING
+        //IF NO LIKES ARE CACHED OR THERE'S A DIFFERENCE IN SIZE APPLY LIKED LIST PULLED FROM SERVER
+        if (cachedLiked == null || liked.size() != cachedLiked.size()) {
+            for (Integer i : liked) {
+                this.likedSet.add(i);
+            }
+        } else { //ELSE LOAD THE CACHED VALUES
+            for (String s : cachedLiked) {
+                try {
+                    this.likedSet.add(Integer.valueOf(s));
+                } catch (NumberFormatException e) {
+                    System.out.println("CACHED LIKE BROKE");
+                }
+            }
+        }
+
+        //SHORT CIRCUITING
+        if (cachedDisliked == null || disliked.size() != cachedLiked.size()) {
+            for (Integer i : disliked) {
+                this.dislikedSet.add(i);
+            }
+        } else {
+            for (String s : cachedDisliked) {
+                try {
+                    this.dislikedSet.add(Integer.valueOf(s));
+                } catch (NumberFormatException e) {
+                    System.out.println("CACHED DISLIKE BROKE");
+                }
+            }
+        }
+    }
+
     public Integer getSchoolId(String schoolName) {
         //NOTE: ONLY OBJECTS CAN BE NULL NOT PRIMITIVES
         return schoolMap.get(schoolName); //RETURNS NULL IF NO MATCH FOUND
     }
 
-    public Integer getSubjectId(String subjectName) { return subjectMap.get(subjectName); }
+    public Integer getSubjectId(String subjectName) {
+        return subjectMap.get(subjectName);
+    }
 
-    public Integer getClassId(String className) { return classMap.get(className); }
+    public Integer getClassId(String className) {
+        return classMap.get(className);
+    }
 
     public Integer getProfessorId(String profName) {
         return professorMap.get(profName);
     }
 
-    public ArrayList<SchoolBundle> getSchoolCache() { return schoolCache; }
+    public ArrayList<SchoolBundle> getSchoolCache() {
+        return schoolCache;
+    }
 
-    public ArrayList<SubjectBundle> getSubjectCache() { return subjectCache; }
+    public ArrayList<SubjectBundle> getSubjectCache() {
+        return subjectCache;
+    }
 
     public ArrayList<ClassBundle> getClassCache() {
         return classCache;

@@ -18,13 +18,13 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.TimeZone;
 
 import io.realm.Realm;
 import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewRatingBundle;
 import teamawesome.cs180frontend.API.Models.UserModel.UserRespBundle;
 import teamawesome.cs180frontend.R;
-import teamawesome.cs180frontend.Realm.ReviewRating;
 
 public class Utils {
     public static void hideKeyboard(View v, Context context) {
@@ -97,6 +97,14 @@ public class Utils {
         sp.edit().remove(Constants.PHONE_NUMBER).commit();
     }
 
+    public static Set<String> getLikedList(Context context) {
+        return SPSingleton.getInstance(context).getSp().getStringSet("liked_list", null);
+    }
+
+    public static Set<String> getDislikedList(Context context) {
+        return SPSingleton.getInstance(context).getSp().getStringSet("disliked_list", null);
+    }
+
     public static String getStackTrace(Throwable aThrowable) {
         final Writer result = new StringWriter();
         final PrintWriter printWriter = new PrintWriter(result);
@@ -115,14 +123,5 @@ public class Utils {
         } catch (ParseException e) {
             return null;
         }
-    }
-
-    public static void storeReviewRatingList(Realm realm, List<ReviewRatingBundle> reviewRatings) {
-        realm.beginTransaction();
-        for (ReviewRatingBundle r : reviewRatings) {
-            realm.copyToRealm(new ReviewRating(r.getReviewId(),
-                    r.isReviewRating()));
-        }
-        realm.commitTransaction();
     }
 }

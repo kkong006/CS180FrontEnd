@@ -11,6 +11,14 @@ import java.util.List;
  */
 
 public class CacheDataBundle implements Serializable{
+    @SerializedName("liked")
+    @Expose
+    private List<Integer> liked;
+
+    @SerializedName("disliked")
+    @Expose
+    private List<Integer> disliked;
+
     @SerializedName("schools")
     @Expose
     private List<SchoolBundle> schools;
@@ -26,6 +34,22 @@ public class CacheDataBundle implements Serializable{
     @SerializedName("professors")
     @Expose
     private List<ProfessorBundle> profs;
+
+    public List<Integer> getLiked() {
+        return liked;
+    }
+
+    public void setLiked(List<Integer> liked) {
+        this.liked = liked;
+    }
+
+    public List<Integer> getDisliked() {
+        return disliked;
+    }
+
+    public void setDisliked(List<Integer> disliked) {
+        this.disliked = disliked;
+    }
 
     public List<SchoolBundle> getSchools() {
         return schools;

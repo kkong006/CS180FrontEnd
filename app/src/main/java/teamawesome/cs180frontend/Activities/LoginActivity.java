@@ -208,7 +208,7 @@ public class LoginActivity extends AppCompatActivity {
     @Subscribe
     public void dataResp(CacheDataBundle data) {
         progressDialog.dismiss();
-        DataSingleton.getInstance().cacheDataBundle(data);
+        DataSingleton.getInstance().cacheDataBundle(this, data);
         System.out.println("SCHOOL ID " + Utils.getSchoolId(this));
         System.out.println("SCHOOL SIZE " + DataSingleton.getInstance().getSchoolCache().size());
         System.out.println("PROFESSOR SIZE " + DataSingleton.getInstance().getProfessorCache().size());

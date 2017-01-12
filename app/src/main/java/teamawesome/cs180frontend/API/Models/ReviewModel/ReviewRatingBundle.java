@@ -3,7 +3,9 @@ package teamawesome.cs180frontend.API.Models.ReviewModel;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class ReviewRatingBundle {
+import java.io.Serializable;
+
+public class ReviewRatingBundle implements Serializable{
     @SerializedName("rating_id")
     @Expose
     private int ratingId;
