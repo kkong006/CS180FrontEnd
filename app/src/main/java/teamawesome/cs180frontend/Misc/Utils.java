@@ -124,4 +124,15 @@ public class Utils {
             return null;
         }
     }
+
+    //retrieve how the user voted on a review (up or down)
+    public static int getReviewRating(int reviewId) {
+        if (DataSingleton.getInstance().getLikedSet().contains(reviewId)) {
+            return 1;
+        } else if (DataSingleton.getInstance().getDislikedSet().contains(reviewId)) {
+            return 2;
+        } else {
+            return 0;
+        }
+    }
 }

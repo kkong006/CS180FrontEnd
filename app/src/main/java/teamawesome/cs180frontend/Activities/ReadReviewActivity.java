@@ -2,6 +2,7 @@ package teamawesome.cs180frontend.Activities;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -19,6 +20,8 @@ import teamawesome.cs180frontend.API.Models.ReviewModel.RateReview;
 import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewRespBundle;
 import teamawesome.cs180frontend.API.RetrofitSingleton;
 import teamawesome.cs180frontend.API.Services.Callbacks.PostReviewRatingCallback;
+import teamawesome.cs180frontend.Misc.DataSingleton;
+import teamawesome.cs180frontend.Misc.SPSingleton;
 import teamawesome.cs180frontend.Misc.Utils;
 import teamawesome.cs180frontend.R;
 
@@ -84,8 +87,6 @@ public class ReadReviewActivity extends AppCompatActivity {
         for(int i = 0; i < review.getRating() && i < 5; i++) {
             mRatings[i].setTextColor(getResources().getColor(R.color.colorGreen));
         }
-
-        mNewUserRating = 0;
 
         setUserRating();
 
@@ -169,7 +170,18 @@ public class ReadReviewActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+        System.out.println("onDestroy Read");
         EventBus.getDefault().unregister(this);
+        if (userRating == 0) {
+            DataSingleton.getInstance().getLikedSet().remove(review.getReviewId());
+            DataSingleton.getInstance().getDislikedSet().remove(review.getReviewId());
+        } else if (userRating == 1) {
+            DataSingleton.getInstance().getLikedSet().add(review.getReviewId());
+            DataSingleton.getInstance().getDislikedSet().remove(review.getReviewId());
+        } else if (userRating == 2) {
+            DataSingleton.getInstance().getLikedSet().remove(review.getReviewId());
+            DataSingleton.getInstance().getDislikedSet().add(review.getReviewId());
+        }
         super.onDestroy();
     }
 }

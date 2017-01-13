@@ -31,7 +31,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnItemClick;
-import teamawesome.cs180frontend.API.Models.DataModel.CacheDataBundle;
+import teamawesome.cs180frontend.API.Models.DataModel.CacheData.CacheDataBundle;
 import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewRespBundle;
 import teamawesome.cs180frontend.API.RetrofitSingleton;
 import teamawesome.cs180frontend.API.Services.Callbacks.GetCacheDataCallback;
@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
         mProgressDialog.show();
         RetrofitSingleton.getInstance()
                 .getMatchingService()
-                .getData(Utils.getSchoolId(this))
+                .getData(Utils.getSchoolId(this), Utils.getUserId(this))
                 .enqueue(new GetCacheDataCallback());
     }
 
@@ -174,7 +174,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Subscribe
     public void dataResp(CacheDataBundle data) {
-        DataSingleton.getInstance().cacheDataBundle(data);
+        DataSingleton.getInstance().cacheDataBundle(this, data);
+        System.out.println("Liked: " + data.getReviewRatings().getLiked().size());
+        System.out.println("Disliked: " + data.getReviewRatings().getDisliked().size());
         getFeed(offset);
     }
 
@@ -208,6 +210,7 @@ public class MainActivity extends AppCompatActivity {
         if (review != null) {
             Intent intent = new Intent(this, ReadReviewActivity.class);
             intent.putExtra("review", (Parcelable) review);
+            intent.putExtra("yourRating", Utils.getReviewRating(review.getReviewId()));
             startActivity(intent);
         }
     }
@@ -309,7 +312,7 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println("OnActivityResult");
                 RetrofitSingleton.getInstance()
                         .getMatchingService()
-                        .getData(Utils.getSchoolId(this))
+                        .getData(Utils.getSchoolId(this), Utils.getUserId(this))
                         .enqueue(new GetCacheDataCallback());
             }
         }

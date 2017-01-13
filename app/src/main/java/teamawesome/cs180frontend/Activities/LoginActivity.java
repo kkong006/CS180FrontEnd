@@ -21,7 +21,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import teamawesome.cs180frontend.API.Models.DataModel.CacheDataBundle;
+import teamawesome.cs180frontend.API.Models.DataModel.CacheData.CacheDataBundle;
 import teamawesome.cs180frontend.API.Models.UserModel.LoginRegisterBundle;
 import teamawesome.cs180frontend.API.Models.DataModel.SchoolBundle;
 import teamawesome.cs180frontend.API.Models.UserModel.UserRespBundle;
@@ -201,7 +201,7 @@ public class LoginActivity extends AppCompatActivity {
         progressDialog.show();
         RetrofitSingleton.getInstance()
                 .getMatchingService()
-                .getData(Utils.getSchoolId(this))
+                .getData(Utils.getSchoolId(this), Utils.getUserId(this))
                 .enqueue(new GetCacheDataCallback());
     }
 

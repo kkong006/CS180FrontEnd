@@ -83,8 +83,6 @@ public class MainFeedAdapter extends BaseAdapter{
     }
 
     public void renderReview(MainFeedViewHolder holder, int position) {
-        holder.adView.loadAd(null); //may or may not work
-
         holder.cardView.setVisibility(View.VISIBLE);
         holder.loadingLayout.setVisibility(View.GONE);
         holder.adLayout.setVisibility(View.GONE);
@@ -107,8 +105,6 @@ public class MainFeedAdapter extends BaseAdapter{
     }
 
     public void renderLoading(MainFeedViewHolder holder) {
-        holder.adView.loadAd(null); //may or may not work
-
         holder.cardView.setVisibility(View.GONE);
         holder.loadingLayout.setVisibility(View.VISIBLE);
         holder.adLayout.setVisibility(View.GONE);

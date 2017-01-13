@@ -8,7 +8,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import teamawesome.cs180frontend.API.Models.DataModel.CacheDataBundle;
+import teamawesome.cs180frontend.API.Models.DataModel.CacheData.CacheDataBundle;
+import teamawesome.cs180frontend.API.Models.DataModel.CacheData.ReviewId;
 import teamawesome.cs180frontend.API.Models.DataModel.ClassBundle;
 import teamawesome.cs180frontend.API.Models.DataModel.ProfessorBundle;
 import teamawesome.cs180frontend.API.Models.DataModel.SchoolBundle;
@@ -83,6 +84,9 @@ public class DataSingleton {
         for (ProfessorBundle p : professorCache) {
             professorMap.put(p.getProfessorName(), p.getProfessorId());
         }
+
+        cacheReviewRatings(context, data.getReviewRatings().getLiked(),
+                data.getReviewRatings().getDisliked());
     }
 
     public List<SchoolBundle> cacheSchools(List<SchoolBundle> schools) {
@@ -109,7 +113,7 @@ public class DataSingleton {
         return this.professorCache;
     }
 
-    public void cacheReviewRatings(Context context, List<Integer> liked, Set<Integer> disliked) {
+    public void cacheReviewRatings(Context context, List<ReviewId> liked, List<ReviewId> disliked) {
         Set<String> cachedLiked = SPSingleton.getInstance(context)
                 .getSp()
                 .getStringSet(Constants.LIKED, null);
@@ -120,8 +124,8 @@ public class DataSingleton {
         //SHORT CIRCUITING
         //IF NO LIKES ARE CACHED OR THERE'S A DIFFERENCE IN SIZE APPLY LIKED LIST PULLED FROM SERVER
         if (cachedLiked == null || liked.size() != cachedLiked.size()) {
-            for (Integer i : liked) {
-                this.likedSet.add(i);
+            for (ReviewId r : liked) {
+                this.likedSet.add(r.getReviewId());
             }
         } else { //ELSE LOAD THE CACHED VALUES
             for (String s : cachedLiked) {
@@ -135,8 +139,8 @@ public class DataSingleton {
 
         //SHORT CIRCUITING
         if (cachedDisliked == null || disliked.size() != cachedLiked.size()) {
-            for (Integer i : disliked) {
-                this.dislikedSet.add(i);
+            for (ReviewId r : disliked) {
+                this.dislikedSet.add(r.getReviewId());
             }
         } else {
             for (String s : cachedDisliked) {
@@ -147,6 +151,25 @@ public class DataSingleton {
                 }
             }
         }
+    }
+
+    public void saveReviewRatings(Context context) {
+        Set<String> likedStrSet = new HashSet<>();
+        Set<String> dislikedStrSet = new HashSet<>();
+
+        for (Integer i : this.likedSet) {
+            likedStrSet.add(i.toString());
+        }
+
+        for (Integer i : this.dislikedSet) {
+            dislikedStrSet.add(i.toString());
+        }
+
+        SPSingleton.getInstance(context).getSp().edit()
+                .putStringSet(Constants.LIKED, likedStrSet).commit();
+
+        SPSingleton.getInstance(context).getSp().edit()
+                .putStringSet(Constants.DISLIKED, dislikedStrSet).commit();
     }
 
     public Integer getSchoolId(String schoolName) {
@@ -180,5 +203,13 @@ public class DataSingleton {
 
     public ArrayList<ProfessorBundle> getProfessorCache() {
         return professorCache;
+    }
+
+    public HashSet<Integer> getLikedSet() {
+        return likedSet;
+    }
+
+    public HashSet<Integer> getDislikedSet() {
+        return dislikedSet;
     }
 }

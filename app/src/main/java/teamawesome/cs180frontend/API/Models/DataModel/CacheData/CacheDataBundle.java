@@ -1,4 +1,4 @@
-package teamawesome.cs180frontend.API.Models.DataModel;
+package teamawesome.cs180frontend.API.Models.DataModel.CacheData;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -6,18 +6,19 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 import java.util.List;
 
+import teamawesome.cs180frontend.API.Models.DataModel.ClassBundle;
+import teamawesome.cs180frontend.API.Models.DataModel.ProfessorBundle;
+import teamawesome.cs180frontend.API.Models.DataModel.SchoolBundle;
+import teamawesome.cs180frontend.API.Models.DataModel.SubjectBundle;
+
 /**
  * Created by jman0_000 on 10/31/2016.
  */
 
 public class CacheDataBundle implements Serializable{
-    @SerializedName("liked")
+    @SerializedName("votes")
     @Expose
-    private List<Integer> liked;
-
-    @SerializedName("disliked")
-    @Expose
-    private List<Integer> disliked;
+    private UserReviewRatingsBundle reviewRatings;
 
     @SerializedName("schools")
     @Expose
@@ -35,20 +36,12 @@ public class CacheDataBundle implements Serializable{
     @Expose
     private List<ProfessorBundle> profs;
 
-    public List<Integer> getLiked() {
-        return liked;
+    public UserReviewRatingsBundle getReviewRatings() {
+        return reviewRatings;
     }
 
-    public void setLiked(List<Integer> liked) {
-        this.liked = liked;
-    }
-
-    public List<Integer> getDisliked() {
-        return disliked;
-    }
-
-    public void setDisliked(List<Integer> disliked) {
-        this.disliked = disliked;
+    public void setReviewRatings(UserReviewRatingsBundle reviewRatings) {
+        this.reviewRatings = reviewRatings;
     }
 
     public List<SchoolBundle> getSchools() {
