@@ -11,6 +11,7 @@ import teamawesome.cs180frontend.API.Models.DataModel.CacheData.CacheDataBundle;
 import teamawesome.cs180frontend.API.Models.DataModel.ProfessorRespBundle;
 import teamawesome.cs180frontend.API.Models.ReviewModel.RateReview;
 import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewIDRespBundle;
+import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewRatingResp;
 import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewRespBundle;
 import teamawesome.cs180frontend.API.Models.ReviewModel.UserReview;
 
@@ -27,7 +28,7 @@ public interface MatchingService {
     Call<ProfessorRespBundle> getProfessorSummary(@Query("prof_id") int profId);
 
     @POST("/rateReview")
-    Call<Void> rateReview(@Body RateReview rateReview);
+    Call<ReviewRatingResp> rateReview(@Body RateReview rateReview);
 
     @POST("/review")
     Call<ReviewIDRespBundle> review(@Body UserReview userReview);

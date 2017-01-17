@@ -17,6 +17,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import retrofit2.Callback;
 import teamawesome.cs180frontend.API.Models.ReviewModel.RateReview;
+import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewRatingResp;
 import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewRespBundle;
 import teamawesome.cs180frontend.API.RetrofitSingleton;
 import teamawesome.cs180frontend.API.Services.Callbacks.PostReviewRatingCallback;
@@ -45,6 +46,7 @@ public class ReadReviewActivity extends AppCompatActivity {
     ReviewRespBundle review;
     private int userRating = 0;
     private int mNewUserRating;
+    boolean ratingProcessing = false;
 
     private ProgressDialog mProgressDialog;
 
@@ -89,7 +91,6 @@ public class ReadReviewActivity extends AppCompatActivity {
         }
 
         setUserRating();
-
     }
 
     private void setUserRating() {
@@ -107,8 +108,8 @@ public class ReadReviewActivity extends AppCompatActivity {
     }
 
     public void updateResponse() {
-        if(userRating != mNewUserRating) {
-            mProgressDialog.show();
+        if(userRating != mNewUserRating && !ratingProcessing) {
+            ratingProcessing = true;
             int userId = Utils.getUserId(this);
             String password = Utils.getPassword(this);
             //System.out.println("USER ID " + userId + "\nPASSWORD " + password + "\nREVIEW ID " + mReviewId + "\nUSER RATING " + userRating + "\nNEW USER RATING " + mNewUserRating);
@@ -122,7 +123,10 @@ public class ReadReviewActivity extends AppCompatActivity {
 
     @OnClick(R.id.read_like_bt)
     public void thumbsUp() {
-        Utils.showSnackbar(this, mParent, getString(R.string.liked));
+        if (ratingProcessing) {
+            return;
+        }
+        //Utils.showSnackbar(this, mParent, getString(R.string.liked));
 
         if(userRating == 1) {
             mNewUserRating = 0;
@@ -134,7 +138,10 @@ public class ReadReviewActivity extends AppCompatActivity {
 
     @OnClick(R.id.read_dislike_bt)
     public void thumbsDown() {
-        Utils.showSnackbar(this, mParent, getString(R.string.disliked));
+        //Utils.showSnackbar(this, mParent, getString(R.string.disliked));
+        if (ratingProcessing) {
+            return;
+        }
 
         if(userRating == 2) {
             mNewUserRating = 0;
@@ -145,24 +152,16 @@ public class ReadReviewActivity extends AppCompatActivity {
     }
 
     @Subscribe
-    public void intLikeDislikeResp(Integer i) {
-        mProgressDialog.dismiss();
-
-        if(i.equals(1)) {
-            Utils.showSnackbar(this, mParent, getString(R.string.account_update_success));
-            userRating = mNewUserRating;
-            setUserRating();
-        } else if(i.equals(0)) {
-            Utils.showSnackbar(this, mParent, getString(R.string.reviews_dne));
-        } else {
-            Utils.showSnackbar(this, mParent, getString(R.string.error_retrieving_data));
-        }
+    public void intLikeDislikeResp(ReviewRatingResp resp) {
+        ratingProcessing = false;
+        Utils.showSnackbar(this, mParent, getString(R.string.account_update_success));
+        userRating = mNewUserRating;
+        setUserRating();
     }
 
     @Subscribe
-    public void stringLikeDislikeResp(String s) {
-        mProgressDialog.dismiss();
-
+    public void onFailedResp(String s) {
+        ratingProcessing = false;
         if(s.equals("ERROR")) {
             Utils.showSnackbar(this, mParent, getString(R.string.error_retrieving_data));
         }
@@ -172,16 +171,6 @@ public class ReadReviewActivity extends AppCompatActivity {
     protected void onDestroy() {
         System.out.println("onDestroy Read");
         EventBus.getDefault().unregister(this);
-        if (userRating == 0) {
-            DataSingleton.getInstance().getLikedSet().remove(review.getReviewId());
-            DataSingleton.getInstance().getDislikedSet().remove(review.getReviewId());
-        } else if (userRating == 1) {
-            DataSingleton.getInstance().getLikedSet().add(review.getReviewId());
-            DataSingleton.getInstance().getDislikedSet().remove(review.getReviewId());
-        } else if (userRating == 2) {
-            DataSingleton.getInstance().getLikedSet().remove(review.getReviewId());
-            DataSingleton.getInstance().getDislikedSet().add(review.getReviewId());
-        }
         super.onDestroy();
     }
 }

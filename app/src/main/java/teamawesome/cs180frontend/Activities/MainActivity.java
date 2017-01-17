@@ -32,6 +32,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnItemClick;
 import teamawesome.cs180frontend.API.Models.DataModel.CacheData.CacheDataBundle;
+import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewRatingBundle;
+import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewRatingResp;
 import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewRespBundle;
 import teamawesome.cs180frontend.API.RetrofitSingleton;
 import teamawesome.cs180frontend.API.Services.Callbacks.GetCacheDataCallback;
@@ -230,6 +232,21 @@ public class MainActivity extends AppCompatActivity {
         mProgressDialog.dismiss();
         if(s.equals("ERROR")) {
             Utils.showSnackbar(this, parent, getString(R.string.error_getting_data));
+        }
+    }
+
+    @Subscribe
+    public void reviewRatingResp(ReviewRatingResp resp) {
+        int rating = resp.getReviewRatingVal();
+        if (rating == 0) {
+            data.getLikedSet().remove(resp.getReviewId());
+            data.getInstance().getDislikedSet().remove(resp.getReviewId());
+        } else if (rating == 1) {
+            data.getInstance().getLikedSet().add(resp.getReviewId());
+            data.getInstance().getDislikedSet().remove(resp.getReviewId());
+        } else if (rating == 2) {
+            data.getInstance().getLikedSet().remove(resp.getReviewId());
+            data.getInstance().getDislikedSet().add(resp.getReviewId());
         }
     }
 
