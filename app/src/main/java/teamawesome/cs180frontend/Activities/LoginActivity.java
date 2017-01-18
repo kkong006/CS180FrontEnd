@@ -68,11 +68,6 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         setSchoolOptions();
-//        acTV.setVisibility(View.GONE);
-//        adapter = new SimpleListAdapter(this, android.R.layout.simple_dropdown_item_1line,
-//                DataSingleton.getInstance().getSchoolCache());
-//        acTV.setAdapter(adapter);
-//        acTV.setThreshold(1);
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(getString(R.string.loading));
@@ -209,12 +204,6 @@ public class LoginActivity extends AppCompatActivity {
     public void dataResp(CacheDataBundle data) {
         progressDialog.dismiss();
         DataSingleton.getInstance().cacheDataBundle(this, data);
-        System.out.println("SCHOOL ID " + Utils.getSchoolId(this));
-        System.out.println("SCHOOL SIZE " + DataSingleton.getInstance().getSchoolCache().size());
-        System.out.println("PROFESSOR SIZE " + DataSingleton.getInstance().getProfessorCache().size());
-        System.out.println("CLASS SIZE " + DataSingleton.getInstance().getClassCache().size());
-        System.out.println("SUBJECT SIZE " + DataSingleton.getInstance().getSubjectCache().size());
-
         setSchoolOptions();
     }
 
