@@ -30,6 +30,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.OnItemClick;
 import teamawesome.cs180frontend.API.Models.DataModel.CacheData.CacheDataBundle;
 import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewRatingBundle;
@@ -116,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
         toggle.syncState();
 
         //PREVENT USER FROM GETTING ACCESS TO THE WRITE REVIEW ACTIVITY
-//        setButtons();
+        setButtons();
 
         mProgressDialog = new ProgressDialog(this);
         mProgressDialog.setMessage(getString(R.string.loading));
@@ -129,6 +130,13 @@ public class MainActivity extends AppCompatActivity {
 
         System.out.println("GETTING DATA");
         getData();
+    }
+
+    @OnClick(R.id.fab)
+    public void onClick() {
+        System.out.println("Hello!");
+        Intent intent =  new Intent(this, WriteReviewActivity.class);
+        startActivity(intent);
     }
 
     private void getData() {
