@@ -1,21 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:ads="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <android.support.v7.widget.CardView
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:id="@+id/card_view"
-        android:layout_gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:layout_margin="5dp"
-        card_view:contentPadding="10dp"
         card_view:cardCornerRadius="5dp"
         card_view:cardElevation="5dp"
-        card_view:cardPreventCornerOverlap="true">
+        card_view:cardPreventCornerOverlap="true"
+        card_view:contentPadding="10dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -33,31 +32,31 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="left"
-                    android:orientation="vertical"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:orientation="vertical">
 
                     <!--Professor Name-->
                     <TextView
                         android:id="@+id/main_feed_professor_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textStyle="bold"
-                        android:textSize="18sp"/>
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
 
                     <!--Rating-->
                     <LinearLayout
-                        android:orientation="horizontal"
                         android:layout_width="wrap_content"
                         android:layout_height="25dp"
                         android:layout_marginTop="5dp"
+                        android:orientation="horizontal"
                         android:weightSum="5">
 
                         <com.joanzapata.iconify.widget.IconTextView
                             android:id="@+id/main_feed_rate_1"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:layout_marginRight="2dp"
                             android:layout_gravity="center_horizontal"
+                            android:layout_marginRight="2dp"
                             android:layout_weight="1"
                             android:text="@string/rating_icon" />
 
@@ -65,8 +64,8 @@
                             android:id="@+id/main_feed_rate_2"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:layout_marginRight="2dp"
                             android:layout_gravity="center_horizontal"
+                            android:layout_marginRight="2dp"
                             android:layout_weight="1"
                             android:text="@string/rating_icon" />
 
@@ -74,8 +73,8 @@
                             android:id="@+id/main_feed_rate_3"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:layout_marginRight="2dp"
                             android:layout_gravity="center_horizontal"
+                            android:layout_marginRight="2dp"
                             android:layout_weight="1"
                             android:text="@string/rating_icon" />
 
@@ -83,8 +82,8 @@
                             android:id="@+id/main_feed_rate_4"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:layout_marginRight="2dp"
                             android:layout_gravity="center_horizontal"
+                            android:layout_marginRight="2dp"
                             android:layout_weight="1"
                             android:text="@string/rating_icon" />
 
@@ -92,8 +91,8 @@
                             android:id="@+id/main_feed_rate_5"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:layout_marginRight="2dp"
                             android:layout_gravity="center_horizontal"
+                            android:layout_marginRight="2dp"
                             android:layout_weight="1"
                             android:text="@string/rating_icon" />
 
@@ -104,17 +103,17 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:gravity="right"
-                    android:orientation="vertical"
-                    android:layout_weight="1">
+                    android:orientation="vertical">
 
                     <!--Class-->
                     <TextView
                         android:id="@+id/main_feed_class_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textStyle="bold"
-                        android:textSize="18sp"/>
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
 
                     <!--Date-->
                     <TextView
@@ -143,10 +142,10 @@
 
     <LinearLayout
         android:id="@+id/loadingLayout"
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
+        android:orientation="horizontal"
         android:visibility="gone">
 
         <ProgressBar
@@ -154,19 +153,20 @@
             android:layout_height="48dp" />
 
     </LinearLayout>
-    
+
     <LinearLayout
         android:id="@+id/adLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        android:visibility="gone">
+        android:background="@android:color/transparent">
 
         <com.google.android.gms.ads.AdView
             android:id="@+id/adView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
             ads:adSize="SMART_BANNER"
             ads:adUnitId="@string/banner_ad_unit_id">
         </com.google.android.gms.ads.AdView>
