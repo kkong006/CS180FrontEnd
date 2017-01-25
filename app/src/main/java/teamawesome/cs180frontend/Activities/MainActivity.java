@@ -33,7 +33,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
 import teamawesome.cs180frontend.API.Models.DataModel.CacheData.CacheDataBundle;
-import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewRatingBundle;
 import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewRatingResp;
 import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewRespBundle;
 import teamawesome.cs180frontend.API.RetrofitSingleton;
@@ -51,18 +50,18 @@ public class MainActivity extends AppCompatActivity {
     @Bind(R.id.drawer_layout) DrawerLayout mDrawerLayout;
     @Bind(R.id.drawer_list) ListView mDrawerList;
     @Bind(R.id.main_layout) CoordinatorLayout parent;
-    @Bind(R.id.fab) FloatingActionButton mFab;
+    @Bind(R.id.fab) FloatingActionButton fab;
     @Bind(R.id.main_srl) SwipeRefreshLayout mainSWL;
-    @Bind(R.id.feed_list_view) ListView mFeedList;
+    @Bind(R.id.feed_list_view) ListView mainFeedList;
 
-    private NavDrawerAdapter mAdapter;
+    private NavDrawerAdapter drawerAdapter;
     private String[] mNavTitles;
     private String[] mIconTitles;
     private static final String TAG = "Main Activity";
 
     private MainFeedAdapter mainFeedAdapter;
 
-    ProgressDialog mProgressDialog;
+    ProgressDialog progressDialog;
     DataSingleton data;
 
     //private Integer apiCnt = new Integer(0);
@@ -70,7 +69,6 @@ public class MainActivity extends AppCompatActivity {
     int lastSelected = 0;
 
     AdRequest adRequest = null;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,8 +101,8 @@ public class MainActivity extends AppCompatActivity {
         mNavTitles = getResources().getStringArray(R.array.nav_drawer_array);
         mIconTitles = getResources().getStringArray(R.array.nav_drawer_icon_array);
 
-        mAdapter = new NavDrawerAdapter(mIconTitles, mNavTitles, this);
-        mDrawerList.setAdapter(mAdapter);
+        drawerAdapter = new NavDrawerAdapter(mIconTitles, mNavTitles, this);
+        mDrawerList.setAdapter(drawerAdapter);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, mDrawerLayout, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
@@ -119,14 +117,17 @@ public class MainActivity extends AppCompatActivity {
         //PREVENT USER FROM GETTING ACCESS TO THE WRITE REVIEW ACTIVITY
         setButtons();
 
-        mProgressDialog = new ProgressDialog(this);
-        mProgressDialog.setMessage(getString(R.string.loading));
-        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        mProgressDialog.setCancelable(false);
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage(getString(R.string.loading));
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setCancelable(false);
 
-        adRequest = new AdRequest.Builder().build();
+        adRequest = new AdRequest.Builder()
+                .addKeyword("college")
+                .addKeyword("university")
+                .build();
         mainFeedAdapter = new MainFeedAdapter(this, adRequest, new ArrayList<ReviewRespBundle>());
-        mFeedList.setAdapter(mainFeedAdapter);
+        mainFeedList.setAdapter(mainFeedAdapter);
 
         System.out.println("GETTING DATA");
         getData();
@@ -134,13 +135,12 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.fab)
     public void onClick() {
-        System.out.println("Hello!");
         Intent intent =  new Intent(this, WriteReviewActivity.class);
         startActivity(intent);
     }
 
     private void getData() {
-        mProgressDialog.show();
+        progressDialog.show();
         RetrofitSingleton.getInstance()
                 .getMatchingService()
                 .getData(Utils.getSchoolId(this), Utils.getUserId(this))
@@ -148,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getFeed(int offset) {
-        mProgressDialog.show();
+        progressDialog.show();
         RetrofitSingleton.getInstance()
                 .getMatchingService()
                 .reviews(null, Utils.getSchoolId(this), Utils.getUserId(this), offset)
@@ -158,15 +158,14 @@ public class MainActivity extends AppCompatActivity {
     //Show/hide the FAB and tool bar
     private void setButtons() {
         if (Utils.getUserId(this) < 1) {
-            mFab.setVisibility(View.GONE);
+            fab.setVisibility(View.GONE);
         } else {
-            mFab.setVisibility(View.VISIBLE);
+            fab.setVisibility(View.VISIBLE);
         }
     }
 
-    //TODO: Make this more concise & reuse callback later!!
     private void setOnScrollListener() {
-        mFeedList.setOnScrollListener(new AbsListView.OnScrollListener() {
+        mainFeedList.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {}
 
@@ -210,9 +209,9 @@ public class MainActivity extends AppCompatActivity {
             System.out.println("offset: " + offset);
 
             mainFeedAdapter.append(reviewList);
-            mFeedList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-            mProgressDialog.dismiss();
-            mFeedList.setVisibility(View.VISIBLE);
+            mainFeedList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+            progressDialog.dismiss();
+            mainFeedList.setVisibility(View.VISIBLE);
 
             /*if(reviewList.size() == 0) {
                 Utils.showSnackbar(this, parent, getString(R.string.reviews_dne));
@@ -234,7 +233,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Subscribe
     public void intResp(Integer i) {
-        mProgressDialog.dismiss();
+        progressDialog.dismiss();
         if (i.equals(0)) {
             Utils.showSnackbar(this, parent, getString(R.string.data_doesnt_exist));
         } else if (i.equals(-1)) {
@@ -244,7 +243,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Subscribe
     public void stringResp(String s) {
-        mProgressDialog.dismiss();
+        progressDialog.dismiss();
         if(s.equals("ERROR")) {
             Utils.showSnackbar(this, parent, getString(R.string.error_getting_data));
         }
@@ -255,13 +254,13 @@ public class MainActivity extends AppCompatActivity {
         int rating = resp.getReviewRatingVal();
         if (rating == 0) {
             data.getLikedSet().remove(resp.getReviewId());
-            data.getInstance().getDislikedSet().remove(resp.getReviewId());
+            data.getDislikedSet().remove(resp.getReviewId());
         } else if (rating == 1) {
-            data.getInstance().getLikedSet().add(resp.getReviewId());
-            data.getInstance().getDislikedSet().remove(resp.getReviewId());
+            data.getLikedSet().add(resp.getReviewId());
+            data.getDislikedSet().remove(resp.getReviewId());
         } else if (rating == 2) {
-            data.getInstance().getLikedSet().remove(resp.getReviewId());
-            data.getInstance().getDislikedSet().add(resp.getReviewId());
+            data.getLikedSet().remove(resp.getReviewId());
+            data.getDislikedSet().add(resp.getReviewId());
         }
     }
 
@@ -290,11 +289,11 @@ public class MainActivity extends AppCompatActivity {
             Utils.showSnackbar(this, parent, getString(R.string.please_sign_in));
             return true;
         }
-        int id = item.getItemId();
 
+        int id = item.getItemId();
         if (id == R.id.action_settings) {
             Intent i = new Intent(this, SettingsActivity.class);
-            startActivity(i);
+            startActivityForResult(i, 2);
             return true;
         }
 
@@ -315,10 +314,11 @@ public class MainActivity extends AppCompatActivity {
             //Search for professor stats
             Intent intent = new Intent(getApplicationContext(), SearchProfessorActivity.class);
             startActivity(intent);
-        }
-        else if (position == 3) {
+        } else if (position == 3) {
+
+        } else if (position == 4) {
             //Login or logout
-            if (mAdapter.getItem(position).equals(getString(R.string.login))) {
+            if (drawerAdapter.getItem(position).equals(getString(R.string.login))) {
                 Intent intent = new Intent(this, LoginActivity.class);
                 startActivityForResult(intent, 1);
             } else {
@@ -330,30 +330,42 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
+
+        if (progressDialog != null) {
+            progressDialog = new ProgressDialog(this);
+            progressDialog.setMessage(getString(R.string.loading));
+            progressDialog.setCancelable(false);
+        }
+
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
-                mAdapter.changeLoginElem();
-                System.out.println("ONACTIITYRESULT");
+                drawerAdapter.changeLoginElem();
+                progressDialog.show();
 
-                //Creating a new one since progressDialog could still possibly be null
-                mProgressDialog = new ProgressDialog(this);
-                mProgressDialog.setMessage(getString(R.string.loading));
-                mProgressDialog.setCancelable(false);
-                mProgressDialog.show();
+                RetrofitSingleton.getInstance()
+                        .getMatchingService()
+                        .getData(Utils.getSchoolId(this), Utils.getUserId(this))
+                        .enqueue(new GetCacheDataCallback());
+            }
+            setButtons();
+        } else if (requestCode == 2) {
+            if (resultCode == RESULT_OK) {
+                offset = 0;
+                System.out.println(Utils.getSchoolId(this));
+                mainFeedAdapter.clear(); //Need to reload the schools
+                progressDialog.show();
 
-                System.out.println("OnActivityResult");
                 RetrofitSingleton.getInstance()
                         .getMatchingService()
                         .getData(Utils.getSchoolId(this), Utils.getUserId(this))
                         .enqueue(new GetCacheDataCallback());
             }
         }
-        setButtons();
     }
 
     private void logout() {
         Utils.nukeUserData(this);
-        mAdapter.changeLoginElem();
+        drawerAdapter.changeLoginElem();
         setButtons();
         Toast.makeText(this, getString(R.string.log_out), Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(this, LoginActivity.class);

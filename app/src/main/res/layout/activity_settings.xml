@@ -1,98 +1,176 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_settings"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/activity_settings">
+    android:layout_height="match_parent">
 
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:orientation="vertical"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingBottom="@dimen/activity_vertical_margin"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin"
-        tools:context="teamawesome.cs180frontend.Activities.SettingsActivity">
+        android:paddingTop="@dimen/activity_vertical_margin">
 
-        <TextView
-            android:id="@+id/settings_university_tv"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="University" />
+            android:orientation="vertical">
 
-        <Spinner
-            android:id="@+id/settings_university_sp"
-            android:layout_width="match_parent"
-            android:layout_height="50dp">
-        </Spinner>
-
-        <Button
-            android:id="@+id/settings_school_bt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center"
-            android:padding="10dp"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:background="@color/colorAccent"
-            android:textColor="@color/colorWhite"
-            android:text="@string/change_school_button" />
-
-        <TextView
-            android:id="@+id/settings_password_tv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:text="Password" />
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/settings_old_password_til"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <EditText
-                android:id="@+id/old_password_et"
+            <LinearLayout
+                android:id="@+id/settings_elem1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColorHint="@color/colorAccent"
-                android:inputType="textPassword"
-                android:maxLines="1"
-                android:hint="Enter current password" />
+                android:orientation="vertical">
 
-        </android.support.design.widget.TextInputLayout>
+                <TextView
+                    android:id="@+id/change_school"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:paddingBottom="6dp"
+                    android:paddingTop="6dp"
+                    android:text="@string/change_school_button"
+                    android:textAppearance="?android:attr/textAppearanceLarge" />
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/settings_new_password_til"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+                <LinearLayout
+                    android:id="@+id/settings_dropdown1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="6dp"
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
-            <EditText
-                android:id="@+id/new_password_et"
+                    <TextView
+                        android:id="@+id/settings_school_tv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/school" />
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <AutoCompleteTextView
+                            android:id="@+id/settings_university_ac"
+                            android:hint="@string/enter_school_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp">
+                        </AutoCompleteTextView>
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <Button
+                        android:id="@+id/settings_school_bt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="@dimen/activity_vertical_margin"
+                        android:background="@color/colorAccent"
+                        android:gravity="center"
+                        android:padding="10dp"
+                        android:text="@string/change_school_button"
+                        android:textColor="@color/colorWhite" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorGrey">
+                </View>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/settings_elem2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColorHint="@color/colorAccent"
-                android:inputType="textPassword"
-                android:maxLines="1"
-                android:hint="Enter new password" />
+                android:orientation="vertical">
 
-        </android.support.design.widget.TextInputLayout>
+                <TextView
+                    android:id="@+id/change_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:paddingBottom="6dp"
+                    android:paddingTop="6dp"
+                    android:text="@string/change_password_button"
+                    android:textAppearance="?android:attr/textAppearanceLarge" />
 
-        <Button
-            android:id="@+id/settings_password_bt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center"
-            android:padding="10dp"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:background="@color/colorAccent"
-            android:textColor="@color/colorWhite"
-            android:text="@string/change_password_button" />
+                <LinearLayout
+                    android:id="@+id/settings_dropdown2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="6dp"
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
-    </LinearLayout>
+                    <TextView
+                        android:id="@+id/settings_password_tv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/activity_vertical_margin"
+                        android:text="Password" />
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/settings_old_password_til"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <EditText
+                            android:id="@+id/old_password_et"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Enter current password"
+                            android:inputType="textPassword"
+                            android:maxLines="1"
+                            android:textColorHint="@color/colorAccent" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/settings_new_password_til"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <EditText
+                            android:id="@+id/new_password_et"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Enter new password"
+                            android:inputType="textPassword"
+                            android:maxLines="1"
+                            android:textColorHint="@color/colorAccent" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <Button
+                        android:id="@+id/settings_password_bt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="@dimen/activity_vertical_margin"
+                        android:background="@color/colorAccent"
+                        android:gravity="center"
+                        android:padding="10dp"
+                        android:text="@string/change_password_button"
+                        android:textColor="@color/colorWhite" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorGrey"></View>
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
 
 </android.support.design.widget.CoordinatorLayout>

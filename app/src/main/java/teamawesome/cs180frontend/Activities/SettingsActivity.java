@@ -1,33 +1,34 @@
 package teamawesome.cs180frontend.Activities;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.SparseIntArray;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.util.ArrayList;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import retrofit2.Callback;
-import teamawesome.cs180frontend.API.Models.DataModel.SchoolBundle;
+import teamawesome.cs180frontend.API.APIConstants;
+import teamawesome.cs180frontend.API.Models.UserModel.FailedUpdate;
+import teamawesome.cs180frontend.API.Models.UserModel.UpdatePasswordStatus;
+import teamawesome.cs180frontend.API.Models.UserModel.UpdateSchoolStatus;
 import teamawesome.cs180frontend.API.Models.UserModel.UpdateUserBundle;
 import teamawesome.cs180frontend.API.RetrofitSingleton;
-import teamawesome.cs180frontend.API.Services.Callbacks.PostUpdateAccountCallback;
+import teamawesome.cs180frontend.API.Services.Callbacks.ChangePasswordCallback;
+import teamawesome.cs180frontend.API.Services.Callbacks.ChangeSchoolCallback;
+import teamawesome.cs180frontend.Adapters.SimpleListAdapter;
 import teamawesome.cs180frontend.Misc.Constants;
 import teamawesome.cs180frontend.Misc.DataSingleton;
 import teamawesome.cs180frontend.Misc.SPSingleton;
@@ -36,26 +37,28 @@ import teamawesome.cs180frontend.R;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    @Bind(R.id.activity_settings) CoordinatorLayout mParent;
-    @Bind(R.id.settings_university_tv) TextView mUniversityTV;
-    @Bind(R.id.settings_password_tv)TextView mPasswordTV;
-    @Bind(R.id.settings_university_sp) Spinner mSpinner;
+    @Bind(R.id.activity_settings) CoordinatorLayout parent;
+    @Bind(R.id.change_school) TextView changeSchoolTV;
+    @Bind(R.id.change_password) TextView changePasswordTV;
+    @Bind(R.id.settings_school_tv) TextView mUniversityTV;
+    @Bind(R.id.settings_password_tv) TextView mPasswordTV;
+    @Bind(R.id.settings_university_ac) AutoCompleteTextView schoolAC;
     @Bind(R.id.settings_school_bt) Button mSchoolButton;
-    @Bind(R.id.old_password_et) EditText mOldPasswordET;
-    @Bind(R.id.new_password_et) EditText mNewPasswordET;
+    @Bind(R.id.old_password_et) EditText oldPasswordET;
+    @Bind(R.id.new_password_et) EditText newPasswordET;
     @Bind(R.id.settings_password_bt) Button mPasswordButton;
-    @Bind(R.id.settings_old_password_til) TextInputLayout mOldPasswordTIL;
-    @Bind(R.id.settings_new_password_til) TextInputLayout mNewPasswordTIL;
+    @Bind(R.id.settings_old_password_til) TextInputLayout oldPasswordTIL;
+    @Bind(R.id.settings_new_password_til) TextInputLayout newPasswordTIL;
 
-    private String mSchoolName;
     private int mSchoolId;
-    private String mNewSchoolName;
-    private int mNewSchoolId;
-    private String[] mSchoolNames;
-    private ArrayAdapter<String> mAdapter;
-    private String mPassword;
-    private String mNewPassword;
-    private ProgressDialog mProgressDialog;
+    private int newSchoolId;
+
+    private SimpleListAdapter schoolAdapter;
+    private String newPasswordHolder; //HOLDS THE NEW PASSWORD AS IT'S BEING CHANGED
+    private ProgressDialog progressDialog;
+
+    SparseIntArray hiddenElemMap;
+    int lastClicked = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,143 +66,162 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        mProgressDialog = new ProgressDialog(this);
-        mProgressDialog.setCancelable(false);
-        mProgressDialog.setMessage(getString(R.string.loading));
-        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        mProgressDialog.setIndeterminate(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle(getString(R.string.action_settings));
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setCancelable(false);
+        progressDialog.setMessage(getString(R.string.loading));
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setIndeterminate(true);
 
         mSchoolId = Utils.getSchoolId(this);
 
-        if(mSchoolId == 0) {
-            mSchoolButton.setVisibility(View.GONE);
-            mPasswordButton.setVisibility(View.GONE);
-            mSpinner.setVisibility(View.GONE);
-            mOldPasswordET.setVisibility(View.GONE);
-            mNewPasswordET.setVisibility(View.GONE);
-            mUniversityTV.setText(getString(R.string.please_sign_in));
-            mPasswordTV.setVisibility(View.GONE);
-            mOldPasswordTIL.setVisibility(View.GONE);
-            mNewPasswordTIL.setVisibility(View.GONE);
-        } else {
-            ArrayList<SchoolBundle> schools = DataSingleton.getInstance().getSchoolCache();
-            if(schools.size() > 0) {
-                mSchoolNames = new String[schools.size()];
-                for(int i = 0; i < schools.size(); i++) {
-                    mSchoolNames[i] = schools.get(i).getSchoolName();
-                    if(schools.get(i).getSchoolId() == mSchoolId) {
-                        mSchoolName = schools.get(i).getSchoolName();
-                    }
-                }
-                System.out.println("Current school " + mSchoolName + " " + mSchoolId);
-                mPassword = Utils.getPassword(this);
-                mNewSchoolName = mSchoolName;
-                mNewSchoolId = mSchoolId;
-                mNewPassword = mPassword;
-                fillSpinner();
-            }
-        }
+        fillAutoComplete();
+        fillHiddenViewMap();
     }
 
-    public void fillSpinner() {
-        mAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, mSchoolNames);
-        mAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mSpinner.setAdapter(mAdapter);
-        for(int i = 0; i < mSchoolNames.length; i++) {
-            if(mSpinner.getItemAtPosition(i) == mSchoolName) {
-                mSpinner.setSelection(i);
-                break;
-            }
-        }
-        mSpinner.setOnItemSelectedListener(new SpinnerActivity());
+    public void fillAutoComplete() {
+        schoolAdapter = new SimpleListAdapter(this,
+                R.layout.simple_list_item,
+                DataSingleton.getInstance().getSchoolCache());
+        schoolAC.setAdapter(schoolAdapter);
     }
 
-    public class SpinnerActivity extends Activity implements AdapterView.OnItemSelectedListener {
-        @Override
-        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        String result = parent.getItemAtPosition(position).toString();
-            mNewSchoolName = result;
-            mNewSchoolId = DataSingleton.getInstance().getSchoolId(mNewSchoolName);
-            System.out.println("New school set to " + mNewSchoolName + " " + mNewSchoolId);
-        }
-
-        @Override
-        public void onNothingSelected(AdapterView<?> parent) { }
+    public void fillHiddenViewMap() {
+        hiddenElemMap = new SparseIntArray();
+        hiddenElemMap.append(R.id.change_school, R.id.settings_dropdown1);
+        hiddenElemMap.append(R.id.change_password, R.id.settings_dropdown2);
     }
 
     @OnClick(R.id.settings_school_bt)
     public void selectSchool() {
-        if(mSchoolId != mNewSchoolId) {
-            UpdateUserBundle user = new UpdateUserBundle(Utils.getUserId(this), mPassword, mPassword, mNewSchoolId);
-            updateUserAccount(user);
+        Utils.hideKeyboard(parent, this);
+        Integer schoolId = DataSingleton.getInstance().getSchoolId(schoolAC.getText().toString());
+        if (schoolId != null) {
+            newSchoolId = schoolId;
+
+            UpdateUserBundle user = new UpdateUserBundle(Utils.getUserId(this),
+                    Utils.getPassword(this),
+                    Utils.getPassword(this),
+                    schoolId);
+
+            progressDialog.show();
+            ChangeSchoolCallback callback = new ChangeSchoolCallback();
+            RetrofitSingleton.getInstance()
+                    .getUserService()
+                    .updateAccount(user)
+                    .enqueue(callback);
+
         } else {
-            Utils.showSnackbar(this, mParent, getString(R.string.select_new_school));
+            schoolAC.setError(getString(R.string.university_dne));
         }
     }
 
     @OnClick(R.id.settings_password_bt)
     public void changePassword() {
-        mOldPasswordET.setError(null);
-        mNewPasswordET.setError(null);
+        Utils.hideKeyboard(parent, this);
+        oldPasswordET.setError(null);
+        newPasswordET.setError(null);
         View focusView = null;
-        String oldPassword = Utils.getMD5Hash(mOldPasswordET.getText().toString());
-        String rawPassword = mNewPasswordET.getText().toString();
-        String newPassword = Utils.getMD5Hash(rawPassword);
-        if(!oldPassword.equals(Utils.getPassword(this))) {
-            mOldPasswordET.setError(getString(R.string.error_incorrect_password));
-            focusView = mOldPasswordET;
-        } else if(rawPassword.length() <= 8) {
-            mNewPasswordET.setError(getString(R.string.error_invalid_password));
-            focusView = mNewPasswordET;
-        } else if(oldPassword.equals(Utils.getPassword(this))) {
-            mNewPassword = newPassword;
-            UpdateUserBundle user = new UpdateUserBundle(Utils.getUserId(this), mPassword, mNewPassword, mSchoolId);
-            updateUserAccount(user);
+
+        String oldPassword = Utils.getMD5Hash(oldPasswordET.getText().toString());
+        String rawNewPassword = newPasswordET.getText().toString();
+        String newPassword = Utils.getMD5Hash(rawNewPassword);
+
+        if (rawNewPassword.length() < 8) {
+            newPasswordTIL.setError(getString(R.string.error_invalid_password));
+            focusView = newPasswordET;
+        } else if (oldPassword.equals(Utils.getPassword(this))) {
+            newPasswordHolder = newPassword;
+            UpdateUserBundle user = new UpdateUserBundle(Utils.getUserId(this),
+                    oldPassword,
+                    newPassword,
+                    mSchoolId);
+
+            progressDialog.show();
+
+            ChangePasswordCallback callback = new ChangePasswordCallback();
+            RetrofitSingleton.getInstance()
+                    .getUserService()
+                    .updateAccount(user)
+                    .enqueue(callback);
         } else {
-            Utils.showSnackbar(this, mParent, getString(R.string.enter_new_password));
+            Utils.showSnackbar(this, parent, getString(R.string.enter_new_password));
         }
-        if(focusView != null) {
+        if (focusView != null) {
             focusView.requestFocus();
         }
     }
 
-    private void updateUserAccount(UpdateUserBundle user) {
-        mProgressDialog.show();
-        Callback callback = new PostUpdateAccountCallback();
-        RetrofitSingleton.getInstance().getUserService()
-                .updateAccount(user)
-                .enqueue(callback);
-    }
+    @OnClick({R.id.change_school, R.id.change_password})
+    public void onSettingsElemClick(View v) {
+        Utils.hideKeyboard(parent, this);
+        int viewToExpand = v.getId();
 
-    @Subscribe
-    public void respInt(Integer i) {
-        mProgressDialog.dismiss();
-        if(i.equals(1)) {
-            mSchoolName = mNewSchoolName;
-            mSchoolId = mNewSchoolId;
-            mPassword = mNewPassword;
-            SPSingleton.getInstance(this).getSp().edit().putInt(Constants.SCHOOL_ID, mSchoolId).commit();
-            SPSingleton.getInstance(this).getSp().edit().putString(Constants.PASSWORD, mPassword).commit();
-            System.out.println("NEW SCHOOL ID " + Utils.getSchoolId(this) + "\nNEW PASSWORD " + Utils.getPassword(this));
-            mOldPasswordET.setText("");
-            mNewPasswordET.setText("");
-            fillSpinner();
-            Utils.showSnackbar(this, mParent, getString(R.string.account_update_success));
+        if (lastClicked == viewToExpand) {
+            View pressedOnView = findViewById(hiddenElemMap.get(lastClicked));
+
+            if (pressedOnView.getVisibility() == View.VISIBLE) {
+                pressedOnView.setVisibility(View.GONE);
+            } else {
+                pressedOnView.setVisibility(View.VISIBLE);
+            }
+            return;
+        } else if (lastClicked != -1) {
+            if (lastClicked == R.id.change_school) {
+                schoolAC.setError(null);
+            } else {
+                oldPasswordET.setError(null);
+                newPasswordET.setError(null);
+            }
+            findViewById(hiddenElemMap.get(lastClicked)).setVisibility(View.GONE);
+        }
+
+        lastClicked = viewToExpand;
+        findViewById(hiddenElemMap.get(lastClicked)).setVisibility(View.VISIBLE);
+        if (lastClicked == R.id.change_school) {
+            schoolAC.requestFocus();
         } else {
-            fillSpinner();
-            Utils.showSnackbar(this, mParent, getString(R.string.error_retrieving_data));
+            oldPasswordET.requestFocus();
         }
     }
 
     @Subscribe
-    public void respString(String s) {
-        mProgressDialog.dismiss();
-        if(s.equals("ERROR")) {
-            fillSpinner();
-            Utils.showSnackbar(this, mParent, getString(R.string.error_retrieving_data));
+    public void onUpdateSchoolResp(UpdateSchoolStatus resp) {
+        progressDialog.dismiss();
+        if (resp.getStatus() == APIConstants.HTTP_STATUS_OK) {
+            SPSingleton.getInstance(this).getSp().edit().putInt(Constants.SCHOOL_ID, newSchoolId).commit();
+            schoolAC.setText("");
+            Utils.showSnackbar(this, parent, getString(R.string.account_update_success));
+        } else {
+            Utils.showSnackbar(this, parent, getString(R.string.invalid_user_data));
         }
+        Intent intent = new Intent();
+        setResult(RESULT_OK, intent);
+        finish();
+    }
+
+    @Subscribe
+    public void onUpdatePasswordResp(UpdatePasswordStatus resp) {
+        progressDialog.dismiss();
+        if (resp.getStatus() == APIConstants.HTTP_STATUS_OK) {
+            System.out.println(newPasswordHolder);
+            Utils.savePassword(this, newPasswordHolder);
+            System.out.println("NEW SCHOOL ID " + Utils.getSchoolId(this) + "\nNEW PASSWORD " + Utils.getPassword(this));
+            oldPasswordET.setText("");
+            newPasswordET.setText("");
+            Utils.showSnackbar(this, parent, getString(R.string.account_update_success));
+        } else {
+            Utils.showSnackbar(this, parent, getString(R.string.invalid_user_data));
+        }
+    }
+
+    @Subscribe
+    public void onUpdateFailure(FailedUpdate failed) {
+        progressDialog.dismiss();
+        Utils.showSnackbar(this, parent, getString(R.string.update_failed));
     }
 
     @Override
@@ -212,7 +234,7 @@ public class SettingsActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                finish();
+                onBackPressed();
                 return true;
             default:
                 return true;

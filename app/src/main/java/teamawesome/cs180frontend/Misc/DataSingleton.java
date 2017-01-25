@@ -212,4 +212,15 @@ public class DataSingleton {
     public HashSet<Integer> getDislikedSet() {
         return dislikedSet;
     }
+
+    public HashMap<String, Integer> getSchoolMap() {
+        return schoolMap;
+    }
+
+    public void setSchoolMap(HashMap<String, Integer> schoolMap) { this.schoolMap = schoolMap; }
+
+    public HashMap<String, Integer> getSubjectMap() { return subjectMap; }
+
+    public void setSubjectMap(HashMap<String, Integer> subjectMap) { this.subjectMap = subjectMap; }
+
 }

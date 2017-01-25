@@ -87,6 +87,7 @@ public class SimpleListAdapter extends ArrayAdapter<SchoolBundle> {
         }
 
         @Override
+        @SuppressWarnings("unchecked") //this warning was annoying me
         protected void publishResults(CharSequence constraint, FilterResults results) {
             clear();
             List<SchoolBundle> filteredList = (ArrayList<SchoolBundle>) results.values;

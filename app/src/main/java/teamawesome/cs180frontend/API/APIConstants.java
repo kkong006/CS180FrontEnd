@@ -5,7 +5,7 @@ package teamawesome.cs180frontend.API;
  */
 
 public class APIConstants {
-    public static final String BASE_URL = "http://cs180team7.herokuapp.com";
+    public static final String BASE_URL = "https://cs180team7.herokuapp.com";
 
     public static final int HTTP_STATUS_OK = 200;
     public static final int HTTP_STATUS_INVALID = 400;

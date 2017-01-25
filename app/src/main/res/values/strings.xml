@@ -22,14 +22,15 @@
         <item>Home</item>
         <item>My Reviews</item>
         <item>Find a Professor</item>
+        <item>Search</item>
         <item>Logout</item>
     </string-array>
 
     <string-array name="nav_drawer_icon_array">
         <item>{fa-home}</item>
-        <item>{fa-search}</item>
+        <item>{fa-pencil}</item>
         <item>{fa-graduation-cap}</item>
-        <!--<item>{fa-paper-plane}</item>-->
+        <item>{fa-search}</item>
         <item>{fa-sign-out}</item>
     </string-array>
 
@@ -66,6 +67,7 @@
     <string name="data_loaded">Data loaded!</string>
 
     <!--Search Activity-->
+    <string name="school">School</string>
     <string name="search_by_professor">Search by Professor</string>
     <string name="search_by_class">Search by Class</string>
     <string name="search_by_school">Search by School</string>
@@ -96,8 +98,10 @@
     <string name="account_update_success">Success!</string>
     <string name="change_password_button">Change Password</string>
     <string name="please_sign_in">Please sign in</string>
-    <string name="select_new_school">Please select new school</string>
-    <string name="enter_new_password">Please enter new password</string>
+    <string name="select_new_school">Please select new school.</string>
+    <string name="enter_new_password">Please enter new password.</string>
+    <string name="invalid_user_data">Unable to update account. Please re-check entered information.</string>
+    <string name="update_failed">Failed to update data. Please try again later.</string>
 
     <!--Read Review Activity-->
     <string name="students_like"> students like this review</string>

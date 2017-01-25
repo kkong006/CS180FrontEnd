@@ -126,7 +126,7 @@ public class ReadReviewActivity extends AppCompatActivity {
         if (ratingProcessing) {
             return;
         }
-        //Utils.showSnackbar(this, mParent, getString(R.string.liked));
+        //Utils.showSnackbar(this, parent, getString(R.string.liked));
 
         if(userRating == 1) {
             mNewUserRating = 0;
@@ -138,7 +138,7 @@ public class ReadReviewActivity extends AppCompatActivity {
 
     @OnClick(R.id.read_dislike_bt)
     public void thumbsDown() {
-        //Utils.showSnackbar(this, mParent, getString(R.string.disliked));
+        //Utils.showSnackbar(this, parent, getString(R.string.disliked));
         if (ratingProcessing) {
             return;
         }

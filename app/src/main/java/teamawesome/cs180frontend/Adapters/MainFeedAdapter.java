@@ -43,6 +43,11 @@ public class MainFeedAdapter extends BaseAdapter{
         notifyDataSetChanged();
     }
 
+    public void clear() {
+        reviewList.clear();
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getCount() {
         return reviewList.size();
