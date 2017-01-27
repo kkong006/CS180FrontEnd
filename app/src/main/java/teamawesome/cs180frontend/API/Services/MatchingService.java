@@ -37,8 +37,10 @@ public interface MatchingService {
     Call<Void> reviewRatings(@Query("id") Integer userId);
 
     @GET("/reviews")
-    Call<List<ReviewRespBundle>> reviews(@Query("prof_id") Integer profId,
-                                         @Query("school_id") Integer schoolId,
+    Call<List<ReviewRespBundle>> reviews(@Query("school_id") Integer schoolId,
+                                         @Query("subject_id") Integer subjectId,
+                                         @Query("class_id") Integer classId,
+                                         @Query("prof_id") Integer profId,
                                          @Query("user_id") Integer userId,
                                          @Query("offset") Integer offset);
 

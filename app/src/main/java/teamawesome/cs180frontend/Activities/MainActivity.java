@@ -1,6 +1,7 @@
 package teamawesome.cs180frontend.Activities;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -164,7 +165,9 @@ public class MainActivity extends AppCompatActivity {
         progressDialog.show();
         RetrofitSingleton.getInstance()
                 .getMatchingService()
-                .reviews(null, Utils.getSchoolId(this), Utils.getUserId(this), offset)
+                .reviews(Utils.getSchoolId(this),
+                        null, null, null,
+                        Utils.getUserId(this), offset)
                 .enqueue(new GetReviewsCallback());
     }
 
@@ -178,6 +181,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setOnScrollListener() {
+        final Context context = this;
         mainFeedList.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {}
@@ -192,8 +196,9 @@ public class MainActivity extends AppCompatActivity {
 
                         RetrofitSingleton.getInstance()
                                 .getMatchingService()
-                                .reviews(null, Utils.getSchoolId(getApplicationContext()),
-                                        Utils.getUserId(getApplicationContext()), offset)
+                                .reviews(Utils.getSchoolId(context),
+                                        null, null, null,
+                                        Utils.getUserId(context), offset)
                                 .enqueue(new GetReviewsCallback());
                     }
                 }
