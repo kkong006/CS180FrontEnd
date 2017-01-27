@@ -40,6 +40,8 @@
     <!--Main Activity-->
     <string name="data_doesnt_exist">Data doesn\'t exist</string>
     <string name="error_getting_data">Couldn\'t get data</string>
+    <string name="invalid_review_request">Invalid request to fetch reviews.</string>
+    <string name="failed_review_request">Failed to fetch reviews. Try again later.</string>
     <string name="log_out">Logging out</string>
 
     <!-- Login Activity -->
@@ -114,14 +116,18 @@
     <string name="REVIEW_CLASS_NAME">REVIEW_CLASS_NAME</string>
     <string name="REVIEW_DATE">REVIEW_DATE</string>
     <string name="REVIEW_USER_RATING">REVIEW_USER_RATING</string>
+    <string name="INVALID_REVIEW_RATING_REQ">Invalid request made.</string>
+    <string name="SERVER_ERROR">Server is unable to process request. Please try again later.</string>
+    <string name="FAILED_REVIEW_RATING">Failed to make a review rating. Please try again later.</string>
 
     <!--Write Review Activity-->
-    <string name="review_not_long_enough">Review too short</string>
-    <string name="failed_to_submit_review">Failed to submit review</string>
-    <string name="invalid_prof_class_name">Select valid professor and class names</string>
-    <string name="already_submitted_review">Review exists already</string>
-    <string name="select_valid_class">Class name does not exist</string>
+    <string name="review_not_long_enough">Review too short.</string>
+    <string name="failed_to_submit_review">Failed to submit review. Please try again later.</string>
+    <string name="invalid_prof_class_name">Select valid professor and class names.</string>
+    <string name="already_submitted_review">You have already reviewed this class and professor!</string>
+    <string name="select_valid_class">Class name does not exist.</string>
     <string name="invalid_rating">Select rating for professor</string>
+    <string name="prof_or_class_DNE">Error: submitting review for class and/or professor that does not exist.</string>
 
     <!--Search Professor Results-->
     <string name="search_professor_button">Get Professor Statistics</string>

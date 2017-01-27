@@ -6,7 +6,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import teamawesome.cs180frontend.API.APIConstants;
-import teamawesome.cs180frontend.API.Models.UserModel.FailedUpdate;
+import teamawesome.cs180frontend.API.Models.StatusModel.FailedUpdate;
 import teamawesome.cs180frontend.API.Models.UserModel.UpdatePasswordStatus;
 import teamawesome.cs180frontend.Misc.Utils;
 

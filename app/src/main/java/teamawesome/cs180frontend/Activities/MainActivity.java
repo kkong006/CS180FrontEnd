@@ -32,9 +32,13 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
+import teamawesome.cs180frontend.API.APIConstants;
 import teamawesome.cs180frontend.API.Models.DataModel.CacheData.CacheDataBundle;
+import teamawesome.cs180frontend.API.Models.StatusModel.CacheReqStatus;
+import teamawesome.cs180frontend.API.Models.StatusModel.ReviewFetchStatus;
 import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewRatingResp;
 import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewRespBundle;
+import teamawesome.cs180frontend.API.Models.StatusModel.ReviewRatingStatus;
 import teamawesome.cs180frontend.API.RetrofitSingleton;
 import teamawesome.cs180frontend.API.Services.Callbacks.GetCacheDataCallback;
 import teamawesome.cs180frontend.API.Services.Callbacks.GetReviewsCallback;
@@ -97,12 +101,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         setOnScrollListener();
-
-        mNavTitles = getResources().getStringArray(R.array.nav_drawer_array);
-        mIconTitles = getResources().getStringArray(R.array.nav_drawer_icon_array);
-
-        drawerAdapter = new NavDrawerAdapter(mIconTitles, mNavTitles, this);
-        mDrawerList.setAdapter(drawerAdapter);
+        setUpNavBar();
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, mDrawerLayout, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
@@ -116,21 +115,35 @@ public class MainActivity extends AppCompatActivity {
 
         //PREVENT USER FROM GETTING ACCESS TO THE WRITE REVIEW ACTIVITY
         setButtons();
-
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage(getString(R.string.loading));
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setCancelable(false);
+        loadProgressDialog();
 
         adRequest = new AdRequest.Builder()
                 .addKeyword("college")
                 .addKeyword("university")
                 .build();
+
+        setUpAdapter();
+        getData();
+    }
+
+    public void setUpNavBar() {
+        String[] navTitles = getResources().getStringArray(R.array.nav_drawer_array);
+        String[] iconTitles = getResources().getStringArray(R.array.nav_drawer_icon_array);
+
+        drawerAdapter = new NavDrawerAdapter(iconTitles, navTitles, this);
+        mDrawerList.setAdapter(drawerAdapter);
+    }
+
+    public void loadProgressDialog() {
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage(getString(R.string.loading));
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setCancelable(false);
+    }
+
+    public void setUpAdapter() {
         mainFeedAdapter = new MainFeedAdapter(this, adRequest, new ArrayList<ReviewRespBundle>());
         mainFeedList.setAdapter(mainFeedAdapter);
-
-        System.out.println("GETTING DATA");
-        getData();
     }
 
     @OnClick(R.id.fab)
@@ -232,20 +245,33 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Subscribe
-    public void intResp(Integer i) {
+    public void failedDataResp(CacheReqStatus resp) {
         progressDialog.dismiss();
-        if (i.equals(0)) {
+        if (resp.getStatus() != -1) {
             Utils.showSnackbar(this, parent, getString(R.string.data_doesnt_exist));
-        } else if (i.equals(-1)) {
+        } else {
             Utils.showSnackbar(this, parent, getString(R.string.error_getting_data));
         }
     }
 
     @Subscribe
-    public void stringResp(String s) {
+    public void failedReviewFetch(ReviewFetchStatus failedFetch) {
         progressDialog.dismiss();
-        if(s.equals("ERROR")) {
-            Utils.showSnackbar(this, parent, getString(R.string.error_getting_data));
+        if (failedFetch.getStatus() != -1) {
+            Utils.showSnackbar(this, parent, getString(R.string.invalid_review_request));
+        } else {
+            Utils.showSnackbar(this, parent, getString(R.string.failed_review_request));
+        }
+    }
+
+    @Subscribe
+    public void onFailedResp(ReviewRatingStatus status) {
+        if (status.getStatus() == APIConstants.HTTP_STATUS_INVALID) {
+            Toast.makeText(this, getString(R.string.INVALID_REVIEW_RATING_REQ), Toast.LENGTH_SHORT).show();
+        } else if (status.getStatus() == APIConstants.HTTP_STATUS_ERROR) {
+            Toast.makeText(this, getString(R.string.SERVER_ERROR), Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, getString(R.string.FAILED_REVIEW_RATING), Toast.LENGTH_SHORT).show();
         }
     }
 

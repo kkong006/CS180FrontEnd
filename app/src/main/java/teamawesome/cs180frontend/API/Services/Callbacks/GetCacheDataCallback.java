@@ -7,6 +7,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import teamawesome.cs180frontend.API.APIConstants;
 import teamawesome.cs180frontend.API.Models.DataModel.CacheData.CacheDataBundle;
+import teamawesome.cs180frontend.API.Models.StatusModel.CacheReqStatus;
 import teamawesome.cs180frontend.Misc.Utils;
 
 /**
@@ -22,7 +23,7 @@ public class GetCacheDataCallback implements Callback<CacheDataBundle> {
                 EventBus.getDefault().post(resp.body());
                 break;
             default:
-                EventBus.getDefault().post(0);
+                EventBus.getDefault().post(new CacheReqStatus(resp.code()));
                 break;
         }
     }
@@ -30,6 +31,6 @@ public class GetCacheDataCallback implements Callback<CacheDataBundle> {
     @Override
     public void onFailure(Call<CacheDataBundle> call, Throwable t) {
         System.out.println(Utils.getStackTrace(t));
-        EventBus.getDefault().post(-1);
+        EventBus.getDefault().post(new CacheReqStatus(-1));
     }
 }

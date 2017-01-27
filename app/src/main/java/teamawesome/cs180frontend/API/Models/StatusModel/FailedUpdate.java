@@ -1,9 +1,6 @@
-package teamawesome.cs180frontend.API.Models.UserModel;
+package teamawesome.cs180frontend.API.Models.StatusModel;
 
-/**
- * Created by jonathan on 1/26/17.
- */
-
+//Broadcasted when user account fails to update
 public class FailedUpdate {
     String stackTrace;
 

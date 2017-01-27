@@ -2,7 +2,6 @@ package teamawesome.cs180frontend.Activities;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -16,13 +15,13 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import retrofit2.Callback;
+import teamawesome.cs180frontend.API.APIConstants;
 import teamawesome.cs180frontend.API.Models.ReviewModel.RateReview;
 import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewRatingResp;
 import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewRespBundle;
+import teamawesome.cs180frontend.API.Models.StatusModel.ReviewRatingStatus;
 import teamawesome.cs180frontend.API.RetrofitSingleton;
 import teamawesome.cs180frontend.API.Services.Callbacks.PostReviewRatingCallback;
-import teamawesome.cs180frontend.Misc.DataSingleton;
-import teamawesome.cs180frontend.Misc.SPSingleton;
 import teamawesome.cs180frontend.Misc.Utils;
 import teamawesome.cs180frontend.R;
 
@@ -46,9 +45,9 @@ public class ReadReviewActivity extends AppCompatActivity {
     ReviewRespBundle review;
     private int userRating = 0;
     private int mNewUserRating;
-    boolean ratingProcessing = false;
+    boolean isRatingProcessing = false;
 
-    private ProgressDialog mProgressDialog;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,11 +64,11 @@ public class ReadReviewActivity extends AppCompatActivity {
             mDislikeCount.setVisibility(View.GONE);
         }
 
-        mProgressDialog = new ProgressDialog(this);
-        mProgressDialog.setCancelable(false);
-        mProgressDialog.setMessage(getResources().getString(R.string.loading));
-        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        mProgressDialog.setIndeterminate(true);
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setCancelable(false);
+        progressDialog.setMessage(getResources().getString(R.string.loading));
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setIndeterminate(true);
 
         mRatings = new TextView[] {mRate1, mRate2, mRate3, mRate4, mRate5};
 
@@ -108,8 +107,8 @@ public class ReadReviewActivity extends AppCompatActivity {
     }
 
     public void updateResponse() {
-        if(userRating != mNewUserRating && !ratingProcessing) {
-            ratingProcessing = true;
+        if(userRating != mNewUserRating && !isRatingProcessing) {
+            isRatingProcessing = true;
             int userId = Utils.getUserId(this);
             String password = Utils.getPassword(this);
             //System.out.println("USER ID " + userId + "\nPASSWORD " + password + "\nREVIEW ID " + mReviewId + "\nUSER RATING " + userRating + "\nNEW USER RATING " + mNewUserRating);
@@ -123,7 +122,7 @@ public class ReadReviewActivity extends AppCompatActivity {
 
     @OnClick(R.id.read_like_bt)
     public void thumbsUp() {
-        if (ratingProcessing) {
+        if (isRatingProcessing) {
             return;
         }
         //Utils.showSnackbar(this, parent, getString(R.string.liked));
@@ -139,7 +138,7 @@ public class ReadReviewActivity extends AppCompatActivity {
     @OnClick(R.id.read_dislike_bt)
     public void thumbsDown() {
         //Utils.showSnackbar(this, parent, getString(R.string.disliked));
-        if (ratingProcessing) {
+        if (isRatingProcessing) {
             return;
         }
 
@@ -153,18 +152,15 @@ public class ReadReviewActivity extends AppCompatActivity {
 
     @Subscribe
     public void intLikeDislikeResp(ReviewRatingResp resp) {
-        ratingProcessing = false;
+        isRatingProcessing = false;
         Utils.showSnackbar(this, mParent, getString(R.string.account_update_success));
         userRating = mNewUserRating;
         setUserRating();
     }
 
     @Subscribe
-    public void onFailedResp(String s) {
-        ratingProcessing = false;
-        if(s.equals("ERROR")) {
-            Utils.showSnackbar(this, mParent, getString(R.string.error_retrieving_data));
-        }
+    public void onFailedResp(ReviewRatingStatus status) {
+        isRatingProcessing = false;
     }
 
     @Override

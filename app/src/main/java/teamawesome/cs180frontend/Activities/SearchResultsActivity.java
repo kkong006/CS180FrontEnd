@@ -35,7 +35,7 @@ public class SearchResultsActivity extends AppCompatActivity {
 
     private String mProfessorName;
     private int mProfessorId;
-    //    private String mClassName;
+    //    private String className;
     private SearchResultsAdapter mAdapter;
     private ProgressDialog mProgressDialog;
     private List<ReviewRespBundle> reviews;

@@ -21,7 +21,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import teamawesome.cs180frontend.API.APIConstants;
-import teamawesome.cs180frontend.API.Models.UserModel.FailedUpdate;
+import teamawesome.cs180frontend.API.Models.StatusModel.FailedUpdate;
 import teamawesome.cs180frontend.API.Models.UserModel.UpdatePasswordStatus;
 import teamawesome.cs180frontend.API.Models.UserModel.UpdateSchoolStatus;
 import teamawesome.cs180frontend.API.Models.UserModel.UpdateUserBundle;
@@ -74,7 +74,6 @@ public class SettingsActivity extends AppCompatActivity {
         progressDialog.setCancelable(false);
         progressDialog.setMessage(getString(R.string.loading));
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setIndeterminate(true);
 
         mSchoolId = Utils.getSchoolId(this);
 

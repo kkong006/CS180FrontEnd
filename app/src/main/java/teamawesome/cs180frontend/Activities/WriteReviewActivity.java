@@ -6,7 +6,6 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -21,10 +20,12 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import retrofit2.Callback;
+import teamawesome.cs180frontend.API.APIConstants;
 import teamawesome.cs180frontend.API.Models.DataModel.ClassBundle;
 import teamawesome.cs180frontend.API.Models.DataModel.ProfessorBundle;
 import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewIDRespBundle;
 import teamawesome.cs180frontend.API.Models.ReviewModel.UserReview;
+import teamawesome.cs180frontend.API.Models.StatusModel.PostReviewStatus;
 import teamawesome.cs180frontend.API.RetrofitSingleton;
 import teamawesome.cs180frontend.API.Services.Callbacks.PostReviewCallback;
 import teamawesome.cs180frontend.Misc.DataSingleton;
@@ -33,28 +34,23 @@ import teamawesome.cs180frontend.R;
 
 public class WriteReviewActivity extends AppCompatActivity {
 
-    @Bind(R.id.activity_write_review) CoordinatorLayout mParent;
-    @Bind(R.id.write_professor_et) AutoCompleteTextView mProfessorName;
-    @Bind(R.id.write_class_et) AutoCompleteTextView mClassName;
-    @Bind(R.id.write_review_et) EditText mReviewText;
-    @Bind(R.id.write_rate_1) Button mStar1;
-    @Bind(R.id.write_rate_2) Button mStar2;
-    @Bind(R.id.write_rate_3) Button mStar3;
-    @Bind(R.id.write_rate_4) Button mStar4;
-    @Bind(R.id.write_rate_5) Button mStar5;
-    @Bind(R.id.write_submit_bt) Button mSubmit;
+    @Bind(R.id.activity_write_review) CoordinatorLayout parent;
+    @Bind(R.id.write_professor_et) AutoCompleteTextView professorName;
+    @Bind(R.id.write_class_et) AutoCompleteTextView className;
+    @Bind(R.id.write_review_et) EditText reviewText;
+    @Bind(R.id.write_rate_1) Button star1;
+    @Bind(R.id.write_rate_2) Button star2;
+    @Bind(R.id.write_rate_3) Button star3;
+    @Bind(R.id.write_rate_4) Button star4;
+    @Bind(R.id.write_rate_5) Button star5;
+    @Bind(R.id.write_submit_bt) Button submit;
 
-    private Button[] mStars;
-    private String[] mProfessorNames;
-    private String[] mClassNames;
-    private String mUserProfessorName;
-    private String mUserClassName;
-    private int mRating;
+    private Button[] stars;
+    private String[] professorNameArr;
+    private String[] classNameArr;
+    private int rating;
 
-    private List<ProfessorBundle> mProfessors;
-    private List<ClassBundle> mClasses;
-
-    ProgressDialog mProgressDialog;
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,48 +60,36 @@ public class WriteReviewActivity extends AppCompatActivity {
         EventBus.getDefault().register(this);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        mProgressDialog = new ProgressDialog(this);
-        mProgressDialog.setCancelable(false);
-        mProgressDialog.setMessage(getResources().getString(R.string.loading));
-        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        mProgressDialog.setIndeterminate(true);
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setCancelable(false);
+        progressDialog.setMessage(getResources().getString(R.string.loading));
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setIndeterminate(true);
 
-        mStars = new Button[] {mStar1, mStar2, mStar3, mStar4, mStar5};
+        stars = new Button[] {star1, star2, star3, star4, star5};
 
-        mRating = 0;
+        rating = 0;
 
         //Fill autocomplete textviews for professor and classs choice
-        mProfessors = DataSingleton.getInstance().getProfessorCache();
-        mProfessorNames = new String[mProfessors.size()];
-        for(int i = 0; i < mProfessors.size(); i++) {
-            mProfessorNames[i] = mProfessors.get(i).getProfessorName();
+        List<ProfessorBundle> professors = DataSingleton.getInstance().getProfessorCache();
+        professorNameArr = new String[professors.size()];
+        for(int i = 0; i < professors.size(); i++) {
+            professorNameArr[i] = professors.get(i).getProfessorName();
         }
-        ArrayAdapter<String> profAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, mProfessorNames);
-        mProfessorName.setAdapter(profAdapter);
-        mProfessorName.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                mUserProfessorName = parent.getItemAtPosition(position).toString();
-            }
-        });
+        ArrayAdapter<String> profAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, professorNameArr);
+        professorName.setAdapter(profAdapter);
 
-        mClasses = DataSingleton.getInstance().getClassCache();
-        mClassNames = new String[mClasses.size()];
-        for(int i = 0; i < mClasses.size(); i++) {
-            mClassNames[i] = mClasses.get(i).getClassName();
+        List<ClassBundle> classes = DataSingleton.getInstance().getClassCache();
+        classNameArr = new String[classes.size()];
+        for(int i = 0; i < classes.size(); i++) {
+            classNameArr[i] = classes.get(i).getClassName();
         }
-        ArrayAdapter<String> classAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, mClassNames);
-        mClassName.setAdapter(classAdapter);
-        mClassName.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                mUserClassName = parent.getItemAtPosition(position).toString();
-            }
-        });
+        ArrayAdapter<String> classAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, classNameArr);
+        className.setAdapter(classAdapter);
 
 //        final Context context = this;
         //Enter key to hide keyboard
-//        mReviewText.setOnKeyListener(new View.OnKeyListener() {
+//        reviewText.setOnKeyListener(new View.OnKeyListener() {
 //            @Override
 //            public boolean onKey(View v, int keyCode, KeyEvent event) {
 //                if(keyCode == KeyEvent.KEYCODE_ENTER) {
@@ -119,41 +103,39 @@ public class WriteReviewActivity extends AppCompatActivity {
     @OnClick(R.id.write_submit_bt)
     public void submitReview() {
 
-        String professorName = mProfessorName.getText().toString();
+        String professorName = this.professorName.getText().toString();
         Integer profId = DataSingleton.getInstance().getProfessorId(professorName);
 
-        String className = mClassName.getText().toString();
+        String className = this.className.getText().toString();
         Integer classId = DataSingleton.getInstance().getClassId(className);
 
-        String reviewText = mReviewText.getText().toString();
+        String reviewText = this.reviewText.getText().toString();
 
         View focusView = null;
 
         if(profId != null) {
             if(classId != null) {
                if(reviewText.length() >= 32) {
-                   if(mRating > 0) {
-                       mUserProfessorName = professorName;
-                       mUserClassName = className;
+                   if(rating > 0) {
                        int userId = Utils.getUserId(this);
                        int schoolId = Utils.getSchoolId(this);
                        String password = Utils.getPassword(this);
-                       System.out.println("PROF ID " + profId + "\nCLASS ID " + classId + "\nSCHOOL_ID " + schoolId + "\nUSER ID " + userId + "\nPASSWORD " + password + "\nRATING " + mRating + "\nREVIEW " + reviewText);
-                       UserReview r = new UserReview(userId, password, classId, profId, mRating, reviewText, schoolId);
+                       System.out.println("PROF ID " + profId + "\nCLASS ID " + classId + "\nSCHOOL_ID " + schoolId + "\nUSER ID " + userId + "\nPASSWORD " + password + "\nRATING " + rating + "\nREVIEW " + reviewText);
+                       UserReview r = new UserReview(userId, password, classId, profId, rating, reviewText, schoolId);
                        submitReview(r);
                    } else {
-                       Utils.showSnackbar(this, mParent, getString(R.string.invalid_rating));
+                       Utils.showSnackbar(this, parent, getString(R.string.invalid_rating));
                    }
                } else {
-                   Utils.showSnackbar(this, mParent, getString(R.string.review_not_long_enough));
+                   Utils.showSnackbar(this, parent, getString(R.string.review_not_long_enough));
                }
             } else {
-                mClassName.setError(getString(R.string.select_valid_class));
-                focusView = mClassName;
+                this.className.setError(getString(R.string.select_valid_class));
+                focusView = this.className;
             }
         } else {
-            mProfessorName.setError(getString(R.string.professor_dne));
-            focusView = mProfessorName;
+            this.professorName.setError(getString(R.string.professor_dne));
+            focusView = this.professorName;
         }
         if(focusView != null) {
             focusView.requestFocus();
@@ -184,18 +166,18 @@ public class WriteReviewActivity extends AppCompatActivity {
     }
 
     private void setStarColor(int count) {
-        mRating = count;
+        rating = count;
         for(int i = 0; i < 5; i++){
             if(i < count) {
-                mStars[i].setTextColor(getApplicationContext().getResources().getColor(R.color.colorGreen));
+                stars[i].setTextColor(getApplicationContext().getResources().getColor(R.color.colorGreen));
             } else {
-                mStars[i].setTextColor(getApplicationContext().getResources().getColor(R.color.colorGrey));
+                stars[i].setTextColor(getApplicationContext().getResources().getColor(R.color.colorGrey));
             }
         }
     }
 
     public void submitReview(UserReview r) {
-        mProgressDialog.show();
+        progressDialog.show();
         Callback callback = new PostReviewCallback();
         RetrofitSingleton.getInstance().getMatchingService()
                 .review(r)
@@ -204,13 +186,11 @@ public class WriteReviewActivity extends AppCompatActivity {
 
     @Subscribe
     public void reviewResp(ReviewIDRespBundle r) {
-        mProgressDialog.dismiss();
-        mReviewText.setText("");
-        mProfessorName.setText("");
-        mClassName.setText("");
-        mUserProfessorName = "";
-        mUserClassName = "";
-        Utils.showSnackbar(this, mParent, getString(R.string.account_update_success));
+        progressDialog.dismiss();
+        reviewText.setText("");
+        professorName.setText("");
+        className.setText("");
+        Utils.showSnackbar(this, parent, getString(R.string.account_update_success));
 
         Intent i = new Intent(this, MainActivity.class);
         startActivity(i);
@@ -218,20 +198,14 @@ public class WriteReviewActivity extends AppCompatActivity {
     }
 
     @Subscribe
-    public void intResp(Integer i) {
-        mProgressDialog.dismiss();
-        if(i.equals(500)) {
-            Utils.showSnackbar(this, mParent, getString(R.string.already_submitted_review));
+    public void onFailedReviewPost(PostReviewStatus status) {
+        progressDialog.dismiss();
+        if(status.getStatus() == APIConstants.HTTP_STATUS_ERROR) {
+            Utils.showSnackbar(this, parent, getString(R.string.already_submitted_review));
+        } else if (status.getStatus() == APIConstants.HTTP_STATUS_DNE) {
+            Utils.showSnackbar(this, parent, getString(R.string.prof_or_class_DNE));
         } else {
-            Utils.showSnackbar(this, mParent, getString(R.string.failed_to_submit_review));
-        }
-    }
-
-    @Subscribe
-    public void stringResp(String s) {
-        mProgressDialog.dismiss();
-        if(s.equals("ERROR")) {
-            Utils.showSnackbar(this, mParent, getString(R.string.failed_to_submit_review));
+            Utils.showSnackbar(this, parent, getString(R.string.failed_to_submit_review));
         }
     }
 
