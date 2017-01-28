@@ -15,7 +15,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import retrofit2.Callback;
-import teamawesome.cs180frontend.API.APIConstants;
 import teamawesome.cs180frontend.API.Models.ReviewModel.RateReview;
 import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewRatingResp;
 import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewRespBundle;
@@ -27,24 +26,24 @@ import teamawesome.cs180frontend.R;
 
 public class ReadReviewActivity extends AppCompatActivity {
 
-    @Bind(R.id.activity_read_review) CoordinatorLayout mParent;
-    @Bind(R.id.read_class_tv) TextView mClassName;
-    @Bind(R.id.read_date_tv) TextView mReviewDate;
-    @Bind(R.id.read_rate_1) TextView mRate1;
-    @Bind(R.id.read_rate_2) TextView mRate2;
-    @Bind(R.id.read_rate_3) TextView mRate3;
-    @Bind(R.id.read_rate_4) TextView mRate4;
-    @Bind(R.id.read_rate_5) TextView mRate5;
-    @Bind(R.id.read_review_tv) TextView mReviewText;
-    @Bind(R.id.read_like_bt) Button mThumbsUp;
-    @Bind(R.id.read_dislike_bt) Button mThumbsDown;
-    @Bind(R.id.read_like_count_tv) TextView mLikeCount;
-    @Bind(R.id.read_dislike_count_tv) TextView mDislikeCount;
+    @Bind(R.id.activity_read_review) CoordinatorLayout parent;
+    @Bind(R.id.read_class_tv) TextView className;
+    @Bind(R.id.read_date_tv) TextView reviewDate;
+    @Bind(R.id.read_rate_1) TextView rate1;
+    @Bind(R.id.read_rate_2) TextView rate2;
+    @Bind(R.id.read_rate_3) TextView rate3;
+    @Bind(R.id.read_rate_4) TextView rate4;
+    @Bind(R.id.read_rate_5) TextView rate5;
+    @Bind(R.id.read_review_tv) TextView reviewText;
+    @Bind(R.id.read_like_bt) Button thumbsUp;
+    @Bind(R.id.read_dislike_bt) Button thumbsDown;
+    @Bind(R.id.read_like_count_tv) TextView likeCount;
+    @Bind(R.id.read_dislike_count_tv) TextView dislikeCount;
 
-    private TextView[] mRatings;
+    private TextView[] ratings;
     ReviewRespBundle review;
     private int userRating = 0;
-    private int mNewUserRating;
+    private int newUserRating = -1;
     boolean isRatingProcessing = false;
 
     private ProgressDialog progressDialog;
@@ -58,10 +57,10 @@ public class ReadReviewActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         if(Utils.getUserId(this) == 0) {
-            mThumbsUp.setVisibility(View.GONE);
-            mThumbsDown.setVisibility(View.GONE);
-            mLikeCount.setVisibility(View.GONE);
-            mDislikeCount.setVisibility(View.GONE);
+            thumbsUp.setVisibility(View.GONE);
+            thumbsDown.setVisibility(View.GONE);
+            likeCount.setVisibility(View.GONE);
+            dislikeCount.setVisibility(View.GONE);
         }
 
         progressDialog = new ProgressDialog(this);
@@ -70,7 +69,7 @@ public class ReadReviewActivity extends AppCompatActivity {
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.setIndeterminate(true);
 
-        mRatings = new TextView[] {mRate1, mRate2, mRate3, mRate4, mRate5};
+        ratings = new TextView[] {rate1, rate2, rate3, rate4, rate5};
 
         Bundle bundle = getIntent().getExtras();
         review = bundle.getParcelable("review");
@@ -81,38 +80,38 @@ public class ReadReviewActivity extends AppCompatActivity {
     }
 
     public void loadReview() {
-        mClassName.setText(review.getClassName());
-        mReviewDate.setText(Utils.getLocalTimeString(review.getReviewDate()));
-        mReviewText.setText(review.getReviewMsg());
+        className.setText(review.getClassName());
+        reviewDate.setText(Utils.getLocalTimeString(review.getReviewDate()));
+        reviewText.setText(review.getReviewMsg());
 
         for(int i = 0; i < review.getRating() && i < 5; i++) {
-            mRatings[i].setTextColor(getResources().getColor(R.color.colorGreen));
+            ratings[i].setTextColor(getResources().getColor(R.color.colorGreen));
         }
 
-        setUserRating();
+        setUserRating(userRating);
     }
 
-    private void setUserRating() {
+    private void setUserRating(int newRating) {
 
-        if(userRating == 0) {
-            mThumbsUp.setTextColor(getResources().getColor(R.color.colorGrey));
-            mThumbsDown.setTextColor(getResources().getColor(R.color.colorGrey));
-        } else if(userRating == 1) {
-            mThumbsUp.setTextColor(getResources().getColor(R.color.colorGreen));
-            mThumbsDown.setTextColor(getResources().getColor(R.color.colorGrey));
-        } else if(userRating == 2) {
-            mThumbsUp.setTextColor(getResources().getColor(R.color.colorGrey));
-            mThumbsDown.setTextColor(getResources().getColor(R.color.colorRed));
+        if(newRating == 0) {
+            thumbsUp.setTextColor(getResources().getColor(R.color.colorGrey));
+            thumbsDown.setTextColor(getResources().getColor(R.color.colorGrey));
+        } else if(newRating == 1) {
+            thumbsUp.setTextColor(getResources().getColor(R.color.colorGreen));
+            thumbsDown.setTextColor(getResources().getColor(R.color.colorGrey));
+        } else if(newRating == 2) {
+            thumbsUp.setTextColor(getResources().getColor(R.color.colorGrey));
+            thumbsDown.setTextColor(getResources().getColor(R.color.colorRed));
         }
     }
 
     public void updateResponse() {
-        if(userRating != mNewUserRating && !isRatingProcessing) {
+        if(userRating != newUserRating && !isRatingProcessing) {
             isRatingProcessing = true;
             int userId = Utils.getUserId(this);
             String password = Utils.getPassword(this);
-            //System.out.println("USER ID " + userId + "\nPASSWORD " + password + "\nREVIEW ID " + mReviewId + "\nUSER RATING " + userRating + "\nNEW USER RATING " + mNewUserRating);
-            RateReview r = new RateReview(userId, password, review.getReviewId(), mNewUserRating);
+            //System.out.println("USER ID " + userId + "\nPASSWORD " + password + "\nREVIEW ID " + mReviewId + "\nUSER RATING " + userRating + "\nNEW USER RATING " + newUserRating);
+            RateReview r = new RateReview(userId, password, review.getReviewId(), newUserRating);
             Callback callback = new PostReviewRatingCallback();
             RetrofitSingleton.getInstance().getMatchingService()
                     .rateReview(r)
@@ -128,10 +127,12 @@ public class ReadReviewActivity extends AppCompatActivity {
         //Utils.showSnackbar(this, parent, getString(R.string.liked));
 
         if(userRating == 1) {
-            mNewUserRating = 0;
+            newUserRating = 0;
         } else {
-            mNewUserRating = 1;
+            newUserRating = 1;
         }
+
+        setUserRating(newUserRating);
         updateResponse();
     }
 
@@ -143,19 +144,20 @@ public class ReadReviewActivity extends AppCompatActivity {
         }
 
         if(userRating == 2) {
-            mNewUserRating = 0;
+            newUserRating = 0;
         } else {
-            mNewUserRating = 2;
+            newUserRating = 2;
         }
+
+        setUserRating(newUserRating);
         updateResponse();
     }
 
     @Subscribe
     public void intLikeDislikeResp(ReviewRatingResp resp) {
         isRatingProcessing = false;
-        Utils.showSnackbar(this, mParent, getString(R.string.account_update_success));
-        userRating = mNewUserRating;
-        setUserRating();
+        Utils.showSnackbar(this, parent, getString(R.string.account_update_success));
+        userRating = newUserRating;
     }
 
     @Subscribe

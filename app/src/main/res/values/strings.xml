@@ -38,11 +38,13 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <!--Main Activity-->
-    <string name="data_doesnt_exist">Data doesn\'t exist</string>
-    <string name="error_getting_data">Couldn\'t get data</string>
+    <string name="data_doesnt_exist">Data doesn\'t exist.</string>
+    <string name="error_getting_data">Unable to fetch data.</string>
+    <string name="fetch_data_again"> Data not available.\n Press here to try again</string>
     <string name="invalid_review_request">Invalid request to fetch reviews.</string>
     <string name="failed_review_request">Failed to fetch reviews. Try again later.</string>
-    <string name="log_out">Logging out</string>
+    <string name="log_out">Logging out.</string>
+    <string name="fetch_feed_again">No reviews available. Press here to try again.</string>
 
     <!-- Login Activity -->
     <string name="prompt_email">Email</string>

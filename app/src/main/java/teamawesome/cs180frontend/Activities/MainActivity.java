@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
@@ -58,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
     @Bind(R.id.fab) FloatingActionButton fab;
     @Bind(R.id.main_srl) SwipeRefreshLayout mainSWL;
     @Bind(R.id.feed_list_view) ListView mainFeedList;
+    @Bind(R.id.error_tv) TextView errorTV;
 
     private NavDrawerAdapter drawerAdapter;
     private String[] mNavTitles;
@@ -147,12 +149,6 @@ public class MainActivity extends AppCompatActivity {
         mainFeedList.setAdapter(mainFeedAdapter);
     }
 
-    @OnClick(R.id.fab)
-    public void onClick() {
-        Intent intent =  new Intent(this, WriteReviewActivity.class);
-        startActivity(intent);
-    }
-
     private void getData() {
         progressDialog.show();
         RetrofitSingleton.getInstance()
@@ -184,7 +180,8 @@ public class MainActivity extends AppCompatActivity {
         final Context context = this;
         mainFeedList.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {}
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+            }
 
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
@@ -217,36 +214,28 @@ public class MainActivity extends AppCompatActivity {
     @Subscribe
     public void reviewsResp(List<ReviewRespBundle> reviewList) {
         System.out.println("REVIEW COUNT " + reviewList.size());
-        if(reviewList != null) {
-            offset += reviewList.size();
+        offset += reviewList.size();
 
-            if (reviewList.size() > 2) {
-                reviewList.add(2, null);
-            }
+        if (mainFeedAdapter.getCount() == 0 && offset == 0) {
+            mainFeedList.setVisibility(View.GONE);
+            errorTV.setText(getString(R.string.fetch_feed_again));
+            errorTV.setVisibility(View.VISIBLE);
+        }
 
-            System.out.println("offset: " + offset);
+        if (reviewList.size() > 2) {
+            reviewList.add(2, null);
+        }
 
-            mainFeedAdapter.append(reviewList);
-            mainFeedList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-            progressDialog.dismiss();
-            mainFeedList.setVisibility(View.VISIBLE);
+        System.out.println("offset: " + offset);
+
+        mainFeedAdapter.append(reviewList);
+        mainFeedList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        progressDialog.dismiss();
+        mainFeedList.setVisibility(View.VISIBLE);
 
             /*if(reviewList.size() == 0) {
                 Utils.showSnackbar(this, parent, getString(R.string.reviews_dne));
             }*/
-        }
-    }
-
-    @OnItemClick(R.id.feed_list_view)
-    public void onReviewClick(AdapterView<?> parent, View view, int position, long id) {
-        System.out.println(position);
-        ReviewRespBundle review = mainFeedAdapter.getItem(position);
-        if (review != null) {
-            Intent intent = new Intent(this, ReadReviewActivity.class);
-            intent.putExtra("review", (Parcelable) review);
-            intent.putExtra("yourRating", Utils.getReviewRating(review.getReviewId()));
-            startActivity(intent);
-        }
     }
 
     @Subscribe
@@ -257,6 +246,10 @@ public class MainActivity extends AppCompatActivity {
         } else {
             Utils.showSnackbar(this, parent, getString(R.string.error_getting_data));
         }
+
+        mainFeedList.setVisibility(View.GONE);
+        errorTV.setText(getString(R.string.fetch_data_again));
+        errorTV.setVisibility(View.VISIBLE);
     }
 
     @Subscribe
@@ -267,6 +260,10 @@ public class MainActivity extends AppCompatActivity {
         } else {
             Utils.showSnackbar(this, parent, getString(R.string.failed_review_request));
         }
+
+        mainFeedList.setVisibility(View.GONE);
+        errorTV.setText(getString(R.string.fetch_feed_again));
+        errorTV.setVisibility(View.VISIBLE);
     }
 
     @Subscribe
@@ -295,6 +292,35 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @OnClick(R.id.error_tv)
+    public void onErrorTVClick() {
+        String errorTVText = errorTV.getText().toString();
+
+        if (errorTVText.equals(getString(R.string.fetch_data_again))) {
+            getData();
+        } else if (errorTVText.equals(getString(R.string.fetch_feed_again))) {
+            getFeed(offset);
+        }
+    }
+
+    @OnClick(R.id.fab)
+    public void onClick() {
+        Intent intent = new Intent(this, WriteReviewActivity.class);
+        startActivity(intent);
+    }
+
+    @OnItemClick(R.id.feed_list_view)
+    public void onReviewClick(AdapterView<?> parent, View view, int position, long id) {
+        System.out.println(position);
+        ReviewRespBundle review = mainFeedAdapter.getItem(position);
+        if (review != null) {
+            Intent intent = new Intent(this, ReadReviewActivity.class);
+            intent.putExtra("review", (Parcelable) review);
+            intent.putExtra("yourRating", Utils.getReviewRating(review.getReviewId()));
+            startActivity(intent);
+        }
+    }
+
     @Override
     public void onBackPressed() {
         if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
@@ -316,7 +342,7 @@ public class MainActivity extends AppCompatActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        if(Utils.getSchoolId(this) < 1) {
+        if (Utils.getSchoolId(this) < 1) {
             Utils.showSnackbar(this, parent, getString(R.string.please_sign_in));
             return true;
         }
