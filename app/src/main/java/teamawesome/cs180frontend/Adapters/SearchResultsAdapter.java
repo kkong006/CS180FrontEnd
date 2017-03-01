@@ -8,7 +8,7 @@ import android.widget.BaseAdapter;
 
 import java.util.List;
 
-import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewRespBundle;
+import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewBundle;
 import teamawesome.cs180frontend.Misc.ViewHolders.SearchResultsViewHolder;
 import teamawesome.cs180frontend.R;
 
@@ -19,9 +19,9 @@ import teamawesome.cs180frontend.R;
 public class SearchResultsAdapter extends BaseAdapter{
 
     private Context context;
-    private List<ReviewRespBundle> reviews;
+    private List<ReviewBundle> reviews;
 
-    public SearchResultsAdapter(Context context, List<ReviewRespBundle> reviews) {
+    public SearchResultsAdapter(Context context, List<ReviewBundle> reviews) {
         this.context = context;
         this.reviews = reviews;
     }
@@ -32,7 +32,7 @@ public class SearchResultsAdapter extends BaseAdapter{
     }
 
     @Override
-    public ReviewRespBundle getItem(int position) {
+    public ReviewBundle getItem(int position) {
         return reviews.get(position);
     }
 

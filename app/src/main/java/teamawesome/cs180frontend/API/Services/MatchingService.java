@@ -12,7 +12,7 @@ import teamawesome.cs180frontend.API.Models.DataModel.ProfessorRespBundle;
 import teamawesome.cs180frontend.API.Models.ReviewModel.RateReview;
 import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewIDRespBundle;
 import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewRatingResp;
-import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewRespBundle;
+import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewBundle;
 import teamawesome.cs180frontend.API.Models.ReviewModel.UserReview;
 
 /**
@@ -37,11 +37,11 @@ public interface MatchingService {
     Call<Void> reviewRatings(@Query("id") Integer userId);
 
     @GET("/reviews")
-    Call<List<ReviewRespBundle>> reviews(@Query("school_id") Integer schoolId,
-                                         @Query("subject_id") Integer subjectId,
-                                         @Query("class_id") Integer classId,
-                                         @Query("prof_id") Integer profId,
-                                         @Query("user_id") Integer userId,
-                                         @Query("offset") Integer offset);
+    Call<List<ReviewBundle>> reviews(@Query("school_id") Integer schoolId,
+                                     @Query("subject_id") Integer subjectId,
+                                     @Query("class_id") Integer classId,
+                                     @Query("prof_id") Integer profId,
+                                     @Query("id") Integer userId,
+                                     @Query("offset") Integer offset);
 
 }

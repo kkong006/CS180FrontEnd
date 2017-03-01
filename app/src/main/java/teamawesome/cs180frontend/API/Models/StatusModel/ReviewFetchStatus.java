@@ -1,5 +1,7 @@
 package teamawesome.cs180frontend.API.Models.StatusModel;
 
+import android.content.Context;
+
 import teamawesome.cs180frontend.API.Models.StatusModel.AbstractStatus;
 
 /**
@@ -7,7 +9,14 @@ import teamawesome.cs180frontend.API.Models.StatusModel.AbstractStatus;
  */
 
 public class ReviewFetchStatus extends AbstractStatus {
-    public ReviewFetchStatus(int status) {
+    Context context;
+
+    public ReviewFetchStatus(Context context, int status) {
         super(status);
+        this.context = context;
+    }
+
+    public Context getContext() {
+        return context;
     }
 }

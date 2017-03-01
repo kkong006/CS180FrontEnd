@@ -10,7 +10,7 @@ import com.google.android.gms.ads.AdRequest;
 
 import java.util.List;
 
-import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewRespBundle;
+import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewBundle;
 import teamawesome.cs180frontend.Misc.Utils;
 import teamawesome.cs180frontend.Misc.ViewHolders.MainFeedViewHolder;
 import teamawesome.cs180frontend.R;
@@ -23,15 +23,15 @@ public class MainFeedAdapter extends BaseAdapter{
 
     private Context mContext;
     private AdRequest adRequest;
-    private List<ReviewRespBundle> reviewList;
+    private List<ReviewBundle> reviewList;
 
-    public MainFeedAdapter(Context mContext, AdRequest adRequest, List<ReviewRespBundle> reviewList) {
+    public MainFeedAdapter(Context mContext, AdRequest adRequest, List<ReviewBundle> reviewList) {
         this.mContext = mContext;
         this.adRequest = adRequest;
         this.reviewList = reviewList;
     }
 
-    public void append(List<ReviewRespBundle> reviewPage) {
+    public void append(List<ReviewBundle> reviewPage) {
         if (reviewList.size() != 0 && reviewList.get(reviewList.size() - 1) == null) {
             reviewList.remove(reviewList.size() - 1);
         }
@@ -54,7 +54,7 @@ public class MainFeedAdapter extends BaseAdapter{
     }
 
     @Override
-    public ReviewRespBundle getItem(int position) {
+    public ReviewBundle getItem(int position) {
         return reviewList.get(position);
     }
 

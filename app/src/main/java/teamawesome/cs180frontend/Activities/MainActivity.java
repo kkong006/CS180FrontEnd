@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Parcelable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -36,10 +37,11 @@ import butterknife.OnClick;
 import butterknife.OnItemClick;
 import teamawesome.cs180frontend.API.APIConstants;
 import teamawesome.cs180frontend.API.Models.DataModel.CacheData.CacheDataBundle;
+import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewBundle;
+import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewPageBundle;
 import teamawesome.cs180frontend.API.Models.StatusModel.CacheReqStatus;
 import teamawesome.cs180frontend.API.Models.StatusModel.ReviewFetchStatus;
 import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewRatingResp;
-import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewRespBundle;
 import teamawesome.cs180frontend.API.Models.StatusModel.ReviewRatingStatus;
 import teamawesome.cs180frontend.API.RetrofitSingleton;
 import teamawesome.cs180frontend.API.Services.Callbacks.GetCacheDataCallback;
@@ -62,20 +64,23 @@ public class MainActivity extends AppCompatActivity {
     @Bind(R.id.error_tv) TextView errorTV;
 
     private NavDrawerAdapter drawerAdapter;
-    private String[] mNavTitles;
-    private String[] mIconTitles;
-    private static final String TAG = "Main Activity";
-
     private MainFeedAdapter mainFeedAdapter;
 
+    AbsListView.OnScrollListener mainLVScroll = null;
+
     ProgressDialog progressDialog;
+
     DataSingleton data;
 
-    //private Integer apiCnt = new Integer(0);
     int offset = 0;
     int lastSelected = 0;
 
     AdRequest adRequest = null;
+
+    boolean isLoading = false;
+    boolean isRefreshing = false;
+
+    final Context context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,11 +104,25 @@ public class MainActivity extends AppCompatActivity {
         mainSWL.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                //TO-DO: Implement refreshing
+                if (!isLoading) {
+                    mainFeedList.setOnScrollListener(null);
+                    isLoading = true;
+                    isRefreshing = true;
+                    offset = 0;
+
+                    RetrofitSingleton.getInstance()
+                            .getMatchingService()
+                            .reviews(Utils.getSchoolId(context),
+                                    null, null, null,
+                                    null, offset)
+                            .enqueue(new GetReviewsCallback(context));
+                    //refresh
+                }
             }
         });
 
-        setOnScrollListener();
+        initOnScrollListener();
+        mainFeedList.setOnScrollListener(mainLVScroll);
         setUpNavBar();
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -113,6 +132,7 @@ public class MainActivity extends AppCompatActivity {
                 Utils.hideKeyboard(parent, getApplicationContext());
             }
         };
+
         mDrawerLayout.setDrawerListener(toggle);
         toggle.syncState();
 
@@ -145,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setUpAdapter() {
-        mainFeedAdapter = new MainFeedAdapter(this, adRequest, new ArrayList<ReviewRespBundle>());
+        mainFeedAdapter = new MainFeedAdapter(this, adRequest, new ArrayList<ReviewBundle>());
         mainFeedList.setAdapter(mainFeedAdapter);
     }
 
@@ -158,13 +178,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getFeed(int offset) {
+        isLoading = true;
+
         progressDialog.show();
         RetrofitSingleton.getInstance()
                 .getMatchingService()
                 .reviews(Utils.getSchoolId(this),
                         null, null, null,
-                        Utils.getUserId(this), offset)
-                .enqueue(new GetReviewsCallback());
+                        null, offset)
+                .enqueue(new GetReviewsCallback(this));
     }
 
     //Show/hide the FAB and tool bar
@@ -176,9 +198,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void setOnScrollListener() {
-        final Context context = this;
-        mainFeedList.setOnScrollListener(new AbsListView.OnScrollListener() {
+    private void initOnScrollListener() {
+        mainLVScroll = new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
             }
@@ -186,21 +207,23 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
                 int lastVisibleIndex = firstVisibleItem + visibleItemCount - 1;
-                if ((lastVisibleIndex == (totalItemCount - 1)) && totalItemCount != 0 &&
-                        mainFeedAdapter.getItem(lastVisibleIndex) == null) {
-                    if (lastSelected != lastVisibleIndex) {
+                if ((lastVisibleIndex == (totalItemCount - 1))
+                        && totalItemCount != 0
+                        && mainFeedAdapter.getItem(lastVisibleIndex) == null) {
+                    if (!isLoading && lastSelected != lastVisibleIndex) {
+                        isLoading = true;
                         lastSelected = lastVisibleIndex;
 
                         RetrofitSingleton.getInstance()
                                 .getMatchingService()
                                 .reviews(Utils.getSchoolId(context),
                                         null, null, null,
-                                        Utils.getUserId(context), offset)
-                                .enqueue(new GetReviewsCallback());
+                                        null, offset)
+                                .enqueue(new GetReviewsCallback(context));
                     }
                 }
             }
-        });
+        };
     }
 
     @Subscribe
@@ -212,30 +235,66 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Subscribe
-    public void reviewsResp(List<ReviewRespBundle> reviewList) {
-        System.out.println("REVIEW COUNT " + reviewList.size());
-        offset += reviewList.size();
+    //Synchronized to prevent race condition BS
+    public synchronized void reviewsResp(final ReviewPageBundle page) {
+        if (page.getContext().equals(this)) {
+            System.out.println("REVIEW COUNT " + page.getReviews().size());
+            offset += page.getReviews().size();
+
+            if (isRefreshing) {
+                mainFeedList.setEnabled(false);
+                mainFeedList.setSelection(0);
+
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mainFeedList.setVisibility(View.GONE);
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                lastSelected = 0;
+                                mainSWL.setRefreshing(false);
+                                mainFeedAdapter.clear();
+                                addToFeed(page);
+                                mainFeedList.setEnabled(true);
+                            }
+                        }, 150);
+                    }
+                }, 250);
+                return;
+            }
+
+            addToFeed(page);
+        }
+    }
+
+    public void addToFeed(ReviewPageBundle page) {
+        List<ReviewBundle> reviews = page.getReviews();
 
         if (mainFeedAdapter.getCount() == 0 && offset == 0) {
+            progressDialog.dismiss();
             mainFeedList.setVisibility(View.GONE);
             errorTV.setText(getString(R.string.fetch_feed_again));
             errorTV.setVisibility(View.VISIBLE);
+            return;
         }
 
-        if (reviewList.size() > 2) {
-            reviewList.add(2, null);
+        if (reviews.size() > 2) {
+            reviews.add(2, null);
         }
 
         System.out.println("offset: " + offset);
 
-        mainFeedAdapter.append(reviewList);
+        mainFeedAdapter.append(reviews);
         mainFeedList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         progressDialog.dismiss();
         mainFeedList.setVisibility(View.VISIBLE);
 
-            /*if(reviewList.size() == 0) {
-                Utils.showSnackbar(this, parent, getString(R.string.reviews_dne));
-            }*/
+        isLoading = false;
+        isRefreshing = false;
+
+        mainFeedList.setOnScrollListener(mainLVScroll);
     }
 
     @Subscribe
@@ -254,16 +313,20 @@ public class MainActivity extends AppCompatActivity {
 
     @Subscribe
     public void failedReviewFetch(ReviewFetchStatus failedFetch) {
-        progressDialog.dismiss();
-        if (failedFetch.getStatus() != -1) {
-            Utils.showSnackbar(this, parent, getString(R.string.invalid_review_request));
-        } else {
-            Utils.showSnackbar(this, parent, getString(R.string.failed_review_request));
-        }
+        if (failedFetch.getContext().equals(this)) {
+            progressDialog.dismiss();
+            if (failedFetch.getStatus() != -1) {
+                Utils.showSnackbar(this, parent, getString(R.string.invalid_review_request));
+            } else {
+                Utils.showSnackbar(this, parent, getString(R.string.failed_review_request));
+            }
 
-        mainFeedList.setVisibility(View.GONE);
-        errorTV.setText(getString(R.string.fetch_feed_again));
-        errorTV.setVisibility(View.VISIBLE);
+            mainFeedList.setVisibility(View.GONE);
+            errorTV.setText(getString(R.string.fetch_feed_again));
+            errorTV.setVisibility(View.VISIBLE);
+
+            isLoading = false;
+        }
     }
 
     @Subscribe
@@ -294,6 +357,8 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.error_tv)
     public void onErrorTVClick() {
+        isLoading = false;
+
         String errorTVText = errorTV.getText().toString();
 
         if (errorTVText.equals(getString(R.string.fetch_data_again))) {
@@ -312,7 +377,7 @@ public class MainActivity extends AppCompatActivity {
     @OnItemClick(R.id.feed_list_view)
     public void onReviewClick(AdapterView<?> parent, View view, int position, long id) {
         System.out.println(position);
-        ReviewRespBundle review = mainFeedAdapter.getItem(position);
+        ReviewBundle review = mainFeedAdapter.getItem(position);
         if (review != null) {
             Intent intent = new Intent(this, ReadReviewActivity.class);
             intent.putExtra("review", (Parcelable) review);
@@ -357,16 +422,12 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
     @OnItemClick(R.id.drawer_list)
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         mDrawerLayout.closeDrawer(GravityCompat.START);
-        if (position == 0) {
-            return;
-        } else if (position == 1) {
-            /*Search for reviews
-            Intent i = new Intent(getApplicationContext(), SearchActivity.class);
-            startActivity(i);*/
+        if (position == 1) {
+            Intent i = new Intent(this, MyReviewsActivity.class);
+            startActivity(i);
         } else if (position == 2) {
             //Search for professor stats
             Intent intent = new Intent(getApplicationContext(), SearchProfessorActivity.class);
@@ -399,6 +460,8 @@ public class MainActivity extends AppCompatActivity {
                 drawerAdapter.changeLoginElem();
                 progressDialog.show();
 
+                isLoading = true;
+
                 RetrofitSingleton.getInstance()
                         .getMatchingService()
                         .getData(Utils.getSchoolId(this), Utils.getUserId(this))
@@ -411,6 +474,8 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println(Utils.getSchoolId(this));
                 mainFeedAdapter.clear(); //Need to reload the schools
                 progressDialog.show();
+
+                isLoading = true;
 
                 RetrofitSingleton.getInstance()
                         .getMatchingService()

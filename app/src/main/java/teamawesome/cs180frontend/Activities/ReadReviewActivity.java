@@ -16,8 +16,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import retrofit2.Callback;
 import teamawesome.cs180frontend.API.Models.ReviewModel.RateReview;
+import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewBundle;
 import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewRatingResp;
-import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewRespBundle;
 import teamawesome.cs180frontend.API.Models.StatusModel.ReviewRatingStatus;
 import teamawesome.cs180frontend.API.RetrofitSingleton;
 import teamawesome.cs180frontend.API.Services.Callbacks.PostReviewRatingCallback;
@@ -41,7 +41,7 @@ public class ReadReviewActivity extends AppCompatActivity {
     @Bind(R.id.read_dislike_count_tv) TextView dislikeCount;
 
     private TextView[] ratings;
-    ReviewRespBundle review;
+    ReviewBundle review;
     private int userRating = 0;
     private int newUserRating = -1;
     boolean isRatingProcessing = false;

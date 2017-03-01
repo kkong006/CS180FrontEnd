@@ -1,5 +1,7 @@
 package teamawesome.cs180frontend.API.Services.Callbacks;
 
+import android.content.Context;
+
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
@@ -8,26 +10,33 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import teamawesome.cs180frontend.API.APIConstants;
+import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewBundle;
+import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewPageBundle;
 import teamawesome.cs180frontend.API.Models.StatusModel.ReviewFetchStatus;
-import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewRespBundle;
 
-public class GetReviewsCallback implements Callback<List<ReviewRespBundle>> {
+public class GetReviewsCallback implements Callback<List<ReviewBundle>> {
+
+    private Context context;
+
+    public GetReviewsCallback(Context context) {
+        this.context = context;
+    }
 
     @Override
-    public void onResponse(Call<List<ReviewRespBundle>> call, Response<List<ReviewRespBundle>> resp) {
+    public void onResponse(Call<List<ReviewBundle>> call, Response<List<ReviewBundle>> resp) {
         System.out.println("GET REVIEWS " + resp.code());
         switch (resp.code()) {
             case APIConstants.HTTP_STATUS_OK:
-                EventBus.getDefault().post(resp.body());
+                EventBus.getDefault().post(new ReviewPageBundle(context, resp.body()));
                 break;
             default:
-                EventBus.getDefault().post(new ReviewFetchStatus(resp.code()));
+                EventBus.getDefault().post(new ReviewFetchStatus(context, resp.code()));
                 break;
         }
     }
 
     @Override
-    public void onFailure(Call<List<ReviewRespBundle>> call, Throwable t) {
-        EventBus.getDefault().post(new ReviewFetchStatus(-1));
+    public void onFailure(Call<List<ReviewBundle>> call, Throwable t) {
+        EventBus.getDefault().post(new ReviewFetchStatus(context, -1));
     }
 }

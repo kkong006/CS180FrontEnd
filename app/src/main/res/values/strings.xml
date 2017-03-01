@@ -137,6 +137,9 @@
     <string name="search_professor_results_schools">Associated Schools</string>
     <string name="search_professor_results_review">See Reviews</string>
 
+    <!--My Reviews-->
+    <string name="my_reviews">My Reviews</string>
+
     <!--Admob-->
     <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
 </resources>

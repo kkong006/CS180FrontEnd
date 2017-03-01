@@ -19,7 +19,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnItemClick;
 import retrofit2.Callback;
-import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewRespBundle;
+import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewBundle;
 import teamawesome.cs180frontend.API.RetrofitSingleton;
 import teamawesome.cs180frontend.API.Services.Callbacks.GetReviewsCallback;
 import teamawesome.cs180frontend.Adapters.SearchResultsAdapter;
@@ -38,7 +38,7 @@ public class SearchResultsActivity extends AppCompatActivity {
     //    private String className;
     private SearchResultsAdapter mAdapter;
     private ProgressDialog mProgressDialog;
-    private List<ReviewRespBundle> reviews;
+    private List<ReviewBundle> reviews;
     private int mPosition;
 
     public static final String REVIEW = "REVIEW";
@@ -72,10 +72,10 @@ public class SearchResultsActivity extends AppCompatActivity {
     public void getReviews() {
         mProgressDialog.show();
         //NOTE: I'M PRETTY SURE THIS WILL FAIL
-        Callback callback = new GetReviewsCallback();
+        Callback callback = new GetReviewsCallback(this);
         RetrofitSingleton.getInstance().getMatchingService()
                 .reviews(null, null, null,
-                        mProfessorId, Utils.getUserId(this), 0)
+                        mProfessorId, null, 0)
                 .enqueue(callback);
     }
 
@@ -103,7 +103,7 @@ public class SearchResultsActivity extends AppCompatActivity {
     }
 
     @Subscribe
-    public void reviewsResp(List<ReviewRespBundle> reviewList) {
+    public void reviewsResp(List<ReviewBundle> reviewList) {
         mProgressDialog.dismiss();
 
         reviews = reviewList;

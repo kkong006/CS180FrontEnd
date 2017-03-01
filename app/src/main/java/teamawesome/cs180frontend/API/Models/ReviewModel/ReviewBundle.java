@@ -12,7 +12,7 @@ import java.io.Serializable;
  * Created by KongK on 10/24/2016.
  */
 
-public class ReviewRespBundle implements Serializable, Parcelable {
+public class ReviewBundle implements Serializable, Parcelable {
 
     @SerializedName("review_id")
     @Expose
@@ -95,7 +95,7 @@ public class ReviewRespBundle implements Serializable, Parcelable {
         dest.writeString(this.className);
     }
 
-    protected ReviewRespBundle(Parcel p) {
+    protected ReviewBundle(Parcel p) {
         this.reviewId = p.readInt();
         this.reviewDate = p.readString();
         this.profName = p.readString();
@@ -106,13 +106,13 @@ public class ReviewRespBundle implements Serializable, Parcelable {
         this.className = p.readString();
     }
 
-    public static final Parcelable.Creator<ReviewRespBundle> CREATOR = new Parcelable.Creator<ReviewRespBundle>() {
-        public ReviewRespBundle createFromParcel(Parcel source) {
-            return new ReviewRespBundle(source);
+    public static final Parcelable.Creator<ReviewBundle> CREATOR = new Parcelable.Creator<ReviewBundle>() {
+        public ReviewBundle createFromParcel(Parcel source) {
+            return new ReviewBundle(source);
         }
 
-        public ReviewRespBundle[] newArray(int size) {
-            return new ReviewRespBundle[size];
+        public ReviewBundle[] newArray(int size) {
+            return new ReviewBundle[size];
         }
     };
 
