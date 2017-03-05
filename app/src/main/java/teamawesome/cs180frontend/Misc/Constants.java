@@ -10,7 +10,7 @@ public class Constants {
     public static final String PHONE_NUMBER = "PHONE_NUMBER";
     public static final String PASSWORD = "PASSWORD";
     public static final String SCHOOL_ID = "SCHOOL_ID";
-    public static final String IS_ACTIVE = "ACTIVE";
+    public static final String IS_VERIFIED = "VERIFIED";
     public static final String LIKED = "LIKED";
     public static final String DISLIKED = "DISLIKED";
 

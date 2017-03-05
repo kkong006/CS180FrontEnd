@@ -189,7 +189,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private boolean isPasswordValid(String password) {
-        return password.length() > 8;
+        return password.length() >= 8;
     }
 
     private void getData() {
@@ -217,14 +217,13 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    @Subscribe
+    @Subscribe //Successful response
     public void onLoginOrRegister(UserRespBundle resp) {
         progressDialog.dismiss();
         Utils.saveUserData(this, resp, loginRegisterBundle.getPassword(),
                 loginRegisterBundle.getPhoneNumber());
         Intent intent = new Intent(this, MainActivity.class);
         setResult(RESULT_OK, intent);
-        System.out.println("FINISH");
         startActivity(intent);
         finish();
     }

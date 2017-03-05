@@ -17,8 +17,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -63,6 +66,12 @@ public class MainActivity extends AppCompatActivity {
     @Bind(R.id.feed_list_view) ListView mainFeedList;
     @Bind(R.id.error_tv) TextView errorTV;
 
+    //Verify layout bindings
+    @Bind(R.id.verify_acc) LinearLayout mainVerifyLayout;
+    @Bind(R.id.verify_snippet_text) TextView verifySnippetText;
+    @Bind(R.id.verify_body) LinearLayout verifyBody;
+    @Bind(R.id.later) Button later;
+
     private NavDrawerAdapter drawerAdapter;
     private MainFeedAdapter mainFeedAdapter;
 
@@ -79,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
 
     boolean isLoading = false;
     boolean isRefreshing = false;
+    boolean initialLoad = true;
 
     final Context context = this;
 
@@ -86,7 +96,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         ButterKnife.bind(this);
         data = DataSingleton.getInstance();
         EventBus.getDefault().register(this);
@@ -147,6 +156,22 @@ public class MainActivity extends AppCompatActivity {
 
         setUpAdapter();
         getData();
+    }
+
+    @Override
+    public void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
+    }
+
+    private void logout() {
+        Utils.nukeUserData(this);
+        drawerAdapter.changeLoginElem();
+        setButtons();
+        Toast.makeText(this, getString(R.string.log_out), Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     public void setUpNavBar() {
@@ -226,6 +251,50 @@ public class MainActivity extends AppCompatActivity {
         };
     }
 
+    public void addToFeed(ReviewPageBundle page) {
+        List<ReviewBundle> reviews = page.getReviews();
+
+        if (mainFeedAdapter.getCount() == 0 && offset == 0) {
+            progressDialog.dismiss();
+            mainFeedList.setVisibility(View.GONE);
+            errorTV.setText(getString(R.string.fetch_feed_again));
+            errorTV.setVisibility(View.VISIBLE);
+            return;
+        }
+
+        if (reviews.size() > 2) {
+            reviews.add(2, null);
+        }
+
+        System.out.println("offset: " + offset);
+
+        mainFeedAdapter.append(reviews);
+        mainFeedList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        progressDialog.dismiss();
+
+        if (initialLoad) {
+            initialLoad = false;
+            if (Utils.isVerified(this)) {
+                mainVerifyLayout.setVisibility(View.GONE);
+            } else {
+                mainVerifyLayout.setVisibility(View.VISIBLE);
+            }
+        }
+
+        mainFeedList.setVisibility(View.VISIBLE);
+
+        isLoading = false;
+        isRefreshing = false;
+
+        mainFeedList.setOnScrollListener(mainLVScroll);
+    }
+
+    private void shrinkVerifyLayout() {
+        Utils.hideKeyboard(parent, this);
+        verifySnippetText.setText(getString(R.string.please_verify_not_clicked));
+        verifyBody.setVisibility(View.GONE);
+    }
+
     @Subscribe
     public void dataResp(CacheDataBundle data) {
         DataSingleton.getInstance().cacheDataBundle(this, data);
@@ -235,7 +304,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Subscribe
-    //Synchronized to prevent race condition BS
     public synchronized void reviewsResp(final ReviewPageBundle page) {
         if (page.getContext().equals(this)) {
             System.out.println("REVIEW COUNT " + page.getReviews().size());
@@ -269,34 +337,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void addToFeed(ReviewPageBundle page) {
-        List<ReviewBundle> reviews = page.getReviews();
-
-        if (mainFeedAdapter.getCount() == 0 && offset == 0) {
-            progressDialog.dismiss();
-            mainFeedList.setVisibility(View.GONE);
-            errorTV.setText(getString(R.string.fetch_feed_again));
-            errorTV.setVisibility(View.VISIBLE);
-            return;
-        }
-
-        if (reviews.size() > 2) {
-            reviews.add(2, null);
-        }
-
-        System.out.println("offset: " + offset);
-
-        mainFeedAdapter.append(reviews);
-        mainFeedList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-        progressDialog.dismiss();
-        mainFeedList.setVisibility(View.VISIBLE);
-
-        isLoading = false;
-        isRefreshing = false;
-
-        mainFeedList.setOnScrollListener(mainLVScroll);
-    }
-
     @Subscribe
     public void failedDataResp(CacheReqStatus resp) {
         progressDialog.dismiss();
@@ -312,7 +352,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Subscribe
-    public void failedReviewFetch(ReviewFetchStatus failedFetch) {
+    public void failedPageFetch(ReviewFetchStatus failedFetch) {
+        initialLoad = false;
         if (failedFetch.getContext().equals(this)) {
             progressDialog.dismiss();
             if (failedFetch.getStatus() != -1) {
@@ -374,6 +415,52 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    @OnClick(R.id.verify_acc)
+    public void onVerifyLayoutClick() {
+        if (verifyBody.getVisibility() == View.GONE) {
+            verifySnippetText.setText(getString(R.string.please_verify_clicked));
+            verifyBody.setVisibility(View.VISIBLE);
+        } else {
+            shrinkVerifyLayout();
+        }
+    }
+
+    @OnClick(R.id.later)
+    public void onLater() {
+        if (verifyBody.getVisibility() == View.VISIBLE) {
+            shrinkVerifyLayout();
+        }
+    }
+
+    @OnClick(R.id.close_verify_view)
+    public void hideVerifyLayout() {
+        AlphaAnimation hide = Utils.createHideAnimation(mainVerifyLayout);
+        mainVerifyLayout.startAnimation(hide);
+    }
+
+    @OnItemClick(R.id.drawer_list)
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        mDrawerLayout.closeDrawer(GravityCompat.START);
+        if (position == 1) {
+            Intent i = new Intent(this, MyReviewsActivity.class);
+            startActivity(i);
+        } else if (position == 2) {
+            //Search for professor stats
+            Intent intent = new Intent(getApplicationContext(), SearchProfessorActivity.class);
+            startActivity(intent);
+        } else if (position == 3) {
+
+        } else if (position == 4) {
+            //Login or logout
+            if (drawerAdapter.getItem(position).equals(getString(R.string.login))) {
+                Intent intent = new Intent(this, LoginActivity.class);
+                startActivityForResult(intent, 1);
+            } else {
+                logout();
+            }
+        }
+    }
+
     @OnItemClick(R.id.feed_list_view)
     public void onReviewClick(AdapterView<?> parent, View view, int position, long id) {
         System.out.println(position);
@@ -422,29 +509,6 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @OnItemClick(R.id.drawer_list)
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        mDrawerLayout.closeDrawer(GravityCompat.START);
-        if (position == 1) {
-            Intent i = new Intent(this, MyReviewsActivity.class);
-            startActivity(i);
-        } else if (position == 2) {
-            //Search for professor stats
-            Intent intent = new Intent(getApplicationContext(), SearchProfessorActivity.class);
-            startActivity(intent);
-        } else if (position == 3) {
-
-        } else if (position == 4) {
-            //Login or logout
-            if (drawerAdapter.getItem(position).equals(getString(R.string.login))) {
-                Intent intent = new Intent(this, LoginActivity.class);
-                startActivityForResult(intent, 1);
-            } else {
-                logout();
-            }
-        }
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
@@ -483,21 +547,5 @@ public class MainActivity extends AppCompatActivity {
                         .enqueue(new GetCacheDataCallback());
             }
         }
-    }
-
-    private void logout() {
-        Utils.nukeUserData(this);
-        drawerAdapter.changeLoginElem();
-        setButtons();
-        Toast.makeText(this, getString(R.string.log_out), Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
-        finish();
-    }
-
-    @Override
-    public void onDestroy() {
-        EventBus.getDefault().unregister(this);
-        super.onDestroy();
     }
 }

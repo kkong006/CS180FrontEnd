@@ -46,6 +46,12 @@
     <string name="log_out">Logging out.</string>
     <string name="fetch_feed_again">No reviews available. Press here to try again.</string>
 
+    <!--Verify Account Widget-->
+    <string name="please_verify_not_clicked">Verify your account (click here)</string>
+    <string name="please_verify_clicked">Verify your account</string>
+    <string name="verify">Verify</string>
+    <string name="later">Later</string>
+
     <!-- Login Activity -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password (optional)</string>

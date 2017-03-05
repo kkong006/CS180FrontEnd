@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.design.widget.Snackbar;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
@@ -17,13 +18,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Set;
 import java.util.TimeZone;
 
-import io.realm.Realm;
-import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewRatingBundle;
 import teamawesome.cs180frontend.API.Models.UserModel.UserRespBundle;
+import teamawesome.cs180frontend.Listeners.AnimationListener.HideAnimationListener;
 import teamawesome.cs180frontend.R;
 
 public class Utils {
@@ -67,6 +66,10 @@ public class Utils {
         return SPSingleton.getInstance(context).getSp().getInt(Constants.SCHOOL_ID, 0);
     }
 
+    public static boolean isVerified(Context context) {
+        return SPSingleton.getInstance(context).getSp().getBoolean(Constants.IS_VERIFIED, true);
+    }
+
     public static void savePassword(Context context, String newPassword) {
         SPSingleton.getInstance(context).getSp()
                 .edit()
@@ -82,14 +85,14 @@ public class Utils {
     //save the user's info once they've logged in and/or registered
     public static void saveUserData(Context context, UserRespBundle userInfo, String password, String number) {
         System.out.println(userInfo.getId());
-        System.out.println(userInfo.isActive());
+        System.out.println(userInfo.isVerified());
         System.out.println(userInfo.getSchoolId());
         System.out.println(password);
         System.out.println(number);
 
         SharedPreferences sp = SPSingleton.getInstance(context).getSp();
         sp.edit().putInt(Constants.USER_ID, userInfo.getId()).commit();
-        sp.edit().putBoolean(Constants.IS_ACTIVE, userInfo.isActive()).commit();
+        sp.edit().putBoolean(Constants.IS_VERIFIED, userInfo.isVerified()).commit();
         sp.edit().putInt(Constants.SCHOOL_ID, userInfo.getSchoolId()).commit();
         sp.edit().putString(Constants.PASSWORD, password).commit();
         sp.edit().putString(Constants.PHONE_NUMBER, number).commit();
@@ -99,7 +102,7 @@ public class Utils {
     public static void nukeUserData(Context context) {
         SharedPreferences sp = SPSingleton.getInstance(context).getSp();
         sp.edit().remove(Constants.USER_ID).commit();
-        sp.edit().remove(Constants.IS_ACTIVE).commit();
+        sp.edit().remove(Constants.IS_VERIFIED).commit();
         sp.edit().remove(Constants.SCHOOL_ID).commit();
         sp.edit().remove(Constants.PASSWORD).commit();
         sp.edit().remove(Constants.PHONE_NUMBER).commit();
@@ -142,5 +145,12 @@ public class Utils {
         } else {
             return 0;
         }
+    }
+
+    public static AlphaAnimation createHideAnimation(View v) {
+        AlphaAnimation hide = new AlphaAnimation(1.0f, 0.0f);
+        hide.setAnimationListener(new HideAnimationListener(v));
+        hide.setDuration(250);
+        return hide;
     }
 }

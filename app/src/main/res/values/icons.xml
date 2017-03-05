@@ -4,4 +4,5 @@
     <string name="fa_icon_search">{fa-search}</string>
     <string name="fa_icon_review">{fa-paper-plane}</string>
     <string name="fa_log_out">{fa-sign-out}</string>
+    <string name="fa_times">{fa-times}</string>
 </resources>

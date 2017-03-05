@@ -1,8 +1,5 @@
 package teamawesome.cs180frontend.API.Models.UserModel;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -19,9 +16,9 @@ public class UserRespBundle {
     @Expose
     public int id;
 
-    @SerializedName("active")
+    @SerializedName("verified")
     @Expose
-    public boolean active;
+    public boolean verified;
 
     @SerializedName("school_id")
     @Expose
@@ -35,13 +32,9 @@ public class UserRespBundle {
         this.id = id;
     }
 
-    public boolean isActive() {
-        return active;
-    }
+    public boolean isVerified() { return verified;}
 
-    public void setActive(boolean active) {
-        this.active = active;
-    }
+    public void setVerified(boolean verified) { this.verified = verified; }
 
     public int getSchoolId() {
         return schoolId;
