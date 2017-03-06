@@ -1,4 +1,4 @@
-package teamawesome.cs180frontend.Activities;
+package teamawesome.cs180frontend.Activities.Application;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -49,8 +49,10 @@ import teamawesome.cs180frontend.API.Models.StatusModel.ReviewRatingStatus;
 import teamawesome.cs180frontend.API.RetrofitSingleton;
 import teamawesome.cs180frontend.API.Services.Callbacks.GetCacheDataCallback;
 import teamawesome.cs180frontend.API.Services.Callbacks.GetReviewsCallback;
+import teamawesome.cs180frontend.Activities.Onboarding.LoginActivity;
 import teamawesome.cs180frontend.Adapters.MainFeedAdapter;
 import teamawesome.cs180frontend.Adapters.NavDrawerAdapter;
+import teamawesome.cs180frontend.Misc.Constants;
 import teamawesome.cs180frontend.Misc.DataSingleton;
 import teamawesome.cs180frontend.Misc.Utils;
 import teamawesome.cs180frontend.R;
@@ -168,8 +170,8 @@ public class MainActivity extends AppCompatActivity {
         Utils.nukeUserData(this);
         drawerAdapter.changeLoginElem();
         setButtons();
-        Toast.makeText(this, getString(R.string.log_out), Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(this, LoginActivity.class);
+        intent.putExtra(Constants.MESSAGE, getString(R.string.log_out));
         startActivity(intent);
         finish();
     }
@@ -296,7 +298,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Subscribe
-    public void dataResp(CacheDataBundle data) {
+    public void onDataFetched(CacheDataBundle data) {
         DataSingleton.getInstance().cacheDataBundle(this, data);
         System.out.println("Liked: " + data.getReviewRatings().getLiked().size());
         System.out.println("Disliked: " + data.getReviewRatings().getDisliked().size());
@@ -341,9 +343,11 @@ public class MainActivity extends AppCompatActivity {
     public void failedDataResp(CacheReqStatus resp) {
         progressDialog.dismiss();
         if (resp.getStatus() != -1) {
-            Utils.showSnackbar(this, parent, getString(R.string.data_doesnt_exist));
+            Utils.showSnackbar(this, parent, R.color.colorPrimary,
+                    getString(R.string.data_doesnt_exist));
         } else {
-            Utils.showSnackbar(this, parent, getString(R.string.error_getting_data));
+            Utils.showSnackbar(this, parent, R.color.colorPrimary,
+                    getString(R.string.error_getting_data));
         }
 
         mainFeedList.setVisibility(View.GONE);
@@ -357,9 +361,11 @@ public class MainActivity extends AppCompatActivity {
         if (failedFetch.getContext().equals(this)) {
             progressDialog.dismiss();
             if (failedFetch.getStatus() != -1) {
-                Utils.showSnackbar(this, parent, getString(R.string.invalid_review_request));
+                Utils.showSnackbar(this, parent, R.color.colorPrimary,
+                        getString(R.string.invalid_review_request));
             } else {
-                Utils.showSnackbar(this, parent, getString(R.string.failed_review_request));
+                Utils.showSnackbar(this, parent, R.color.colorPrimary,
+                        getString(R.string.failed_review_request));
             }
 
             mainFeedList.setVisibility(View.GONE);
@@ -495,7 +501,8 @@ public class MainActivity extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         if (Utils.getSchoolId(this) < 1) {
-            Utils.showSnackbar(this, parent, getString(R.string.please_sign_in));
+            Utils.showSnackbar(this, parent, R.color.colorPrimary,
+                    getString(R.string.please_sign_in));
             return true;
         }
 

@@ -70,7 +70,7 @@
 [31m-    android:paddingLeft="@dimen/activity_horizontal_margin"[m
 [31m-    android:paddingRight="@dimen/activity_horizontal_margin"[m
 [31m-    android:paddingTop="@dimen/activity_vertical_margin"[m
-[31m-    tools:context="teamawesome.cs180frontend.Activities.SettingsActivity">[m
+[31m-    tools:context="teamawesome.cs180frontend.Activities.Application.SettingsActivity">[m
 [32m+[m[32m    android:id="@+id/activity_settings">[m
  [m
 [31m-    <TextView[m
@@ -86,7 +86,7 @@
 [32m+[m[32m        android:paddingLeft="@dimen/activity_horizontal_margin"[m
 [32m+[m[32m        android:paddingRight="@dimen/activity_horizontal_margin"[m
 [32m+[m[32m        android:paddingTop="@dimen/activity_vertical_margin"[m
-[32m+[m[32m        tools:context="teamawesome.cs180frontend.Activities.SettingsActivity">[m
+[32m+[m[32m        tools:context="teamawesome.cs180frontend.Activities.Application.SettingsActivity">[m
  [m
 [31m-    <Spinner[m
 [31m-        android:id="@+id/settings_university_sp"[m
@@ -232,7 +232,7 @@
 [1m--- a/app/src/main/res/layout/content_main.xml[m
 [1m+++ b/app/src/main/res/layout/content_main.xml[m
 [36m@@ -12,4 +12,11 @@[m
-     tools:context="teamawesome.cs180frontend.Activities.MainActivity"[m
+     tools:context="teamawesome.cs180frontend.Activities.Application.MainActivity"[m
      tools:showIn="@layout/app_bar_main">[m
  [m
 [32m+[m[32m    <RelativeLayout[m

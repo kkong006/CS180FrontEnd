@@ -1,4 +1,4 @@
-package teamawesome.cs180frontend.Activities;
+package teamawesome.cs180frontend.Activities.Application;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -69,6 +69,12 @@ public class SearchResultsActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
+    }
+
     public void getReviews() {
         mProgressDialog.show();
         //NOTE: I'M PRETTY SURE THIS WILL FAIL
@@ -111,7 +117,8 @@ public class SearchResultsActivity extends AppCompatActivity {
         if (reviewList.size() > 0) {
             populateListView();
         } else {
-            Utils.showSnackbar(this, mParent, getString(R.string.reviews_dne));
+            Utils.showSnackbar(this, mParent, R.color.colorPrimary,
+                    getString(R.string.reviews_dne));
         }
     }
 
@@ -119,9 +126,11 @@ public class SearchResultsActivity extends AppCompatActivity {
     public void intResp(Integer i) {
         mProgressDialog.dismiss();
         if (i.equals(0)) {
-            Utils.showSnackbar(this, mParent, getString(R.string.reviews_dne));
+            Utils.showSnackbar(this, mParent, R.color.colorPrimary,
+                    getString(R.string.reviews_dne));
         } else {
-            Utils.showSnackbar(this, mParent, getString(R.string.error_retrieving_data));
+            Utils.showSnackbar(this, mParent, R.color.colorPrimary,
+                    getString(R.string.error_retrieving_data));
         }
     }
 
@@ -129,26 +138,8 @@ public class SearchResultsActivity extends AppCompatActivity {
     public void stringResp(String s) {
         mProgressDialog.dismiss();
         if (s.equals("ERROR")) {
-            Utils.showSnackbar(this, mParent, getString(R.string.error_retrieving_data));
+            Utils.showSnackbar(this, mParent, R.color.colorPrimary,
+                    getString(R.string.error_retrieving_data));
         }
     }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        EventBus.getDefault().register(this);
-        getReviews();
-    }
-
-    @Override
-    protected void onStop() {
-        EventBus.getDefault().unregister(this);
-        super.onStop();
-    }
-
-//    @Override
-//    protected void onDestroy() {
-//        EventBus.getDefault().unregister(this);
-//        super.onDestroy();
-//    }
 }

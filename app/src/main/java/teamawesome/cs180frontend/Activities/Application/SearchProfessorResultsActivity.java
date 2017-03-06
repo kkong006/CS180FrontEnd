@@ -1,4 +1,4 @@
-package teamawesome.cs180frontend.Activities;
+package teamawesome.cs180frontend.Activities.Application;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -115,16 +115,19 @@ public class SearchProfessorResultsActivity extends AppCompatActivity {
         for(int i = 0; i < mRating && i < 5; i++) {
             mRatings[i].setTextColor(getResources().getColor(R.color.colorGreen));
         }
-        Utils.showSnackbar(this, mParent, getString(R.string.account_update_success));
+        Utils.showSnackbar(this, mParent, R.color.colorPrimary,
+                getString(R.string.account_update_success));
     }
 
     @Subscribe
     public void intResp(Integer i) {
         mProgressDialog.dismiss();
         if(i.equals(0)) {
-            Utils.showSnackbar(this, mParent, getString(R.string.error_retrieving_data));
+            Utils.showSnackbar(this, mParent, R.color.colorPrimary,
+                    getString(R.string.error_retrieving_data));
         } else {
-            Utils.showSnackbar(this, mParent, getString(R.string.error_retrieving_data));
+            Utils.showSnackbar(this, mParent, R.color.colorPrimary,
+                    getString(R.string.error_retrieving_data));
         }
     }
 
@@ -132,7 +135,8 @@ public class SearchProfessorResultsActivity extends AppCompatActivity {
     public void stringResp(String s) {
         mProgressDialog.dismiss();
         if(s.equals("ERROR")) {
-            Utils.showSnackbar(this, mParent, getString(R.string.error_retrieving_data));
+            Utils.showSnackbar(this, mParent, R.color.colorPrimary,
+                    getString(R.string.error_retrieving_data));
         }
     }
 

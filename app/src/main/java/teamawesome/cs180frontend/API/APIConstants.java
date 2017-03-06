@@ -9,7 +9,8 @@ public class APIConstants {
 
     public static final int HTTP_STATUS_OK = 200;
     public static final int HTTP_STATUS_INVALID = 400;
-    public static final int HTTP_STATUS_DNE = 401;
+    public static final int HTTP_STATUS_UNAUTHORIZED = 401;
+    public static final int TOO_MANY_REQ = 429;
     public static final int HTTP_STATUS_ERROR = 500;
 
     public static final String LOGIN_FAILURE = "Unable to login. Please check your phone number/password.";

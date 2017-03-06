@@ -1,14 +1,12 @@
-package teamawesome.cs180frontend.Listeners.AnimationListener;
+package teamawesome.cs180frontend.Listeners.AnimationListener.Generic;
 
 import android.view.View;
 import android.view.animation.Animation;
 
-public class HideAnimationListener implements Animation.AnimationListener{
+public class GenericHideAnimationListener implements Animation.AnimationListener{
     private View v;
 
-    public HideAnimationListener(View v) {
-        this.v = v;
-    }
+    public GenericHideAnimationListener(View v) { this.v = v; }
 
     @Override
     public void onAnimationStart(Animation animation) { }

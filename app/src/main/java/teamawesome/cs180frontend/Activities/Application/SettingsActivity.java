@@ -1,4 +1,4 @@
-package teamawesome.cs180frontend.Activities;
+package teamawesome.cs180frontend.Activities.Application;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -114,7 +114,7 @@ public class SettingsActivity extends AppCompatActivity {
                     .enqueue(callback);
 
         } else {
-            schoolAC.setError(getString(R.string.university_dne));
+            schoolAC.setError(getString(R.string.school_dne));
         }
     }
 
@@ -147,7 +147,8 @@ public class SettingsActivity extends AppCompatActivity {
                     .updateAccount(user)
                     .enqueue(callback);
         } else {
-            Utils.showSnackbar(this, parent, getString(R.string.enter_new_password));
+            Utils.showSnackbar(this, parent, R.color.colorPrimary,
+                    getString(R.string.enter_new_password));
         }
         if (focusView != null) {
             focusView.requestFocus();
@@ -193,9 +194,11 @@ public class SettingsActivity extends AppCompatActivity {
         if (resp.getStatus() == APIConstants.HTTP_STATUS_OK) {
             SPSingleton.getInstance(this).getSp().edit().putInt(Constants.SCHOOL_ID, newSchoolId).commit();
             schoolAC.setText("");
-            Utils.showSnackbar(this, parent, getString(R.string.account_update_success));
+            Utils.showSnackbar(this, parent, R.color.colorPrimary,
+                    getString(R.string.account_update_success));
         } else {
-            Utils.showSnackbar(this, parent, getString(R.string.invalid_user_data));
+            Utils.showSnackbar(this, parent, R.color.colorPrimary,
+                    getString(R.string.invalid_user_data));
         }
         Intent intent = new Intent();
         setResult(RESULT_OK, intent);
@@ -211,16 +214,19 @@ public class SettingsActivity extends AppCompatActivity {
             System.out.println("NEW SCHOOL ID " + Utils.getSchoolId(this) + "\nNEW PASSWORD " + Utils.getPassword(this));
             oldPasswordET.setText("");
             newPasswordET.setText("");
-            Utils.showSnackbar(this, parent, getString(R.string.account_update_success));
+            Utils.showSnackbar(this, parent, R.color.colorPrimary,
+                    getString(R.string.account_update_success));
         } else {
-            Utils.showSnackbar(this, parent, getString(R.string.invalid_user_data));
+            Utils.showSnackbar(this, parent, R.color.colorPrimary,
+                    getString(R.string.invalid_user_data));
         }
     }
 
     @Subscribe
     public void onUpdateFailure(FailedUpdate failed) {
         progressDialog.dismiss();
-        Utils.showSnackbar(this, parent, getString(R.string.update_failed));
+        Utils.showSnackbar(this, parent, R.color.colorPrimary,
+                getString(R.string.update_failed));
     }
 
     @Override

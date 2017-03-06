@@ -1,4 +1,4 @@
-package teamawesome.cs180frontend.Activities;
+package teamawesome.cs180frontend.Activities.Application;
 
 import android.content.Intent;
 import android.support.design.widget.CoordinatorLayout;

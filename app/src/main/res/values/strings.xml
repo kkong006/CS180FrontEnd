@@ -37,13 +37,16 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
+    <!-- Generic -->
+    <string name="too_many_req">Too many requests made. Try again later.</string>
+
     <!--Main Activity-->
     <string name="data_doesnt_exist">Data doesn\'t exist.</string>
     <string name="error_getting_data">Unable to fetch data.</string>
     <string name="fetch_data_again"> Data not available.\n Press here to try again</string>
     <string name="invalid_review_request">Invalid request to fetch reviews.</string>
     <string name="failed_review_request">Failed to fetch reviews. Try again later.</string>
-    <string name="log_out">Logging out.</string>
+    <string name="log_out">Successfully logged out!</string>
     <string name="fetch_feed_again">No reviews available. Press here to try again.</string>
 
     <!--Verify Account Widget-->
@@ -57,7 +60,7 @@
     <string name="prompt_password">Password (optional)</string>
     <string name="action_sign_in">Sign in or register</string>
     <string name="action_sign_in_short">Sign in</string>
-    <string name="error_invalid_number">This number is invalid</string>
+    <string name="error_invalid_number">This number is too short</string>
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
@@ -72,6 +75,23 @@
     <string name="register_now">Don\'t have an account? Register now!</string>
     <string name="sign_in">Already have an account? Sign in!</string>
     <string name="register">Register</string>
+    <string name="login_failed">Failed to login. Please check your information and makes sure it\'s correct.</string>
+    <string name="unable_to_login">Unable to login. Please try again later.</string>
+    <string name="no_account">Don\'t have an account?\u0020</string>
+    <string name="sign_up_now">Sign up now!</string>
+
+    <!-- Onboarding -->
+    <string name="password_digits">ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%&amp;</string>
+    <string name="enter_info">To begin, enter in your phone number and a password</string>
+    <string name="phone_number">Phone number</string>
+    <string name="password_hint">Password (min. 8 chars)</string>
+    <string name="next">Next</string>
+    <string name="onboard_loading">Just one moment...</string>
+    <string name="done">Done</string>
+    <string name="enter_school">Now, enter in your school\'s name</string>
+    <string name="creating_account">Creating account...</string>
+    <string name="account_exists">Account already exists. Please try a different number.</string>
+    <string name="server_issue">Server unable to process request. Please try again later.</string>
 
     <!-- Main Activity -->
     <string name="data_loaded">Data loaded!</string>
@@ -100,10 +120,11 @@
     <string name="change_school_button">Change School</string>
     <string name="logout_button">Logout</string>
     <string name="loading">Loading...</string>
-    <string name="enter_school_name">Enter school name</string>
+    <string name="enter_school_name">School name</string>
     <string name="school_name_changed">School name changed!</string>
-    <string name="university_dne">University does not exist</string>
-    <string name="universities_dne">Universities do not exist</string>
+    <string name="school_dne">School does not exist</string>
+    <string name="schools_dne">Schools do not exist</string>
+    <string name="school_empty">Please enter in a school</string>
     <string name="error_retrieving_data">Error retrieving data</string>
     <string name="account_update_success">Success!</string>
     <string name="change_password_button">Change Password</string>

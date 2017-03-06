@@ -5,24 +5,26 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-/**
- * Created by jman0_000 on 10/27/2016.
- */
-
 public class LoginRegisterBundle implements Serializable {
     @SerializedName("phone_number")
     @Expose
-    String phoneNumber;
+    private String phoneNumber;
 
     @SerializedName("password")
     @Expose
-    String password;
+    private String password;
 
     @SerializedName("school_id")
     @Expose
-    int school_id;
+    private int school_id;
 
     public LoginRegisterBundle(String phoneNumber, String password, int school_id) {
+        this.phoneNumber = phoneNumber;
+        this.password = password;
+        this.school_id = school_id;
+    }
+
+    public void setLoginRegisterBundle(String phoneNumber, String password, int school_id) {
         this.phoneNumber = phoneNumber;
         this.password = password;
         this.school_id = school_id;

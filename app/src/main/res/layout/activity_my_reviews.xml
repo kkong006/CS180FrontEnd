@@ -6,7 +6,7 @@
     android:id="@+id/myreviews_parent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="teamawesome.cs180frontend.Activities.MyReviewsActivity">
+    tools:context="teamawesome.cs180frontend.Activities.Application.MyReviewsActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"

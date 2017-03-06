@@ -1,4 +1,4 @@
-package teamawesome.cs180frontend.Activities;
+package teamawesome.cs180frontend.Activities.Application;
 
 import android.content.Context;
 import android.support.design.widget.CoordinatorLayout;
@@ -126,9 +126,11 @@ public class MyReviewsActivity extends AppCompatActivity {
         if (failedFetch.getContext().equals(this)) {
             progressBar.setVisibility(View.GONE);
             if (failedFetch.getStatus() != -1) {
-                Utils.showSnackbar(this, parent, getString(R.string.invalid_review_request));
+                Utils.showSnackbar(this, parent, R.color.colorPrimary,
+                        getString(R.string.invalid_review_request));
             } else {
-                Utils.showSnackbar(this, parent, getString(R.string.failed_review_request));
+                Utils.showSnackbar(this, parent, R.color.colorPrimary,
+                        getString(R.string.failed_review_request));
             }
 
             myReviews.setVisibility(View.GONE);

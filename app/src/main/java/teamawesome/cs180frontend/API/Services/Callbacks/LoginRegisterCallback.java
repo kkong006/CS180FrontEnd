@@ -6,11 +6,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import teamawesome.cs180frontend.API.APIConstants;
+import teamawesome.cs180frontend.API.Models.StatusModel.LoginRegisterStatus;
 import teamawesome.cs180frontend.API.Models.UserModel.UserRespBundle;
-
-/**
- * Created by jman0_000 on 10/27/2016.
- */
 
 public class LoginRegisterCallback implements Callback<UserRespBundle> {
     @Override
@@ -21,12 +18,12 @@ public class LoginRegisterCallback implements Callback<UserRespBundle> {
                 EventBus.getDefault().post(resp.body());
                 break;
             default:
-                EventBus.getDefault().post(APIConstants.LOGIN_FAILURE);
+                EventBus.getDefault().post(new LoginRegisterStatus(resp.code()));
         }
     }
 
     @Override
     public void onFailure(Call<UserRespBundle> call, Throwable t) {
-        EventBus.getDefault().post(APIConstants.LOGIN_ERROR);
+        EventBus.getDefault().post(new LoginRegisterStatus(-1));
     }
 }

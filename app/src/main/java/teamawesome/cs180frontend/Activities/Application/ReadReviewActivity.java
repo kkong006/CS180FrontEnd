@@ -1,4 +1,4 @@
-package teamawesome.cs180frontend.Activities;
+package teamawesome.cs180frontend.Activities.Application;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -154,9 +154,10 @@ public class ReadReviewActivity extends AppCompatActivity {
     }
 
     @Subscribe
-    public void intLikeDislikeResp(ReviewRatingResp resp) {
+    public void likeDislikeResp(ReviewRatingResp resp) {
         isRatingProcessing = false;
-        Utils.showSnackbar(this, parent, getString(R.string.account_update_success));
+        Utils.showSnackbar(this, parent, R.color.colorPrimary,
+                getString(R.string.account_update_success));
         userRating = newUserRating;
     }
 

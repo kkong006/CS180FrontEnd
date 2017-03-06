@@ -22,7 +22,7 @@ import teamawesome.cs180frontend.API.Models.ReviewModel.UserReview;
 public interface MatchingService {
 
     @GET("/getData")
-    Call<CacheDataBundle> getData(@Query("school_id") int schoolId, @Query("id") int userId);
+    Call<CacheDataBundle> getData(@Query("school_id") Integer schoolId, @Query("id") Integer userId);
 
     @GET("/professor")
     Call<ProfessorRespBundle> getProfessorSummary(@Query("prof_id") int profId);

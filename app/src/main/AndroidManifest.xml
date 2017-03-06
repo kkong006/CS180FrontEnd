@@ -16,59 +16,70 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity
-            android:name=".Activities.LoginActivity"
+            android:name=".Activities.Onboarding.LoginActivity"
             android:animateLayoutChanges="true"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".Activities.MainActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"
+            android:name=".Activities.Application.MainActivity"
             android:launchMode="singleTop"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
+
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
+
         <activity
-            android:name=".Activities.SearchActivity"
-            android:screenOrientation="portrait"
-            android:parentActivityName=".Activities.MainActivity"/>
+            android:name=".Activities.Application.SearchActivity"
+            android:parentActivityName=".Activities.Application.MainActivity"
+            android:screenOrientation="portrait" />
         <activity
-            android:name=".Activities.MyReviewsActivity"
-            android:screenOrientation="portrait"
-            android:parentActivityName=".Activities.MainActivity"/>
+            android:name=".Activities.Application.MyReviewsActivity"
+            android:parentActivityName=".Activities.Application.MainActivity"
+            android:screenOrientation="portrait" />
         <activity
-            android:name=".Activities.SettingsActivity"
-            android:screenOrientation="portrait"
-            android:parentActivityName=".Activities.MainActivity"/>
+            android:name=".Activities.Application.SettingsActivity"
+            android:parentActivityName=".Activities.Application.MainActivity"
+            android:screenOrientation="portrait" />
         <activity
-            android:name=".Activities.SearchResultsActivity"
-            android:screenOrientation="portrait"
-            android:parentActivityName=".Activities.MainActivity"/>
+            android:name=".Activities.Application.SearchResultsActivity"
+            android:parentActivityName=".Activities.Application.MainActivity"
+            android:screenOrientation="portrait" />
         <activity
-            android:name=".Activities.WriteReviewActivity"
-            android:screenOrientation="portrait"
-            android:parentActivityName=".Activities.MainActivity"/>
+            android:name=".Activities.Application.WriteReviewActivity"
+            android:parentActivityName=".Activities.Application.MainActivity"
+            android:screenOrientation="portrait" />
         <activity
-            android:name=".Activities.ReadReviewActivity"
-            android:screenOrientation="portrait"
-            android:parentActivityName=".Activities.SearchResultsActivity"/>
-        <activity android:name=".Activities.SearchProfessorActivity"
-            android:screenOrientation="portrait"
-            android:parentActivityName=".Activities.MainActivity"/>
-        <activity android:name=".Activities.SearchProfessorResultsActivity"
-            android:screenOrientation="portrait"
-            android:parentActivityName=".Activities.SearchProfessorActivity"/>
+            android:name=".Activities.Application.ReadReviewActivity"
+            android:parentActivityName=".Activities.Application.SearchResultsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.Application.SearchProfessorActivity"
+            android:parentActivityName=".Activities.Application.MainActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.Application.SearchProfessorResultsActivity"
+            android:parentActivityName=".Activities.Application.SearchProfessorActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.Onboarding.AccountInfoActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".Activities.Onboarding.VerifyActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

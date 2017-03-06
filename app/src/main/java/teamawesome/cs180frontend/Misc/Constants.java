@@ -14,4 +14,7 @@ public class Constants {
     public static final String LIKED = "LIKED";
     public static final String DISLIKED = "DISLIKED";
 
+    //Intent extra keys
+    public static final String MESSAGE = "MESSAGE";
+
 }

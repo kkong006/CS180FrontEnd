@@ -1,4 +1,4 @@
-package teamawesome.cs180frontend.Activities;
+package teamawesome.cs180frontend.Activities.Application;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -124,10 +124,12 @@ public class WriteReviewActivity extends AppCompatActivity {
                        UserReview r = new UserReview(userId, password, classId, profId, rating, reviewText, schoolId);
                        submitReview(r);
                    } else {
-                       Utils.showSnackbar(this, parent, getString(R.string.invalid_rating));
+                       Utils.showSnackbar(this, parent, R.color.colorPrimary,
+                               getString(R.string.invalid_rating));
                    }
                } else {
-                   Utils.showSnackbar(this, parent, getString(R.string.review_not_long_enough));
+                   Utils.showSnackbar(this, parent, R.color.colorPrimary,
+                           getString(R.string.review_not_long_enough));
                }
             } else {
                 this.className.setError(getString(R.string.select_valid_class));
@@ -190,7 +192,8 @@ public class WriteReviewActivity extends AppCompatActivity {
         reviewText.setText("");
         professorName.setText("");
         className.setText("");
-        Utils.showSnackbar(this, parent, getString(R.string.account_update_success));
+        Utils.showSnackbar(this, parent, R.color.colorPrimary,
+                getString(R.string.account_update_success));
 
         Intent i = new Intent(this, MainActivity.class);
         startActivity(i);
@@ -201,11 +204,14 @@ public class WriteReviewActivity extends AppCompatActivity {
     public void onFailedReviewPost(PostReviewStatus status) {
         progressDialog.dismiss();
         if(status.getStatus() == APIConstants.HTTP_STATUS_ERROR) {
-            Utils.showSnackbar(this, parent, getString(R.string.already_submitted_review));
-        } else if (status.getStatus() == APIConstants.HTTP_STATUS_DNE) {
-            Utils.showSnackbar(this, parent, getString(R.string.prof_or_class_DNE));
+            Utils.showSnackbar(this, parent, R.color.colorPrimary,
+                    getString(R.string.already_submitted_review));
+        } else if (status.getStatus() == APIConstants.HTTP_STATUS_UNAUTHORIZED) {
+            Utils.showSnackbar(this, parent, R.color.colorPrimary,
+                    getString(R.string.prof_or_class_DNE));
         } else {
-            Utils.showSnackbar(this, parent, getString(R.string.failed_to_submit_review));
+            Utils.showSnackbar(this, parent, R.color.colorPrimary,
+                    getString(R.string.failed_to_submit_review));
         }
     }
 

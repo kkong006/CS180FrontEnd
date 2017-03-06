@@ -22,7 +22,7 @@ import java.util.Set;
 import java.util.TimeZone;
 
 import teamawesome.cs180frontend.API.Models.UserModel.UserRespBundle;
-import teamawesome.cs180frontend.Listeners.AnimationListener.HideAnimationListener;
+import teamawesome.cs180frontend.Listeners.AnimationListener.Generic.GenericHideAnimationListener;
 import teamawesome.cs180frontend.R;
 
 public class Utils {
@@ -48,10 +48,10 @@ public class Utils {
         return hashtext;
     }
 
-    public static Snackbar showSnackbar(Context context, View parent, String message) {
+    public static Snackbar showSnackbar(Context context, View parent, int colorId, String message) {
         Snackbar snackbar = Snackbar.make(parent, message, Snackbar.LENGTH_LONG);
         View rootView = snackbar.getView();
-        snackbar.getView().setBackgroundColor(context.getResources().getColor(R.color.colorPrimary));
+        snackbar.getView().setBackgroundColor(context.getResources().getColor(colorId));
         TextView tv = (TextView) rootView.findViewById(android.support.design.R.id.snackbar_text);
         tv.setTextColor(context.getResources().getColor(R.color.colorWhite));
         snackbar.show();
@@ -149,8 +149,8 @@ public class Utils {
 
     public static AlphaAnimation createHideAnimation(View v) {
         AlphaAnimation hide = new AlphaAnimation(1.0f, 0.0f);
-        hide.setAnimationListener(new HideAnimationListener(v));
-        hide.setDuration(250);
+        hide.setAnimationListener(new GenericHideAnimationListener(v));
+        hide.setDuration(500);
         return hide;
     }
 }
