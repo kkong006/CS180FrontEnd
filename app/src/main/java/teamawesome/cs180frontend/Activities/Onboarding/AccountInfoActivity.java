@@ -26,7 +26,7 @@ import teamawesome.cs180frontend.API.APIConstants;
 import teamawesome.cs180frontend.API.Models.DataModel.CacheData.CacheDataBundle;
 import teamawesome.cs180frontend.API.Models.StatusModel.CacheReqStatus;
 import teamawesome.cs180frontend.API.Models.StatusModel.LoginRegisterStatus;
-import teamawesome.cs180frontend.API.Models.UserModel.LoginRegisterBundle;
+import teamawesome.cs180frontend.API.Models.UserModel.AccountBundle;
 import teamawesome.cs180frontend.API.Models.UserModel.UserRespBundle;
 import teamawesome.cs180frontend.API.RetrofitSingleton;
 import teamawesome.cs180frontend.API.Services.Callbacks.LoginRegisterCallback;
@@ -36,8 +36,10 @@ import teamawesome.cs180frontend.Listeners.AnimationListener.Onboarding.Animatio
 import teamawesome.cs180frontend.Listeners.AnimationListener.Onboarding.HideTextAnim1;
 import teamawesome.cs180frontend.Listeners.AnimationListener.Onboarding.UpdateTextAnimation1;
 import teamawesome.cs180frontend.Misc.DataSingleton;
+import teamawesome.cs180frontend.Misc.Events.FinishEvent;
 import teamawesome.cs180frontend.Misc.Utils;
 import teamawesome.cs180frontend.R;
+import teamawesome.cs180frontend.Runnable.InitOnboardRunnable;
 
 public class AccountInfoActivity extends AppCompatActivity {
     private final Context context = this;
@@ -56,7 +58,7 @@ public class AccountInfoActivity extends AppCompatActivity {
     @Bind(R.id.done) Button done;
 
     private Handler handler;
-    private LoginRegisterBundle registerBundle;
+    private AccountBundle registerBundle;
     private LoginRegisterCallback callback;
     private SimpleListAdapter adapter;
     private ProgressDialog progressDialog;
@@ -72,7 +74,7 @@ public class AccountInfoActivity extends AppCompatActivity {
         EventBus.getDefault().register(this);
         callback = new LoginRegisterCallback();
 
-        animateTextView1();
+        initAnimation();
         createProgressDialog();
     }
 
@@ -88,19 +90,11 @@ public class AccountInfoActivity extends AppCompatActivity {
         progressDialog.setMessage(getString(R.string.creating_account));
     }
 
-    private void animateTextView1() {
+    private void initAnimation() {
         handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                AlphaAnimation showText = new AlphaAnimation(0.0f, 1.0f);
-                showText.setAnimationListener(new AnimationListener1(context,
-                        onboardText1, infoLayout1,
-                        next, View.VISIBLE));
-                showText.setDuration(650);
-                onboardText1.startAnimation(showText);
-            }
-        }, 100);
+        handler.postDelayed(new InitOnboardRunnable(this, onboardText1,
+                infoLayout1, next,
+                View.VISIBLE), 100);
     }
 
     public void setUpSchoolAC() {
@@ -191,10 +185,10 @@ public class AccountInfoActivity extends AppCompatActivity {
             return;
         }
 
-        done.setClickable(false);
+        //done.setClickable(false);
 
         if (registerBundle == null) {
-            registerBundle = new LoginRegisterBundle(phoneNumber.getText().toString(),
+            registerBundle = new AccountBundle(phoneNumber.getText().toString(),
                     password.getText().toString(), schoolId);
         } else {
             registerBundle.setLoginRegisterBundle(phoneNumber.getText().toString(),
@@ -239,13 +233,14 @@ public class AccountInfoActivity extends AppCompatActivity {
         }
     }
 
-    @Subscribe
-    public void onRegister(UserRespBundle resp) {
-        Utils.saveUserData(this, resp, registerBundle.getPassword(),
+    @Subscribe //listening to FinishEvent to ensure that finishing activity chaining will happen
+    public void onRegister(FinishEvent<UserRespBundle> bundle) {
+        Utils.saveUserData(this, bundle.getObject(), registerBundle.getPassword(),
                 registerBundle.getPhoneNumber());
-        progressDialog.dismiss();
         Intent intent = new Intent(this, VerifyActivity.class);
+        progressDialog.dismiss();
         startActivity(intent);
+        finish();
     }
 
     @Subscribe

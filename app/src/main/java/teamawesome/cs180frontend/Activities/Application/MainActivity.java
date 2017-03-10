@@ -21,6 +21,7 @@ import android.view.animation.AlphaAnimation;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -46,9 +47,13 @@ import teamawesome.cs180frontend.API.Models.StatusModel.CacheReqStatus;
 import teamawesome.cs180frontend.API.Models.StatusModel.ReviewFetchStatus;
 import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewRatingResp;
 import teamawesome.cs180frontend.API.Models.StatusModel.ReviewRatingStatus;
+import teamawesome.cs180frontend.API.Models.StatusModel.VerifyStatus;
+import teamawesome.cs180frontend.API.Models.UserModel.VerifyBundle;
+import teamawesome.cs180frontend.API.Models.UserModel.VerifyResp;
 import teamawesome.cs180frontend.API.RetrofitSingleton;
 import teamawesome.cs180frontend.API.Services.Callbacks.GetCacheDataCallback;
 import teamawesome.cs180frontend.API.Services.Callbacks.GetReviewsCallback;
+import teamawesome.cs180frontend.API.Services.Callbacks.VerifyCallback;
 import teamawesome.cs180frontend.Activities.Onboarding.LoginActivity;
 import teamawesome.cs180frontend.Adapters.MainFeedAdapter;
 import teamawesome.cs180frontend.Adapters.NavDrawerAdapter;
@@ -70,8 +75,10 @@ public class MainActivity extends AppCompatActivity {
 
     //Verify layout bindings
     @Bind(R.id.verify_acc) LinearLayout mainVerifyLayout;
-    @Bind(R.id.verify_snippet_text) TextView verifySnippetText;
     @Bind(R.id.verify_body) LinearLayout verifyBody;
+    @Bind(R.id.verify_snippet_text) TextView verifySnippetText;
+    @Bind(R.id.pin_edittext) EditText pinEditText;
+    @Bind(R.id.verify) Button verify;
     @Bind(R.id.later) Button later;
 
     private NavDrawerAdapter drawerAdapter;
@@ -81,16 +88,19 @@ public class MainActivity extends AppCompatActivity {
 
     ProgressDialog progressDialog;
 
-    DataSingleton data;
+    private DataSingleton data;
+    private VerifyBundle bundle;
+    private VerifyCallback verifyCallback;
 
     int offset = 0;
     int lastSelected = 0;
 
     AdRequest adRequest = null;
 
-    boolean isLoading = false;
-    boolean isRefreshing = false;
-    boolean initialLoad = true;
+    private boolean isLoading = false;
+    private boolean isRefreshing = false;
+    private boolean initialLoad = true;
+    private boolean verifiedDisabled = false;
 
     final Context context = this;
 
@@ -111,6 +121,13 @@ public class MainActivity extends AppCompatActivity {
             finish();
             return;
         }
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null && !extras.getString(Constants.MESSAGE, "").isEmpty()) {
+            Toast.makeText(this, extras.getString(Constants.MESSAGE, ""), Toast.LENGTH_SHORT).show();
+        }
+
+        verifyCallback = new VerifyCallback();
 
         mainSWL.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -166,6 +183,85 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
+    @Override
+    public void onBackPressed() {
+        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+            mDrawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            moveTaskToBack(true);
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        if (Utils.getSchoolId(this) < 1) {
+            Utils.showSnackbar(this, parent, R.color.colorPrimary,
+                    getString(R.string.please_sign_in));
+            return true;
+        }
+
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            Intent i = new Intent(this, SettingsActivity.class);
+            startActivityForResult(i, 2);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+
+        if (progressDialog != null) {
+            progressDialog = new ProgressDialog(this);
+            progressDialog.setMessage(getString(R.string.loading));
+            progressDialog.setCancelable(false);
+        }
+
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                drawerAdapter.changeLoginElem();
+                progressDialog.setMessage(getString(R.string.loading));
+                progressDialog.show();
+
+                isLoading = true;
+
+                RetrofitSingleton.getInstance()
+                        .getMatchingService()
+                        .getData(Utils.getSchoolId(this), Utils.getUserId(this))
+                        .enqueue(new GetCacheDataCallback());
+            }
+            setButtons();
+        } else if (requestCode == 2) {
+            if (resultCode == RESULT_OK) {
+                offset = 0;
+                System.out.println(Utils.getSchoolId(this));
+                mainFeedAdapter.clear();
+                progressDialog.setMessage(getString(R.string.loading));
+                progressDialog.show();
+
+                isLoading = true;
+
+                RetrofitSingleton.getInstance()
+                        .getMatchingService()
+                        .getData(Utils.getSchoolId(this), Utils.getUserId(this))
+                        .enqueue(new GetCacheDataCallback());
+            }
+        }
+    }
+
     private void logout() {
         Utils.nukeUserData(this);
         drawerAdapter.changeLoginElem();
@@ -197,6 +293,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getData() {
+        progressDialog.setMessage(getString(R.string.loading));
         progressDialog.show();
         RetrofitSingleton.getInstance()
                 .getMatchingService()
@@ -381,7 +478,7 @@ public class MainActivity extends AppCompatActivity {
         if (status.getStatus() == APIConstants.HTTP_STATUS_INVALID) {
             Toast.makeText(this, getString(R.string.INVALID_REVIEW_RATING_REQ), Toast.LENGTH_SHORT).show();
         } else if (status.getStatus() == APIConstants.HTTP_STATUS_ERROR) {
-            Toast.makeText(this, getString(R.string.SERVER_ERROR), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.server_error), Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(this, getString(R.string.FAILED_REVIEW_RATING), Toast.LENGTH_SHORT).show();
         }
@@ -399,6 +496,27 @@ public class MainActivity extends AppCompatActivity {
         } else if (rating == 2) {
             data.getLikedSet().remove(resp.getReviewId());
             data.getDislikedSet().add(resp.getReviewId());
+        }
+    }
+
+    @Subscribe
+    public void onVerifyResp(VerifyResp resp) {
+        mainVerifyLayout.setVisibility(View.GONE);
+        Utils.setVerified(this, true);
+        progressDialog.dismiss();
+        Utils.showSnackbar(this, parent, R.color.colorPrimary, getString(R.string.verify_success));
+    }
+
+    @Subscribe
+    public void onVerifyFailed(VerifyStatus status) {
+        verifiedDisabled = false;
+        progressDialog.dismiss();
+        if (status.getStatus() == APIConstants.HTTP_STATUS_INVALID) {
+            Utils.showSnackbar(this, parent, R.color.colorPrimary, getString(R.string.invalid_pin));
+        } else if (status.getStatus() == APIConstants.HTTP_STATUS_ERROR) {
+            Utils.showSnackbar(this, parent, R.color.colorPrimary, getString(R.string.server_error));
+        } else {
+            Utils.showSnackbar(this, parent, R.color.colorPrimary, getString(R.string.unable_to_request));
         }
     }
 
@@ -431,8 +549,38 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @OnClick(R.id.verify)
+    public void verify() {
+        if (!verifiedDisabled) {
+            String pin = pinEditText.getText().toString();
+            if (pin.length() < 4) {
+                Utils.showSnackbar(this, parent, R.color.colorPrimary, getString(R.string.pin_too_short));
+                return;
+            }
+
+            verifiedDisabled = true;
+            Utils.hideKeyboard(parent, this);
+            progressDialog.setMessage(getString(R.string.verifying));
+            progressDialog.show();
+
+            if (bundle == null) {
+                bundle = new VerifyBundle(Utils.getUserId(this),
+                        Utils.getPassword(this), pin);
+            } else {
+                bundle.changeValues(Utils.getUserId(this),
+                        Utils.getPassword(this), pin);
+            }
+
+            RetrofitSingleton.getInstance()
+                    .getUserService()
+                    .verifyUser(bundle)
+                    .enqueue(verifyCallback);
+        }
+    }
+
     @OnClick(R.id.later)
     public void onLater() {
+        Utils.hideKeyboard(parent, this);
         if (verifyBody.getVisibility() == View.VISIBLE) {
             shrinkVerifyLayout();
         }
@@ -440,8 +588,11 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.close_verify_view)
     public void hideVerifyLayout() {
-        AlphaAnimation hide = Utils.createHideAnimation(mainVerifyLayout);
-        mainVerifyLayout.startAnimation(hide);
+        if (!verifiedDisabled) {
+            verifiedDisabled = true;
+            AlphaAnimation hide = Utils.createHideAnimation(mainVerifyLayout);
+            mainVerifyLayout.startAnimation(hide);
+        }
     }
 
     @OnItemClick(R.id.drawer_list)
@@ -476,83 +627,6 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra("review", (Parcelable) review);
             intent.putExtra("yourRating", Utils.getReviewRating(review.getReviewId()));
             startActivity(intent);
-        }
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
-            mDrawerLayout.closeDrawer(GravityCompat.START);
-        } else {
-            moveTaskToBack(true);
-        }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        if (Utils.getSchoolId(this) < 1) {
-            Utils.showSnackbar(this, parent, R.color.colorPrimary,
-                    getString(R.string.please_sign_in));
-            return true;
-        }
-
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            Intent i = new Intent(this, SettingsActivity.class);
-            startActivityForResult(i, 2);
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        super.onActivityResult(requestCode, resultCode, intent);
-
-        if (progressDialog != null) {
-            progressDialog = new ProgressDialog(this);
-            progressDialog.setMessage(getString(R.string.loading));
-            progressDialog.setCancelable(false);
-        }
-
-        if (requestCode == 1) {
-            if (resultCode == RESULT_OK) {
-                drawerAdapter.changeLoginElem();
-                progressDialog.show();
-
-                isLoading = true;
-
-                RetrofitSingleton.getInstance()
-                        .getMatchingService()
-                        .getData(Utils.getSchoolId(this), Utils.getUserId(this))
-                        .enqueue(new GetCacheDataCallback());
-            }
-            setButtons();
-        } else if (requestCode == 2) {
-            if (resultCode == RESULT_OK) {
-                offset = 0;
-                System.out.println(Utils.getSchoolId(this));
-                mainFeedAdapter.clear(); //Need to reload the schools
-                progressDialog.show();
-
-                isLoading = true;
-
-                RetrofitSingleton.getInstance()
-                        .getMatchingService()
-                        .getData(Utils.getSchoolId(this), Utils.getUserId(this))
-                        .enqueue(new GetCacheDataCallback());
-            }
         }
     }
 }

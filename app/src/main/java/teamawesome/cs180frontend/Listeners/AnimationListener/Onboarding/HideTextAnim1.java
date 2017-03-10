@@ -4,7 +4,7 @@ import android.app.ProgressDialog;
 import android.view.animation.Animation;
 import android.widget.TextView;
 
-import teamawesome.cs180frontend.API.Models.UserModel.LoginRegisterBundle;
+import teamawesome.cs180frontend.API.Models.UserModel.AccountBundle;
 import teamawesome.cs180frontend.API.RetrofitSingleton;
 import teamawesome.cs180frontend.API.Services.Callbacks.LoginRegisterCallback;
 
@@ -14,12 +14,12 @@ import teamawesome.cs180frontend.API.Services.Callbacks.LoginRegisterCallback;
 
 public class HideTextAnim1 implements Animation.AnimationListener {
     private int visibility;
-    private LoginRegisterBundle registerBundle;
+    private AccountBundle registerBundle;
     private LoginRegisterCallback callback;
     private TextView textView;
     private ProgressDialog progressDialog;
 
-    public HideTextAnim1(int visibility, LoginRegisterBundle registerBundle,
+    public HideTextAnim1(int visibility, AccountBundle registerBundle,
                          LoginRegisterCallback callback, TextView textView,
                          ProgressDialog progressDialog) {
         this.visibility = visibility;

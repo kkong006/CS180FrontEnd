@@ -5,15 +5,15 @@
     android:layout_height="match_parent"
     android:background="@color/lightGrey"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
-    
+
     <LinearLayout
+        android:id="@+id/verify_acc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:orientation="vertical"
-        android:background="@color/colorRed"
         android:layout_margin="4dp"
-        android:id="@+id/verify_acc">
+        android:background="@color/colorRed"
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -21,63 +21,64 @@
             android:gravity="center_vertical">
 
             <TextView
+                android:id="@+id/verify_snippet_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorWhite"
-                android:text="@string/please_verify_not_clicked"
-                android:layout_margin="4dp"
                 android:layout_alignParentStart="true"
-                android:id="@+id/verify_snippet_text"/>
+                android:layout_margin="4dp"
+                android:text="@string/please_verify_not_clicked"
+                android:textColor="@color/colorWhite" />
 
             <com.joanzapata.iconify.widget.IconTextView
+                android:id="@+id/close_verify_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorWhite"
-                android:text="@string/fa_times"
-                android:textSize="26sp"
-                android:layout_margin="4dp"
                 android:layout_alignParentEnd="true"
-                android:id="@+id/close_verify_view"/>
+                android:layout_margin="4dp"
+                android:text="@string/fa_times"
+                android:textColor="@color/colorWhite"
+                android:textSize="26sp" />
 
         </RelativeLayout>
 
         <LinearLayout
+            android:id="@+id/verify_body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:orientation="vertical"
-            android:gravity="end"
             android:layout_marginBottom="4dp"
-            android:id="@+id/verify_body">
+            android:gravity="end"
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <EditText
+                android:id="@+id/pin_edittext"
                 style="@style/WhiteTextTheme"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="number"
                 android:layout_margin="4dp"
-                android:id="@+id/pin_edittext"/>
+                android:inputType="number"
+                android:maxLength="4" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginEnd="4dp">
+                android:layout_marginEnd="4dp"
+                android:orientation="horizontal">
 
                 <Button
+                    android:id="@+id/verify"
                     style="@style/VerifyButtonTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="2dp"
-                    android:text="@string/verify"
-                    android:id="@+id/verify" />
+                    android:layout_marginEnd="4dp"
+                    android:text="@string/verify" />
 
                 <Button
+                    android:id="@+id/later"
                     style="@style/VerifyButtonTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/later"
-                    android:id="@+id/later"/>
+                    android:text="@string/later" />
 
             </LinearLayout>
 
@@ -99,8 +100,8 @@
         android:id="@+id/main_srl"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/verify_acc"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/verify_acc">
 
         <ListView
             android:id="@+id/feed_list_view"
@@ -109,8 +110,7 @@
             android:divider="@null"
             android:dividerHeight="0dp"
             android:visibility="gone"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
-        </ListView>
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"></ListView>
 
     </android.support.v4.widget.SwipeRefreshLayout>
 

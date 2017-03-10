@@ -8,8 +8,6 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ScrollView;
@@ -18,29 +16,23 @@ import android.widget.TextView;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.util.List;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import teamawesome.cs180frontend.API.Models.DataModel.CacheData.CacheDataBundle;
-import teamawesome.cs180frontend.API.Models.StatusModel.CacheReqStatus;
 import teamawesome.cs180frontend.API.Models.StatusModel.LoginRegisterStatus;
-import teamawesome.cs180frontend.API.Models.UserModel.LoginRegisterBundle;
-import teamawesome.cs180frontend.API.Models.DataModel.SchoolBundle;
+import teamawesome.cs180frontend.API.Models.UserModel.AccountBundle;
 import teamawesome.cs180frontend.API.Models.UserModel.UserRespBundle;
 import teamawesome.cs180frontend.API.RetrofitSingleton;
-import teamawesome.cs180frontend.API.Services.Callbacks.GetCacheDataCallback;
 import teamawesome.cs180frontend.API.Services.Callbacks.LoginRegisterCallback;
 import teamawesome.cs180frontend.Activities.Application.MainActivity;
 import teamawesome.cs180frontend.Misc.Constants;
-import teamawesome.cs180frontend.Misc.DataSingleton;
+import teamawesome.cs180frontend.Misc.Events.FinishEvent;
 import teamawesome.cs180frontend.Misc.Utils;
 import teamawesome.cs180frontend.R;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private LoginRegisterBundle loginRegisterBundle;
+    private AccountBundle accountBundle;
 
     // UI references.
     @Bind(R.id.login_parent) CoordinatorLayout parent;
@@ -53,7 +45,7 @@ public class LoginActivity extends AppCompatActivity {
     @Bind(R.id.register) TextView registerText;
 
     ProgressDialog progressDialog;
-    boolean loginMode = true;
+    boolean isRegistering = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +72,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onRestart() {
         super.onRestart();
+        isRegistering = false;
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
@@ -101,7 +94,7 @@ public class LoginActivity extends AppCompatActivity {
 
     @OnClick(R.id.register)
     public void startRegister() {
-        EventBus.getDefault().unregister(this);
+        isRegistering = true;
         Intent intent = new Intent(this, AccountInfoActivity.class);
         startActivity(intent);
     }
@@ -119,7 +112,6 @@ public class LoginActivity extends AppCompatActivity {
         String password = Utils.getMD5Hash(rawPassword);
 
         boolean cancel = false;
-        Integer schoolId = null;
         View focusView = null;
 
         // Check for a valid password, if the user entered one.
@@ -146,44 +138,47 @@ public class LoginActivity extends AppCompatActivity {
             focusView.requestFocus();
         } else {
             Utils.hideKeyboard(parent, this);
-            loginRegisterBundle = new LoginRegisterBundle(phoneNum, password,
-                    loginMode ? 1 : schoolId.intValue());
+            accountBundle = new AccountBundle(phoneNum, password, null);
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-            progressDialog.setMessage(loginMode ? getString(R.string.login_loading) :
-                    getString(R.string.register_loading));
+            progressDialog.setMessage(getString(R.string.login_loading));
             progressDialog.show();
 
             //Login & register are nearly identical => use the same callback
-            if (loginMode) {
-                RetrofitSingleton.getInstance()
-                        .getUserService()
-                        .login(loginRegisterBundle)
-                        .enqueue(new LoginRegisterCallback());
-            }
+            RetrofitSingleton.getInstance()
+                    .getUserService()
+                    .login(accountBundle)
+                    .enqueue(new LoginRegisterCallback());
         }
     }
 
     @Subscribe //Successful response
     public void onLogin(UserRespBundle resp) {
-        progressDialog.dismiss();
-        Utils.saveUserData(this, resp, loginRegisterBundle.getPassword(),
-                loginRegisterBundle.getPhoneNumber());
-        Intent intent = new Intent(this, MainActivity.class);
-        setResult(RESULT_OK, intent);
-        startActivity(intent);
-        finish();
+        if (!isRegistering) {
+            progressDialog.dismiss();
+            Utils.saveUserData(this, resp, accountBundle.getPassword(),
+                    accountBundle.getPhoneNumber());
+            Intent intent = new Intent(this, MainActivity.class);
+            setResult(RESULT_OK, intent);
+            startActivity(intent);
+            finish();
+        } else {
+            EventBus.getDefault().post(new FinishEvent<>(1, resp));
+            finish();
+        }
     }
 
     @Subscribe
-    public void onLoginResisterFailure(LoginRegisterStatus status) {
-        progressDialog.dismiss();
-        if (status.getStatus() == -1) {
-            Utils.showSnackbar(this, parent, R.color.colorPrimary,
-                    getString(R.string.unable_to_login));
-        } else {
-            Utils.showSnackbar(this, parent, R.color.colorPrimary,
-                    getString(R.string.login_failed));
+    public void onLoginFailure(LoginRegisterStatus status) {
+        if (!isRegistering) {
+            progressDialog.dismiss();
+            if (status.getStatus() == -1) {
+                Utils.showSnackbar(this, parent, R.color.colorPrimary,
+                        getString(R.string.unable_to_login));
+            } else {
+                Utils.showSnackbar(this, parent, R.color.colorPrimary,
+                        getString(R.string.login_failed));
+            }
         }
     }
 }

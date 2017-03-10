@@ -40,7 +40,5 @@ public class UserRespBundle {
         return schoolId;
     }
 
-    public void setSchoolId(int schoolId) {
-        this.schoolId = schoolId;
-    }
+    public void setSchoolId(int schoolId) { this.schoolId = schoolId; }
 }

@@ -22,7 +22,7 @@ import java.util.Set;
 import java.util.TimeZone;
 
 import teamawesome.cs180frontend.API.Models.UserModel.UserRespBundle;
-import teamawesome.cs180frontend.Listeners.AnimationListener.Generic.GenericHideAnimationListener;
+import teamawesome.cs180frontend.Listeners.AnimationListener.Generic.GenericAnimationListener;
 import teamawesome.cs180frontend.R;
 
 public class Utils {
@@ -68,6 +68,13 @@ public class Utils {
 
     public static boolean isVerified(Context context) {
         return SPSingleton.getInstance(context).getSp().getBoolean(Constants.IS_VERIFIED, true);
+    }
+
+    public static void setVerified(Context context, boolean isVerified) {
+        SPSingleton.getInstance(context).getSp()
+                .edit()
+                .putBoolean(Constants.IS_VERIFIED, isVerified)
+                .commit();
     }
 
     public static void savePassword(Context context, String newPassword) {
@@ -149,7 +156,7 @@ public class Utils {
 
     public static AlphaAnimation createHideAnimation(View v) {
         AlphaAnimation hide = new AlphaAnimation(1.0f, 0.0f);
-        hide.setAnimationListener(new GenericHideAnimationListener(v));
+        hide.setAnimationListener(new GenericAnimationListener(View.GONE, v));
         hide.setDuration(500);
         return hide;
     }

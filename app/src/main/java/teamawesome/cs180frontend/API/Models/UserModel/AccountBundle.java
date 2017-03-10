@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-public class LoginRegisterBundle implements Serializable {
+public class AccountBundle implements Serializable {
     @SerializedName("phone_number")
     @Expose
     private String phoneNumber;
@@ -16,18 +16,18 @@ public class LoginRegisterBundle implements Serializable {
 
     @SerializedName("school_id")
     @Expose
-    private int school_id;
+    private Integer schoolId;
 
-    public LoginRegisterBundle(String phoneNumber, String password, int school_id) {
+    public AccountBundle(String phoneNumber, String password, Integer schoolId) {
         this.phoneNumber = phoneNumber;
         this.password = password;
-        this.school_id = school_id;
+        this.schoolId = schoolId;
     }
 
     public void setLoginRegisterBundle(String phoneNumber, String password, int school_id) {
         this.phoneNumber = phoneNumber;
         this.password = password;
-        this.school_id = school_id;
+        this.schoolId = school_id;
     }
 
     public String getPhoneNumber() {
@@ -44,4 +44,7 @@ public class LoginRegisterBundle implements Serializable {
 
     public void setPassword(String password) { this.password = password; }
 
+    public Integer getSchoolId() { return schoolId; }
+
+    public void setSchoolId(Integer schoolId) { this.schoolId = schoolId; }
 }
