@@ -32,9 +32,8 @@ public class MainFeedViewHolder {
 
     public TextView[] ratings;
 
-
     public MainFeedViewHolder(View view) {
         ButterKnife.bind(this, view);
-        ratings = new TextView[] { oneTV, twoTV, threeTV, fourTV, fiveTV };
+        ratings = new TextView[] {oneTV, twoTV, threeTV, fourTV, fiveTV};
     }
 }

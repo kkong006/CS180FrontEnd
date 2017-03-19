@@ -43,9 +43,9 @@ import teamawesome.cs180frontend.API.APIConstants;
 import teamawesome.cs180frontend.API.Models.DataModel.CacheData.CacheDataBundle;
 import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewBundle;
 import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewPageBundle;
+import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewRatingResp;
 import teamawesome.cs180frontend.API.Models.StatusModel.CacheReqStatus;
 import teamawesome.cs180frontend.API.Models.StatusModel.ReviewFetchStatus;
-import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewRatingResp;
 import teamawesome.cs180frontend.API.Models.StatusModel.ReviewRatingStatus;
 import teamawesome.cs180frontend.API.Models.StatusModel.VerifyStatus;
 import teamawesome.cs180frontend.API.Models.UserModel.VerifyBundle;
@@ -100,7 +100,9 @@ public class MainActivity extends AppCompatActivity {
     private boolean isLoading = false;
     private boolean isRefreshing = false;
     private boolean initialLoad = true;
-    private boolean verifiedDisabled = false;
+    private boolean verifiedDisabled = false; //to stop people from spamming verification stuff
+    //using boolean vs hiding view because too many methods interact with the verification layout
+    private boolean verifiedHidden = false;
 
     final Context context = this;
 
@@ -246,13 +248,17 @@ public class MainActivity extends AppCompatActivity {
             setButtons();
         } else if (requestCode == 2) {
             if (resultCode == RESULT_OK) {
+                mainSWL.setRefreshing(false);
+                errorTV.setVisibility(View.GONE);
+
                 offset = 0;
+                initialLoad = true;
+                isLoading = true;
+
                 System.out.println(Utils.getSchoolId(this));
                 mainFeedAdapter.clear();
                 progressDialog.setMessage(getString(R.string.loading));
                 progressDialog.show();
-
-                isLoading = true;
 
                 RetrofitSingleton.getInstance()
                         .getMatchingService()
@@ -267,7 +273,6 @@ public class MainActivity extends AppCompatActivity {
         drawerAdapter.changeLoginElem();
         setButtons();
         Intent intent = new Intent(this, LoginActivity.class);
-        intent.putExtra(Constants.MESSAGE, getString(R.string.log_out));
         startActivity(intent);
         finish();
     }
@@ -353,32 +358,36 @@ public class MainActivity extends AppCompatActivity {
     public void addToFeed(ReviewPageBundle page) {
         List<ReviewBundle> reviews = page.getReviews();
 
+        if (initialLoad) {
+            initialLoad = false;
+            if (!verifiedHidden) {
+                if (Utils.isVerified(this)) {
+                    mainVerifyLayout.setVisibility(View.GONE);
+                } else {
+                    mainVerifyLayout.setVisibility(View.VISIBLE);
+                }
+            }
+        }
+
         if (mainFeedAdapter.getCount() == 0 && offset == 0) {
             progressDialog.dismiss();
             mainFeedList.setVisibility(View.GONE);
             errorTV.setText(getString(R.string.fetch_feed_again));
             errorTV.setVisibility(View.VISIBLE);
+            isLoading = false;
+            isRefreshing = false;
             return;
         }
+
+        errorTV.setVisibility(View.GONE);
 
         if (reviews.size() > 2) {
             reviews.add(2, null);
         }
 
-        System.out.println("offset: " + offset);
-
         mainFeedAdapter.append(reviews);
         mainFeedList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         progressDialog.dismiss();
-
-        if (initialLoad) {
-            initialLoad = false;
-            if (Utils.isVerified(this)) {
-                mainVerifyLayout.setVisibility(View.GONE);
-            } else {
-                mainVerifyLayout.setVisibility(View.VISIBLE);
-            }
-        }
 
         mainFeedList.setVisibility(View.VISIBLE);
 
@@ -589,7 +598,8 @@ public class MainActivity extends AppCompatActivity {
     @OnClick(R.id.close_verify_view)
     public void hideVerifyLayout() {
         if (!verifiedDisabled) {
-            verifiedDisabled = true;
+            verifiedDisabled = true; //probably don't need this, just in case though
+            verifiedHidden = true;
             AlphaAnimation hide = Utils.createHideAnimation(mainVerifyLayout);
             mainVerifyLayout.startAnimation(hide);
         }
@@ -603,7 +613,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(i);
         } else if (position == 2) {
             //Search for professor stats
-            Intent intent = new Intent(getApplicationContext(), SearchProfessorActivity.class);
+            Intent intent = new Intent(getApplicationContext(), FindProfActivity.class);
             startActivity(intent);
         } else if (position == 3) {
 
@@ -620,7 +630,6 @@ public class MainActivity extends AppCompatActivity {
 
     @OnItemClick(R.id.feed_list_view)
     public void onReviewClick(AdapterView<?> parent, View view, int position, long id) {
-        System.out.println(position);
         ReviewBundle review = mainFeedAdapter.getItem(position);
         if (review != null) {
             Intent intent = new Intent(this, ReadReviewActivity.class);

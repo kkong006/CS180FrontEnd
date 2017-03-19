@@ -3,11 +3,11 @@ package teamawesome.cs180frontend.Activities.Onboarding;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.widget.AutoCompleteTextView;
@@ -82,6 +82,12 @@ public class AccountInfoActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.slide_right_in_250, R.anim.slide_right_out_250);
     }
 
     private void createProgressDialog() {
@@ -240,6 +246,7 @@ public class AccountInfoActivity extends AppCompatActivity {
         Intent intent = new Intent(this, VerifyActivity.class);
         progressDialog.dismiss();
         startActivity(intent);
+        overridePendingTransition(R.anim.slide_left_in_250, R.anim.slide_left_out_250);
         finish();
     }
 

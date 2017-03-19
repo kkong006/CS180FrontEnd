@@ -2,10 +2,10 @@ package teamawesome.cs180frontend.Activities.Application;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.SparseIntArray;
 import android.view.MenuItem;
 import android.view.View;
@@ -68,7 +68,6 @@ public class SettingsActivity extends AppCompatActivity {
         EventBus.getDefault().register(this);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(getString(R.string.action_settings));
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setCancelable(false);
@@ -79,6 +78,29 @@ public class SettingsActivity extends AppCompatActivity {
 
         fillAutoComplete();
         fillHiddenViewMap();
+    }
+
+    @Override
+    protected void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:
+                return true;
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Utils.hideKeyboard(parent, this);
     }
 
     public void fillAutoComplete() {
@@ -95,24 +117,27 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     @OnClick(R.id.settings_school_bt)
-    public void selectSchool() {
+    public void changeSchool() {
         Utils.hideKeyboard(parent, this);
         Integer schoolId = DataSingleton.getInstance().getSchoolId(schoolAC.getText().toString());
         if (schoolId != null) {
-            newSchoolId = schoolId;
+            if (schoolId != Utils.getSchoolId(this)) {
+                newSchoolId = schoolId;
 
-            UpdateUserBundle user = new UpdateUserBundle(Utils.getUserId(this),
-                    Utils.getPassword(this),
-                    Utils.getPassword(this),
-                    schoolId);
+                UpdateUserBundle user = new UpdateUserBundle(Utils.getUserId(this),
+                        Utils.getPassword(this),
+                        Utils.getPassword(this),
+                        schoolId);
 
-            progressDialog.show();
-            ChangeSchoolCallback callback = new ChangeSchoolCallback();
-            RetrofitSingleton.getInstance()
-                    .getUserService()
-                    .updateAccount(user)
-                    .enqueue(callback);
-
+                progressDialog.show();
+                ChangeSchoolCallback callback = new ChangeSchoolCallback();
+                RetrofitSingleton.getInstance()
+                        .getUserService()
+                        .updateAccount(user)
+                        .enqueue(callback);
+            } else {
+                schoolAC.setError(getString(R.string.same_school_error));
+            }
         } else {
             schoolAC.setError(getString(R.string.school_dne));
         }
@@ -148,7 +173,7 @@ public class SettingsActivity extends AppCompatActivity {
                     .enqueue(callback);
         } else {
             Utils.showSnackbar(this, parent, R.color.colorPrimary,
-                    getString(R.string.enter_new_password));
+                    getString(R.string.old_password_error));
         }
         if (focusView != null) {
             focusView.requestFocus();
@@ -194,15 +219,13 @@ public class SettingsActivity extends AppCompatActivity {
         if (resp.getStatus() == APIConstants.HTTP_STATUS_OK) {
             SPSingleton.getInstance(this).getSp().edit().putInt(Constants.SCHOOL_ID, newSchoolId).commit();
             schoolAC.setText("");
-            Utils.showSnackbar(this, parent, R.color.colorPrimary,
-                    getString(R.string.account_update_success));
+            Intent intent = new Intent();
+            setResult(RESULT_OK, intent);
+            finish();
         } else {
             Utils.showSnackbar(this, parent, R.color.colorPrimary,
                     getString(R.string.invalid_user_data));
         }
-        Intent intent = new Intent();
-        setResult(RESULT_OK, intent);
-        finish();
     }
 
     @Subscribe
@@ -227,22 +250,5 @@ public class SettingsActivity extends AppCompatActivity {
         progressDialog.dismiss();
         Utils.showSnackbar(this, parent, R.color.colorPrimary,
                 getString(R.string.update_failed));
-    }
-
-    @Override
-    protected void onDestroy() {
-        EventBus.getDefault().unregister(this);
-        super.onDestroy();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                return true;
-            default:
-                return true;
-        }
     }
 }

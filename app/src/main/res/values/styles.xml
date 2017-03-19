@@ -25,6 +25,33 @@
         <item name="android:textColor">@color/colorWhite</item>
     </style>
 
+    <style name="RatingIconTheme">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginEnd">@dimen/activity_vertical_margin</item>
+        <item name="android:textSize">30sp</item>
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:text">@string/fa_star</item>
+    </style>
+
+    <style name="ReviewRatingIconTheme">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_marginEnd">2dp</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:text">@string/fa_star</item>
+    </style>
+
+    <style name="FeedRatingIconTheme">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:layout_marginRight">2dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:text">@string/fa_star</item>
+    </style>
+
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />

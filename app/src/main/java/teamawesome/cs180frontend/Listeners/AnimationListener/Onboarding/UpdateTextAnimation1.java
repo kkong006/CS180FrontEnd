@@ -3,7 +3,6 @@ package teamawesome.cs180frontend.Listeners.AnimationListener.Onboarding;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 public class UpdateTextAnimation1 implements Animation.AnimationListener{

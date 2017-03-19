@@ -10,19 +10,15 @@ import java.util.List;
  * Created by KongK on 11/15/2016.
  */
 
-public class ProfessorRespBundle implements Serializable {
+public class ProfRespBundle implements Serializable {
 
     @SerializedName("prof_name")
     @Expose
     private String prof_name;
 
-    @SerializedName("rating")
+    @SerializedName("avg_rating")
     @Expose
-    private int rating;
-
-//    @SerializedName("schools")
-//    @Expose
-//    List<ProfessorSchoolBundle> schools;
+    private double rating;
 
     @SerializedName("school_name")
     @Expose
@@ -30,9 +26,9 @@ public class ProfessorRespBundle implements Serializable {
 
     @SerializedName("classes")
     @Expose
-    List<ProfessorClassBundle> classes;
+    List<ProfClassBundle> classes;
 
-    public ProfessorRespBundle(String prof_name, int rating, String schoolName, List<ProfessorClassBundle> classes) {
+    public ProfRespBundle(String prof_name, int rating, String schoolName, List<ProfClassBundle> classes) {
         this.prof_name = prof_name;
         this.rating = rating;
         this.schoolName = schoolName;
@@ -43,7 +39,7 @@ public class ProfessorRespBundle implements Serializable {
         return prof_name;
     }
 
-    public int getAvgRating() {
+    public double getAvgRating() {
         return rating;
     }
 
@@ -51,7 +47,7 @@ public class ProfessorRespBundle implements Serializable {
         return schoolName;
     }
 
-    public List<ProfessorClassBundle> getClasses() {
+    public List<ProfClassBundle> getClasses() {
         return classes;
     }
 }

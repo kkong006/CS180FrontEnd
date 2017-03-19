@@ -27,7 +27,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColorHint="@color/colorAccent"
-                android:hint="@string/search_by_professor"
                 android:maxLines="1"
                 android:textSize="18sp"
                 android:layout_marginTop="10dp"

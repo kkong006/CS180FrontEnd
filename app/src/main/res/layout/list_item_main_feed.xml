@@ -52,49 +52,24 @@
                         android:weightSum="5">
 
                         <com.joanzapata.iconify.widget.IconTextView
-                            android:id="@+id/main_feed_rate_1"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_marginRight="2dp"
-                            android:layout_weight="1"
-                            android:text="@string/rating_icon" />
+                            style="@style/FeedRatingIconTheme"
+                            android:id="@+id/main_feed_rate_1" />
 
                         <com.joanzapata.iconify.widget.IconTextView
-                            android:id="@+id/main_feed_rate_2"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_marginRight="2dp"
-                            android:layout_weight="1"
-                            android:text="@string/rating_icon" />
+                            style="@style/FeedRatingIconTheme"
+                            android:id="@+id/main_feed_rate_2" />
 
                         <com.joanzapata.iconify.widget.IconTextView
-                            android:id="@+id/main_feed_rate_3"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_marginRight="2dp"
-                            android:layout_weight="1"
-                            android:text="@string/rating_icon" />
+                            style="@style/FeedRatingIconTheme"
+                            android:id="@+id/main_feed_rate_3" />
 
                         <com.joanzapata.iconify.widget.IconTextView
-                            android:id="@+id/main_feed_rate_4"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_marginRight="2dp"
-                            android:layout_weight="1"
-                            android:text="@string/rating_icon" />
+                            style="@style/FeedRatingIconTheme"
+                            android:id="@+id/main_feed_rate_4" />
 
                         <com.joanzapata.iconify.widget.IconTextView
-                            android:id="@+id/main_feed_rate_5"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_marginRight="2dp"
-                            android:layout_weight="1"
-                            android:text="@string/rating_icon" />
+                            style="@style/FeedRatingIconTheme"
+                            android:id="@+id/main_feed_rate_5" />
 
                     </LinearLayout>
 

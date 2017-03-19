@@ -28,7 +28,7 @@ public class AnimationListener1 implements Animation.AnimationListener {
     @Override
     public void onAnimationEnd(Animation animation) {
         v.setVisibility(visibility);
-        Animation anim = AnimationUtils.loadAnimation(context, R.anim.slide_right_in);
+        Animation anim = AnimationUtils.loadAnimation(context, R.anim.slide_left_in_500);
         anim.setAnimationListener(new AnimationListener2(nextView, finalView, View.VISIBLE, false));
         nextView.startAnimation(anim);
     }

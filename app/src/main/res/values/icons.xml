@@ -5,4 +5,9 @@
     <string name="fa_icon_review">{fa-paper-plane}</string>
     <string name="fa_log_out">{fa-sign-out}</string>
     <string name="fa_times">{fa-times}</string>
+    <string name="fa_rating_icon">{fa-check-circle}</string>
+    <string name="fa_star">{fa-star}</string>
+    <string name="fa_star_half">{fa-star-half}</string>
+    <string name="thumbs_up_icon">{fa-thumbs-up}</string>
+    <string name="thumbs_down_icon">{fa-thumbs-down}</string>
 </resources>

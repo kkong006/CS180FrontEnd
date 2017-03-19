@@ -51,13 +51,14 @@
             android:visibility="gone">
 
             <EditText
-                android:id="@+id/pin_edittext"
                 style="@style/WhiteTextTheme"
+                android:id="@+id/pin_edittext"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
                 android:inputType="number"
-                android:maxLength="4" />
+                android:maxLength="4"
+                android:maxLines="1"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -92,7 +93,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:gravity="center"
+        android:layout_gravity="center"
         android:text=""
         android:visibility="gone" />
 
@@ -110,7 +111,8 @@
             android:divider="@null"
             android:dividerHeight="0dp"
             android:visibility="gone"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"></ListView>
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        </ListView>
 
     </android.support.v4.widget.SwipeRefreshLayout>
 

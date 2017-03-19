@@ -1,7 +1,5 @@
 package teamawesome.cs180frontend.API.Services.Callbacks;
 
-import android.content.Context;
-
 import org.greenrobot.eventbus.EventBus;
 
 import retrofit2.Call;

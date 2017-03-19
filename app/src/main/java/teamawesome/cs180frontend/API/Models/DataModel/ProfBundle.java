@@ -5,11 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-/**
- * Created by KongK on 10/24/2016.
- */
-
-public class ProfessorBundle implements Serializable{
+public class ProfBundle implements Serializable{
 
     @SerializedName("prof_id")
     @Expose
@@ -19,7 +15,7 @@ public class ProfessorBundle implements Serializable{
     @Expose
     private String prof_name;
 
-    public ProfessorBundle(int prof_id, String prof_name) {
+    public ProfBundle(int prof_id, String prof_name) {
         this.prof_id = prof_id;
         this.prof_name = prof_name;
     }

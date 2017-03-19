@@ -2,9 +2,9 @@ package teamawesome.cs180frontend.Activities.Application;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -22,7 +22,7 @@ import butterknife.OnClick;
 import retrofit2.Callback;
 import teamawesome.cs180frontend.API.APIConstants;
 import teamawesome.cs180frontend.API.Models.DataModel.ClassBundle;
-import teamawesome.cs180frontend.API.Models.DataModel.ProfessorBundle;
+import teamawesome.cs180frontend.API.Models.DataModel.ProfBundle;
 import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewIDRespBundle;
 import teamawesome.cs180frontend.API.Models.ReviewModel.UserReview;
 import teamawesome.cs180frontend.API.Models.StatusModel.PostReviewStatus;
@@ -66,12 +66,12 @@ public class WriteReviewActivity extends AppCompatActivity {
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.setIndeterminate(true);
 
-        stars = new Button[] {star1, star2, star3, star4, star5};
+        stars = new Button[]{star1, star2, star3, star4, star5};
 
         rating = 0;
 
         //Fill autocomplete textviews for professor and classs choice
-        List<ProfessorBundle> professors = DataSingleton.getInstance().getProfessorCache();
+        List<ProfBundle> professors = DataSingleton.getInstance().getProfessorCache();
         professorNameArr = new String[professors.size()];
         for(int i = 0; i < professors.size(); i++) {
             professorNameArr[i] = professors.get(i).getProfessorName();
@@ -84,20 +84,8 @@ public class WriteReviewActivity extends AppCompatActivity {
         for(int i = 0; i < classes.size(); i++) {
             classNameArr[i] = classes.get(i).getClassName();
         }
-        ArrayAdapter<String> classAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, classNameArr);
+        ArrayAdapter<String> classAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, classNameArr);
         className.setAdapter(classAdapter);
-
-//        final Context context = this;
-        //Enter key to hide keyboard
-//        reviewText.setOnKeyListener(new View.OnKeyListener() {
-//            @Override
-//            public boolean onKey(View v, int keyCode, KeyEvent event) {
-//                if(keyCode == KeyEvent.KEYCODE_ENTER) {
-//                    Utils.hideKeyboard(mReviewLayout, getApplicationContext());
-//                }
-//                return true;
-//            }
-//        });
     }
 
     @OnClick(R.id.write_submit_bt)
@@ -136,7 +124,7 @@ public class WriteReviewActivity extends AppCompatActivity {
                 focusView = this.className;
             }
         } else {
-            this.professorName.setError(getString(R.string.professor_dne));
+            this.professorName.setError(getString(R.string.prof_dne));
             focusView = this.professorName;
         }
         if(focusView != null) {
@@ -180,7 +168,7 @@ public class WriteReviewActivity extends AppCompatActivity {
 
     public void submitReview(UserReview r) {
         progressDialog.show();
-        Callback callback = new PostReviewCallback();
+        PostReviewCallback callback = new PostReviewCallback();
         RetrofitSingleton.getInstance().getMatchingService()
                 .review(r)
                 .enqueue(callback);

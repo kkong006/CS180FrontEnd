@@ -156,8 +156,6 @@ public class ReadReviewActivity extends AppCompatActivity {
     @Subscribe
     public void likeDislikeResp(ReviewRatingResp resp) {
         isRatingProcessing = false;
-        Utils.showSnackbar(this, parent, R.color.colorPrimary,
-                getString(R.string.account_update_success));
         userRating = newUserRating;
     }
 

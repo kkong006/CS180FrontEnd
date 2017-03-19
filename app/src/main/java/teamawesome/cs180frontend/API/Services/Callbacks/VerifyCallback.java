@@ -7,7 +7,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import teamawesome.cs180frontend.API.APIConstants;
 import teamawesome.cs180frontend.API.Models.StatusModel.VerifyStatus;
-import teamawesome.cs180frontend.API.Models.UserModel.VerifyBundle;
 import teamawesome.cs180frontend.API.Models.UserModel.VerifyResp;
 
 /**

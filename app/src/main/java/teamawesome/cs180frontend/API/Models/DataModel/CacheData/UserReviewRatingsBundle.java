@@ -6,8 +6,6 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 import java.util.List;
 
-import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewRatingBundle;
-
 /**
  * Created by jman0_000 on 1/13/2017.
  */

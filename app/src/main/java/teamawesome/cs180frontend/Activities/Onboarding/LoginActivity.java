@@ -51,22 +51,13 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        // Set up the login form.
         ButterKnife.bind(this);
-
         EventBus.getDefault().register(this);
-
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(getString(R.string.loading));
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.setCancelable(false);
-
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            Utils.showSnackbar(this, parent, R.color.colorPrimary,
-                    extras.getString(Constants.MESSAGE, null));
-        }
     }
 
     @Override
@@ -97,11 +88,11 @@ public class LoginActivity extends AppCompatActivity {
         isRegistering = true;
         Intent intent = new Intent(this, AccountInfoActivity.class);
         startActivity(intent);
+        overridePendingTransition(R.anim.slide_left_in_250, R.anim.slide_left_out_250);
     }
 
     @OnClick(R.id.sign_in_button)
     public void attemptLogin() {
-
         // Reset errors.
         phoneNumberTIL.setError(null);
         passwordTIL.setError(null);
@@ -133,14 +124,12 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         if (cancel) {
-            // There was an error; don't attempt login and focus the first
-            // form field with an error.
+            // There was an error; don't attempt login and focus the first form field with an error.
             focusView.requestFocus();
         } else {
             Utils.hideKeyboard(parent, this);
             accountBundle = new AccountBundle(phoneNum, password, null);
-            // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
+            // Show a progress spinner, and kick off a background task to perform the user login attempt.
             progressDialog.setMessage(getString(R.string.login_loading));
             progressDialog.show();
 

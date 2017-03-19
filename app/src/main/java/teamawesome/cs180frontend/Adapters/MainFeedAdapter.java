@@ -21,12 +21,12 @@ import teamawesome.cs180frontend.R;
 
 public class MainFeedAdapter extends BaseAdapter{
 
-    private Context mContext;
+    private Context context;
     private AdRequest adRequest;
     private List<ReviewBundle> reviewList;
 
-    public MainFeedAdapter(Context mContext, AdRequest adRequest, List<ReviewBundle> reviewList) {
-        this.mContext = mContext;
+    public MainFeedAdapter(Context context, AdRequest adRequest, List<ReviewBundle> reviewList) {
+        this.context = context;
         this.adRequest = adRequest;
         this.reviewList = reviewList;
     }
@@ -67,7 +67,7 @@ public class MainFeedAdapter extends BaseAdapter{
     public View getView(int position, View convertView, ViewGroup parent) {
         MainFeedViewHolder holder;
         if(convertView == null) {
-            LayoutInflater vi = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater vi = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = vi.inflate(R.layout.list_item_main_feed, parent, false);
             holder = new MainFeedViewHolder(convertView);
             convertView.setTag(holder);
@@ -98,15 +98,11 @@ public class MainFeedAdapter extends BaseAdapter{
         holder.reviewTV.setText(reviewList.get(position).getReviewMsg());
         for (int i = 0; i < 5; i++) {
             if (i < reviewList.get(position).getRating()) {
-                holder.ratings[i].setTextColor(mContext.getResources().getColor(R.color.colorGreen));
+                holder.ratings[i].setTextColor(context.getResources().getColor(R.color.colorGreen));
             } else {
-                holder.ratings[i].setTextColor(mContext.getResources().getColor(R.color.colorGrey));
+                holder.ratings[i].setTextColor(context.getResources().getColor(R.color.colorGrey));
             }
         }
-
-//        if (position == 0) {
-//            convertView.setBackgroundColor(mContext.getResources().getColor(R.color.colorWhite));
-//        }
     }
 
     public void renderLoading(MainFeedViewHolder holder) {

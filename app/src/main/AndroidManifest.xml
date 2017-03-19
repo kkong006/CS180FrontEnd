@@ -51,6 +51,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activities.Application.SettingsActivity"
+            android:label="@string/action_settings"
             android:parentActivityName=".Activities.Application.MainActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -59,6 +60,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activities.Application.WriteReviewActivity"
+            android:label="@string/submit_review"
             android:parentActivityName=".Activities.Application.MainActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -66,12 +68,13 @@
             android:parentActivityName=".Activities.Application.SearchResultsActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Activities.Application.SearchProfessorActivity"
+            android:name=".Activities.Application.FindProfActivity"
+            android:label="@string/get_prof_summary"
             android:parentActivityName=".Activities.Application.MainActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Activities.Application.SearchProfessorResultsActivity"
-            android:parentActivityName=".Activities.Application.SearchProfessorActivity"
+            android:name=".Activities.Application.ProfSummaryActivity"
+            android:parentActivityName=".Activities.Application.FindProfActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activities.Onboarding.AccountInfoActivity"

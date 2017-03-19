@@ -2,8 +2,6 @@ package teamawesome.cs180frontend.API.Models.StatusModel;
 
 import android.content.Context;
 
-import teamawesome.cs180frontend.API.Models.StatusModel.AbstractStatus;
-
 /**
  * Created by jonathan on 1/26/17.
  */

@@ -1,9 +1,9 @@
 package teamawesome.cs180frontend.Activities.Application;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -16,7 +16,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import teamawesome.cs180frontend.API.Models.DataModel.ProfessorBundle;
+import teamawesome.cs180frontend.API.Models.DataModel.ProfBundle;
 import teamawesome.cs180frontend.Misc.DataSingleton;
 import teamawesome.cs180frontend.Misc.Utils;
 import teamawesome.cs180frontend.R;
@@ -27,7 +27,7 @@ public class SearchActivity extends AppCompatActivity {
     @Bind(R.id.search_professor_et) AutoCompleteTextView mProfessorName;
     @Bind(R.id.search_search_bt) Button mSearch;
 
-    private List<ProfessorBundle> mProfessors;
+    private List<ProfBundle> mProfessors;
     private String[] mProfessorNames;
     private String mUserProfessorName;
 
@@ -68,12 +68,12 @@ public class SearchActivity extends AppCompatActivity {
             if(profId != null) {
                 mUserProfessorName = professorName;
             } else {
-                mProfessorName.setError(getString(R.string.professor_dne));
+                mProfessorName.setError(getString(R.string.prof_dne));
             }
         }
 
         if(mUserProfessorName == "") {
-            mProfessorName.setError(getString(R.string.professor_dne));
+            mProfessorName.setError(getString(R.string.prof_dne));
         } else {
             Integer profId = DataSingleton.getInstance().getProfessorId(mUserProfessorName);
             System.out.println("PROFESSOR " + mUserProfessorName + " " + profId + "\nUSER ID " + Utils.getUserId(this));

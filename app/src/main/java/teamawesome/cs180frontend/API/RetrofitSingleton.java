@@ -7,7 +7,6 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import teamawesome.cs180frontend.API.Services.MatchingService;
 import teamawesome.cs180frontend.API.Services.UserService;
-import teamawesome.cs180frontend.Misc.Constants;
 
 /**
  * Created by KongK on 10/21/2016.

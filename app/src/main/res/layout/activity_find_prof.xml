@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/activity_search_professor">
+    android:id="@+id/activity_search_prof">
 
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -16,29 +16,31 @@
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
-        tools:context="teamawesome.cs180frontend.Activities.Application.SearchProfessorActivity">
+        tools:context="teamawesome.cs180frontend.Activities.Application.FindProfActivity">
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <AutoCompleteTextView
-                android:id="@+id/search_professor_professor_et"
+                android:id="@+id/search_prof_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColorHint="@color/colorAccent"
-                android:hint="@string/search_by_professor"
-                android:maxLines="1"
-                android:textSize="18sp"
                 android:layout_marginTop="10dp"
+                android:dropDownHeight="50dp"
+                android:hint="@string/enter_prof_name"
+                android:textColorHint="@color/colorAccent"
+                android:textSize="22sp"
                 android:textColor="@color/colorBlack"
-                android:completionThreshold="1"
-                android:dropDownHeight="50dp"/>
+                android:inputType="text"
+                android:imeOptions="actionDone"
+                android:maxLines="1"
+                android:completionThreshold="2" />
 
         </android.support.design.widget.TextInputLayout>
 
         <Button
-            android:id="@+id/search_professor_search_bt"
+            android:id="@+id/search"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -46,7 +48,7 @@
             android:padding="10dp"
             android:background="@color/colorAccent"
             android:textColor="@color/colorWhite"
-            android:text="@string/search_professor_button" />
+            android:text="@string/prof_summary_button" />
 
     </LinearLayout>
 

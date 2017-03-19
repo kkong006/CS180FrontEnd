@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import teamawesome.cs180frontend.API.Models.DataModel.ClassBundle;
-import teamawesome.cs180frontend.API.Models.DataModel.ProfessorBundle;
+import teamawesome.cs180frontend.API.Models.DataModel.ProfBundle;
 import teamawesome.cs180frontend.API.Models.DataModel.SchoolBundle;
 import teamawesome.cs180frontend.API.Models.DataModel.SubjectBundle;
 
@@ -34,7 +34,7 @@ public class CacheDataBundle implements Serializable{
 
     @SerializedName("professors")
     @Expose
-    private List<ProfessorBundle> profs;
+    private List<ProfBundle> profs;
 
     public UserReviewRatingsBundle getReviewRatings() {
         return reviewRatings;
@@ -68,11 +68,11 @@ public class CacheDataBundle implements Serializable{
         this.classes = classes;
     }
 
-    public List<ProfessorBundle> getProfs() {
+    public List<ProfBundle> getProfs() {
         return profs;
     }
 
-    public void setProfs(List<ProfessorBundle> profs) {
+    public void setProfs(List<ProfBundle> profs) {
         this.profs = profs;
     }
 }

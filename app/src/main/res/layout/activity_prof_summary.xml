@@ -2,17 +2,18 @@
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    tools:context="teamawesome.cs180frontend.Activities.Application.ProfSummaryActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/activity_search_professor_results">
+    android:visibility="invisible"
+    android:id="@+id/prof_summ_parent">
 
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:context="teamawesome.cs180frontend.Activities.Application.SearchProfessorResultsActivity">
+        android:orientation="vertical">
 
         <!--<android.support.v4.view.ViewPager-->
             <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
@@ -42,53 +43,35 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:gravity="center_horizontal"
+            android:gravity="center"
             android:layout_marginBottom="@dimen/activity_horizontal_margin">
 
             <com.joanzapata.iconify.widget.IconTextView
-                android:id="@+id/prof_rate_1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/activity_vertical_margin"
-                android:gravity="center_horizontal"
-                android:textSize="30sp"
-                android:text="@string/rating_icon" />
+                style="@style/RatingIconTheme"
+                android:id="@+id/prof_rate_1" />
 
             <com.joanzapata.iconify.widget.IconTextView
-                android:id="@+id/prof_rate_2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/activity_vertical_margin"
-                android:gravity="center_horizontal"
-                android:textSize="30sp"
-                android:text="@string/rating_icon" />
+                style="@style/RatingIconTheme"
+                android:id="@+id/prof_rate_2" />
 
             <com.joanzapata.iconify.widget.IconTextView
-                android:id="@+id/prof_rate_3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/activity_vertical_margin"
-                android:gravity="center_horizontal"
-                android:textSize="30sp"
-                android:text="@string/rating_icon" />
+                style="@style/RatingIconTheme"
+                android:id="@+id/prof_rate_3" />
 
             <com.joanzapata.iconify.widget.IconTextView
-                android:id="@+id/prof_rate_4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/activity_vertical_margin"
-                android:gravity="center_horizontal"
-                android:textSize="30sp"
-                android:text="@string/rating_icon" />
+                style="@style/RatingIconTheme"
+                android:id="@+id/prof_rate_4" />
 
             <com.joanzapata.iconify.widget.IconTextView
-                android:id="@+id/prof_rate_5"
+                style="@style/RatingIconTheme"
+                android:id="@+id/prof_rate_5" />
+
+            <TextView
+                android:id="@+id/avg_rating_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/activity_vertical_margin"
-                android:gravity="center_horizontal"
-                android:textSize="30sp"
-                android:text="@string/rating_icon" />
+                android:textColor="@color/colorBlack"
+                android:textSize="30sp" />
 
         </LinearLayout>
 
@@ -103,12 +86,6 @@
 
         <ListView
             android:id="@+id/search_professor_class_list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        </ListView>
-
-        <ListView
-            android:id="@+id/search_professor_school_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
         </ListView>

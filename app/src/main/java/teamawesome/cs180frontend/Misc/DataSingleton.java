@@ -11,7 +11,7 @@ import java.util.Set;
 import teamawesome.cs180frontend.API.Models.DataModel.CacheData.CacheDataBundle;
 import teamawesome.cs180frontend.API.Models.DataModel.CacheData.ReviewId;
 import teamawesome.cs180frontend.API.Models.DataModel.ClassBundle;
-import teamawesome.cs180frontend.API.Models.DataModel.ProfessorBundle;
+import teamawesome.cs180frontend.API.Models.DataModel.ProfBundle;
 import teamawesome.cs180frontend.API.Models.DataModel.SchoolBundle;
 import teamawesome.cs180frontend.API.Models.DataModel.SubjectBundle;
 
@@ -21,7 +21,7 @@ public class DataSingleton {
     private ArrayList<SchoolBundle> schoolCache;
     private ArrayList<SubjectBundle> subjectCache;
     private ArrayList<ClassBundle> classCache;
-    private ArrayList<ProfessorBundle> professorCache;
+    private ArrayList<ProfBundle> professorCache;
 
     private HashMap<String, Integer> schoolMap; //FOR O(1) access
     private HashMap<String, Integer> subjectMap;
@@ -81,7 +81,7 @@ public class DataSingleton {
         }
 
         professorCache.addAll(data.getProfs());
-        for (ProfessorBundle p : professorCache) {
+        for (ProfBundle p : professorCache) {
             professorMap.put(p.getProfessorName(), p.getProfessorId());
         }
 
@@ -107,7 +107,7 @@ public class DataSingleton {
         return this.classCache;
     }
 
-    public List<ProfessorBundle> cacheProfessors(List<ProfessorBundle> profs) {
+    public List<ProfBundle> cacheProfessors(List<ProfBundle> profs) {
         this.professorCache.clear();
         this.professorCache.addAll(profs);
         return this.professorCache;
@@ -201,7 +201,7 @@ public class DataSingleton {
         return classCache;
     }
 
-    public ArrayList<ProfessorBundle> getProfessorCache() {
+    public ArrayList<ProfBundle> getProfessorCache() {
         return professorCache;
     }
 

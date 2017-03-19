@@ -1,9 +1,9 @@
 package teamawesome.cs180frontend.Activities.Application;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ListView;
@@ -19,8 +19,8 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewPageBundle;
 import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewBundle;
+import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewPageBundle;
 import teamawesome.cs180frontend.API.Models.StatusModel.ReviewFetchStatus;
 import teamawesome.cs180frontend.API.RetrofitSingleton;
 import teamawesome.cs180frontend.API.Services.Callbacks.GetReviewsCallback;
