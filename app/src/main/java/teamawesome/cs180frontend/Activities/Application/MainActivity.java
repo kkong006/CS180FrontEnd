@@ -27,8 +27,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.ads.AdRequest;
-
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
@@ -95,8 +93,6 @@ public class MainActivity extends AppCompatActivity {
     int offset = 0;
     int lastSelected = 0;
 
-    AdRequest adRequest = null;
-
     private boolean isLoading = false;
     private boolean isRefreshing = false;
     private boolean initialLoad = true;
@@ -151,7 +147,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        initOnScrollListener();
         mainFeedList.setOnScrollListener(mainLVScroll);
         setUpNavBar();
 
@@ -169,11 +164,6 @@ public class MainActivity extends AppCompatActivity {
         //PREVENT USER FROM GETTING ACCESS TO THE WRITE REVIEW ACTIVITY
         setButtons();
         loadProgressDialog();
-
-        adRequest = new AdRequest.Builder()
-                .addKeyword("college")
-                .addKeyword("university")
-                .build();
 
         setUpAdapter();
         getData();
@@ -293,7 +283,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setUpAdapter() {
-        mainFeedAdapter = new MainFeedAdapter(this, adRequest, new ArrayList<ReviewBundle>());
+        mainFeedAdapter = new MainFeedAdapter(this, new ArrayList<ReviewBundle>());
         mainFeedList.setAdapter(mainFeedAdapter);
     }
 
@@ -327,7 +317,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void initOnScrollListener() {
+    private void setOnScrollListener() {
         mainLVScroll = new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
@@ -353,6 +343,10 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         };
+    }
+
+    private void initOnRefreshListener() {
+
     }
 
     public void addToFeed(ReviewPageBundle page) {
@@ -383,6 +377,12 @@ public class MainActivity extends AppCompatActivity {
 
         if (reviews.size() > 2) {
             reviews.add(2, null);
+        } else if (offset == reviews.size() && (reviews.size() > 0)) {
+            reviews.add(null);
+        }
+
+        if (offset > 3) {
+            setOnScrollListener();
         }
 
         mainFeedAdapter.append(reviews);

@@ -25,10 +25,14 @@ public class MainFeedAdapter extends BaseAdapter{
     private AdRequest adRequest;
     private List<ReviewBundle> reviewList;
 
-    public MainFeedAdapter(Context context, AdRequest adRequest, List<ReviewBundle> reviewList) {
+    public MainFeedAdapter(Context context, List<ReviewBundle> reviewList) {
         this.context = context;
-        this.adRequest = adRequest;
         this.reviewList = reviewList;
+
+        this.adRequest = new AdRequest.Builder()
+                .addKeyword("college")
+                .addKeyword("university")
+                .build();
     }
 
     public void append(List<ReviewBundle> reviewPage) {
@@ -75,13 +79,21 @@ public class MainFeedAdapter extends BaseAdapter{
             holder = (MainFeedViewHolder) convertView.getTag();
         }
 
-        if (reviewList.get(position) != null) {
-            renderReview(holder, position);
-        } else if ((reviewList.get(position) == null) &&
-                (position == reviewList.size() - 1)){
-            renderLoading(holder);
+        if (reviewList.size() > 3) {
+            if (reviewList.get(position) != null) {
+                renderReview(holder, position);
+            } else if ((reviewList.get(position) == null) &&
+                    (position == reviewList.size() - 1)) {
+                renderLoading(holder);
+            } else {
+                renderAdLayout(holder);
+            }
         } else {
-            renderAdLayout(holder);
+            if (reviewList.get(position) != null) {
+                renderReview(holder, position);
+            } else {
+                renderAdLayout(holder);
+            }
         }
 
         return convertView;

@@ -50,7 +50,6 @@ public class MyReviewsActivity extends AppCompatActivity {
         EventBus.getDefault().register(this);
 
         setUpAdapter();
-        setOnScrollListener();
     }
 
     @Override
@@ -65,7 +64,7 @@ public class MyReviewsActivity extends AppCompatActivity {
                 .addKeyword("university")
                 .build();
 
-        mainFeedAdapter = new MainFeedAdapter(this, adRequest, new ArrayList<ReviewBundle>());
+        mainFeedAdapter = new MainFeedAdapter(this, new ArrayList<ReviewBundle>());
         myReviews.setAdapter(mainFeedAdapter);
 
         RetrofitSingleton.getInstance()
@@ -104,7 +103,7 @@ public class MyReviewsActivity extends AppCompatActivity {
     @Subscribe
     public void reviewsResp(ReviewPageBundle page) {
         List<ReviewBundle> reviews = page.getReviews();
-        offset += page.getReviews().size();
+        offset += reviews.size();
 
         if (mainFeedAdapter.getCount() == 0 && offset == 0) {
             progressBar.setVisibility(View.GONE);
@@ -113,6 +112,12 @@ public class MyReviewsActivity extends AppCompatActivity {
 
         if (reviews.size() > 2) {
             reviews.add(2, null);
+        } else if (offset == reviews.size() && (reviews.size() > 0)) {
+            reviews.add(null);
+        }
+
+        if (offset > 3) {
+            setOnScrollListener();
         }
 
         mainFeedAdapter.append(reviews);
