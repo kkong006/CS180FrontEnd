@@ -242,7 +242,7 @@ public class MainActivity extends AppCompatActivity {
                 errorTV.setVisibility(View.GONE);
 
                 offset = 0;
-                initialLoad = true;
+                lastSelected = 0;
                 isLoading = true;
 
                 System.out.println(Utils.getSchoolId(this));
@@ -463,8 +463,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Subscribe
     public void failedPageFetch(ReviewFetchStatus failedFetch) {
-        initialLoad = false;
         if (failedFetch.getContext().equals(this)) {
+            initialLoad = false;
             progressDialog.dismiss();
             if (failedFetch.getStatus() != -1) {
                 Utils.showSnackbar(this, parent, R.color.colorPrimary,
