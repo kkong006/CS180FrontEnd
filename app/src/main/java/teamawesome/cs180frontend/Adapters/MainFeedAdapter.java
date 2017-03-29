@@ -15,10 +15,6 @@ import teamawesome.cs180frontend.Misc.Utils;
 import teamawesome.cs180frontend.Misc.ViewHolders.MainFeedViewHolder;
 import teamawesome.cs180frontend.R;
 
-/**
- * Created by KongK on 11/14/2016.
- */
-
 public class MainFeedAdapter extends BaseAdapter{
 
     private Context context;
@@ -79,18 +75,15 @@ public class MainFeedAdapter extends BaseAdapter{
             holder = (MainFeedViewHolder) convertView.getTag();
         }
 
-        if (reviewList.size() > 3) {
-            if (reviewList.get(position) != null) {
-                renderReview(holder, position);
-            } else if ((reviewList.get(position) == null) &&
-                    (position == reviewList.size() - 1)) {
-                renderLoading(holder);
-            } else {
-                renderAdLayout(holder);
-            }
+        if (reviewList.get(position) != null) {
+            renderReview(holder, position);
         } else {
-            if (reviewList.get(position) != null) {
-                renderReview(holder, position);
+            if (reviewList.size() > 3) {
+                if (position == reviewList.size() - 1){
+                    renderLoading(holder);
+                } else {
+                    renderAdLayout(holder);
+                }
             } else {
                 renderAdLayout(holder);
             }
@@ -99,7 +92,7 @@ public class MainFeedAdapter extends BaseAdapter{
         return convertView;
     }
 
-    public void renderReview(MainFeedViewHolder holder, int position) {
+    private void renderReview(MainFeedViewHolder holder, int position) {
         holder.cardView.setVisibility(View.VISIBLE);
         holder.loadingLayout.setVisibility(View.GONE);
         holder.adLayout.setVisibility(View.GONE);
@@ -117,13 +110,13 @@ public class MainFeedAdapter extends BaseAdapter{
         }
     }
 
-    public void renderLoading(MainFeedViewHolder holder) {
+    private void renderLoading(MainFeedViewHolder holder) {
         holder.cardView.setVisibility(View.GONE);
         holder.loadingLayout.setVisibility(View.VISIBLE);
         holder.adLayout.setVisibility(View.GONE);
     }
 
-    public void renderAdLayout(MainFeedViewHolder holder) {
+    private void renderAdLayout(MainFeedViewHolder holder) {
         holder.cardView.setVisibility(View.GONE);
         holder.loadingLayout.setVisibility(View.GONE);
         holder.adLayout.setVisibility(View.VISIBLE);

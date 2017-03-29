@@ -9,7 +9,7 @@ import java.io.Serializable;
  * Created by KongK on 10/21/2016.
  */
 
-public class SchoolBundle implements Serializable {
+public class SchoolBundle implements Serializable, AbstractBundle {
 
     @SerializedName("school_id")
     @Expose
@@ -17,18 +17,18 @@ public class SchoolBundle implements Serializable {
 
     @SerializedName("school_name")
     @Expose
-    private String school_name;
+    private String name;
 
-    public SchoolBundle(int school_id, String school_name) {
+    public SchoolBundle(int school_id, String name) {
         this.school_id = school_id;
-        this.school_name = school_name;
+        this.name = name;
     }
 
     public int getSchoolId() {
         return school_id;
     }
 
-    public String getSchoolName() {
-        return school_name;
+    public String getName() {
+        return name;
     }
 }

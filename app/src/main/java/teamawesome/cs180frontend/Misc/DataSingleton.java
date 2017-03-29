@@ -67,7 +67,7 @@ public class DataSingleton {
 
         schoolCache.addAll(data.getSchools());
         for (SchoolBundle s : schoolCache) {
-            schoolMap.put(s.getSchoolName(), s.getSchoolId());
+            schoolMap.put(s.getName(), s.getSchoolId());
         }
 
         subjectCache.addAll(data.getSubjects());
@@ -77,12 +77,12 @@ public class DataSingleton {
 
         classCache.addAll(data.getClasses());
         for (ClassBundle c : classCache) {
-            classMap.put(c.getClassName(), c.getClassId());
+            classMap.put(c.getName(), c.getClassId());
         }
 
         professorCache.addAll(data.getProfs());
         for (ProfBundle p : professorCache) {
-            professorMap.put(p.getProfessorName(), p.getProfessorId());
+            professorMap.put(p.getName(), p.getProfessorId());
         }
 
         cacheReviewRatings(context, data.getReviewRatings().getLiked(),

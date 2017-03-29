@@ -13,6 +13,7 @@ import com.google.android.gms.ads.AdRequest;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,40 +38,25 @@ public class MyReviewsActivity extends AppCompatActivity {
     int lastSelected = 0;
 
     MainFeedAdapter mainFeedAdapter = null;
-    AdRequest adRequest = null;
-
     final Context context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_reviews);
-        getSupportActionBar().setTitle(getString(R.string.my_reviews));
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
 
-        setUpAdapter();
+        RetrofitSingleton.getInstance()
+                .getMatchingService()
+                .reviews(null, null, null, null, Utils.getUserId(this), offset)
+                .enqueue(new GetReviewsCallback(this));
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
-    }
-
-    public void setUpAdapter() {
-        adRequest = new AdRequest.Builder()
-                .addKeyword("college")
-                .addKeyword("university")
-                .build();
-
-        mainFeedAdapter = new MainFeedAdapter(this, new ArrayList<ReviewBundle>());
-        myReviews.setAdapter(mainFeedAdapter);
-
-        RetrofitSingleton.getInstance()
-                .getMatchingService()
-                .reviews(null, null, null, null, Utils.getUserId(this), offset)
-                .enqueue(new GetReviewsCallback(this));
     }
 
     public void setOnScrollListener() {
@@ -102,25 +88,33 @@ public class MyReviewsActivity extends AppCompatActivity {
 
     @Subscribe
     public void reviewsResp(ReviewPageBundle page) {
-        List<ReviewBundle> reviews = page.getReviews();
-        offset += reviews.size();
 
-        if (mainFeedAdapter.getCount() == 0 && offset == 0) {
+        List<ReviewBundle> reviews = page.getReviews();
+
+        if ((offset == 0) && (reviews.size() == 0)) {
             progressBar.setVisibility(View.GONE);
             return;
         }
 
         if (reviews.size() > 2) {
             reviews.add(2, null);
-        } else if (offset == reviews.size() && (reviews.size() > 0)) {
+        } else if ((offset == 0) && (reviews.size() > 0)) {
             reviews.add(null);
         }
 
-        if (offset > 3) {
+        offset += reviews.size();
+
+        if (offset > 10) {
             setOnScrollListener();
         }
 
-        mainFeedAdapter.append(reviews);
+        if (mainFeedAdapter == null) {
+            mainFeedAdapter = new MainFeedAdapter(this, reviews);
+            myReviews.setAdapter(mainFeedAdapter);
+        } else {
+            mainFeedAdapter.append(reviews);
+        }
+
         myReviews.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         progressBar.setVisibility(View.GONE);
         myReviews.setVisibility(View.VISIBLE);

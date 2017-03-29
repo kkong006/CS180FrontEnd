@@ -10,7 +10,7 @@ import java.io.Serializable;
  */
 
 //Renamed to class bundle to avoid confusion with Class object
-public class ClassBundle implements Serializable{
+public class ClassBundle implements Serializable, AbstractBundle {
 
     @SerializedName("subject_id")
     @Expose
@@ -26,13 +26,13 @@ public class ClassBundle implements Serializable{
 
     @SerializedName("class_name")
     @Expose
-    private String className;
+    private String name;
 
     public ClassBundle(int subjectId, int classId, int schoolId, String className) {
         this.subjectId = subjectId;
         this.classId = classId;
         this.schoolId = schoolId;
-        this.className = className;
+        this.name = className;
     }
 
     public int getSchoolId() {
@@ -47,10 +47,6 @@ public class ClassBundle implements Serializable{
         return subjectId;
     }
 
-//    public void setSubjectId(int subjectId) {
-//        this.subjectId = subjectId;
-//    }
-
     public int getClassId() {
         return classId;
     }
@@ -59,11 +55,9 @@ public class ClassBundle implements Serializable{
         this.classId = classId;
     }
 
-    public String getClassName() {
-        return className;
+    public String getName() {
+        return name;
     }
 
-//    public void setClassName(String className) {
-//        this.className = className;
-//    }
+    public void setName(String name) { this.name = name; }
 }

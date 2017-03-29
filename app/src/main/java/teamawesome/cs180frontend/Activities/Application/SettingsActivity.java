@@ -28,7 +28,7 @@ import teamawesome.cs180frontend.API.Models.UserModel.UpdateUserBundle;
 import teamawesome.cs180frontend.API.RetrofitSingleton;
 import teamawesome.cs180frontend.API.Services.Callbacks.ChangePasswordCallback;
 import teamawesome.cs180frontend.API.Services.Callbacks.ChangeSchoolCallback;
-import teamawesome.cs180frontend.Adapters.SimpleListAdapter;
+import teamawesome.cs180frontend.Adapters.SimpleACAdapter;
 import teamawesome.cs180frontend.Misc.Constants;
 import teamawesome.cs180frontend.Misc.DataSingleton;
 import teamawesome.cs180frontend.Misc.SPSingleton;
@@ -53,7 +53,6 @@ public class SettingsActivity extends AppCompatActivity {
     private int mSchoolId;
     private int newSchoolId;
 
-    private SimpleListAdapter schoolAdapter;
     private String newPasswordHolder; //HOLDS THE NEW PASSWORD AS IT'S BEING CHANGED
     private ProgressDialog progressDialog;
 
@@ -76,14 +75,27 @@ public class SettingsActivity extends AppCompatActivity {
 
         mSchoolId = Utils.getSchoolId(this);
 
-        fillAutoComplete();
-        fillHiddenViewMap();
+        //fill school AC adapter
+        SimpleACAdapter schoolAdapter = new SimpleACAdapter(this, R.layout.simple_list_item,
+                DataSingleton.getInstance().getSchoolCache());
+        schoolAC.setAdapter(schoolAdapter);
+
+        //map for constant time access to a dropdown
+        hiddenElemMap = new SparseIntArray();
+        hiddenElemMap.append(R.id.change_school, R.id.settings_dropdown1);
+        hiddenElemMap.append(R.id.change_password, R.id.settings_dropdown2);
     }
 
     @Override
     protected void onDestroy() {
         EventBus.getDefault().unregister(this);
         super.onDestroy();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Utils.hideKeyboard(parent, this);
     }
 
     @Override
@@ -95,25 +107,6 @@ public class SettingsActivity extends AppCompatActivity {
             default:
                 return true;
         }
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        Utils.hideKeyboard(parent, this);
-    }
-
-    public void fillAutoComplete() {
-        schoolAdapter = new SimpleListAdapter(this,
-                R.layout.simple_list_item,
-                DataSingleton.getInstance().getSchoolCache());
-        schoolAC.setAdapter(schoolAdapter);
-    }
-
-    public void fillHiddenViewMap() {
-        hiddenElemMap = new SparseIntArray();
-        hiddenElemMap.append(R.id.change_school, R.id.settings_dropdown1);
-        hiddenElemMap.append(R.id.change_password, R.id.settings_dropdown2);
     }
 
     @OnClick(R.id.settings_school_bt)

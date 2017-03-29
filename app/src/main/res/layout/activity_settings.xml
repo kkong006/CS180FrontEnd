@@ -53,11 +53,13 @@
                     <AutoCompleteTextView
                         android:id="@+id/settings_university_ac"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
+                        android:layout_height="wrap_content"
                         android:hint="@string/enter_school_name"
+                        android:textSize="18sp"
                         android:imeOptions="actionDone"
                         android:inputType="text"
-                        android:maxLines="1"></AutoCompleteTextView>
+                        android:maxLines="1">
+                    </AutoCompleteTextView>
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -123,6 +125,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Enter current password"
+                        android:textSize="18sp"
                         android:inputType="textPassword"
                         android:maxLines="1"
                         android:textColorHint="@color/colorAccent" />
@@ -139,6 +142,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Enter new password"
+                        android:textSize="18sp"
                         android:inputType="textPassword"
                         android:maxLines="1"
                         android:textColorHint="@color/colorAccent" />

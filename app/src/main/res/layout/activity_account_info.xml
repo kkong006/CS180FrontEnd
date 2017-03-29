@@ -46,13 +46,14 @@
 
                 <EditText
                     style="@style/WhiteTextTheme"
+                    android:id="@+id/onboarding_number"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/phone_number"
                     android:inputType="number"
+                    android:textSize="18sp"
                     android:maxLength="10"
-                    android:maxLines="1"
-                    android:id="@+id/onboarding_number"/>
+                    android:maxLines="1" />
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -71,14 +72,15 @@
 
                     <EditText
                         style="@style/WhiteTextTheme"
+                        android:id="@+id/onboarding_password"
                         android:digits="@string/password_digits"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/password_hint"
                         android:maxLength="16"
                         android:inputType="textPassword"
-                        android:maxLines="1"
-                        android:id="@+id/onboarding_password"/>
+                        android:textSize="18sp"
+                        android:maxLines="1" />
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -126,10 +128,11 @@
                             style="@style/WhiteTextTheme"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:hint="@string/enter_school_name"
                             android:inputType="text"
                             android:imeOptions="actionDone"
                             android:maxLines="1"
-                            android:hint="@string/enter_school_name"
+                            android:textSize="18sp"
                             android:id="@+id/onboarding_school_ac">
                         </AutoCompleteTextView>
 
@@ -146,7 +149,6 @@
                     android:textColor="@color/colorWhite"
                     android:text="@string/done"
                     android:id="@+id/done"/>
-
 
             </LinearLayout>
 

@@ -30,7 +30,7 @@ import teamawesome.cs180frontend.API.Models.UserModel.AccountBundle;
 import teamawesome.cs180frontend.API.Models.UserModel.UserRespBundle;
 import teamawesome.cs180frontend.API.RetrofitSingleton;
 import teamawesome.cs180frontend.API.Services.Callbacks.LoginRegisterCallback;
-import teamawesome.cs180frontend.Adapters.SimpleListAdapter;
+import teamawesome.cs180frontend.Adapters.SimpleACAdapter;
 import teamawesome.cs180frontend.Listeners.AnimationListener.Onboarding.AnimationListener1;
 import teamawesome.cs180frontend.Listeners.AnimationListener.Onboarding.AnimationListener2;
 import teamawesome.cs180frontend.Listeners.AnimationListener.Onboarding.HideTextAnim1;
@@ -60,7 +60,6 @@ public class AccountInfoActivity extends AppCompatActivity {
     private Handler handler;
     private AccountBundle registerBundle;
     private LoginRegisterCallback callback;
-    private SimpleListAdapter adapter;
     private ProgressDialog progressDialog;
 
     private boolean nextClicked = false;
@@ -104,7 +103,7 @@ public class AccountInfoActivity extends AppCompatActivity {
     }
 
     public void setUpSchoolAC() {
-        adapter = new SimpleListAdapter(this, R.layout.simple_list_item,
+        SimpleACAdapter adapter = new SimpleACAdapter(this, R.layout.simple_list_item,
                 DataSingleton.getInstance().getSchoolCache());
         schoolAC.setAdapter(adapter);
 

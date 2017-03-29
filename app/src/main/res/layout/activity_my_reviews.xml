@@ -14,12 +14,14 @@
         android:background="@color/lightGrey">
 
         <ListView
+            android:id="@+id/myreviews"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:divider="@null"
             android:dividerHeight="0dp"
-            android:id="@+id/myreviews"
-            android:visibility="gone">
+            android:visibility="gone"
+            android:scrollingCache="false"
+            android:animationCache="false">
         </ListView>
 
         <ProgressBar

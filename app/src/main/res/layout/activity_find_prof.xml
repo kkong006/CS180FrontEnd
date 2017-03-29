@@ -30,12 +30,11 @@
                 android:dropDownHeight="50dp"
                 android:hint="@string/enter_prof_name"
                 android:textColorHint="@color/colorAccent"
-                android:textSize="22sp"
+                android:textSize="18sp"
                 android:textColor="@color/colorBlack"
                 android:inputType="text"
                 android:imeOptions="actionDone"
-                android:maxLines="1"
-                android:completionThreshold="2" />
+                android:maxLines="1" />
 
         </android.support.design.widget.TextInputLayout>
 

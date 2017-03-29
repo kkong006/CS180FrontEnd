@@ -47,6 +47,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activities.Application.MyReviewsActivity"
+            android:label="@string/my_reviews"
             android:parentActivityName=".Activities.Application.MainActivity"
             android:screenOrientation="portrait" />
         <activity

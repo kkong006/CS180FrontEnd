@@ -47,7 +47,7 @@ public class SearchActivity extends AppCompatActivity {
         mProfessors = DataSingleton.getInstance().getProfessorCache();
         mProfessorNames = new String[mProfessors.size()];
         for(int i = 0; i < mProfessors.size(); i++) {
-            mProfessorNames[i] = mProfessors.get(i).getProfessorName();
+            mProfessorNames[i] = mProfessors.get(i).getName();
         }
         ArrayAdapter<String> profAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, mProfessorNames);
         mProfessorName.setAdapter(profAdapter);

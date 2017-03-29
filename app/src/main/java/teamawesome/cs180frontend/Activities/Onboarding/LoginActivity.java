@@ -25,7 +25,6 @@ import teamawesome.cs180frontend.API.Models.UserModel.UserRespBundle;
 import teamawesome.cs180frontend.API.RetrofitSingleton;
 import teamawesome.cs180frontend.API.Services.Callbacks.LoginRegisterCallback;
 import teamawesome.cs180frontend.Activities.Application.MainActivity;
-import teamawesome.cs180frontend.Misc.Constants;
 import teamawesome.cs180frontend.Misc.Events.FinishEvent;
 import teamawesome.cs180frontend.Misc.Utils;
 import teamawesome.cs180frontend.R;

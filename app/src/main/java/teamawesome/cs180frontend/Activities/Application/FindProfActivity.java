@@ -5,18 +5,13 @@ import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-
-import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import teamawesome.cs180frontend.API.Models.DataModel.ProfBundle;
+import teamawesome.cs180frontend.Adapters.SimpleACAdapter;
 import teamawesome.cs180frontend.Misc.DataSingleton;
 import teamawesome.cs180frontend.Misc.Utils;
 import teamawesome.cs180frontend.R;
@@ -24,12 +19,8 @@ import teamawesome.cs180frontend.R;
 public class FindProfActivity extends AppCompatActivity {
 
     @Bind(R.id.activity_search_prof) CoordinatorLayout parent;
-    @Bind(R.id.search_prof_et) AutoCompleteTextView profET;
+    @Bind(R.id.search_prof_et) AutoCompleteTextView profAC;
     @Bind(R.id.search) Button search;
-
-    private String[] mProfessorNames;
-
-    private String mSearchProfessorName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,22 +29,10 @@ public class FindProfActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        mSearchProfessorName = "";
-
         //Fill autocomplete text view for professor choices
-        List<ProfBundle> professors = DataSingleton.getInstance().getProfessorCache();
-        mProfessorNames = new String[professors.size()];
-        for(int i = 0; i < professors.size(); i++) {
-            mProfessorNames[i] = professors.get(i).getProfessorName();
-        }
-        ArrayAdapter<String> profAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, mProfessorNames);
-        profET.setAdapter(profAdapter);
-        profET.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                mSearchProfessorName = parent.getItemAtPosition(position).toString();
-            }
-        });
+        SimpleACAdapter profNameAdapter = new SimpleACAdapter(this, R.layout.simple_list_item,
+                DataSingleton.getInstance().getProfessorCache());
+        profAC.setAdapter(profNameAdapter);
     }
 
     @Override
@@ -64,25 +43,25 @@ public class FindProfActivity extends AppCompatActivity {
 
     @OnClick(R.id.search)
     public void getProfessorStats() {
-        profET.setError(null);
+        profAC.setError(null);
         Utils.hideKeyboard(parent, this);
 
-        String profName = profET.getText().toString();
+        String profName = profAC.getText().toString();
 
         if (profName.length() == 0) {
-            profET.setError(getString(R.string.no_prof_entered));
+            profAC.setError(getString(R.string.no_prof_entered));
             return;
         }
 
         Integer profId = DataSingleton.getInstance().getProfessorId(profName);
 
         if (profId == null) {
-            profET.setError(getString(R.string.prof_dne));
+            profAC.setError(getString(R.string.prof_dne));
             return;
         }
 
         Intent intent = new Intent(this, ProfSummaryActivity.class);
-        intent.putExtra(getString(R.string.PROFESSOR_NAME), mSearchProfessorName);
+        intent.putExtra(getString(R.string.PROFESSOR_NAME), profName);
         intent.putExtra(getString(R.string.PROFESSOR_ID), profId);
         startActivity(intent);
         overridePendingTransition(R.anim.slide_left_in_250, R.anim.slide_left_out_250);

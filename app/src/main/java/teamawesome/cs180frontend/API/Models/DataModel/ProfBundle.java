@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-public class ProfBundle implements Serializable{
+public class ProfBundle implements Serializable, AbstractBundle {
 
     @SerializedName("prof_id")
     @Expose
@@ -13,18 +13,18 @@ public class ProfBundle implements Serializable{
 
     @SerializedName("prof_name")
     @Expose
-    private String prof_name;
+    private String name;
 
     public ProfBundle(int prof_id, String prof_name) {
         this.prof_id = prof_id;
-        this.prof_name = prof_name;
+        this.name = prof_name;
     }
 
     public int getProfessorId() {
         return prof_id;
     }
 
-    public String getProfessorName() {
-        return prof_name;
+    public String getName() {
+        return name;
     }
 }

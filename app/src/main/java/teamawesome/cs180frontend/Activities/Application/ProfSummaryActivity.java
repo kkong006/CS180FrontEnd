@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -15,18 +14,15 @@ import com.joanzapata.iconify.widget.IconTextView;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.util.List;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import teamawesome.cs180frontend.API.APIConstants;
-import teamawesome.cs180frontend.API.Models.DataModel.ProfClassBundle;
 import teamawesome.cs180frontend.API.Models.DataModel.ProfRespBundle;
 import teamawesome.cs180frontend.API.Models.StatusModel.ProfSummaryStatus;
 import teamawesome.cs180frontend.API.RetrofitSingleton;
 import teamawesome.cs180frontend.API.Services.Callbacks.GetProfSummaryCallback;
-import teamawesome.cs180frontend.Adapters.SimpleListAdapter2;
+import teamawesome.cs180frontend.Adapters.SimpleListAdapter;
 import teamawesome.cs180frontend.Misc.Utils;
 import teamawesome.cs180frontend.R;
 
@@ -44,20 +40,23 @@ public class ProfSummaryActivity extends AppCompatActivity {
 
     private ProgressDialog progressDialog;
 
-    private String profName;
     private int profId;
+
     private IconTextView[] ratings;
 
-    private SimpleListAdapter2 adapter = null;
+    private SimpleListAdapter adapter = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Intent intent = getIntent();
-        profName = intent.getStringExtra(getString(R.string.PROFESSOR_NAME));
         setContentView(R.layout.activity_prof_summary);
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
+
+        Intent intent = getIntent();
+        String profName = intent.getStringExtra(getString(R.string.PROFESSOR_NAME));
+        profId = intent.getIntExtra(getString(R.string.PROFESSOR_ID), 0);
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(profName);
 
@@ -68,8 +67,6 @@ public class ProfSummaryActivity extends AppCompatActivity {
         progressDialog.setIndeterminate(true);
 
         ratings = new IconTextView[]{one, two, three, four, five};
-
-        profId = intent.getIntExtra(getString(R.string.PROFESSOR_ID), 0);
 
         if(profId > 0) {
             getSupportActionBar().setTitle(profName);
@@ -103,7 +100,7 @@ public class ProfSummaryActivity extends AppCompatActivity {
         String school = resp.getSchoolName();
         university.setText(school);
 
-        adapter = new SimpleListAdapter2(this, resp.getClasses());
+        adapter = new SimpleListAdapter(this, resp.getClasses());
         classList.setAdapter(adapter);
 
         double rating = resp.getAvgRating();
