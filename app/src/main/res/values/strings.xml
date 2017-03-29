@@ -169,7 +169,7 @@
     <string name="prof_or_class_DNE">Error: submitting review for class and/or professor that does not exist.</string>
 
     <!--Prof Summary Activity-->
-    <string name="search_professor_results_classes">Classes Taught</string>
+    <string name="search_professor_results_classes">Classes Taught:</string>
     <string name="search_professor_results_schools">Associated Schools</string>
     <string name="search_professor_results_review">See Reviews</string>
 
