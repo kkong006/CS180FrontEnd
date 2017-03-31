@@ -7,10 +7,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import teamawesome.cs180frontend.R;
 
-/**
- * Created by jman0_000 on 11/4/2016.
- */
-
 public class SimpleViewHolder {
     @Bind(R.id.simple_textview) public TextView textView;
 

@@ -1,41 +1,47 @@
 package teamawesome.cs180frontend.Activities.Application;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
-import com.google.android.gms.ads.AdRequest;
-
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnItemClick;
 import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewBundle;
 import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewPageBundle;
 import teamawesome.cs180frontend.API.Models.StatusModel.ReviewFetchStatus;
 import teamawesome.cs180frontend.API.RetrofitSingleton;
 import teamawesome.cs180frontend.API.Services.Callbacks.GetReviewsCallback;
 import teamawesome.cs180frontend.Adapters.MainFeedAdapter;
+import teamawesome.cs180frontend.Misc.Constants;
 import teamawesome.cs180frontend.Misc.Utils;
 import teamawesome.cs180frontend.R;
 
-public class MyReviewsActivity extends AppCompatActivity {
-    @Bind(R.id.myreviews) ListView myReviews;
-    @Bind(R.id.myreviews_progressbar) ProgressBar progressBar;
-    @Bind(R.id.myreviews_parent) CoordinatorLayout parent;
+//MyReviewsActivity => ReviewsActivity (making this generic)
+public class ReviewsActivity extends AppCompatActivity {
+    @Bind(R.id.reviews) ListView myReviews;
+    @Bind(R.id.reviews_progressbar) ProgressBar progressBar;
+    @Bind(R.id.reviews_parent) CoordinatorLayout parent;
 
     int offset = 0; //feed offset
     int lastSelected = 0;
+    String idType; //what type of ID is being passed in
+    int id;
 
     MainFeedAdapter mainFeedAdapter = null;
     final Context context = this;
@@ -43,13 +49,33 @@ public class MyReviewsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_reviews);
+        setContentView(R.layout.activity_reviews);
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
 
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            idType = bundle.getString(Constants.ID_TYPE);
+            id = bundle.getInt(idType);
+
+            if (idType.equals(Constants.USER_ID) && id == Utils.getUserId(this)) {
+                getSupportActionBar().setTitle(R.string.my_reviews);
+            } else {
+                getSupportActionBar()
+                        .setTitle(bundle.getString(Constants.NAME, "") + " " + Constants.REVIEWS);
+            }
+
+            mainFeedAdapter = new MainFeedAdapter(this, new ArrayList<ReviewBundle>());
+            myReviews.setAdapter(mainFeedAdapter);
+        } else {
+            finish();
+        }
+
         RetrofitSingleton.getInstance()
                 .getMatchingService()
-                .reviews(null, null, null, null, Utils.getUserId(this), offset)
+                .reviews(null, idType.equals(Constants.SUBJECT_ID) ? id : null,
+                        idType.equals(Constants.CLASS_ID) ? id : null, null,
+                        idType.equals(Constants.USER_ID) ? id : null, offset)
                 .enqueue(new GetReviewsCallback(this));
     }
 
@@ -76,14 +102,36 @@ public class MyReviewsActivity extends AppCompatActivity {
 
                         RetrofitSingleton.getInstance()
                                 .getMatchingService()
-                                .reviews(null,
-                                        null, null, null,
-                                        Utils.getUserId(context), offset)
+                                .reviews(null, idType.equals(Constants.SUBJECT_ID) ? id : null,
+                                        idType.equals(Constants.CLASS_ID) ? id : null, null,
+                                        idType.equals(Constants.USER_ID) ? id : null, offset)
                                 .enqueue(new GetReviewsCallback(context));
                     }
                 }
             }
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:
+                return true;
+        }
+    }
+
+    @OnItemClick(R.id.reviews)
+    public void onReviewClick(AdapterView<?> parent, View view, int position, long id) {
+        ReviewBundle review = mainFeedAdapter.getItem(position);
+        if (review != null) {
+            Intent intent = new Intent(this, ReadReviewActivity.class);
+            intent.putExtra(Constants.REVIEW, (Parcelable) review);
+            intent.putExtra(Constants.USER_RATING, Utils.getReviewRating(review.getReviewId()));
+            startActivity(intent);
+        }
     }
 
     @Subscribe
@@ -96,24 +144,19 @@ public class MyReviewsActivity extends AppCompatActivity {
             return;
         }
 
+        offset += reviews.size();
+
         if (reviews.size() > 2) {
             reviews.add(2, null);
         } else if ((offset == 0) && (reviews.size() > 0)) {
             reviews.add(null);
         }
 
-        offset += reviews.size();
-
-        if (offset > 10) {
+        if (offset >= 10) {
             setOnScrollListener();
         }
 
-        if (mainFeedAdapter == null) {
-            mainFeedAdapter = new MainFeedAdapter(this, reviews);
-            myReviews.setAdapter(mainFeedAdapter);
-        } else {
-            mainFeedAdapter.append(reviews);
-        }
+        mainFeedAdapter.append(reviews);
 
         myReviews.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         progressBar.setVisibility(View.GONE);

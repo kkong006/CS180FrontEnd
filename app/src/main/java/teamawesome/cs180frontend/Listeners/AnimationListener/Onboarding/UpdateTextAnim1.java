@@ -5,14 +5,14 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.TextView;
 
-public class UpdateTextAnimation1 implements Animation.AnimationListener{
+public class UpdateTextAnim1 implements Animation.AnimationListener{
     private TextView v;
     private View nextView;
     private String newText;
     private Animation anim;
     private int visibility;
 
-    public UpdateTextAnimation1(TextView v, View nextView, String newText, Animation anim, int visibility) {
+    public UpdateTextAnim1(TextView v, View nextView, String newText, Animation anim, int visibility) {
         this.v = v;
         this.nextView = nextView;
         this.newText = newText;
@@ -32,9 +32,9 @@ public class UpdateTextAnimation1 implements Animation.AnimationListener{
         if (visibility == View.INVISIBLE) {
             v.setText(newText);
             AlphaAnimation show = new AlphaAnimation(0.0f, 1.0f);
-            show.setAnimationListener(new UpdateTextAnimation1(v, nextView, newText,
+            show.setAnimationListener(new UpdateTextAnim1(v, nextView, newText,
                     anim, View.VISIBLE));
-            show.setDuration(650);
+            show.setDuration(750);
             v.startAnimation(show);
         } else {
             if (anim != null) {

@@ -15,6 +15,7 @@ import teamawesome.cs180frontend.API.Models.DataModel.ProfBundle;
 import teamawesome.cs180frontend.API.Models.DataModel.SchoolBundle;
 import teamawesome.cs180frontend.API.Models.DataModel.SubjectBundle;
 
+//THIS HOLDS ALL LOCAL DATA THAT I DON'T WANT TO PERSIST
 public class DataSingleton {
     private static DataSingleton instance = null;
 

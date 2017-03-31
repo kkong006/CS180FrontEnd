@@ -10,10 +10,6 @@ import teamawesome.cs180frontend.Misc.Utils;
 import teamawesome.cs180frontend.Misc.ViewHolders.NavDrawerViewHolder;
 import teamawesome.cs180frontend.R;
 
-/**
- * Created by KongK on 10/14/2016.
- */
-
 public class NavDrawerAdapter extends BaseAdapter {
     private String[] mIcons;
     private String[] mText;

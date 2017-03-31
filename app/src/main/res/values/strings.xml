@@ -29,6 +29,16 @@
         <item>{fa-sign-out}</item>
     </string-array>
 
+    <string-array name="search_array">
+        <item>Classes</item>
+        <item>Subjects</item>
+    </string-array>
+
+    <string-array name="search_option_array">
+        <item>Show Reviews</item>
+        <item>Show Classes</item>
+    </string-array>
+
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
@@ -38,6 +48,10 @@
     <string name="unable_to_request">Unable to make a request. Please contact the devs if the issue persists.</string>
     <string name="verifying">Verifying account...</string>
     <string name="next">Next</string>
+    <string name="search">Search</string>
+    <string name="classes">Classes</string>
+    <string name="subjects">Subjects</string>
+    <string name="school">School</string>
 
     <!--Main Activity-->
     <string name="verify_success">Successfully verified your account!</string>
@@ -111,13 +125,7 @@
     <string name="prof_summary_button">Get Professor Summary</string>
 
     <!--Search Activity-->
-    <string name="school">School</string>
-    <string name="search_by_professor">Search by Professor</string>
-    <string name="search_by_class">Search by Class</string>
-    <string name="search_by_school">Search by School</string>
-    <string name="search_button">Search Reviews</string>
-    <string name="reviews_dne">Reviews do not exist</string>
-    <string name="search_reviews">Search Reviews</string>
+    <string name="no_results">No matching results found.</string>
 
     <!--Search Results Activity-->
     <string name="REVIEW_ID">REVIEW_ID</string>

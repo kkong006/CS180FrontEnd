@@ -21,6 +21,7 @@ import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewRatingResp;
 import teamawesome.cs180frontend.API.Models.StatusModel.ReviewRatingStatus;
 import teamawesome.cs180frontend.API.RetrofitSingleton;
 import teamawesome.cs180frontend.API.Services.Callbacks.PostReviewRatingCallback;
+import teamawesome.cs180frontend.Misc.Constants;
 import teamawesome.cs180frontend.Misc.Utils;
 import teamawesome.cs180frontend.R;
 
@@ -29,24 +30,18 @@ public class ReadReviewActivity extends AppCompatActivity {
     @Bind(R.id.activity_read_review) CoordinatorLayout parent;
     @Bind(R.id.read_class_tv) TextView className;
     @Bind(R.id.read_date_tv) TextView reviewDate;
-    @Bind(R.id.read_rate_1) TextView rate1;
-    @Bind(R.id.read_rate_2) TextView rate2;
-    @Bind(R.id.read_rate_3) TextView rate3;
-    @Bind(R.id.read_rate_4) TextView rate4;
-    @Bind(R.id.read_rate_5) TextView rate5;
+    @Bind({R.id.read_rate_1, R.id.read_rate_2, R.id.read_rate_3,
+            R.id.read_rate_4, R.id.read_rate_5}) TextView[] ratings;
     @Bind(R.id.read_review_tv) TextView reviewText;
     @Bind(R.id.read_like_bt) Button thumbsUp;
     @Bind(R.id.read_dislike_bt) Button thumbsDown;
     @Bind(R.id.read_like_count_tv) TextView likeCount;
     @Bind(R.id.read_dislike_count_tv) TextView dislikeCount;
 
-    private TextView[] ratings;
     ReviewBundle review;
     private int userRating = 0;
     private int newUserRating = -1;
     boolean isRatingProcessing = false;
-
-    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,17 +58,9 @@ public class ReadReviewActivity extends AppCompatActivity {
             dislikeCount.setVisibility(View.GONE);
         }
 
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setCancelable(false);
-        progressDialog.setMessage(getResources().getString(R.string.loading));
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setIndeterminate(true);
-
-        ratings = new TextView[] {rate1, rate2, rate3, rate4, rate5};
-
         Bundle bundle = getIntent().getExtras();
-        review = bundle.getParcelable("review");
-        userRating = bundle.getInt("yourRating");
+        review = bundle.getParcelable(Constants.REVIEW);
+        userRating = bundle.getInt(Constants.USER_RATING);
 
         getSupportActionBar().setTitle(review.getProfName());
         loadReview();
@@ -124,7 +111,6 @@ public class ReadReviewActivity extends AppCompatActivity {
         if (isRatingProcessing) {
             return;
         }
-        //Utils.showSnackbar(this, parent, getString(R.string.liked));
 
         if(userRating == 1) {
             newUserRating = 0;
@@ -138,7 +124,6 @@ public class ReadReviewActivity extends AppCompatActivity {
 
     @OnClick(R.id.read_dislike_bt)
     public void thumbsDown() {
-        //Utils.showSnackbar(this, parent, getString(R.string.disliked));
         if (isRatingProcessing) {
             return;
         }
@@ -166,7 +151,6 @@ public class ReadReviewActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        System.out.println("onDestroy Read");
         EventBus.getDefault().unregister(this);
         super.onDestroy();
     }

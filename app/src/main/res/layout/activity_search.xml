@@ -1,100 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/search_parent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/activity_search">
+    tools:context="teamawesome.cs180frontend.Activities.Application.SearchActivity">
 
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/input_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:paddingBottom="@dimen/activity_vertical_margin"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin"
-        tools:context="teamawesome.cs180frontend.Activities.Application.SearchActivity">
+        android:orientation="vertical">
 
-        <android.support.design.widget.TextInputLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:paddingTop="@dimen/activity_horizontal_margin"
+            android:paddingStart="@dimen/activity_horizontal_margin"
+            android:paddingEnd="@dimen/activity_horizontal_margin">
 
-            <AutoCompleteTextView
-                android:id="@+id/search_professor_et"
+            <Spinner
+                android:id="@+id/spinner"
+                android:background="@drawable/bordered_rounded_rectangle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColorHint="@color/colorAccent"
-                android:maxLines="1"
-                android:textSize="18sp"
-                android:layout_marginTop="10dp"
-                android:textColor="@color/colorBlack"
-                android:completionThreshold="1"
-                android:dropDownHeight="50dp"/>
+                android:layout_marginBottom="4dp"/>
 
-        </android.support.design.widget.TextInputLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-        <Button
-            android:id="@+id/search_search_bt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:padding="10dp"
-            android:background="@color/colorAccent"
-            android:textColor="@color/colorWhite"
-            android:text="@string/search_button" />
+                <Button
+                    android:id="@+id/search_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"
+                    android:textSize="12sp"
+                    android:text="@string/search" />
 
-        <!--<android.support.design.widget.TextInputLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content">-->
+                <EditText
+                    android:id="@+id/query_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:inputType="textPersonName"
+                    android:layout_alignBottom="@+id/search_button"
+                    android:layout_alignParentStart="true"
+                    android:layout_toStartOf="@+id/search_button" />
 
-            <!--<AutoCompleteTextView-->
-                <!--android:id="@+id/search_class_et"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:textColorHint="@color/colorAccent"-->
-                <!--android:hint="@string/search_by_class"-->
-                <!--android:maxLines="1"-->
-                <!--android:textSize="18sp"-->
-                <!--android:layout_marginTop="10dp"-->
-                <!--android:textColor="@color/colorBlack"-->
-                <!--android:completionThreshold="1"-->
-                <!--android:dropDownHeight="50dp"/>-->
+            </RelativeLayout>
 
-        <!--</android.support.design.widget.TextInputLayout>-->
+        </LinearLayout>
 
-        <!--<android.support.design.widget.TextInputLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content">-->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="4dp"
+            android:background="@color/colorGrey">
+        </View>
 
-            <!--<AutoCompleteTextView-->
-                <!--android:id="@+id/search_school_et"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:textColorHint="@color/colorAccent"-->
-                <!--android:hint="@string/search_by_school"-->
-                <!--android:maxLines="1"-->
-                <!--android:textSize="18sp"-->
-                <!--android:layout_marginTop="10dp"-->
-                <!--android:textColor="@color/colorBlack"-->
-                <!--android:completionThreshold="1"-->
-                <!--android:dropDownHeight="50dp"/>-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        <!--</android.support.design.widget.TextInputLayout>-->
+            <TextView
+                android:id="@+id/search_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="4dp"
+                android:visibility="gone"
+                android:gravity="center"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="@string/no_results"/>
 
-        <!--<Button-->
-            <!--android:id="@+id/search_search_class_bt"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_gravity="center_horizontal"-->
-            <!--android:layout_marginTop="@dimen/activity_vertical_margin"-->
-            <!--android:padding="10dp"-->
-            <!--android:background="@color/colorAccent"-->
-            <!--android:textColor="@color/colorWhite"-->
-            <!--android:text="@string/search_button" />-->
+            <ListView
+                android:id="@+id/search_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="2dp"
+                android:layout_marginEnd="2dp"
+                android:visibility="gone">
+            </ListView>
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_centerInParent="true"
+                android:visibility="invisible"/>
+
+        </RelativeLayout>
 
     </LinearLayout>
 

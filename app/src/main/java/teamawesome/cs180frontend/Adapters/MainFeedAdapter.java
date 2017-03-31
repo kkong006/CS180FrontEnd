@@ -37,7 +37,7 @@ public class MainFeedAdapter extends BaseAdapter{
         }
 
         reviewList.addAll(reviewPage);
-        if (reviewPage.size() >= 10) {
+        if (reviewPage.size() >= 11) {
             reviewList.add(null);
         }
         notifyDataSetChanged();

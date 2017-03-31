@@ -22,7 +22,7 @@ import teamawesome.cs180frontend.API.Models.DataModel.ProfRespBundle;
 import teamawesome.cs180frontend.API.Models.StatusModel.ProfSummaryStatus;
 import teamawesome.cs180frontend.API.RetrofitSingleton;
 import teamawesome.cs180frontend.API.Services.Callbacks.GetProfSummaryCallback;
-import teamawesome.cs180frontend.Adapters.SimpleListAdapter;
+import teamawesome.cs180frontend.Adapters.SimpleListAdapter2;
 import teamawesome.cs180frontend.Misc.Utils;
 import teamawesome.cs180frontend.R;
 
@@ -32,19 +32,14 @@ public class ProfSummaryActivity extends AppCompatActivity {
     @Bind(R.id.search_professor_class_list) ListView classList;
     @Bind(R.id.search_professor_university) TextView university;
     @Bind(R.id.avg_rating_tv) TextView avgRating;
-    @Bind(R.id.prof_rate_1) IconTextView one;
-    @Bind(R.id.prof_rate_2) IconTextView two;
-    @Bind(R.id.prof_rate_3) IconTextView three;
-    @Bind(R.id.prof_rate_4) IconTextView four;
-    @Bind(R.id.prof_rate_5) IconTextView five;
-
-    private ProgressDialog progressDialog;
+    @Bind({R.id.prof_rate_1, R.id.prof_rate_2,
+            R.id.prof_rate_3, R.id.prof_rate_4,
+            R.id.prof_rate_5}) IconTextView[] ratings;
 
     private int profId;
 
-    private IconTextView[] ratings;
-
-    private SimpleListAdapter adapter = null;
+    private ProgressDialog progressDialog;
+    private SimpleListAdapter2 adapter = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,8 +61,6 @@ public class ProfSummaryActivity extends AppCompatActivity {
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.setIndeterminate(true);
 
-        ratings = new IconTextView[]{one, two, three, four, five};
-
         if(profId > 0) {
             getSupportActionBar().setTitle(profName);
             progressDialog.show();
@@ -86,7 +79,7 @@ public class ProfSummaryActivity extends AppCompatActivity {
 
     @OnClick(R.id.search_professor_reviews_button)
     public void searchProfessor() {
-        /*Intent intent = new Intent(this, SearchResultsActivity.class);
+        /*Intent intent = new Intent(this, ResultsListActivity.class);
         intent.putExtra(getString(R.string.PROFESSOR_NAME), profName);
         intent.putExtra(getString(R.string.PROFESSOR_ID), profId);
         startActivity(intent);*/
@@ -100,7 +93,7 @@ public class ProfSummaryActivity extends AppCompatActivity {
         String school = resp.getSchoolName();
         university.setText(school);
 
-        adapter = new SimpleListAdapter(this, resp.getClasses());
+        adapter = new SimpleListAdapter2(this, resp.getClasses());
         classList.setAdapter(adapter);
 
         double rating = resp.getAvgRating();

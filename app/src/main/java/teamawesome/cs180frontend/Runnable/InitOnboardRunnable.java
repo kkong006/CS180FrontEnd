@@ -4,18 +4,14 @@ import android.content.Context;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 
-import teamawesome.cs180frontend.Listeners.AnimationListener.Onboarding.AnimationListener1;
-
-/**
- * Created by jonathan on 3/9/17.
- */
+import teamawesome.cs180frontend.Listeners.AnimationListener.Onboarding.AnimListener1;
 
 public class InitOnboardRunnable implements Runnable {
     private Context context;
     private View v1;
     private View v2;
     private View v3;
-    int visibility;
+    private int visibility;
 
     public InitOnboardRunnable(Context context, View v1, View v2, View v3, int visibility) {
         this.context = context;
@@ -28,9 +24,9 @@ public class InitOnboardRunnable implements Runnable {
     @Override
     public void run() {
         AlphaAnimation showText = new AlphaAnimation(0.0f, 1.0f);
-        showText.setAnimationListener(new AnimationListener1(context,
+        showText.setAnimationListener(new AnimListener1(context,
                 v1, v2, v3, visibility));
-        showText.setDuration(650);
+        showText.setDuration(750);
         v1.startAnimation(showText);
     }
 }

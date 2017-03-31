@@ -15,10 +15,6 @@ import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewIDRespBundle;
 import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewRatingResp;
 import teamawesome.cs180frontend.API.Models.ReviewModel.UserReview;
 
-/**
- * Created by jman0_000 on 10/27/2016.
- */
-
 public interface MatchingService {
 
     @GET("/getData")

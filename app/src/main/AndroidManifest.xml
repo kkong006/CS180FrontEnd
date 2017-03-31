@@ -2,10 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="teamawesome.cs180frontend">
 
-    <!-- To auto-complete the email text field in the login form with the userRespBundle's emails -->
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-    <uses-permission android:name="android.permission.READ_PROFILE" />
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
     <!-- retrofit permission -->
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -35,19 +31,8 @@
             </intent-filter>
         </activity>
 
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-
         <activity
-            android:name=".Activities.Application.SearchActivity"
-            android:parentActivityName=".Activities.Application.MainActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".Activities.Application.MyReviewsActivity"
-            android:label="@string/my_reviews"
+            android:name=".Activities.Application.ReviewsActivity"
             android:parentActivityName=".Activities.Application.MainActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -56,7 +41,7 @@
             android:parentActivityName=".Activities.Application.MainActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Activities.Application.SearchResultsActivity"
+            android:name=".Activities.Application.ResultsListActivity"
             android:parentActivityName=".Activities.Application.MainActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -66,7 +51,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activities.Application.ReadReviewActivity"
-            android:parentActivityName=".Activities.Application.SearchResultsActivity"
+            android:parentActivityName=".Activities.Application.ResultsListActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activities.Application.FindProfActivity"
@@ -79,12 +64,15 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activities.Onboarding.AccountInfoActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activities.Onboarding.VerifyActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Activities.Application.SearchActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/search"/>
     </application>
 
 </manifest>

@@ -31,10 +31,10 @@ import teamawesome.cs180frontend.API.Models.UserModel.UserRespBundle;
 import teamawesome.cs180frontend.API.RetrofitSingleton;
 import teamawesome.cs180frontend.API.Services.Callbacks.LoginRegisterCallback;
 import teamawesome.cs180frontend.Adapters.SimpleACAdapter;
-import teamawesome.cs180frontend.Listeners.AnimationListener.Onboarding.AnimationListener1;
-import teamawesome.cs180frontend.Listeners.AnimationListener.Onboarding.AnimationListener2;
+import teamawesome.cs180frontend.Listeners.AnimationListener.Onboarding.AnimListener1;
+import teamawesome.cs180frontend.Listeners.AnimationListener.Onboarding.AnimListener2;
 import teamawesome.cs180frontend.Listeners.AnimationListener.Onboarding.HideTextAnim1;
-import teamawesome.cs180frontend.Listeners.AnimationListener.Onboarding.UpdateTextAnimation1;
+import teamawesome.cs180frontend.Listeners.AnimationListener.Onboarding.UpdateTextAnim1;
 import teamawesome.cs180frontend.Misc.DataSingleton;
 import teamawesome.cs180frontend.Misc.Events.FinishEvent;
 import teamawesome.cs180frontend.Misc.Utils;
@@ -108,14 +108,14 @@ public class AccountInfoActivity extends AppCompatActivity {
         schoolAC.setAdapter(adapter);
 
         AlphaAnimation hideLoadingText = new AlphaAnimation(1.0f, 0.0f);
-        hideLoadingText.setAnimationListener(new AnimationListener1(this, loadingTextView,
+        hideLoadingText.setAnimationListener(new AnimListener1(this, loadingTextView,
                 schoolLayout, done, View.GONE));
-        hideLoadingText.setDuration(650);
+        hideLoadingText.setDuration(750);
 
         AlphaAnimation hideOnboardText = new AlphaAnimation(1.0f, 0.0f);
-        hideOnboardText.setAnimationListener(new UpdateTextAnimation1(onboardText1,
+        hideOnboardText.setAnimationListener(new UpdateTextAnim1(onboardText1,
                 loadingTextView, getString(R.string.enter_school), hideLoadingText, View.INVISIBLE));
-        hideOnboardText.setDuration(650);
+        hideOnboardText.setDuration(750);
         onboardText1.startAnimation(hideOnboardText);
     }
 
@@ -151,15 +151,18 @@ public class AccountInfoActivity extends AppCompatActivity {
                 return;
             }
 
+            phoneNumberTIL.setEnabled(false);
+            passwordTIL.setEnabled(false);
+
             handler.post(new Runnable() {
                 @Override
                 public void run() {
                     AlphaAnimation hideNext = new AlphaAnimation(1.0f, 0.0f);
-                    hideNext.setAnimationListener(new AnimationListener2(next,
+                    hideNext.setAnimationListener(new AnimListener2(next,
                             loadingTextView,
                             View.GONE,
                             true));
-                    hideNext.setDuration(650);
+                    hideNext.setDuration(750);
                     next.startAnimation(hideNext);
                 }
             });
@@ -205,7 +208,7 @@ public class AccountInfoActivity extends AppCompatActivity {
             AlphaAnimation hideText = new AlphaAnimation(1.0f, 0.0f);
             hideText.setAnimationListener(new HideTextAnim1(View.INVISIBLE, registerBundle,
                     callback, onboardText1, progressDialog));
-            hideText.setDuration(800);
+            hideText.setDuration(750);
             onboardText1.startAnimation(hideText);
         } else {
             progressDialog.show();
@@ -262,6 +265,8 @@ public class AccountInfoActivity extends AppCompatActivity {
             Utils.showSnackbar(this, parent, R.color.colorAccent, getString(R.string.too_many_req));
         }
 
+        phoneNumberTIL.setEnabled(true);
+        passwordTIL.setEnabled(true);
         done.setClickable(true);
     }
 

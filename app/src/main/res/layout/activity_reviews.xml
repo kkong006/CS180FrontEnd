@@ -3,10 +3,10 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/myreviews_parent"
+    android:id="@+id/reviews_parent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="teamawesome.cs180frontend.Activities.Application.MyReviewsActivity">
+    tools:context="teamawesome.cs180frontend.Activities.Application.ReviewsActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -14,7 +14,7 @@
         android:background="@color/lightGrey">
 
         <ListView
-            android:id="@+id/myreviews"
+            android:id="@+id/reviews"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:divider="@null"
@@ -28,7 +28,7 @@
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:layout_centerInParent="true"
-            android:id="@+id/myreviews_progressbar"/>
+            android:id="@+id/reviews_progressbar"/>
 
     </RelativeLayout>
 

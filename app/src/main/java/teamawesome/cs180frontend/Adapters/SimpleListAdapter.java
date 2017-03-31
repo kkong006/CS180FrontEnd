@@ -8,45 +8,53 @@ import android.widget.BaseAdapter;
 
 import java.util.List;
 
-import teamawesome.cs180frontend.API.Models.DataModel.ProfClassBundle;
-import teamawesome.cs180frontend.Misc.ViewHolders.SimpleViewHolder2;
+import teamawesome.cs180frontend.Misc.ViewHolders.SimpleViewHolder;
 import teamawesome.cs180frontend.R;
 
-//for displaying the classes & respective review count for each class
 public class SimpleListAdapter extends BaseAdapter {
     private Context context;
-    private List<ProfClassBundle> profClassBundleList;
+    private List<String> stringList;
 
-    public SimpleListAdapter(Context context, List<ProfClassBundle> profClassBundleList) {
+    public SimpleListAdapter(Context context, List<String> stringList) {
         this.context = context;
-        this.profClassBundleList = profClassBundleList;
+        this.stringList = stringList;
     }
 
     @Override
-    public int getCount() { return profClassBundleList.size(); }
+    public int getCount() {
+        return stringList.size();
+    }
 
     @Override
-    public ProfClassBundle getItem(int position) { return profClassBundleList.get(position); }
+    public String getItem(int pos) {
+        return stringList.get(pos);
+    }
 
     @Override
-    public long getItemId(int position) { return position; }
+    public long getItemId(int pos) {
+        return pos;
+    }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        SimpleViewHolder2 holder;
+    public View getView(int pos, View convertView, ViewGroup parent) {
+        SimpleViewHolder holder;
         if(convertView == null) {
             LayoutInflater vi = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = vi.inflate(R.layout.simple_list_item_2, parent, false);
-            holder = new SimpleViewHolder2(convertView);
+            convertView = vi.inflate(R.layout.larger_text_list_item, parent, false);
+            holder = new SimpleViewHolder(convertView);
             convertView.setTag(holder);
         } else {
-            holder = (SimpleViewHolder2) convertView.getTag();
+            holder = (SimpleViewHolder) convertView.getTag();
         }
 
-        holder.nameTextView.setText(getItem(position).getClassName());
-        holder.countTextView.setText(String.valueOf(getItem(position).getReviewCnt()));
+        holder.textView.setText(stringList.get(pos));
 
         return convertView;
     }
 
+    public void loadNewList(List<String> stringList) {
+        this.stringList.clear();
+        this.stringList.addAll(stringList);
+        notifyDataSetChanged();
+    }
 }

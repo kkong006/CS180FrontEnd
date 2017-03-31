@@ -258,10 +258,207 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @OnClick(R.id.error_tv)
+    public void onErrorTVClick() {
+        isLoading = false;
+
+        String errorTVText = errorTV.getText().toString();
+
+        if (errorTVText.equals(getString(R.string.fetch_data_again))) {
+            getData();
+        } else if (errorTVText.equals(getString(R.string.fetch_feed_again))) {
+            getFeed(offset);
+        }
+    }
+
+    @OnClick(R.id.fab)
+    public void onClick() {
+        Intent intent = new Intent(this, WriteReviewActivity.class);
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.verify_acc)
+    public void onVerifyLayoutClick() {
+        if (verifyBody.getVisibility() == View.GONE) {
+            verifySnippetText.setText(getString(R.string.please_verify_clicked));
+            verifyBody.setVisibility(View.VISIBLE);
+        } else {
+            shrinkVerifyLayout();
+        }
+    }
+
+    @OnClick(R.id.verify)
+    public void verify() {
+        if (!verifiedDisabled) {
+            String pin = pinEditText.getText().toString();
+            if (pin.length() < 4) {
+                Utils.showSnackbar(this, parent, R.color.colorPrimary, getString(R.string.pin_too_short));
+                return;
+            }
+
+            verifiedDisabled = true;
+            Utils.hideKeyboard(parent, this);
+            progressDialog.setMessage(getString(R.string.verifying));
+            progressDialog.show();
+
+            if (bundle == null) {
+                bundle = new VerifyBundle(Utils.getUserId(this),
+                        Utils.getPassword(this), pin);
+            } else {
+                bundle.changeValues(Utils.getUserId(this),
+                        Utils.getPassword(this), pin);
+            }
+
+            RetrofitSingleton.getInstance()
+                    .getUserService()
+                    .verifyUser(bundle)
+                    .enqueue(verifyCallback);
+        }
+    }
+
+    @OnClick(R.id.later)
+    public void onLater() {
+        Utils.hideKeyboard(parent, this);
+        if (verifyBody.getVisibility() == View.VISIBLE) {
+            shrinkVerifyLayout();
+        }
+    }
+
+    @OnClick(R.id.close_verify_view)
+    public void hideVerifyLayout() {
+        if (!verifiedDisabled) {
+            verifiedDisabled = true; //probably don't need this, just in case though
+            verifiedHidden = true;
+            AlphaAnimation hide = Utils.createHideAnimation(mainVerifyLayout);
+            mainVerifyLayout.startAnimation(hide);
+        }
+    }
+
+    @OnItemClick(R.id.drawer_list)
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        mDrawerLayout.closeDrawer(GravityCompat.START);
+        if (position == 1) {
+            Intent intent = new Intent(this, ReviewsActivity.class);
+            intent.putExtra(Constants.ID_TYPE, Constants.USER_ID);
+            intent.putExtra(Constants.USER_ID, Utils.getUserId(this));
+            startActivity(intent);
+        } else if (position == 2) {
+            //Search for professor stats
+            Intent intent = new Intent(this, FindProfActivity.class);
+            startActivity(intent);
+        } else if (position == 3) {
+            Intent intent = new Intent(this, SearchActivity.class);
+            startActivity(intent);
+        } else if (position == 4) {
+            //Logout
+            if (drawerAdapter.getItem(position).equals(getString(R.string.login))) {
+                Intent intent = new Intent(this, LoginActivity.class);
+                startActivityForResult(intent, 1);
+            } else {
+                logout();
+            }
+        }
+    }
+
+    @OnItemClick(R.id.feed_list_view)
+    public void onReviewClick(AdapterView<?> parent, View view, int position, long id) {
+        ReviewBundle review = mainFeedAdapter.getItem(position);
+        if (review != null) {
+            Intent intent = new Intent(this, ReadReviewActivity.class);
+            intent.putExtra(Constants.REVIEW, (Parcelable) review);
+            intent.putExtra(Constants.USER_RATING, Utils.getReviewRating(review.getReviewId()));
+            startActivity(intent);
+        }
+    }
+
+    @Subscribe
+    public void failedDataResp(CacheReqStatus resp) {
+        progressDialog.dismiss();
+        if (resp.getStatus() != -1) {
+            Utils.showSnackbar(this, parent, R.color.colorPrimary,
+                    getString(R.string.data_doesnt_exist));
+        } else {
+            Utils.showSnackbar(this, parent, R.color.colorPrimary,
+                    getString(R.string.error_getting_data));
+        }
+
+        mainFeedList.setVisibility(View.GONE);
+        errorTV.setText(getString(R.string.fetch_data_again));
+        errorTV.setVisibility(View.VISIBLE);
+    }
+
+    @Subscribe
+    public void failedPageFetch(ReviewFetchStatus failedFetch) {
+        if (failedFetch.getContext().equals(this)) {
+            initialLoad = false;
+            progressDialog.dismiss();
+            if (failedFetch.getStatus() != -1) {
+                Utils.showSnackbar(this, parent, R.color.colorPrimary,
+                        getString(R.string.invalid_review_request));
+            } else {
+                Utils.showSnackbar(this, parent, R.color.colorPrimary,
+                        getString(R.string.failed_review_request));
+            }
+
+            mainFeedList.setVisibility(View.GONE);
+            errorTV.setText(getString(R.string.fetch_feed_again));
+            errorTV.setVisibility(View.VISIBLE);
+
+            isLoading = false;
+        }
+    }
+
+    @Subscribe
+    public void onFailedResp(ReviewRatingStatus status) {
+        if (status.getStatus() == APIConstants.HTTP_STATUS_INVALID) {
+            Toast.makeText(this, getString(R.string.INVALID_REVIEW_RATING_REQ), Toast.LENGTH_SHORT).show();
+        } else if (status.getStatus() == APIConstants.HTTP_STATUS_ERROR) {
+            Toast.makeText(this, getString(R.string.server_error), Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, getString(R.string.FAILED_REVIEW_RATING), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Subscribe
+    public void reviewRatingResp(ReviewRatingResp resp) {
+        int rating = resp.getReviewRatingVal();
+        if (rating == 0) {
+            data.getLikedSet().remove(resp.getReviewId());
+            data.getDislikedSet().remove(resp.getReviewId());
+        } else if (rating == 1) {
+            data.getLikedSet().add(resp.getReviewId());
+            data.getDislikedSet().remove(resp.getReviewId());
+        } else if (rating == 2) {
+            data.getLikedSet().remove(resp.getReviewId());
+            data.getDislikedSet().add(resp.getReviewId());
+        }
+    }
+
+    @Subscribe
+    public void onVerifyResp(VerifyResp resp) {
+        mainVerifyLayout.setVisibility(View.GONE);
+        Utils.setVerified(this, true);
+        progressDialog.dismiss();
+        Utils.showSnackbar(this, parent, R.color.colorPrimary, getString(R.string.verify_success));
+    }
+
+    @Subscribe
+    public void onVerifyFailed(VerifyStatus status) {
+        verifiedDisabled = false;
+        progressDialog.dismiss();
+        if (status.getStatus() == APIConstants.HTTP_STATUS_INVALID) {
+            Utils.showSnackbar(this, parent, R.color.colorPrimary, getString(R.string.invalid_pin));
+        } else if (status.getStatus() == APIConstants.HTTP_STATUS_ERROR) {
+            Utils.showSnackbar(this, parent, R.color.colorPrimary, getString(R.string.server_error));
+        } else {
+            Utils.showSnackbar(this, parent, R.color.colorPrimary, getString(R.string.unable_to_request));
+        }
+    }
+
     private void logout() {
         Utils.nukeUserData(this);
-        drawerAdapter.changeLoginElem();
-        setButtons();
+        //drawerAdapter.changeLoginElem();
+        //setButtons();
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
         finish();
@@ -445,197 +642,4 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Subscribe
-    public void failedDataResp(CacheReqStatus resp) {
-        progressDialog.dismiss();
-        if (resp.getStatus() != -1) {
-            Utils.showSnackbar(this, parent, R.color.colorPrimary,
-                    getString(R.string.data_doesnt_exist));
-        } else {
-            Utils.showSnackbar(this, parent, R.color.colorPrimary,
-                    getString(R.string.error_getting_data));
-        }
-
-        mainFeedList.setVisibility(View.GONE);
-        errorTV.setText(getString(R.string.fetch_data_again));
-        errorTV.setVisibility(View.VISIBLE);
-    }
-
-    @Subscribe
-    public void failedPageFetch(ReviewFetchStatus failedFetch) {
-        if (failedFetch.getContext().equals(this)) {
-            initialLoad = false;
-            progressDialog.dismiss();
-            if (failedFetch.getStatus() != -1) {
-                Utils.showSnackbar(this, parent, R.color.colorPrimary,
-                        getString(R.string.invalid_review_request));
-            } else {
-                Utils.showSnackbar(this, parent, R.color.colorPrimary,
-                        getString(R.string.failed_review_request));
-            }
-
-            mainFeedList.setVisibility(View.GONE);
-            errorTV.setText(getString(R.string.fetch_feed_again));
-            errorTV.setVisibility(View.VISIBLE);
-
-            isLoading = false;
-        }
-    }
-
-    @Subscribe
-    public void onFailedResp(ReviewRatingStatus status) {
-        if (status.getStatus() == APIConstants.HTTP_STATUS_INVALID) {
-            Toast.makeText(this, getString(R.string.INVALID_REVIEW_RATING_REQ), Toast.LENGTH_SHORT).show();
-        } else if (status.getStatus() == APIConstants.HTTP_STATUS_ERROR) {
-            Toast.makeText(this, getString(R.string.server_error), Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(this, getString(R.string.FAILED_REVIEW_RATING), Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    @Subscribe
-    public void reviewRatingResp(ReviewRatingResp resp) {
-        int rating = resp.getReviewRatingVal();
-        if (rating == 0) {
-            data.getLikedSet().remove(resp.getReviewId());
-            data.getDislikedSet().remove(resp.getReviewId());
-        } else if (rating == 1) {
-            data.getLikedSet().add(resp.getReviewId());
-            data.getDislikedSet().remove(resp.getReviewId());
-        } else if (rating == 2) {
-            data.getLikedSet().remove(resp.getReviewId());
-            data.getDislikedSet().add(resp.getReviewId());
-        }
-    }
-
-    @Subscribe
-    public void onVerifyResp(VerifyResp resp) {
-        mainVerifyLayout.setVisibility(View.GONE);
-        Utils.setVerified(this, true);
-        progressDialog.dismiss();
-        Utils.showSnackbar(this, parent, R.color.colorPrimary, getString(R.string.verify_success));
-    }
-
-    @Subscribe
-    public void onVerifyFailed(VerifyStatus status) {
-        verifiedDisabled = false;
-        progressDialog.dismiss();
-        if (status.getStatus() == APIConstants.HTTP_STATUS_INVALID) {
-            Utils.showSnackbar(this, parent, R.color.colorPrimary, getString(R.string.invalid_pin));
-        } else if (status.getStatus() == APIConstants.HTTP_STATUS_ERROR) {
-            Utils.showSnackbar(this, parent, R.color.colorPrimary, getString(R.string.server_error));
-        } else {
-            Utils.showSnackbar(this, parent, R.color.colorPrimary, getString(R.string.unable_to_request));
-        }
-    }
-
-    @OnClick(R.id.error_tv)
-    public void onErrorTVClick() {
-        isLoading = false;
-
-        String errorTVText = errorTV.getText().toString();
-
-        if (errorTVText.equals(getString(R.string.fetch_data_again))) {
-            getData();
-        } else if (errorTVText.equals(getString(R.string.fetch_feed_again))) {
-            getFeed(offset);
-        }
-    }
-
-    @OnClick(R.id.fab)
-    public void onClick() {
-        Intent intent = new Intent(this, WriteReviewActivity.class);
-        startActivity(intent);
-    }
-
-    @OnClick(R.id.verify_acc)
-    public void onVerifyLayoutClick() {
-        if (verifyBody.getVisibility() == View.GONE) {
-            verifySnippetText.setText(getString(R.string.please_verify_clicked));
-            verifyBody.setVisibility(View.VISIBLE);
-        } else {
-            shrinkVerifyLayout();
-        }
-    }
-
-    @OnClick(R.id.verify)
-    public void verify() {
-        if (!verifiedDisabled) {
-            String pin = pinEditText.getText().toString();
-            if (pin.length() < 4) {
-                Utils.showSnackbar(this, parent, R.color.colorPrimary, getString(R.string.pin_too_short));
-                return;
-            }
-
-            verifiedDisabled = true;
-            Utils.hideKeyboard(parent, this);
-            progressDialog.setMessage(getString(R.string.verifying));
-            progressDialog.show();
-
-            if (bundle == null) {
-                bundle = new VerifyBundle(Utils.getUserId(this),
-                        Utils.getPassword(this), pin);
-            } else {
-                bundle.changeValues(Utils.getUserId(this),
-                        Utils.getPassword(this), pin);
-            }
-
-            RetrofitSingleton.getInstance()
-                    .getUserService()
-                    .verifyUser(bundle)
-                    .enqueue(verifyCallback);
-        }
-    }
-
-    @OnClick(R.id.later)
-    public void onLater() {
-        Utils.hideKeyboard(parent, this);
-        if (verifyBody.getVisibility() == View.VISIBLE) {
-            shrinkVerifyLayout();
-        }
-    }
-
-    @OnClick(R.id.close_verify_view)
-    public void hideVerifyLayout() {
-        if (!verifiedDisabled) {
-            verifiedDisabled = true; //probably don't need this, just in case though
-            verifiedHidden = true;
-            AlphaAnimation hide = Utils.createHideAnimation(mainVerifyLayout);
-            mainVerifyLayout.startAnimation(hide);
-        }
-    }
-
-    @OnItemClick(R.id.drawer_list)
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        mDrawerLayout.closeDrawer(GravityCompat.START);
-        if (position == 1) {
-            Intent i = new Intent(this, MyReviewsActivity.class);
-            startActivity(i);
-        } else if (position == 2) {
-            //Search for professor stats
-            Intent intent = new Intent(getApplicationContext(), FindProfActivity.class);
-            startActivity(intent);
-        } else if (position == 3) {
-
-        } else if (position == 4) {
-            //Login or logout
-            if (drawerAdapter.getItem(position).equals(getString(R.string.login))) {
-                Intent intent = new Intent(this, LoginActivity.class);
-                startActivityForResult(intent, 1);
-            } else {
-                logout();
-            }
-        }
-    }
-
-    @OnItemClick(R.id.feed_list_view)
-    public void onReviewClick(AdapterView<?> parent, View view, int position, long id) {
-        ReviewBundle review = mainFeedAdapter.getItem(position);
-        if (review != null) {
-            Intent intent = new Intent(this, ReadReviewActivity.class);
-            intent.putExtra("review", (Parcelable) review);
-            intent.putExtra("yourRating", Utils.getReviewRating(review.getReviewId()));
-            startActivity(intent);
-        }
-    }
 }

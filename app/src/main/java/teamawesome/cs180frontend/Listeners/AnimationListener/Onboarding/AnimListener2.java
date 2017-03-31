@@ -10,13 +10,13 @@ import teamawesome.cs180frontend.API.RetrofitSingleton;
 import teamawesome.cs180frontend.API.Services.Callbacks.GetCacheDataCallback;
 import teamawesome.cs180frontend.Misc.DataSingleton;
 
-public class AnimationListener2 implements Animation.AnimationListener {
+public class AnimListener2 implements Animation.AnimationListener {
     private View v;
     private View nextView;
     private int visibility;
     private boolean fetchData;
 
-    public AnimationListener2(View v, View nextView, int visibility, boolean fetchData) {
+    public AnimListener2(View v, View nextView, int visibility, boolean fetchData) {
         this.v = v;
         this.nextView = nextView;
         this.visibility = visibility;
@@ -24,15 +24,15 @@ public class AnimationListener2 implements Animation.AnimationListener {
     }
 
     @Override
-    public void onAnimationRepeat(Animation animation) { }
+    public void onAnimationStart(Animation animation) { }
 
     @Override
     public void onAnimationEnd(Animation animation) {
         v.setVisibility(visibility);
         if (nextView != null) {
             AlphaAnimation showView = new AlphaAnimation(0.0f, 1.0f);
-            showView.setAnimationListener(new AnimationListener2(nextView, null, View.VISIBLE, fetchData));
-            showView.setDuration(650);
+            showView.setAnimationListener(new AnimListener2(nextView, null, View.VISIBLE, fetchData));
+            showView.setDuration(750);
             nextView.startAnimation(showView);
         } else {
             if (fetchData) {
@@ -49,5 +49,6 @@ public class AnimationListener2 implements Animation.AnimationListener {
     }
 
     @Override
-    public void onAnimationStart(Animation animation) { }
+    public void onAnimationRepeat(Animation animation) { }
+
 }

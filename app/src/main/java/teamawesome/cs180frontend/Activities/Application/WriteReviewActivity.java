@@ -34,14 +34,11 @@ public class WriteReviewActivity extends AppCompatActivity {
     @Bind(R.id.write_professor_et) AutoCompleteTextView profAC;
     @Bind(R.id.write_class_et) AutoCompleteTextView classAC;
     @Bind(R.id.write_review_et) EditText reviewText;
-    @Bind(R.id.write_rate_1) Button star1;
-    @Bind(R.id.write_rate_2) Button star2;
-    @Bind(R.id.write_rate_3) Button star3;
-    @Bind(R.id.write_rate_4) Button star4;
-    @Bind(R.id.write_rate_5) Button star5;
+    @Bind({R.id.write_rate_1, R.id.write_rate_2,
+            R.id.write_rate_3, R.id.write_rate_4,
+            R.id.write_rate_5}) Button[] stars;
     @Bind(R.id.write_submit_bt) Button submit;
 
-    private Button[] stars;
     private String[] professorNameArr;
     private String[] classNameArr;
     private int rating;
@@ -61,8 +58,6 @@ public class WriteReviewActivity extends AppCompatActivity {
         progressDialog.setMessage(getResources().getString(R.string.loading));
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.setIndeterminate(true);
-
-        stars = new Button[]{star1, star2, star3, star4, star5};
 
         rating = 0;
 
