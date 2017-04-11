@@ -233,10 +233,10 @@ public class AccountInfoActivity extends AppCompatActivity {
     @Subscribe
     public void failedDataResp(CacheReqStatus resp) {
         if (resp.getStatus() != -1) {
-            Utils.showSnackbar(this, parent,
+            Utils.showSnackBar(this, parent,
                     R.color.colorPrimary, getString(R.string.data_doesnt_exist));
         } else {
-            Utils.showSnackbar(this, parent,
+            Utils.showSnackBar(this, parent,
                     R.color.colorPrimary, getString(R.string.error_getting_data));
         }
     }
@@ -258,11 +258,11 @@ public class AccountInfoActivity extends AppCompatActivity {
 
         int respCode = status.getStatus();
         if (respCode == APIConstants.HTTP_STATUS_UNAUTHORIZED) {
-            Utils.showSnackbar(this, parent, R.color.colorAccent, getString(R.string.account_exists));
+            Utils.showSnackBar(this, parent, R.color.colorAccent, getString(R.string.account_exists));
         } else if (respCode == APIConstants.HTTP_STATUS_ERROR || respCode == -1) {
-            Utils.showSnackbar(this, parent, R.color.colorAccent, getString(R.string.server_issue));
+            Utils.showSnackBar(this, parent, R.color.colorAccent, getString(R.string.server_issue));
         } else if (respCode == APIConstants.TOO_MANY_REQ) {
-            Utils.showSnackbar(this, parent, R.color.colorAccent, getString(R.string.too_many_req));
+            Utils.showSnackBar(this, parent, R.color.colorAccent, getString(R.string.too_many_req));
         }
 
         phoneNumberTIL.setEnabled(true);

@@ -41,6 +41,18 @@ public class FindProfActivity extends AppCompatActivity {
         Utils.hideKeyboard(parent, this);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                finish();
+                return true;
+            default:
+                return true;
+        }
+    }
+
     @OnClick(R.id.search)
     public void getProfessorStats() {
         profAC.setError(null);
@@ -66,17 +78,5 @@ public class FindProfActivity extends AppCompatActivity {
         startActivity(intent);
         overridePendingTransition(R.anim.slide_left_in_250, R.anim.slide_left_out_250);
         finish();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                finish();
-                return true;
-            default:
-                return true;
-        }
     }
 }

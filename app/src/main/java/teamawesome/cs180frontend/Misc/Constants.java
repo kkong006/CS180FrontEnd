@@ -3,6 +3,7 @@ package teamawesome.cs180frontend.Misc;
 
 public class Constants {
     //Data related keys
+    public static final String TAG = "TAG";
     public static final String NAME = "NAME";
     public static final String ID_TYPE = "ID_TYPE";
     public static final String USER_ID = "USER_ID";

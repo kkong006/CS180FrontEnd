@@ -52,7 +52,7 @@ public class VerifyActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
 
-        callback = new VerifyCallback();
+        callback = new VerifyCallback(this);
         createProgressDialog();
         initAnimation();
     }
@@ -115,13 +115,6 @@ public class VerifyActivity extends AppCompatActivity {
 
     @Subscribe
     public void onVerifyFailure(VerifyStatus status) {
-        progressDialog.dismiss();
-        if (status.getStatus() == APIConstants.HTTP_STATUS_INVALID) {
-            Utils.showSnackbar(this, parent, R.color.colorAccent, getString(R.string.invalid_pin));
-        } else if (status.getStatus() == APIConstants.HTTP_STATUS_ERROR) {
-            Utils.showSnackbar(this, parent, R.color.colorAccent, getString(R.string.server_error));
-        } else {
-            Utils.showSnackbar(this, parent, R.color.colorAccent, getString(R.string.unable_to_request));
-        }
+        Utils.failedVerifySnackBar(null, parent, R.color.colorAccent, status.getStatus(), this);
     }
 }

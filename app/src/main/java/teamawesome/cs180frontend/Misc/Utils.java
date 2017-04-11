@@ -1,7 +1,9 @@
 package teamawesome.cs180frontend.Misc;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
@@ -21,6 +23,7 @@ import java.util.Date;
 import java.util.Set;
 import java.util.TimeZone;
 
+import teamawesome.cs180frontend.API.APIConstants;
 import teamawesome.cs180frontend.API.Models.UserModel.UserRespBundle;
 import teamawesome.cs180frontend.Listeners.AnimationListener.Generic.GenericAnimationListener;
 import teamawesome.cs180frontend.R;
@@ -48,7 +51,7 @@ public class Utils {
         return hashtext;
     }
 
-    public static Snackbar showSnackbar(Context context, View parent, int colorId, String message) {
+    public static Snackbar showSnackBar(Context context, View parent, int colorId, String message) {
         Snackbar snackbar = Snackbar.make(parent, message, Snackbar.LENGTH_LONG);
         View rootView = snackbar.getView();
         snackbar.getView().setBackgroundColor(context.getResources().getColor(colorId));
@@ -159,5 +162,20 @@ public class Utils {
         hide.setAnimationListener(new GenericAnimationListener(View.GONE, v));
         hide.setDuration(500);
         return hide;
+    }
+
+    public static void failedVerifySnackBar(ProgressDialog progressDialog, CoordinatorLayout parent,
+                                            int color, int status, Context context) {
+        if (progressDialog != null) {
+            progressDialog.dismiss();
+        }
+
+        if (status== APIConstants.HTTP_STATUS_INVALID) {
+            showSnackBar(context, parent, color, context.getString(R.string.invalid_pin));
+        } else if (status == APIConstants.HTTP_STATUS_ERROR) {
+            showSnackBar(context, parent, color, context.getString(R.string.server_error));
+        } else {
+            showSnackBar(context, parent, color, context.getString(R.string.unable_to_request));
+        }
     }
 }

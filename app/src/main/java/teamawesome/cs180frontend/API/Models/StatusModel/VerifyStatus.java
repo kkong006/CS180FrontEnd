@@ -1,9 +1,17 @@
 package teamawesome.cs180frontend.API.Models.StatusModel;
 
-/**
- * Created by jonathan on 3/10/17.
- */
+import android.content.Context;
+
 
 public class VerifyStatus extends AbstractStatus {
-    public VerifyStatus(int status) { super(status); }
+    private Context context;
+
+    public VerifyStatus(int status, Context context) {
+        super(status);
+        this.context = context;
+    }
+
+    public Context getContext() {
+        return context;
+    }
 }

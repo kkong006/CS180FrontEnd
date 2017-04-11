@@ -1,16 +1,10 @@
 <resources>
-    <string name="app_name">de-classify</string>
+    <string name="app_name">declassify</string>
 
     <!--Shared Preferences-->
     <string name="USER_ID">USER_ID</string>
     <string name="PASSWORD">PASSWORD</string>
     <string name="SCHOOL_ID">SCHOOL_ID</string>
-
-    <string name="home">Home</string>
-    <string name="action_settings">Settings</string>
-    <string name="title_activity_login">Sign in</string>
-    <string name="login">Login</string>
-    <string name="logout">Logout</string>
 
     <!--Navigation Drawer-->
     <string-array name="nav_drawer_array">
@@ -39,19 +33,36 @@
         <item>Show Classes</item>
     </string-array>
 
+    <string-array name="report_option_array">
+        <item>Advertisement</item>
+        <item>Inappropriate</item>
+        <item>Spam</item>
+    </string-array>
+
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <!-- Generic -->
+    <string name="home">Home</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_report">Report</string>
+    <string name="title_activity_login">Sign in</string>
+    <string name="login">Login</string>
+    <string name="logout">Logout</string>
     <string name="server_error">Server is unable to process request. Please try again later.</string>
     <string name="too_many_req">Too many requests made. Try again later.</string>
     <string name="unable_to_request">Unable to make a request. Please contact the devs if the issue persists.</string>
+    <string name="loading">Loading...</string>
     <string name="verifying">Verifying account...</string>
     <string name="next">Next</string>
     <string name="search">Search</string>
     <string name="classes">Classes</string>
     <string name="subjects">Subjects</string>
     <string name="school">School</string>
+
+    <!-- Report -->
+    <string name="report">Report this review</string>
+    <string name="review_reported">Your report has been received!</string>
 
     <!--Main Activity-->
     <string name="verify_success">Successfully verified your account!</string>
@@ -63,9 +74,11 @@
     <string name="log_out">Successfully logged out!</string>
     <string name="fetch_feed_again">No reviews available. Swipe up to try again.</string>
 
-    <!--Verify Account Widget-->
+    <!--Verify Account-->
+    <string name="verify_account">Verify Account</string>
     <string name="please_verify_not_clicked">Verify your account (click here)</string>
     <string name="please_verify_clicked">Please enter your 4 digit confirmation PIN</string>
+    <string name="pin_here">4 digit PIN here</string>
     <string name="verify">Verify</string>
     <string name="later">Later</string>
 
@@ -135,7 +148,7 @@
     <!--Settings Activity-->
     <string name="change_school">Change School</string>
     <string name="logout_button">Logout</string>
-    <string name="loading">Loading...</string>
+    <string name="updating_account">Updating account...</string>
     <string name="enter_school_name">School name</string>
     <string name="school_name_changed">School name changed!</string>
     <string name="school_dne">School does not exist</string>

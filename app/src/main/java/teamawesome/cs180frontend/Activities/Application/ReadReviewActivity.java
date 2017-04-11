@@ -1,12 +1,18 @@
 package teamawesome.cs180frontend.Activities.Application;
 
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -39,6 +45,9 @@ public class ReadReviewActivity extends AppCompatActivity {
     @Bind(R.id.read_dislike_count_tv) TextView dislikeCount;
 
     ReviewBundle review;
+    AlertDialog alertDialog;
+    final Context context = this;
+
     private int userRating = 0;
     private int newUserRating = -1;
     boolean isRatingProcessing = false;
@@ -64,6 +73,76 @@ public class ReadReviewActivity extends AppCompatActivity {
 
         getSupportActionBar().setTitle(review.getProfName());
         loadReview();
+    }
+
+    @Override
+    protected void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.readreview, menu);
+        return true;
+    }
+
+    @OnClick(R.id.read_like_bt)
+    public void thumbsUp() {
+        if (isRatingProcessing) {
+            return;
+        }
+
+        if(userRating == 1) {
+            newUserRating = 0;
+        } else {
+            newUserRating = 1;
+        }
+
+        setUserRating(newUserRating);
+        updateResponse();
+    }
+
+    @OnClick(R.id.read_dislike_bt)
+    public void thumbsDown() {
+        if (isRatingProcessing) {
+            return;
+        }
+
+        if(userRating == 2) {
+            newUserRating = 0;
+        } else {
+            newUserRating = 2;
+        }
+
+        setUserRating(newUserRating);
+        updateResponse();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            case R.id.action_report:
+                showReportDialog();
+                return true;
+            default:
+                return true;
+        }
+    }
+
+    @Subscribe
+    public void likeDislikeResp(ReviewRatingResp resp) {
+        isRatingProcessing = false;
+        userRating = newUserRating;
+    }
+
+    @Subscribe
+    public void onFailedResp(ReviewRatingStatus status) {
+        isRatingProcessing = false;
     }
 
     public void loadReview() {
@@ -99,59 +178,26 @@ public class ReadReviewActivity extends AppCompatActivity {
             String password = Utils.getPassword(this);
             //System.out.println("USER ID " + userId + "\nPASSWORD " + password + "\nREVIEW ID " + mReviewId + "\nUSER RATING " + userRating + "\nNEW USER RATING " + newUserRating);
             RateReview r = new RateReview(userId, password, review.getReviewId(), newUserRating);
-            Callback callback = new PostReviewRatingCallback();
+            PostReviewRatingCallback callback = new PostReviewRatingCallback();
             RetrofitSingleton.getInstance().getMatchingService()
                     .rateReview(r)
                     .enqueue(callback);
         }
     }
 
-    @OnClick(R.id.read_like_bt)
-    public void thumbsUp() {
-        if (isRatingProcessing) {
-            return;
+    public void showReportDialog() {
+        if (alertDialog == null) {
+            alertDialog = new AlertDialog.Builder(this)
+                    .setTitle(R.string.report)
+                    .setItems(R.array.report_option_array, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Toast.makeText(context, R.string.review_reported, Toast.LENGTH_SHORT).show();
+                        }
+                    }).create();
         }
 
-        if(userRating == 1) {
-            newUserRating = 0;
-        } else {
-            newUserRating = 1;
-        }
-
-        setUserRating(newUserRating);
-        updateResponse();
+        alertDialog.show();
     }
 
-    @OnClick(R.id.read_dislike_bt)
-    public void thumbsDown() {
-        if (isRatingProcessing) {
-            return;
-        }
-
-        if(userRating == 2) {
-            newUserRating = 0;
-        } else {
-            newUserRating = 2;
-        }
-
-        setUserRating(newUserRating);
-        updateResponse();
-    }
-
-    @Subscribe
-    public void likeDislikeResp(ReviewRatingResp resp) {
-        isRatingProcessing = false;
-        userRating = newUserRating;
-    }
-
-    @Subscribe
-    public void onFailedResp(ReviewRatingStatus status) {
-        isRatingProcessing = false;
-    }
-
-    @Override
-    protected void onDestroy() {
-        EventBus.getDefault().unregister(this);
-        super.onDestroy();
-    }
 }

@@ -45,9 +45,9 @@ public class SearchActivity extends AppCompatActivity {
     @Bind(R.id.progressBar) ProgressBar progressBar;
     @Bind({R.id.spinner, R.id.query_text, R.id.search_button}) View[] inputViews;
 
+    AlertDialog alertDialog;
     ArrayAdapter<CharSequence> adapter;
     SimpleListAdapter resultsAdapter;
-
     private Handler handler;
     private Context context = this;
 
@@ -122,26 +122,7 @@ public class SearchActivity extends AppCompatActivity {
                     .putExtra(Constants.CLASS_ID, DataSingleton.getInstance().getClassId(className));
             startActivity(intent);
         } else {
-            new AlertDialog.Builder(this)
-                    .setItems(R.array.search_option_array, new DialogInterface.OnClickListener() {
-
-                        @Override
-                        public void onClick(DialogInterface dialog, int index) {
-                            if (index == 0) {
-                                String subjectIdent = resultsAdapter.getItem(pos).split(" ")[0];
-
-                                Intent intent = new Intent(context, ReviewsActivity.class);
-                                intent.putExtra(Constants.ID_TYPE, Constants.SUBJECT_ID)
-                                        .putExtra(Constants.NAME, subjectIdent)
-                                        .putExtra(Constants.SUBJECT_ID, DataSingleton.getInstance().getSubjectId(subjectIdent));
-                                startActivity(intent);
-                            } else {
-                                Intent intent = new Intent(context, ResultsListActivity.class);
-                                //TODO: figure out what values to put in later
-                                startActivity(intent);
-                            }
-                        }
-                    }).create().show();
+            showAlertDialog(pos);
         }
     }
 
@@ -160,5 +141,32 @@ public class SearchActivity extends AppCompatActivity {
         isSearching = false;
         resultsAdapter.loadNewList(results);
         searchList.setVisibility(View.VISIBLE);
+    }
+
+    public void showAlertDialog(final int pos) {
+        if (alertDialog == null) {
+            alertDialog = new AlertDialog.Builder(this)
+                    .setItems(R.array.search_option_array, new DialogInterface.OnClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface dialog, int index) {
+                            String subjectIdent = resultsAdapter.getItem(pos).split(" ")[0];
+                            if (index == 0) {
+                                Intent intent = new Intent(context, ReviewsActivity.class);
+                                intent.putExtra(Constants.ID_TYPE, Constants.SUBJECT_ID)
+                                        .putExtra(Constants.NAME, subjectIdent)
+                                        .putExtra(Constants.SUBJECT_ID, DataSingleton.getInstance().getSubjectId(subjectIdent));
+                                startActivity(intent);
+                            } else {
+                                Intent intent = new Intent(context, ResultsListActivity.class);
+                                intent.putExtra(Constants.TAG, getString(R.string.classes));
+                                intent.putExtra(Constants.NAME, subjectIdent);
+                                startActivity(intent);
+                            }
+                        }
+                    }).create();
+        }
+
+        alertDialog.show();
     }
 }

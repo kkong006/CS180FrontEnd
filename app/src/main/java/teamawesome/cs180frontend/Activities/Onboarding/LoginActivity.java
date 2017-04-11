@@ -161,10 +161,10 @@ public class LoginActivity extends AppCompatActivity {
         if (!isRegistering) {
             progressDialog.dismiss();
             if (status.getStatus() == -1) {
-                Utils.showSnackbar(this, parent, R.color.colorPrimary,
+                Utils.showSnackBar(this, parent, R.color.colorPrimary,
                         getString(R.string.unable_to_login));
             } else {
-                Utils.showSnackbar(this, parent, R.color.colorPrimary,
+                Utils.showSnackBar(this, parent, R.color.colorPrimary,
                         getString(R.string.login_failed));
             }
         }

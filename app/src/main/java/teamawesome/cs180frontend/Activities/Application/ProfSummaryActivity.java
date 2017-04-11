@@ -119,13 +119,13 @@ public class ProfSummaryActivity extends AppCompatActivity {
         progressDialog.dismiss();
         switch (status.getStatus()) {
             case APIConstants.HTTP_STATUS_INVALID:
-                Utils.showSnackbar(this, parent, R.color.colorAccent, getString(R.string.prof_dne));
+                Utils.showSnackBar(this, parent, R.color.colorAccent, getString(R.string.prof_dne));
                 break;
             case APIConstants.HTTP_STATUS_ERROR:
-                Utils.showSnackbar(this, parent, R.color.colorAccent, getString(R.string.server_error));
+                Utils.showSnackBar(this, parent, R.color.colorAccent, getString(R.string.server_error));
                 break;
             default:
-                Utils.showSnackbar(this, parent, R.color.colorAccent, getString(R.string.unable_to_request));
+                Utils.showSnackBar(this, parent, R.color.colorAccent, getString(R.string.unable_to_request));
                 break;
         }
     }

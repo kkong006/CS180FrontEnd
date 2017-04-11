@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, extras.getString(Constants.MESSAGE, ""), Toast.LENGTH_SHORT).show();
         }
 
-        verifyCallback = new VerifyCallback();
+        verifyCallback = new VerifyCallback(this);
 
         mainSWL.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -197,7 +197,7 @@ public class MainActivity extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         if (Utils.getSchoolId(this) < 1) {
-            Utils.showSnackbar(this, parent, R.color.colorPrimary,
+            Utils.showSnackBar(this, parent, R.color.colorPrimary,
                     getString(R.string.please_sign_in));
             return true;
         }
@@ -292,7 +292,7 @@ public class MainActivity extends AppCompatActivity {
         if (!verifiedDisabled) {
             String pin = pinEditText.getText().toString();
             if (pin.length() < 4) {
-                Utils.showSnackbar(this, parent, R.color.colorPrimary, getString(R.string.pin_too_short));
+                Utils.showSnackBar(this, parent, R.color.colorPrimary, getString(R.string.pin_too_short));
                 return;
             }
 
@@ -375,10 +375,10 @@ public class MainActivity extends AppCompatActivity {
     public void failedDataResp(CacheReqStatus resp) {
         progressDialog.dismiss();
         if (resp.getStatus() != -1) {
-            Utils.showSnackbar(this, parent, R.color.colorPrimary,
+            Utils.showSnackBar(this, parent, R.color.colorPrimary,
                     getString(R.string.data_doesnt_exist));
         } else {
-            Utils.showSnackbar(this, parent, R.color.colorPrimary,
+            Utils.showSnackBar(this, parent, R.color.colorPrimary,
                     getString(R.string.error_getting_data));
         }
 
@@ -393,10 +393,10 @@ public class MainActivity extends AppCompatActivity {
             initialLoad = false;
             progressDialog.dismiss();
             if (failedFetch.getStatus() != -1) {
-                Utils.showSnackbar(this, parent, R.color.colorPrimary,
+                Utils.showSnackBar(this, parent, R.color.colorPrimary,
                         getString(R.string.invalid_review_request));
             } else {
-                Utils.showSnackbar(this, parent, R.color.colorPrimary,
+                Utils.showSnackBar(this, parent, R.color.colorPrimary,
                         getString(R.string.failed_review_request));
             }
 
@@ -439,19 +439,14 @@ public class MainActivity extends AppCompatActivity {
         mainVerifyLayout.setVisibility(View.GONE);
         Utils.setVerified(this, true);
         progressDialog.dismiss();
-        Utils.showSnackbar(this, parent, R.color.colorPrimary, getString(R.string.verify_success));
+        Utils.showSnackBar(this, parent, R.color.colorPrimary, getString(R.string.verify_success));
     }
 
     @Subscribe
     public void onVerifyFailed(VerifyStatus status) {
-        verifiedDisabled = false;
-        progressDialog.dismiss();
-        if (status.getStatus() == APIConstants.HTTP_STATUS_INVALID) {
-            Utils.showSnackbar(this, parent, R.color.colorPrimary, getString(R.string.invalid_pin));
-        } else if (status.getStatus() == APIConstants.HTTP_STATUS_ERROR) {
-            Utils.showSnackbar(this, parent, R.color.colorPrimary, getString(R.string.server_error));
-        } else {
-            Utils.showSnackbar(this, parent, R.color.colorPrimary, getString(R.string.unable_to_request));
+        if (status.getContext().equals(this)) {
+            verifiedDisabled = false;
+            Utils.failedVerifySnackBar(progressDialog, parent, R.color.colorPrimary, status.getStatus(), this);
         }
     }
 
@@ -574,11 +569,11 @@ public class MainActivity extends AppCompatActivity {
 
         if (reviews.size() > 2) {
             reviews.add(2, null);
-        } else if (offset == reviews.size() && (reviews.size() > 0)) {
+        } else if ((mainFeedAdapter.getCount() == 0) && (reviews.size() > 0)) {
             reviews.add(null);
         }
 
-        if (offset > 3) {
+        if (offset >= 10) {
             setOnScrollListener();
         }
 

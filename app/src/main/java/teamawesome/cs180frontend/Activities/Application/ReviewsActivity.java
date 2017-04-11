@@ -148,7 +148,7 @@ public class ReviewsActivity extends AppCompatActivity {
 
         if (reviews.size() > 2) {
             reviews.add(2, null);
-        } else if ((offset == 0) && (reviews.size() > 0)) {
+        } else if ((mainFeedAdapter.getCount() == 0) && (reviews.size() > 0)) {
             reviews.add(null);
         }
 
@@ -168,10 +168,10 @@ public class ReviewsActivity extends AppCompatActivity {
         if (failedFetch.getContext().equals(this)) {
             progressBar.setVisibility(View.GONE);
             if (failedFetch.getStatus() != -1) {
-                Utils.showSnackbar(this, parent, R.color.colorPrimary,
+                Utils.showSnackBar(this, parent, R.color.colorPrimary,
                         getString(R.string.invalid_review_request));
             } else {
-                Utils.showSnackbar(this, parent, R.color.colorPrimary,
+                Utils.showSnackBar(this, parent, R.color.colorPrimary,
                         getString(R.string.failed_review_request));
             }
 
