@@ -46,6 +46,7 @@ public class SettingsActivity extends AppCompatActivity {
     @Bind(R.id.old_password_et) EditText oldPasswordET;
     @Bind(R.id.new_password_et) EditText newPasswordET;
     @Bind(R.id.verify_et) EditText verifyET;
+    @Bind(R.id.change_school_TIL) TextInputLayout changeSchoolTIL;
     @Bind(R.id.settings_old_password_til) TextInputLayout oldPasswordTIL;
     @Bind(R.id.settings_new_password_til) TextInputLayout newPasswordTIL;
     @Bind(R.id.verify_til) TextInputLayout verifyTIL;
@@ -115,6 +116,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     @OnClick(R.id.settings_school_bt)
     public void changeSchool() {
+        changeSchoolTIL.setError(null);
         Utils.hideKeyboard(parent, this);
         Integer schoolId = DataSingleton.getInstance().getSchoolId(schoolAC.getText().toString());
         if (schoolId != null) {
@@ -134,18 +136,18 @@ public class SettingsActivity extends AppCompatActivity {
                         .updateAccount(user)
                         .enqueue(callback);
             } else {
-                schoolAC.setError(getString(R.string.same_school_error));
+                changeSchoolTIL.setError(getString(R.string.same_school_error));
             }
         } else {
-            schoolAC.setError(getString(R.string.school_dne));
+            changeSchoolTIL.setError(getString(R.string.school_dne));
         }
     }
 
     @OnClick(R.id.settings_password_bt)
     public void changePassword() {
         Utils.hideKeyboard(parent, this);
-        oldPasswordET.setError(null);
-        newPasswordET.setError(null);
+        oldPasswordTIL.setError(null);
+        newPasswordTIL.setError(null);
         View focusView = null;
 
         String oldPassword = Utils.getMD5Hash(oldPasswordET.getText().toString());
@@ -171,9 +173,10 @@ public class SettingsActivity extends AppCompatActivity {
                     .updateAccount(user)
                     .enqueue(callback);
         } else {
-            Utils.showSnackBar(this, parent, R.color.colorPrimary,
-                    getString(R.string.old_password_error));
+            oldPasswordTIL.setError(getString(R.string.old_password_error));
+            focusView = oldPasswordET;
         }
+
         if (focusView != null) {
             focusView.requestFocus();
         }
@@ -237,13 +240,19 @@ public class SettingsActivity extends AppCompatActivity {
         }
 
         lastClicked = viewToExpand;
-        findViewById(hiddenElemMap.get(lastClicked)).setVisibility(View.VISIBLE);
         if (lastClicked == R.id.change_school) {
+            findViewById(hiddenElemMap.get(lastClicked)).setVisibility(View.VISIBLE);
             schoolAC.requestFocus();
         } else if (lastClicked == R.id.change_password){
+            findViewById(hiddenElemMap.get(lastClicked)).setVisibility(View.VISIBLE);
             oldPasswordET.requestFocus();
         } else {
-            verifyET.requestFocus();
+            if (!Utils.isVerified(this)) {
+                findViewById(hiddenElemMap.get(lastClicked)).setVisibility(View.VISIBLE);
+                verifyET.requestFocus();
+            } else {
+                Utils.showSnackBar(this, parent, R.color.colorPrimary, getString(R.string.already_verified));
+            }
         }
     }
 

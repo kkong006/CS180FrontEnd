@@ -35,13 +35,13 @@ public class LoginActivity extends AppCompatActivity {
 
     // UI references.
     @Bind(R.id.login_parent) CoordinatorLayout parent;
-    @Bind(R.id.login_form) ScrollView loginFormView;
     @Bind(R.id.number) EditText phoneEditText;
     @Bind(R.id.password) EditText passwordEditText;
     @Bind(R.id.password_til) TextInputLayout passwordTIL;
     @Bind(R.id.phone_number_til) TextInputLayout phoneNumberTIL;
     @Bind(R.id.sign_in_button) Button signInButton;
     @Bind(R.id.register) TextView registerText;
+    @Bind(R.id.error) TextView errorTV;
 
     ProgressDialog progressDialog;
     boolean isRegistering = false;
@@ -95,6 +95,9 @@ public class LoginActivity extends AppCompatActivity {
         // Reset errors.
         phoneNumberTIL.setError(null);
         passwordTIL.setError(null);
+        phoneEditText.clearFocus();
+        passwordEditText.clearFocus();
+        errorTV.setText("");
 
         // Store values at the time of the login attempt.
         String phoneNum = phoneEditText.getText().toString();
@@ -104,21 +107,21 @@ public class LoginActivity extends AppCompatActivity {
         boolean cancel = false;
         View focusView = null;
 
-        // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(rawPassword) && !isPasswordValid(rawPassword)) {
-            passwordTIL.setError(getString(R.string.error_invalid_password));
-            focusView = passwordEditText;
-            cancel = true;
-        }
-
-        // Check for a phone number
-        if (TextUtils.isEmpty(phoneNum)) {
-            phoneNumberTIL.setError(getString(R.string.error_field_required));
-            focusView = phoneEditText;
+        if (phoneNum.isEmpty() || rawPassword.isEmpty()) { // Check for a phone number
+            (phoneNum.isEmpty() ? phoneNumberTIL : passwordTIL).setError(" ");
+            errorTV.setText(R.string.error_field_required);
+            focusView = (phoneNum.isEmpty() ? phoneEditText : passwordEditText);
             cancel = true;
         } else if (!isNumberValid(phoneNum)) {
-            phoneNumberTIL.setError(getString(R.string.error_invalid_number));
+            phoneNumberTIL.setError(" ");
+            errorTV.setText(R.string.error_invalid_number);
             focusView = phoneEditText;
+            cancel = true;
+        } else if (!isPasswordValid(rawPassword)) {
+            // Check for a valid password, if the user entered one.
+            passwordTIL.setError(" ");
+            errorTV.setText(R.string.error_invalid_password);
+            focusView = passwordEditText;
             cancel = true;
         }
 

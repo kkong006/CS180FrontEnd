@@ -81,6 +81,7 @@
     <string name="pin_here">4 digit PIN here</string>
     <string name="verify">Verify</string>
     <string name="later">Later</string>
+    <string name="already_verified">Account already verified!</string>
 
     <!-- Login Activity -->
     <string name="prompt_email">Email</string>
@@ -154,14 +155,14 @@
     <string name="school_dne">School does not exist</string>
     <string name="schools_dne">Schools do not exist</string>
     <string name="school_empty">Please enter in a school</string>
-    <string name="same_school_error">New school matches your current school. Please try a different school.</string>
+    <string name="same_school_error">This is already your current school!</string>
     <string name="error_retrieving_data">Error retrieving data</string>
     <string name="account_update_success">Success!</string>
     <string name="change_password">Change Password</string>
     <string name="please_sign_in">Please sign in</string>
     <string name="change_school_blurb">Please enter a school name</string>
     <string name="change_password_blurb">Please enter your current password and your new password</string>
-    <string name="old_password_error">Entered current password does not match current password.</string>
+    <string name="old_password_error">Does not match current password</string>
     <string name="invalid_user_data">Unable to update account. Please re-check entered information.</string>
     <string name="update_failed">Failed to update data. Please try again later.</string>
 
