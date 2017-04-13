@@ -3,6 +3,7 @@ package teamawesome.cs180frontend.Activities.Application;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AlertDialog;
@@ -129,6 +130,18 @@ public class ReadReviewActivity extends AppCompatActivity {
             case R.id.action_report:
                 showReportDialog();
                 return true;
+            case R.id.action_share:
+                String msg = String.format(getString(R.string.share_template),
+                        review.getClassName(),
+                        review.getProfName(),
+                        review.getSchoolName(),
+                        review.getReviewMsg());
+
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, msg);
+                sendIntent.setType("text/plain");
+                startActivity(sendIntent);
             default:
                 return true;
         }

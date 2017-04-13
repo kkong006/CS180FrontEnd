@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -16,26 +17,30 @@ import org.greenrobot.eventbus.Subscribe;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
+import butterknife.OnItemClick;
 import teamawesome.cs180frontend.API.APIConstants;
 import teamawesome.cs180frontend.API.Models.DataModel.ProfRespBundle;
 import teamawesome.cs180frontend.API.Models.StatusModel.ProfSummaryStatus;
 import teamawesome.cs180frontend.API.RetrofitSingleton;
 import teamawesome.cs180frontend.API.Services.Callbacks.GetProfSummaryCallback;
 import teamawesome.cs180frontend.Adapters.SimpleListAdapter2;
+import teamawesome.cs180frontend.Misc.Constants;
+import teamawesome.cs180frontend.Misc.DataSingleton;
 import teamawesome.cs180frontend.Misc.Utils;
 import teamawesome.cs180frontend.R;
 
 public class ProfSummaryActivity extends AppCompatActivity {
 
     @Bind(R.id.prof_summ_parent) CoordinatorLayout parent;
-    @Bind(R.id.search_professor_class_list) ListView classList;
-    @Bind(R.id.search_professor_university) TextView university;
+    @Bind(R.id.search_prof_class_list) ListView classList;
     @Bind(R.id.avg_rating_tv) TextView avgRating;
     @Bind({R.id.prof_rate_1, R.id.prof_rate_2,
             R.id.prof_rate_3, R.id.prof_rate_4,
             R.id.prof_rate_5}) IconTextView[] ratings;
+    @Bind(R.id.search_professor_university) TextView university;
+    @Bind(R.id.total_tv) TextView totalTV;
 
+    private String profName;
     private int profId;
 
     private ProgressDialog progressDialog;
@@ -49,7 +54,7 @@ public class ProfSummaryActivity extends AppCompatActivity {
         EventBus.getDefault().register(this);
 
         Intent intent = getIntent();
-        String profName = intent.getStringExtra(getString(R.string.PROFESSOR_NAME));
+        profName = intent.getStringExtra(getString(R.string.PROFESSOR_NAME));
         profId = intent.getIntExtra(getString(R.string.PROFESSOR_ID), 0);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -77,21 +82,27 @@ public class ProfSummaryActivity extends AppCompatActivity {
         EventBus.getDefault().unregister(this);
     }
 
-    @OnClick(R.id.search_professor_reviews_button)
-    public void searchProfessor() {
-        /*Intent intent = new Intent(this, ResultsListActivity.class);
-        intent.putExtra(getString(R.string.PROFESSOR_NAME), profName);
-        intent.putExtra(getString(R.string.PROFESSOR_ID), profId);
-        startActivity(intent);*/
+    @OnItemClick(R.id.search_prof_class_list)
+    public void onClassClick(AdapterView<?> parent, View view, int pos, long id) {
+        String className = adapter.getItem(pos).getClassName();
+        int classId = DataSingleton.getInstance()
+                .getClassId(className);
+        Intent intent = new Intent(this, ReviewsActivity.class);
+        intent.putExtra(Constants.ID_TYPE, Constants.PROF_ID)
+                .putExtra(Constants.PROF_ID, profId)
+                .putExtra(Constants.ID_TYPE_2, Constants.CLASS_ID)
+                .putExtra(Constants.CLASS_ID, classId)
+                .putExtra(Constants.NAME, profName.split(" ")[1] + " for " + className);
+        startActivity(intent);
     }
 
     @Subscribe
     public void profSummaryResp(ProfRespBundle resp) {
-        System.out.println("SCHOOL NAME" + resp.getSchoolName());
         progressDialog.dismiss();
 
         String school = resp.getSchoolName();
         university.setText(school);
+        totalTV.setText(String.format(getString(R.string.review_total), resp.getTotalRatings()));
 
         adapter = new SimpleListAdapter2(this, resp.getClasses());
         classList.setAdapter(adapter);

@@ -9,30 +9,19 @@
     android:id="@+id/prof_summ_parent">
 
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-
-        <!--<android.support.v4.view.ViewPager-->
-            <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
-            <!--android:id="@+id/professor_tab"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent" />-->
-
-            <!--<TextView-->
-                <!--android:id="@+id/search_professor_n"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:text=""/>-->
 
         <TextView
             android:id="@+id/search_professor_university"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:layout_margin="@dimen/activity_vertical_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_marginStart="@dimen/activity_vertical_margin"
+            android:layout_marginEnd="@dimen/activity_vertical_margin"
+            android:layout_marginBottom="8dp"
             android:textStyle="bold"
             android:textColor="@color/colorAccent"
             android:textSize="18sp" />
@@ -44,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:gravity="center"
-            android:layout_marginBottom="@dimen/activity_horizontal_margin">
+            android:layout_marginBottom="8dp">
 
             <com.joanzapata.iconify.widget.IconTextView
                 style="@style/RatingIconTheme"
@@ -76,31 +65,29 @@
         </LinearLayout>
 
         <TextView
+            android:id="@+id/total_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="6dp"
+            android:textColor="@color/colorAccent"
+            android:textSize="18sp" />
+
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/activity_vertical_margin"
+            android:layout_marginStart="@dimen/activity_vertical_margin"
             android:textStyle="bold"
             android:textColor="@color/colorPrimary"
             android:textSize="18sp"
             android:text="@string/search_professor_results_classes" />
 
         <ListView
-            android:id="@+id/search_professor_class_list"
+            android:id="@+id/search_prof_class_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="4dp">
         </ListView>
-
-        <Button
-            android:id="@+id/search_professor_reviews_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:padding="10dp"
-            android:background="@color/colorAccent"
-            android:textColor="@color/colorWhite"
-            android:text="@string/search_professor_results_review" />
 
     </LinearLayout>
 

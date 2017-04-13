@@ -38,10 +38,15 @@ public class ReviewsActivity extends AppCompatActivity {
     @Bind(R.id.reviews_progressbar) ProgressBar progressBar;
     @Bind(R.id.reviews_parent) CoordinatorLayout parent;
 
+    Integer classId;
+
+    String idType; //what type of ID is being passed in
+    String idType2; //using two for when I'm searching for reviews for class X taught by prof Y
+
     int offset = 0; //feed offset
     int lastSelected = 0;
-    String idType; //what type of ID is being passed in
     int id;
+    int id2;
 
     MainFeedAdapter mainFeedAdapter = null;
     final Context context = this;
@@ -55,8 +60,11 @@ public class ReviewsActivity extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            idType = bundle.getString(Constants.ID_TYPE);
-            id = bundle.getInt(idType);
+            idType = bundle.getString(Constants.ID_TYPE, "");
+            id = bundle.getInt(idType, -1);
+
+            idType2 = bundle.getString(Constants.ID_TYPE_2, "");
+            id2 = bundle.getInt(idType2, -1);
 
             if (idType.equals(Constants.USER_ID) && id == Utils.getUserId(this)) {
                 getSupportActionBar().setTitle(R.string.my_reviews);
@@ -71,10 +79,20 @@ public class ReviewsActivity extends AppCompatActivity {
             finish();
         }
 
+        /*only having classId check idType2 since right now it's the only scenario where I have to check
+        it to make sure if I have to put 2 values into the API call  */
+        if (idType.equals(Constants.CLASS_ID)) {
+            classId = id;
+        } else if (idType2.equals(Constants.CLASS_ID)) {
+            classId = id2;
+        }
+
         RetrofitSingleton.getInstance()
                 .getMatchingService()
-                .reviews(null, idType.equals(Constants.SUBJECT_ID) ? id : null,
-                        idType.equals(Constants.CLASS_ID) ? id : null, null,
+                .reviews(null, //The main feed is already a list of school specific reviews
+                        idType.equals(Constants.SUBJECT_ID) ? id : null,
+                        classId,
+                        idType.equals(Constants.PROF_ID) ? id : null,
                         idType.equals(Constants.USER_ID) ? id : null, offset)
                 .enqueue(new GetReviewsCallback(this));
     }
@@ -102,8 +120,10 @@ public class ReviewsActivity extends AppCompatActivity {
 
                         RetrofitSingleton.getInstance()
                                 .getMatchingService()
-                                .reviews(null, idType.equals(Constants.SUBJECT_ID) ? id : null,
-                                        idType.equals(Constants.CLASS_ID) ? id : null, null,
+                                .reviews(null,
+                                        idType.equals(Constants.SUBJECT_ID) ? id : null,
+                                        classId,
+                                        idType.equals(Constants.PROF_ID) ? id : null,
                                         idType.equals(Constants.USER_ID) ? id : null, offset)
                                 .enqueue(new GetReviewsCallback(context));
                     }
@@ -136,7 +156,6 @@ public class ReviewsActivity extends AppCompatActivity {
 
     @Subscribe
     public void reviewsResp(ReviewPageBundle page) {
-
         List<ReviewBundle> reviews = page.getReviews();
 
         if ((offset == 0) && (reviews.size() == 0)) {
