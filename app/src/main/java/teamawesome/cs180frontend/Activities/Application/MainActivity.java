@@ -255,6 +255,14 @@ public class MainActivity extends AppCompatActivity {
                         .getData(Utils.getSchoolId(this), Utils.getUserId(this))
                         .enqueue(new GetCacheDataCallback());
             }
+        } else if (requestCode == 3) {
+            if (resultCode == RESULT_OK) {
+                String msg = intent.getExtras().getString(Constants.MESSAGE, null);
+                if (msg != null) {
+                    Utils.showSnackBar(this, parent, R.color.colorPrimary,
+                            msg);
+                }
+            }
         }
     }
 
@@ -272,9 +280,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @OnClick(R.id.fab)
-    public void onClick() {
+    public void onFabClick() {
         Intent intent = new Intent(this, WriteReviewActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent, 3);
     }
 
     @OnClick(R.id.verify_acc)
@@ -450,6 +458,48 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Subscribe
+    public void onDataFetched(CacheDataBundle data) {
+        DataSingleton.getInstance().cacheDataBundle(this, data);
+        System.out.println("Liked: " + data.getReviewRatings().getLiked().size());
+        System.out.println("Disliked: " + data.getReviewRatings().getDisliked().size());
+        getFeed(offset);
+    }
+
+    @Subscribe
+    public void reviewsResp(final ReviewPageBundle page) {
+        if (page.getContext().equals(this)) {
+            System.out.println("REVIEW COUNT " + page.getReviews().size());
+            offset += page.getReviews().size();
+
+            if (isRefreshing) {
+                mainFeedList.setEnabled(false);
+                mainFeedList.setSelection(0);
+
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mainFeedList.setVisibility(View.GONE);
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                lastSelected = 0;
+                                mainSWL.setRefreshing(false);
+                                mainFeedAdapter.clear();
+                                addToFeed(page);
+                                mainFeedList.setEnabled(true);
+                            }
+                        }, 150);
+                    }
+                }, 250);
+                return;
+            }
+
+            addToFeed(page);
+        }
+    }
+
     private void logout() {
         Utils.nukeUserData(this);
         //drawerAdapter.changeLoginElem();
@@ -593,48 +643,6 @@ public class MainActivity extends AppCompatActivity {
         Utils.hideKeyboard(parent, this);
         verifySnippetText.setText(getString(R.string.please_verify_not_clicked));
         verifyBody.setVisibility(View.GONE);
-    }
-
-    @Subscribe
-    public void onDataFetched(CacheDataBundle data) {
-        DataSingleton.getInstance().cacheDataBundle(this, data);
-        System.out.println("Liked: " + data.getReviewRatings().getLiked().size());
-        System.out.println("Disliked: " + data.getReviewRatings().getDisliked().size());
-        getFeed(offset);
-    }
-
-    @Subscribe
-    public synchronized void reviewsResp(final ReviewPageBundle page) {
-        if (page.getContext().equals(this)) {
-            System.out.println("REVIEW COUNT " + page.getReviews().size());
-            offset += page.getReviews().size();
-
-            if (isRefreshing) {
-                mainFeedList.setEnabled(false);
-                mainFeedList.setSelection(0);
-
-                final Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mainFeedList.setVisibility(View.GONE);
-                        handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                lastSelected = 0;
-                                mainSWL.setRefreshing(false);
-                                mainFeedAdapter.clear();
-                                addToFeed(page);
-                                mainFeedList.setEnabled(true);
-                            }
-                        }, 150);
-                    }
-                }, 250);
-                return;
-            }
-
-            addToFeed(page);
-        }
     }
 
 }

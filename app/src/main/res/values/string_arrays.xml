@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Navigation Drawer-->
+    <string-array name="nav_drawer_array">
+        <item>Home</item>
+        <item>My Reviews</item>
+        <item>Professors</item>
+        <item>Search</item>
+        <item>Logout</item>
+    </string-array>
+
+    <string-array name="nav_drawer_icon_array">
+        <item>{fa-home}</item>
+        <item>{fa-pencil}</item>
+        <item>{fa-graduation-cap}</item>
+        <item>{fa-search}</item>
+        <item>{fa-sign-out}</item>
+    </string-array>
+
+    <string-array name="search_array">
+        <item>Classes</item>
+        <item>Subjects</item>
+    </string-array>
+
+    <string-array name="search_option_array">
+        <item>Show Reviews</item>
+        <item>Show Classes</item>
+    </string-array>
+
+    <string-array name="report_option_array">
+        <item>Advertisement</item>
+        <item>Harassment</item>
+        <item>Inappropriate</item>
+        <item>Spam</item>
+    </string-array>
+</resources>

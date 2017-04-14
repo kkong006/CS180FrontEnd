@@ -12,6 +12,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import teamawesome.cs180frontend.Adapters.SimpleACAdapter;
+import teamawesome.cs180frontend.Misc.Constants;
 import teamawesome.cs180frontend.Misc.DataSingleton;
 import teamawesome.cs180frontend.Misc.Utils;
 import teamawesome.cs180frontend.R;
@@ -73,8 +74,8 @@ public class FindProfActivity extends AppCompatActivity {
         }
 
         Intent intent = new Intent(this, ProfSummaryActivity.class);
-        intent.putExtra(getString(R.string.PROFESSOR_NAME), profName);
-        intent.putExtra(getString(R.string.PROFESSOR_ID), profId);
+        intent.putExtra(Constants.PROF_NAME, profName);
+        intent.putExtra(Constants.PROF_ID, profId);
         startActivity(intent);
         overridePendingTransition(R.anim.slide_left_in_250, R.anim.slide_left_out_250);
         finish();

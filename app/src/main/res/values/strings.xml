@@ -6,67 +6,15 @@
     <string name="PASSWORD">PASSWORD</string>
     <string name="SCHOOL_ID">SCHOOL_ID</string>
 
-    <!--Navigation Drawer-->
-    <string-array name="nav_drawer_array">
-        <item>Home</item>
-        <item>My Reviews</item>
-        <item>Professors</item>
-        <item>Search</item>
-        <item>Logout</item>
-    </string-array>
-
-    <string-array name="nav_drawer_icon_array">
-        <item>{fa-home}</item>
-        <item>{fa-pencil}</item>
-        <item>{fa-graduation-cap}</item>
-        <item>{fa-search}</item>
-        <item>{fa-sign-out}</item>
-    </string-array>
-
-    <string-array name="search_array">
-        <item>Classes</item>
-        <item>Subjects</item>
-    </string-array>
-
-    <string-array name="search_option_array">
-        <item>Show Reviews</item>
-        <item>Show Classes</item>
-    </string-array>
-
-    <string-array name="report_option_array">
-        <item>Advertisement</item>
-        <item>Harassment</item>
-        <item>Inappropriate</item>
-        <item>Spam</item>
-    </string-array>
-
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-
-    <!-- Generic -->
-    <string name="home">Home</string>
-    <string name="action_settings">Settings</string>
-    <string name="action_report">Report</string>
-    <string name="action_share">Share</string>
-    <string name="title_activity_login">Sign in</string>
-    <string name="login">Login</string>
-    <string name="logout">Logout</string>
-    <string name="server_error">Server is unable to process request. Please try again later.</string>
-    <string name="too_many_req">Too many requests made. Try again later.</string>
-    <string name="unable_to_request">Unable to make a request. Please contact the devs if the issue persists.</string>
-    <string name="loading">Loading...</string>
-    <string name="verifying">Verifying account...</string>
-    <string name="next">Next</string>
-    <string name="search">Search</string>
-    <string name="classes">Classes</string>
-    <string name="subjects">Subjects</string>
-    <string name="school">School</string>
 
     <!-- Report -->
     <string name="report">Report this review</string>
     <string name="review_reported">Your report has been received!</string>
 
     <!--Main Activity-->
+    <string name="data_loaded">Data loaded!</string>
     <string name="verify_success">Successfully verified your account!</string>
     <string name="data_doesnt_exist">Data doesn\'t exist.</string>
     <string name="error_getting_data">Unable to fetch data.</string>
@@ -126,14 +74,9 @@
     <string name="pin_too_short">Entered PIN too short</string>
     <string name="invalid_pin">Invalid PIN. Please try again.</string>
 
-    <!-- Main Activity -->
-    <string name="data_loaded">Data loaded!</string>
-
     <!--Prof Search Activity -->
     <string name="get_prof_summary">Get Professor Summary</string>
     <string name="enter_prof_name">Enter in a professor\'s name</string>
-    <string name="PROFESSOR_NAME">PROFESSOR_NAME</string>
-    <string name="PROFESSOR_ID">PROFESSOR_ID</string>
     <string name="prof_dne">Professor does not exist</string>
     <string name="profs_dne">Professors do not exist</string>
     <string name="no_prof_entered">Please enter in a professor name.</string>

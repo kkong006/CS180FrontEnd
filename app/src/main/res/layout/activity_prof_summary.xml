@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context="teamawesome.cs180frontend.Activities.Application.ProfSummaryActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:visibility="invisible"
@@ -36,24 +34,24 @@
             android:layout_marginBottom="8dp">
 
             <com.joanzapata.iconify.widget.IconTextView
-                style="@style/RatingIconTheme"
-                android:id="@+id/prof_rate_1" />
+                android:id="@+id/prof_rate_1"
+                style="@style/RatingIconTheme" />
 
             <com.joanzapata.iconify.widget.IconTextView
-                style="@style/RatingIconTheme"
-                android:id="@+id/prof_rate_2" />
+                android:id="@+id/prof_rate_2"
+                style="@style/RatingIconTheme" />
 
             <com.joanzapata.iconify.widget.IconTextView
-                style="@style/RatingIconTheme"
-                android:id="@+id/prof_rate_3" />
+                android:id="@+id/prof_rate_3"
+                style="@style/RatingIconTheme" />
 
             <com.joanzapata.iconify.widget.IconTextView
-                style="@style/RatingIconTheme"
-                android:id="@+id/prof_rate_4" />
+                android:id="@+id/prof_rate_4"
+                style="@style/RatingIconTheme" />
 
             <com.joanzapata.iconify.widget.IconTextView
-                style="@style/RatingIconTheme"
-                android:id="@+id/prof_rate_5" />
+                android:id="@+id/prof_rate_5"
+                style="@style/RatingIconTheme" />
 
             <TextView
                 android:id="@+id/avg_rating_tv"
@@ -73,6 +71,180 @@
             android:textColor="@color/colorAccent"
             android:textSize="18sp" />
 
+        <LinearLayout
+            android:id="@+id/rating_freq_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    style="@style/StarsPerRatingTheme">
+
+                    <com.joanzapata.iconify.widget.IconTextView
+                        style="@style/SmallStarTheme" />
+
+                    <com.joanzapata.iconify.widget.IconTextView
+                        style="@style/SmallStarTheme" />
+
+                    <com.joanzapata.iconify.widget.IconTextView
+                        style="@style/SmallStarTheme" />
+
+                    <com.joanzapata.iconify.widget.IconTextView
+                        style="@style/SmallStarTheme" />
+
+                    <com.joanzapata.iconify.widget.IconTextView
+                        style="@style/SmallStarTheme" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/StarsPerRatingTheme">
+
+                    <com.joanzapata.iconify.widget.IconTextView
+                        style="@style/SmallStarTheme" />
+
+                    <com.joanzapata.iconify.widget.IconTextView
+                        style="@style/SmallStarTheme" />
+
+                    <com.joanzapata.iconify.widget.IconTextView
+                        style="@style/SmallStarTheme" />
+
+                    <com.joanzapata.iconify.widget.IconTextView
+                        style="@style/SmallStarTheme" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/StarsPerRatingTheme">
+
+                    <com.joanzapata.iconify.widget.IconTextView
+                        style="@style/SmallStarTheme" />
+
+                    <com.joanzapata.iconify.widget.IconTextView
+                        style="@style/SmallStarTheme" />
+
+                    <com.joanzapata.iconify.widget.IconTextView
+                        style="@style/SmallStarTheme" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/StarsPerRatingTheme">
+
+                    <com.joanzapata.iconify.widget.IconTextView
+                        style="@style/SmallStarTheme" />
+
+                    <com.joanzapata.iconify.widget.IconTextView
+                        style="@style/SmallStarTheme" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/StarsPerRatingTheme">
+
+                    <com.joanzapata.iconify.widget.IconTextView
+                        style="@style/SmallStarTheme" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/bar_layout"
+                android:layout_width="240dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="18dp"
+                    android:orientation="horizontal">
+
+                    <View
+                        android:id="@+id/five_stars_bar"
+                        style="@style/BarTheme"
+                        android:background="@color/colorGreen"/>
+
+                    <TextView
+                        android:id="@+id/five_stars_count"
+                        style="@style/RatingCountTextViewTheme"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="18dp"
+                    android:orientation="horizontal">
+
+                    <View
+                        android:id="@+id/four_stars_bar"
+                        style="@style/BarTheme"
+                        android:background="@color/colorLime"/>
+
+                    <TextView
+                        android:id="@+id/four_stars_count"
+                        style="@style/RatingCountTextViewTheme"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="18dp"
+                    android:orientation="horizontal">
+
+                    <View
+                        android:id="@+id/three_stars_bar"
+                        style="@style/BarTheme"
+                        android:background="@color/colorDandelion"/>
+
+                    <TextView
+                        android:id="@+id/three_stars_count"
+                        style="@style/RatingCountTextViewTheme"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="18dp"
+                    android:orientation="horizontal">
+
+                    <View
+                        android:id="@+id/two_stars_bar"
+                        style="@style/BarTheme"
+                        android:background="@color/colorOrange"/>
+
+                    <TextView
+                        android:id="@+id/two_stars_count"
+                        style="@style/RatingCountTextViewTheme"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="18dp"
+                    android:orientation="horizontal">
+
+                    <View
+                        android:id="@+id/one_star_bar"
+                        style="@style/BarTheme"
+                        android:background="@color/colorRed"/>
+
+                    <TextView
+                        android:id="@+id/one_star_count"
+                        style="@style/RatingCountTextViewTheme"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -85,7 +257,7 @@
         <ListView
             android:id="@+id/search_prof_class_list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_margin="4dp">
         </ListView>
 

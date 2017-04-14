@@ -24,6 +24,7 @@ import teamawesome.cs180frontend.API.Models.StatusModel.PostReviewStatus;
 import teamawesome.cs180frontend.API.RetrofitSingleton;
 import teamawesome.cs180frontend.API.Services.Callbacks.PostReviewCallback;
 import teamawesome.cs180frontend.Adapters.SimpleACAdapter;
+import teamawesome.cs180frontend.Misc.Constants;
 import teamawesome.cs180frontend.Misc.DataSingleton;
 import teamawesome.cs180frontend.Misc.Utils;
 import teamawesome.cs180frontend.R;
@@ -39,11 +40,9 @@ public class WriteReviewActivity extends AppCompatActivity {
             R.id.write_rate_5}) Button[] stars;
     @Bind(R.id.write_submit_bt) Button submit;
 
-    private String[] professorNameArr;
-    private String[] classNameArr;
-    private int rating;
-
     ProgressDialog progressDialog;
+
+    private int rating;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -159,6 +158,31 @@ public class WriteReviewActivity extends AppCompatActivity {
         setStarColor(5);
     }
 
+    @Subscribe
+    public void reviewPosted(ReviewIDRespBundle r) {
+        Intent intent = new Intent();
+        intent.putExtra(Constants.MESSAGE, getString(R.string.account_update_success));
+        setResult(RESULT_OK, intent);
+
+        progressDialog.dismiss();
+        finish();
+    }
+
+    @Subscribe
+    public void onFailedReviewPost(PostReviewStatus status) {
+        progressDialog.dismiss();
+        if(status.getStatus() == APIConstants.HTTP_STATUS_ERROR) {
+            Utils.showSnackBar(this, parent, R.color.colorPrimary,
+                    getString(R.string.already_submitted_review));
+        } else if (status.getStatus() == APIConstants.HTTP_STATUS_UNAUTHORIZED) {
+            Utils.showSnackBar(this, parent, R.color.colorPrimary,
+                    getString(R.string.prof_or_class_DNE));
+        } else {
+            Utils.showSnackBar(this, parent, R.color.colorPrimary,
+                    getString(R.string.failed_to_submit_review));
+        }
+    }
+
     private void setStarColor(int count) {
         rating = count;
         for(int i = 0; i < 5; i++){
@@ -176,34 +200,5 @@ public class WriteReviewActivity extends AppCompatActivity {
         RetrofitSingleton.getInstance().getMatchingService()
                 .review(r)
                 .enqueue(callback);
-    }
-
-    @Subscribe
-    public void reviewResp(ReviewIDRespBundle r) {
-        progressDialog.dismiss();
-        reviewText.setText("");
-        profAC.setText("");
-        classAC.setText("");
-        Utils.showSnackBar(this, parent, R.color.colorPrimary,
-                getString(R.string.account_update_success));
-
-        Intent i = new Intent(this, MainActivity.class);
-        startActivity(i);
-        finish();
-    }
-
-    @Subscribe
-    public void onFailedReviewPost(PostReviewStatus status) {
-        progressDialog.dismiss();
-        if(status.getStatus() == APIConstants.HTTP_STATUS_ERROR) {
-            Utils.showSnackBar(this, parent, R.color.colorPrimary,
-                    getString(R.string.already_submitted_review));
-        } else if (status.getStatus() == APIConstants.HTTP_STATUS_UNAUTHORIZED) {
-            Utils.showSnackBar(this, parent, R.color.colorPrimary,
-                    getString(R.string.prof_or_class_DNE));
-        } else {
-            Utils.showSnackBar(this, parent, R.color.colorPrimary,
-                    getString(R.string.failed_to_submit_review));
-        }
     }
 }

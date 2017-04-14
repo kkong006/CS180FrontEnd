@@ -1,4 +1,4 @@
-package teamawesome.cs180frontend.API.Models.DataModel;
+package teamawesome.cs180frontend.API.Models.DataModel.ProfSummary;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -6,11 +6,9 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 import java.util.List;
 
-/**
- * Created by KongK on 11/15/2016.
- */
+import teamawesome.cs180frontend.API.Models.DataModel.ProfClassBundle;
 
-public class ProfRespBundle implements Serializable {
+public class ProfSummaryBundle implements Serializable {
 
     @SerializedName("prof_name")
     @Expose
@@ -19,6 +17,10 @@ public class ProfRespBundle implements Serializable {
     @SerializedName("avg_rating")
     @Expose
     private double rating;
+
+    @SerializedName("ratings_info")
+    @Expose
+    private List<RatingDataBundle> ratingDataBundles;
 
     @SerializedName("total_ratings")
     @Expose
@@ -39,6 +41,8 @@ public class ProfRespBundle implements Serializable {
     public double getAvgRating() {
         return rating;
     }
+
+    public List<RatingDataBundle> getRatingDataBundles() { return ratingDataBundles; }
 
     public int getTotalRatings() { return totalRatings; }
 

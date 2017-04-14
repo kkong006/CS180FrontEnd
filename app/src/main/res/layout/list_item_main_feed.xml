@@ -52,24 +52,24 @@
                         android:weightSum="5">
 
                         <com.joanzapata.iconify.widget.IconTextView
-                            style="@style/FeedRatingIconTheme"
-                            android:id="@+id/main_feed_rate_1" />
+                            android:id="@+id/main_feed_rate_1"
+                            style="@style/FeedRatingIconTheme" />
 
                         <com.joanzapata.iconify.widget.IconTextView
-                            style="@style/FeedRatingIconTheme"
-                            android:id="@+id/main_feed_rate_2" />
+                            android:id="@+id/main_feed_rate_2"
+                            style="@style/FeedRatingIconTheme" />
 
                         <com.joanzapata.iconify.widget.IconTextView
-                            style="@style/FeedRatingIconTheme"
-                            android:id="@+id/main_feed_rate_3" />
+                            android:id="@+id/main_feed_rate_3"
+                            style="@style/FeedRatingIconTheme" />
 
                         <com.joanzapata.iconify.widget.IconTextView
-                            style="@style/FeedRatingIconTheme"
-                            android:id="@+id/main_feed_rate_4" />
+                            android:id="@+id/main_feed_rate_4"
+                            style="@style/FeedRatingIconTheme" />
 
                         <com.joanzapata.iconify.widget.IconTextView
-                            style="@style/FeedRatingIconTheme"
-                            android:id="@+id/main_feed_rate_5" />
+                            android:id="@+id/main_feed_rate_5"
+                            style="@style/FeedRatingIconTheme" />
 
                     </LinearLayout>
 

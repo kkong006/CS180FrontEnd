@@ -80,58 +80,23 @@
 
             <com.joanzapata.iconify.widget.IconButton
                 android:id="@+id/write_rate_1"
-                android:layout_width="30dp"
-                android:layout_height="match_parent"
-                android:layout_marginRight="5dp"
-                android:background="@android:color/transparent"
-                android:gravity="center_horizontal"
-                android:textSize="22sp"
-                android:textColor="@color/colorGrey"
-                android:text="@string/fa_rating_icon" />
+                style="@style/WriteReviewStarTheme" />
 
             <com.joanzapata.iconify.widget.IconButton
                 android:id="@+id/write_rate_2"
-                android:layout_width="30dp"
-                android:layout_height="match_parent"
-                android:layout_marginRight="5dp"
-                android:background="@android:color/transparent"
-                android:gravity="center_horizontal"
-                android:textSize="22sp"
-                android:textColor="@color/colorGrey"
-                android:text="@string/fa_rating_icon" />
+                style="@style/WriteReviewStarTheme" />
 
             <com.joanzapata.iconify.widget.IconButton
                 android:id="@+id/write_rate_3"
-                android:layout_width="30dp"
-                android:layout_height="match_parent"
-                android:layout_marginRight="5dp"
-                android:background="@android:color/transparent"
-                android:gravity="center_horizontal"
-                android:textSize="22sp"
-                android:textColor="@color/colorGrey"
-                android:text="@string/fa_rating_icon" />
+                style="@style/WriteReviewStarTheme" />
 
             <com.joanzapata.iconify.widget.IconButton
                 android:id="@+id/write_rate_4"
-                android:layout_width="30dp"
-                android:layout_height="match_parent"
-                android:layout_marginRight="5dp"
-                android:background="@android:color/transparent"
-                android:gravity="center_horizontal"
-                android:textSize="22sp"
-                android:textColor="@color/colorGrey"
-                android:text="@string/fa_rating_icon" />
+                style="@style/WriteReviewStarTheme" />
 
             <com.joanzapata.iconify.widget.IconButton
                 android:id="@+id/write_rate_5"
-                android:layout_width="30dp"
-                android:layout_height="match_parent"
-                android:layout_marginRight="5dp"
-                android:background="@android:color/transparent"
-                android:gravity="center_horizontal"
-                android:textSize="22sp"
-                android:textColor="@color/colorGrey"
-                android:text="@string/fa_rating_icon" />
+                style="@style/WriteReviewStarTheme" />
 
         </LinearLayout>
 
@@ -145,7 +110,7 @@
             android:background="@color/colorAccent"
             android:textColor="@color/colorWhite"
             android:textSize="20sp"
-            android:text="Submit" />
+            android:text="@string/submit" />
 
     </LinearLayout>
 

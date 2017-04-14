@@ -39,24 +39,24 @@
             android:layout_marginTop="@dimen/activity_vertical_margin">
 
             <com.joanzapata.iconify.widget.IconTextView
-                style="@style/ReviewRatingIconTheme"
-                android:id="@+id/read_rate_1" />
+                android:id="@+id/read_rate_1"
+                style="@style/ReviewRatingIconTheme" />
 
             <com.joanzapata.iconify.widget.IconTextView
-                style="@style/ReviewRatingIconTheme"
-                android:id="@+id/read_rate_2" />
+                android:id="@+id/read_rate_2"
+                style="@style/ReviewRatingIconTheme" />
 
             <com.joanzapata.iconify.widget.IconTextView
-                style="@style/ReviewRatingIconTheme"
-                android:id="@+id/read_rate_3" />
+                android:id="@+id/read_rate_3"
+                style="@style/ReviewRatingIconTheme" />
 
             <com.joanzapata.iconify.widget.IconTextView
-                style="@style/ReviewRatingIconTheme"
-                android:id="@+id/read_rate_4" />
+                android:id="@+id/read_rate_4"
+                style="@style/ReviewRatingIconTheme" />
 
             <com.joanzapata.iconify.widget.IconTextView
-                style="@style/ReviewRatingIconTheme"
-                android:id="@+id/read_rate_5" />
+                android:id="@+id/read_rate_5"
+                style="@style/ReviewRatingIconTheme" />
 
         </LinearLayout>
 
@@ -91,7 +91,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
-                android:gravity="right|center_vertical"
+                android:gravity="end|center_vertical"
                 android:textSize="10sp"
                 android:text = "@string/you_like" />
 
@@ -99,8 +99,8 @@
                 android:id="@+id/read_dislike_bt"
                 android:layout_width="30dp"
                 android:layout_height="match_parent"
-                android:layout_gravity="left"
-                android:gravity="left"
+                android:layout_gravity="start"
+                android:gravity="start"
                 android:background="@android:color/transparent"
                 android:textColor="@color/colorRed"
                 android:textSize="28sp"
@@ -112,7 +112,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
-                android:gravity="left|center_vertical"
+                android:gravity="start|center_vertical"
                 android:textSize="10sp"
                 android:text="@string/you_dislike" />
 

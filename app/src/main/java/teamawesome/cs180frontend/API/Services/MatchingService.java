@@ -8,7 +8,7 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 import teamawesome.cs180frontend.API.Models.DataModel.CacheData.CacheDataBundle;
-import teamawesome.cs180frontend.API.Models.DataModel.ProfRespBundle;
+import teamawesome.cs180frontend.API.Models.DataModel.ProfSummary.ProfSummaryBundle;
 import teamawesome.cs180frontend.API.Models.ReviewModel.RateReview;
 import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewBundle;
 import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewIDRespBundle;
@@ -21,7 +21,7 @@ public interface MatchingService {
     Call<CacheDataBundle> getData(@Query("school_id") Integer schoolId, @Query("id") Integer userId);
 
     @GET("/professor")
-    Call<ProfRespBundle> getProfessorSummary(@Query("id") int profId);
+    Call<ProfSummaryBundle> getProfessorSummary(@Query("id") int profId);
 
     @POST("/rateReview")
     Call<ReviewRatingResp> rateReview(@Body RateReview rateReview);
