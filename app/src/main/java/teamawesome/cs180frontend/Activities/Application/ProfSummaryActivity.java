@@ -1,6 +1,7 @@
 package teamawesome.cs180frontend.Activities.Application;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
@@ -17,10 +18,14 @@ import com.joanzapata.iconify.widget.IconTextView;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.List;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnItemClick;
 import teamawesome.cs180frontend.API.APIConstants;
+import teamawesome.cs180frontend.API.Models.DataModel.ClassBundle;
+import teamawesome.cs180frontend.API.Models.DataModel.ProfClassBundle;
 import teamawesome.cs180frontend.API.Models.DataModel.ProfSummary.ProfSummaryBundle;
 import teamawesome.cs180frontend.API.Models.DataModel.ProfSummary.RatingDataBundle;
 import teamawesome.cs180frontend.API.Models.StatusModel.ProfSummaryStatus;
@@ -38,7 +43,7 @@ public class ProfSummaryActivity extends AppCompatActivity {
     @Bind(R.id.prof_summ_parent) CoordinatorLayout parent;
     @Bind(R.id.bar_layout) LinearLayout barLayout;
     @Bind(R.id.rating_freq_layout) LinearLayout ratingFreqLayout;
-    @Bind(R.id.search_prof_class_list) ListView classList;
+    @Bind(R.id.search_prof_class_list) LinearLayout classList;
     @Bind(R.id.avg_rating_tv) TextView avgRating;
     @Bind({R.id.prof_rate_1, R.id.prof_rate_2,
             R.id.prof_rate_3, R.id.prof_rate_4,
@@ -92,7 +97,7 @@ public class ProfSummaryActivity extends AppCompatActivity {
         EventBus.getDefault().unregister(this);
     }
 
-    @OnItemClick(R.id.search_prof_class_list)
+    /*@OnItemClick(R.id.search_prof_class_list)
     public void onClassClick(AdapterView<?> parent, View view, int pos, long id) {
         String className = adapter.getItem(pos).getClassName();
         int classId = DataSingleton.getInstance()
@@ -104,7 +109,7 @@ public class ProfSummaryActivity extends AppCompatActivity {
                 .putExtra(Constants.CLASS_ID, classId)
                 .putExtra(Constants.NAME, profName.split(" ")[1] + " for " + className);
         startActivity(intent);
-    }
+    }*/
 
     @Subscribe
     public void profSummaryResp(ProfSummaryBundle resp) {
@@ -114,8 +119,7 @@ public class ProfSummaryActivity extends AppCompatActivity {
         university.setText(school);
         totalTV.setText(String.format(getString(R.string.review_total), resp.getTotalRatings()));
 
-        adapter = new SimpleListAdapter2(this, resp.getClasses());
-        classList.setAdapter(adapter);
+        initClassesList(resp.getClasses(), this);
 
         double rating = resp.getAvgRating();
         int roundedRating = (int) Math.floor(rating);
@@ -160,5 +164,34 @@ public class ProfSummaryActivity extends AppCompatActivity {
         ((ViewGroup.MarginLayoutParams) ratingFreqLayout.getLayoutParams())
                 .setMarginStart(marginStart);
         ratingFreqLayout.requestLayout();
+    }
+
+    //initializing the LinearLayout that diplays info for a professor's classes
+    public void initClassesList(List<ProfClassBundle> classes, final Context context) {
+        View.OnClickListener onClassPressed = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String className = ((TextView) v.findViewById(R.id.name_textview))
+                        .getText().toString();
+                int classId = DataSingleton.getInstance()
+                        .getClassId(className);
+                Intent intent = new Intent(context, ReviewsActivity.class);
+                intent.putExtra(Constants.ID_TYPE, Constants.PROF_ID)
+                        .putExtra(Constants.PROF_ID, profId)
+                        .putExtra(Constants.ID_TYPE_2, Constants.CLASS_ID)
+                        .putExtra(Constants.CLASS_ID, classId)
+                        .putExtra(Constants.NAME, profName.split(" ")[1] + " for " + className);
+                startActivity(intent);
+            }
+        };
+
+        adapter = new SimpleListAdapter2(this, classes);
+
+        for (int i = 0; i < adapter.getCount(); ++i) {
+            View v = adapter.getView(i, null, null);
+            v.setOnClickListener(onClassPressed);
+            classList.addView(v);
+        }
+
     }
 }

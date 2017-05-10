@@ -36,7 +36,7 @@ public class SimpleListAdapter2 extends BaseAdapter {
         SimpleViewHolder2 holder;
         if(convertView == null) {
             LayoutInflater vi = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = vi.inflate(R.layout.simple_list_item_2, parent, false);
+            convertView = vi.inflate(R.layout.prof_class_item, parent, false);
             holder = new SimpleViewHolder2(convertView);
             convertView.setTag(holder);
         } else {

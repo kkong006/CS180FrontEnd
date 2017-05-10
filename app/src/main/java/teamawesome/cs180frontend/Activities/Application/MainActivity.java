@@ -472,31 +472,22 @@ public class MainActivity extends AppCompatActivity {
             System.out.println("REVIEW COUNT " + page.getReviews().size());
             offset += page.getReviews().size();
 
+            final Handler handler = new Handler();
             if (isRefreshing) {
                 mainFeedList.setEnabled(false);
                 mainFeedList.setSelection(0);
 
-                final Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         mainFeedList.setVisibility(View.GONE);
-                        handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                lastSelected = 0;
-                                mainSWL.setRefreshing(false);
-                                mainFeedAdapter.clear();
-                                addToFeed(page);
-                                mainFeedList.setEnabled(true);
-                            }
-                        }, 150);
+                        appendToFeed(handler, page);
                     }
                 }, 250);
                 return;
             }
 
-            addToFeed(page);
+            appendToFeed(handler, page);
         }
     }
 
@@ -644,5 +635,19 @@ public class MainActivity extends AppCompatActivity {
         verifySnippetText.setText(getString(R.string.please_verify_not_clicked));
         verifyBody.setVisibility(View.GONE);
     }
+
+    private void appendToFeed(Handler handler, final ReviewPageBundle page) {
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                lastSelected = 0;
+                mainSWL.setRefreshing(false);
+                mainFeedAdapter.clear();
+                addToFeed(page);
+                mainFeedList.setEnabled(true);
+            }
+        }, 150);
+    }
+
 
 }

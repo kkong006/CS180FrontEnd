@@ -12,6 +12,14 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".Activities.Onboarding.SplashActivity"
+            android:theme="@style/SplashTheme">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".Activities.Onboarding.LoginActivity"
             android:animateLayoutChanges="true"
@@ -24,13 +32,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
-
         <activity
             android:name=".Activities.Application.ReviewsActivity"
             android:parentActivityName=".Activities.Application.MainActivity"
@@ -70,9 +72,10 @@
             android:name=".Activities.Onboarding.VerifyActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Activities.Application.SearchActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/search"/>
+        <activity
+            android:name=".Activities.Application.SearchActivity"
+            android:label="@string/search"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

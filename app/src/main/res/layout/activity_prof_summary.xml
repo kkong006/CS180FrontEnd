@@ -6,261 +6,268 @@
     android:visibility="invisible"
     android:id="@+id/prof_summ_parent">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/search_professor_university"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:layout_marginStart="@dimen/activity_vertical_margin"
-            android:layout_marginEnd="@dimen/activity_vertical_margin"
-            android:layout_marginBottom="8dp"
-            android:textStyle="bold"
-            android:textColor="@color/colorAccent"
-            android:textSize="18sp" />
-
-        <!--Rating-->
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center"
-            android:layout_marginBottom="8dp">
-
-            <com.joanzapata.iconify.widget.IconTextView
-                android:id="@+id/prof_rate_1"
-                style="@style/RatingIconTheme" />
-
-            <com.joanzapata.iconify.widget.IconTextView
-                android:id="@+id/prof_rate_2"
-                style="@style/RatingIconTheme" />
-
-            <com.joanzapata.iconify.widget.IconTextView
-                android:id="@+id/prof_rate_3"
-                style="@style/RatingIconTheme" />
-
-            <com.joanzapata.iconify.widget.IconTextView
-                android:id="@+id/prof_rate_4"
-                style="@style/RatingIconTheme" />
-
-            <com.joanzapata.iconify.widget.IconTextView
-                android:id="@+id/prof_rate_5"
-                style="@style/RatingIconTheme" />
+            android:orientation="vertical">
 
             <TextView
-                android:id="@+id/avg_rating_tv"
+                android:id="@+id/search_professor_university"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_marginStart="@dimen/activity_vertical_margin"
+                android:layout_marginEnd="@dimen/activity_vertical_margin"
+                android:layout_marginBottom="8dp"
+                android:textStyle="bold"
+                android:textColor="@color/colorAccent"
+                android:textSize="18sp" />
+
+            <!--Rating-->
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center"
+                android:layout_marginBottom="8dp">
+
+                <com.joanzapata.iconify.widget.IconTextView
+                    android:id="@+id/prof_rate_1"
+                    style="@style/RatingIconTheme" />
+
+                <com.joanzapata.iconify.widget.IconTextView
+                    android:id="@+id/prof_rate_2"
+                    style="@style/RatingIconTheme" />
+
+                <com.joanzapata.iconify.widget.IconTextView
+                    android:id="@+id/prof_rate_3"
+                    style="@style/RatingIconTheme" />
+
+                <com.joanzapata.iconify.widget.IconTextView
+                    android:id="@+id/prof_rate_4"
+                    style="@style/RatingIconTheme" />
+
+                <com.joanzapata.iconify.widget.IconTextView
+                    android:id="@+id/prof_rate_5"
+                    style="@style/RatingIconTheme" />
+
+                <TextView
+                    android:id="@+id/avg_rating_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="30sp" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/total_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorBlack"
-                android:textSize="30sp" />
-
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/total_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="6dp"
-            android:textColor="@color/colorAccent"
-            android:textSize="18sp" />
-
-        <LinearLayout
-            android:id="@+id/rating_freq_layout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="6dp"
-            android:orientation="horizontal">
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="6dp"
+                android:textColor="@color/colorAccent"
+                android:textSize="18sp" />
 
             <LinearLayout
+                android:id="@+id/rating_freq_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_marginBottom="12dp"
+                android:orientation="horizontal">
 
                 <LinearLayout
-                    style="@style/StarsPerRatingTheme">
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-                    <com.joanzapata.iconify.widget.IconTextView
-                        style="@style/SmallStarTheme" />
+                    <LinearLayout
+                        style="@style/StarsPerRatingTheme">
 
-                    <com.joanzapata.iconify.widget.IconTextView
-                        style="@style/SmallStarTheme" />
+                        <com.joanzapata.iconify.widget.IconTextView
+                            style="@style/SmallStarTheme" />
 
-                    <com.joanzapata.iconify.widget.IconTextView
-                        style="@style/SmallStarTheme" />
+                        <com.joanzapata.iconify.widget.IconTextView
+                            style="@style/SmallStarTheme" />
 
-                    <com.joanzapata.iconify.widget.IconTextView
-                        style="@style/SmallStarTheme" />
+                        <com.joanzapata.iconify.widget.IconTextView
+                            style="@style/SmallStarTheme" />
 
-                    <com.joanzapata.iconify.widget.IconTextView
-                        style="@style/SmallStarTheme" />
+                        <com.joanzapata.iconify.widget.IconTextView
+                            style="@style/SmallStarTheme" />
+
+                        <com.joanzapata.iconify.widget.IconTextView
+                            style="@style/SmallStarTheme" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        style="@style/StarsPerRatingTheme">
+
+                        <com.joanzapata.iconify.widget.IconTextView
+                            style="@style/SmallStarTheme" />
+
+                        <com.joanzapata.iconify.widget.IconTextView
+                            style="@style/SmallStarTheme" />
+
+                        <com.joanzapata.iconify.widget.IconTextView
+                            style="@style/SmallStarTheme" />
+
+                        <com.joanzapata.iconify.widget.IconTextView
+                            style="@style/SmallStarTheme" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        style="@style/StarsPerRatingTheme">
+
+                        <com.joanzapata.iconify.widget.IconTextView
+                            style="@style/SmallStarTheme" />
+
+                        <com.joanzapata.iconify.widget.IconTextView
+                            style="@style/SmallStarTheme" />
+
+                        <com.joanzapata.iconify.widget.IconTextView
+                            style="@style/SmallStarTheme" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        style="@style/StarsPerRatingTheme">
+
+                        <com.joanzapata.iconify.widget.IconTextView
+                            style="@style/SmallStarTheme" />
+
+                        <com.joanzapata.iconify.widget.IconTextView
+                            style="@style/SmallStarTheme" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        style="@style/StarsPerRatingTheme">
+
+                        <com.joanzapata.iconify.widget.IconTextView
+                            style="@style/SmallStarTheme" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
                 <LinearLayout
-                    style="@style/StarsPerRatingTheme">
+                    android:id="@+id/bar_layout"
+                    android:layout_width="240dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-                    <com.joanzapata.iconify.widget.IconTextView
-                        style="@style/SmallStarTheme" />
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="18dp"
+                        android:orientation="horizontal">
 
-                    <com.joanzapata.iconify.widget.IconTextView
-                        style="@style/SmallStarTheme" />
+                        <View
+                            android:id="@+id/five_stars_bar"
+                            style="@style/BarTheme"
+                            android:background="@color/colorGreen"/>
 
-                    <com.joanzapata.iconify.widget.IconTextView
-                        style="@style/SmallStarTheme" />
+                        <TextView
+                            android:id="@+id/five_stars_count"
+                            style="@style/RatingCountTextViewTheme"/>
 
-                    <com.joanzapata.iconify.widget.IconTextView
-                        style="@style/SmallStarTheme" />
+                    </LinearLayout>
 
-                </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="18dp"
+                        android:orientation="horizontal">
 
-                <LinearLayout
-                    style="@style/StarsPerRatingTheme">
+                        <View
+                            android:id="@+id/four_stars_bar"
+                            style="@style/BarTheme"
+                            android:background="@color/colorLime"/>
 
-                    <com.joanzapata.iconify.widget.IconTextView
-                        style="@style/SmallStarTheme" />
+                        <TextView
+                            android:id="@+id/four_stars_count"
+                            style="@style/RatingCountTextViewTheme"/>
 
-                    <com.joanzapata.iconify.widget.IconTextView
-                        style="@style/SmallStarTheme" />
+                    </LinearLayout>
 
-                    <com.joanzapata.iconify.widget.IconTextView
-                        style="@style/SmallStarTheme" />
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="18dp"
+                        android:orientation="horizontal">
 
-                </LinearLayout>
+                        <View
+                            android:id="@+id/three_stars_bar"
+                            style="@style/BarTheme"
+                            android:background="@color/colorDandelion"/>
 
-                <LinearLayout
-                    style="@style/StarsPerRatingTheme">
+                        <TextView
+                            android:id="@+id/three_stars_count"
+                            style="@style/RatingCountTextViewTheme"/>
 
-                    <com.joanzapata.iconify.widget.IconTextView
-                        style="@style/SmallStarTheme" />
+                    </LinearLayout>
 
-                    <com.joanzapata.iconify.widget.IconTextView
-                        style="@style/SmallStarTheme" />
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="18dp"
+                        android:orientation="horizontal">
 
-                </LinearLayout>
+                        <View
+                            android:id="@+id/two_stars_bar"
+                            style="@style/BarTheme"
+                            android:background="@color/colorOrange"/>
 
-                <LinearLayout
-                    style="@style/StarsPerRatingTheme">
+                        <TextView
+                            android:id="@+id/two_stars_count"
+                            style="@style/RatingCountTextViewTheme"/>
 
-                    <com.joanzapata.iconify.widget.IconTextView
-                        style="@style/SmallStarTheme" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="18dp"
+                        android:orientation="horizontal">
+
+                        <View
+                            android:id="@+id/one_star_bar"
+                            style="@style/BarTheme"
+                            android:background="@color/colorRed"/>
+
+                        <TextView
+                            android:id="@+id/one_star_count"
+                            style="@style/RatingCountTextViewTheme"/>
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/bar_layout"
-                android:layout_width="240dp"
+            <TextView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:textStyle="bold"
+                android:textColor="@color/colorPrimary"
+                android:textSize="18sp"
+                android:text="@string/search_professor_results_classes" />
+
+            <LinearLayout
+                android:id="@+id/search_prof_class_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="4dp"
                 android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="18dp"
-                    android:orientation="horizontal">
-
-                    <View
-                        android:id="@+id/five_stars_bar"
-                        style="@style/BarTheme"
-                        android:background="@color/colorGreen"/>
-
-                    <TextView
-                        android:id="@+id/five_stars_count"
-                        style="@style/RatingCountTextViewTheme"/>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="18dp"
-                    android:orientation="horizontal">
-
-                    <View
-                        android:id="@+id/four_stars_bar"
-                        style="@style/BarTheme"
-                        android:background="@color/colorLime"/>
-
-                    <TextView
-                        android:id="@+id/four_stars_count"
-                        style="@style/RatingCountTextViewTheme"/>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="18dp"
-                    android:orientation="horizontal">
-
-                    <View
-                        android:id="@+id/three_stars_bar"
-                        style="@style/BarTheme"
-                        android:background="@color/colorDandelion"/>
-
-                    <TextView
-                        android:id="@+id/three_stars_count"
-                        style="@style/RatingCountTextViewTheme"/>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="18dp"
-                    android:orientation="horizontal">
-
-                    <View
-                        android:id="@+id/two_stars_bar"
-                        style="@style/BarTheme"
-                        android:background="@color/colorOrange"/>
-
-                    <TextView
-                        android:id="@+id/two_stars_count"
-                        style="@style/RatingCountTextViewTheme"/>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="18dp"
-                    android:orientation="horizontal">
-
-                    <View
-                        android:id="@+id/one_star_bar"
-                        style="@style/BarTheme"
-                        android:background="@color/colorRed"/>
-
-                    <TextView
-                        android:id="@+id/one_star_count"
-                        style="@style/RatingCountTextViewTheme"/>
-
-                </LinearLayout>
-
             </LinearLayout>
 
         </LinearLayout>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/activity_vertical_margin"
-            android:textStyle="bold"
-            android:textColor="@color/colorPrimary"
-            android:textSize="18sp"
-            android:text="@string/search_professor_results_classes" />
-
-        <ListView
-            android:id="@+id/search_prof_class_list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="4dp">
-        </ListView>
-
-    </LinearLayout>
+    </ScrollView>
 
 </android.support.design.widget.CoordinatorLayout>
