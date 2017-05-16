@@ -31,6 +31,7 @@ public class Constants {
 
     //Misc keys
     public static final String MESSAGE = "MESSAGE";
+    public static final String INDEX = "INDEX";
 
     //Partial titles
     public static final String REVIEWS = "Reviews";

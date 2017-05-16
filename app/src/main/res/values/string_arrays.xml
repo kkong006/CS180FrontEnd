@@ -17,6 +17,12 @@
         <item>{fa-sign-out}</item>
     </string-array>
 
+    <string-array name="settings_array">
+        <item>@string/change_school</item>
+        <item>@string/change_password</item>
+        <item>@string/verify_account</item>
+    </string-array>
+
     <string-array name="search_array">
         <item>Classes</item>
         <item>Subjects</item>
@@ -33,4 +39,5 @@
         <item>Inappropriate</item>
         <item>Spam</item>
     </string-array>
+
 </resources>

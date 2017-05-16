@@ -103,6 +103,8 @@
     <string name="error_retrieving_data">Error retrieving data</string>
     <string name="account_update_success">Success!</string>
     <string name="change_password">Change Password</string>
+    <string name="enter_current_password">Enter current password</string>
+    <string name="enter_new_password">Enter new password</string>
     <string name="please_sign_in">Please sign in</string>
     <string name="change_school_blurb">Please enter a school name</string>
     <string name="change_password_blurb">Please enter your current password and your new password</string>

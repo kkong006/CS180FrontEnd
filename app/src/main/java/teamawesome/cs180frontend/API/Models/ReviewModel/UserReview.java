@@ -21,15 +21,19 @@ public class UserReview implements Serializable{
 
     @SerializedName("school_id")
     @Expose
-    private int school_id;
+    private int schoolId;
+
+    @SerializedName("subject_id")
+    @Expose
+    private int subjectId;
 
     @SerializedName("class_id")
     @Expose
-    private int class_id;
+    private int classId;
 
     @SerializedName("prof_id")
     @Expose
-    private int prof_id;
+    private int profId;
 
     @SerializedName("rating")
     @Expose
@@ -39,23 +43,24 @@ public class UserReview implements Serializable{
     @Expose
     private String review;
 
-    public UserReview(int id, String password, int class_id, int prof_id, int rating, String review, int school_id) {
+    public UserReview(int id, String password, int schoolId, int subjectId, int classId, int profId, int rating, String review) {
         this.id = id;
         this.password = password;
-        this.class_id = class_id;
-        this.prof_id = prof_id;
+        this.schoolId = schoolId;
+        this.subjectId = subjectId;
+        this.classId = classId;
+        this.profId = profId;
         this.rating = rating;
         this.review = review;
-        this.school_id = school_id;
     }
 
-    public int getClassId() { return class_id; }
+    public int getClassId() { return classId; }
 
-    public void setClassId(int class_id) { this.class_id = class_id; }
+    public void setClassId(int class_id) { this.classId = class_id; }
 
-    public int getProfId() { return prof_id; }
+    public int getProfId() { return profId; }
 
-    public void setProfId(int prof_id) { this.prof_id = prof_id; }
+    public void setProfId(int prof_id) { this.profId = prof_id; }
 
     public int getRating() { return rating; }
 

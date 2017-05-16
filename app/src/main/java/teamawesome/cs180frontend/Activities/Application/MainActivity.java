@@ -53,6 +53,7 @@ import teamawesome.cs180frontend.API.Services.Callbacks.GetCacheDataCallback;
 import teamawesome.cs180frontend.API.Services.Callbacks.GetReviewsCallback;
 import teamawesome.cs180frontend.API.Services.Callbacks.VerifyCallback;
 import teamawesome.cs180frontend.Activities.Onboarding.LoginActivity;
+import teamawesome.cs180frontend.Activities.Settings.SettingsActivity;
 import teamawesome.cs180frontend.Adapters.MainFeedAdapter;
 import teamawesome.cs180frontend.Adapters.NavDrawerAdapter;
 import teamawesome.cs180frontend.Misc.Constants;
@@ -481,13 +482,18 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         mainFeedList.setVisibility(View.GONE);
-                        appendToFeed(handler, page);
+                        refreshFeed(handler, page);
                     }
                 }, 250);
                 return;
             }
 
-            appendToFeed(handler, page);
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    addToFeed(page);
+                }
+            }, 150);
         }
     }
 
@@ -636,7 +642,7 @@ public class MainActivity extends AppCompatActivity {
         verifyBody.setVisibility(View.GONE);
     }
 
-    private void appendToFeed(Handler handler, final ReviewPageBundle page) {
+    private void refreshFeed(Handler handler, final ReviewPageBundle page) {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {

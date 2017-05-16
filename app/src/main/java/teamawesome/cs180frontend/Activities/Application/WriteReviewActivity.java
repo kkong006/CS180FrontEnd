@@ -93,12 +93,22 @@ public class WriteReviewActivity extends AppCompatActivity {
 
     @OnClick(R.id.write_submit_bt)
     public void submitReview() {
+        String className = this.classAC.getText().toString();
+        Integer classId = DataSingleton.getInstance().getClassId(className);
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < className.length(); ++i) {
+            char c = className.charAt(i);
+            if ('A' <= c && c <='Z') {
+              sb.append(c);
+            } else {
+                break;
+            }
+        }
+        Integer subjectId = DataSingleton.getInstance().getSubjectId(sb.toString());
 
         String professorName = this.profAC.getText().toString();
         Integer profId = DataSingleton.getInstance().getProfessorId(professorName);
-
-        String className = this.classAC.getText().toString();
-        Integer classId = DataSingleton.getInstance().getClassId(className);
 
         String reviewText = this.reviewText.getText().toString();
 
@@ -112,7 +122,8 @@ public class WriteReviewActivity extends AppCompatActivity {
                        int schoolId = Utils.getSchoolId(this);
                        String password = Utils.getPassword(this);
                        System.out.println("PROF ID " + profId + "\nCLASS ID " + classId + "\nSCHOOL_ID " + schoolId + "\nUSER ID " + userId + "\nPASSWORD " + password + "\nRATING " + rating + "\nREVIEW " + reviewText);
-                       UserReview r = new UserReview(userId, password, classId, profId, rating, reviewText, schoolId);
+                       UserReview r = new UserReview(userId, password, schoolId, subjectId, classId,
+                               profId, rating, reviewText);
                        submitReview(r);
                    } else {
                        Utils.showSnackBar(this, parent, R.color.colorPrimary,

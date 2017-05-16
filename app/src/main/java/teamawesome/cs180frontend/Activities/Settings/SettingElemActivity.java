@@ -1,17 +1,17 @@
-package teamawesome.cs180frontend.Activities.Application;
+package teamawesome.cs180frontend.Activities.Settings;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.util.SparseIntArray;
+import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -38,9 +38,12 @@ import teamawesome.cs180frontend.Misc.SPSingleton;
 import teamawesome.cs180frontend.Misc.Utils;
 import teamawesome.cs180frontend.R;
 
-public class SettingsActivity extends AppCompatActivity {
+public class SettingElemActivity extends AppCompatActivity {
 
-    @Bind(R.id.activity_settings) CoordinatorLayout parent;
+    @Bind(R.id.activity_setting_elem) CoordinatorLayout parent;
+    @Bind({R.id.setting_elem1,
+            R.id.setting_elem2,
+            R.id.setting_elem3}) LinearLayout[] settingElems;
     @Bind(R.id.settings_university_ac) AutoCompleteTextView schoolAC;
     @Bind(R.id.settings_school_bt) Button schoolButton;
     @Bind(R.id.old_password_et) EditText oldPasswordET;
@@ -59,17 +62,24 @@ public class SettingsActivity extends AppCompatActivity {
     private int newSchoolId;
     private String newPasswordHolder; //HOLDS THE NEW PASSWORD AS IT'S BEING CHANGED\
     private boolean makingAPICall = false;
-    SparseIntArray hiddenElemMap;
     int lastClicked = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings);
+        setContentView(R.layout.activity_setting_elem);
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
 
+        Bundle extras = getIntent().getExtras();
+
+        if (extras == null) {
+            finish();
+        }
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle(extras.getString(Constants.TAG, ""));
+        settingElems[extras.getInt(Constants.INDEX, -1)].setVisibility(View.VISIBLE);
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setCancelable(false);
@@ -83,12 +93,6 @@ public class SettingsActivity extends AppCompatActivity {
         SimpleACAdapter schoolAdapter = new SimpleACAdapter(this, R.layout.simple_list_item,
                 DataSingleton.getInstance().getSchoolCache());
         schoolAC.setAdapter(schoolAdapter);
-
-        //map for constant time access to a dropdown
-        hiddenElemMap = new SparseIntArray();
-        hiddenElemMap.append(R.id.change_school, R.id.settings_dropdown1);
-        hiddenElemMap.append(R.id.change_password, R.id.settings_dropdown2);
-        hiddenElemMap.append(R.id.verify_account, R.id.settings_dropdown3);
     }
 
     @Override
@@ -213,49 +217,6 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
-    @OnClick({R.id.change_school, R.id.change_password, R.id.verify_account})
-    public void onSettingsElemClick(View v) {
-        Utils.hideKeyboard(parent, this);
-        int viewToExpand = v.getId();
-
-        if (lastClicked == viewToExpand) {
-            View pressedOnView = findViewById(hiddenElemMap.get(lastClicked));
-
-            if (pressedOnView.getVisibility() == View.VISIBLE) {
-                pressedOnView.setVisibility(View.GONE);
-            } else {
-                pressedOnView.setVisibility(View.VISIBLE);
-            }
-            return;
-        } else if (lastClicked != -1) {
-            if (lastClicked == R.id.change_school) {
-                schoolAC.setError(null);
-            } else if (lastClicked == R.id.change_password){
-                oldPasswordET.setError(null);
-                newPasswordET.setError(null);
-            } else {
-                verifyET.setError(null);
-            }
-            findViewById(hiddenElemMap.get(lastClicked)).setVisibility(View.GONE);
-        }
-
-        lastClicked = viewToExpand;
-        if (lastClicked == R.id.change_school) {
-            findViewById(hiddenElemMap.get(lastClicked)).setVisibility(View.VISIBLE);
-            schoolAC.requestFocus();
-        } else if (lastClicked == R.id.change_password){
-            findViewById(hiddenElemMap.get(lastClicked)).setVisibility(View.VISIBLE);
-            oldPasswordET.requestFocus();
-        } else {
-            if (!Utils.isVerified(this)) {
-                findViewById(hiddenElemMap.get(lastClicked)).setVisibility(View.VISIBLE);
-                verifyET.requestFocus();
-            } else {
-                Utils.showSnackBar(this, parent, R.color.colorPrimary, getString(R.string.already_verified));
-            }
-        }
-    }
-
     @Subscribe
     public void onUpdateSchoolResp(UpdateSchoolStatus resp) {
         progressDialog.dismiss();
@@ -277,7 +238,6 @@ public class SettingsActivity extends AppCompatActivity {
         if (resp.getStatus() == APIConstants.HTTP_STATUS_OK) {
             System.out.println(newPasswordHolder);
             Utils.savePassword(this, newPasswordHolder);
-            System.out.println("NEW SCHOOL ID " + Utils.getSchoolId(this) + "\nNEW PASSWORD " + Utils.getPassword(this));
             oldPasswordET.setText("");
             newPasswordET.setText("");
             Utils.showSnackBar(this, parent, R.color.colorPrimary,
