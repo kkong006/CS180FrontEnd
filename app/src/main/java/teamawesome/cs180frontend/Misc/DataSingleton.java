@@ -24,7 +24,7 @@ public class DataSingleton {
     private ArrayList<ClassBundle> classCache;
     private ArrayList<ProfBundle> professorCache;
 
-    private HashMap<String, Integer> schoolMap; //FOR O(1) access
+    private HashMap<String, SchoolBundle> schoolMap; //FOR O(1) access
     private HashMap<String, Integer> subjectMap;
     private HashMap<String, Integer> classMap;
     private HashMap<String, Integer> professorMap;
@@ -68,7 +68,7 @@ public class DataSingleton {
 
         schoolCache.addAll(data.getSchools());
         for (SchoolBundle s : schoolCache) {
-            schoolMap.put(s.getName(), s.getSchoolId());
+            schoolMap.put(s.getName(), s);
         }
 
         subjectCache.addAll(data.getSubjects());
@@ -175,7 +175,11 @@ public class DataSingleton {
 
     public Integer getSchoolId(String schoolName) {
         //NOTE: ONLY OBJECTS CAN BE NULL NOT PRIMITIVES
-        return schoolMap.get(schoolName); //RETURNS NULL IF NO MATCH FOUND
+        return schoolMap.get(schoolName).getSchoolId(); //RETURNS NULL IF NO MATCH FOUND
+    }
+
+    public SchoolBundle getSchoolBundleByName(String schoolName) {
+        return schoolMap.get(schoolName);
     }
 
     public Integer getSubjectId(String subjectName) {
@@ -214,11 +218,11 @@ public class DataSingleton {
         return dislikedSet;
     }
 
-    public HashMap<String, Integer> getSchoolMap() {
+    public HashMap<String, SchoolBundle> getSchoolMap() {
         return schoolMap;
     }
 
-    public void setSchoolMap(HashMap<String, Integer> schoolMap) { this.schoolMap = schoolMap; }
+    public void setSchoolMap(HashMap<String, SchoolBundle> schoolMap) { this.schoolMap = schoolMap; }
 
     public HashMap<String, Integer> getSubjectMap() { return subjectMap; }
 

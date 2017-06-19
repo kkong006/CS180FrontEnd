@@ -8,9 +8,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.joanzapata.iconify.widget.IconTextView;
@@ -22,12 +20,9 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnItemClick;
 import teamawesome.cs180frontend.API.APIConstants;
-import teamawesome.cs180frontend.API.Models.DataModel.ClassBundle;
 import teamawesome.cs180frontend.API.Models.DataModel.ProfClassBundle;
 import teamawesome.cs180frontend.API.Models.DataModel.ProfSummary.ProfSummaryBundle;
-import teamawesome.cs180frontend.API.Models.DataModel.ProfSummary.RatingDataBundle;
 import teamawesome.cs180frontend.API.Models.StatusModel.ProfSummaryStatus;
 import teamawesome.cs180frontend.API.RetrofitSingleton;
 import teamawesome.cs180frontend.API.Services.Callbacks.GetProfSummaryCallback;
@@ -96,20 +91,6 @@ public class ProfSummaryActivity extends AppCompatActivity {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
     }
-
-    /*@OnItemClick(R.id.search_prof_class_list)
-    public void onClassClick(AdapterView<?> parent, View view, int pos, long id) {
-        String className = adapter.getItem(pos).getClassName();
-        int classId = DataSingleton.getInstance()
-                .getClassId(className);
-        Intent intent = new Intent(this, ReviewsActivity.class);
-        intent.putExtra(Constants.ID_TYPE, Constants.PROF_ID)
-                .putExtra(Constants.PROF_ID, profId)
-                .putExtra(Constants.ID_TYPE_2, Constants.CLASS_ID)
-                .putExtra(Constants.CLASS_ID, classId)
-                .putExtra(Constants.NAME, profName.split(" ")[1] + " for " + className);
-        startActivity(intent);
-    }*/
 
     @Subscribe
     public void profSummaryResp(ProfSummaryBundle resp) {

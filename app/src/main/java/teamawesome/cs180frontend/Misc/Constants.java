@@ -2,6 +2,9 @@ package teamawesome.cs180frontend.Misc;
 
 
 public class Constants {
+    public static final String EMAIL = "declassifyapp@gmail.com";
+    public static final String ADMOB_APP_ID = "ca-app-pub-3366431309616914~2650662783";
+
     //Data related keys
     public static final String TAG = "TAG";
     public static final String NAME = "NAME";
@@ -15,6 +18,7 @@ public class Constants {
     /*I could pass in an array of ID_TYPE's instead of having 2 keys for it, but I'm only dealing with
     2 values at most and using an array obfuscates things    */
     public static final String USER_ID = "USER_ID";
+    public static final String SYSTEM_TYPE = "SYSTEM_TYPE";
 
     public static final String PROF_NAME = "PROF_NAME";
     public static final String PROF_ID = "PROF_ID";

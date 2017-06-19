@@ -5,10 +5,6 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-/**
- * Created by KongK on 10/21/2016.
- */
-
 public class UserReview implements Serializable{
 
     @SerializedName("id")
@@ -22,6 +18,14 @@ public class UserReview implements Serializable{
     @SerializedName("school_id")
     @Expose
     private int schoolId;
+
+    @SerializedName("interval_name")
+    @Expose
+    private String intervalName;
+
+    @SerializedName("year")
+    @Expose
+    private int year;
 
     @SerializedName("subject_id")
     @Expose
@@ -43,30 +47,17 @@ public class UserReview implements Serializable{
     @Expose
     private String review;
 
-    public UserReview(int id, String password, int schoolId, int subjectId, int classId, int profId, int rating, String review) {
+    public UserReview(int id, String password, int schoolId, String intervalName, int year,
+                      int subjectId, int classId, int profId, int rating, String review) {
         this.id = id;
         this.password = password;
         this.schoolId = schoolId;
+        this.intervalName = intervalName;
+        this.year = year;
         this.subjectId = subjectId;
         this.classId = classId;
         this.profId = profId;
         this.rating = rating;
         this.review = review;
     }
-
-    public int getClassId() { return classId; }
-
-    public void setClassId(int class_id) { this.classId = class_id; }
-
-    public int getProfId() { return profId; }
-
-    public void setProfId(int prof_id) { this.profId = prof_id; }
-
-    public int getRating() { return rating; }
-
-    public void setRating(int rating) { this.rating = rating; }
-
-    public String getReview() { return review; }
-
-    public void setReview(String review) { this.review = review; }
 }

@@ -8,10 +8,6 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-/**
- * Created by KongK on 10/24/2016.
- */
-
 public class ReviewBundle implements Serializable, Parcelable {
 
     @SerializedName("review_id")
@@ -46,6 +42,10 @@ public class ReviewBundle implements Serializable, Parcelable {
     @Expose
     private String className;
 
+    @SerializedName("time")
+    @Expose
+    private String time;
+
     public int getReviewId() {
         return reviewId;
     }
@@ -78,6 +78,10 @@ public class ReviewBundle implements Serializable, Parcelable {
         return className;
     }
 
+    public String getTime() {
+        return time;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -93,6 +97,7 @@ public class ReviewBundle implements Serializable, Parcelable {
         dest.writeInt(this.accountId);
         dest.writeString(this.reviewMsg);
         dest.writeString(this.className);
+        dest.writeString(this.time);
     }
 
     protected ReviewBundle(Parcel p) {
@@ -104,6 +109,7 @@ public class ReviewBundle implements Serializable, Parcelable {
         this.accountId = p.readInt();
         this.reviewMsg = p.readString();
         this.className = p.readString();
+        this.time = p.readString();
     }
 
     public static final Parcelable.Creator<ReviewBundle> CREATOR = new Parcelable.Creator<ReviewBundle>() {

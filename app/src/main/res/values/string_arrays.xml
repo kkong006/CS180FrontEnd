@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Quarter -->
+    <string-array name="quarters">
+        <item>Fall</item>
+        <item>Winter</item>
+        <item>Spring</item>
+        <item>Summer</item>
+    </string-array>
+
+    <!-- Semester -->
+    <string-array name="semesters">
+        <item>Fall</item>
+        <item>Spring</item>
+    </string-array>
+
     <!--Navigation Drawer-->
     <string-array name="nav_drawer_array">
         <item>Home</item>
@@ -31,6 +45,11 @@
     <string-array name="search_option_array">
         <item>Show Reviews</item>
         <item>Show Classes</item>
+    </string-array>
+
+    <string-array name="system_type_array">
+        <item>Quarters</item>
+        <item>Semesters</item>
     </string-array>
 
     <string-array name="report_option_array">

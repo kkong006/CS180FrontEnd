@@ -12,6 +12,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -21,6 +22,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.OnItemClick;
 import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewBundle;
 import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewPageBundle;
@@ -32,11 +34,11 @@ import teamawesome.cs180frontend.Misc.Constants;
 import teamawesome.cs180frontend.Misc.Utils;
 import teamawesome.cs180frontend.R;
 
-//MyReviewsActivity => ReviewsActivity (making this generic)
 public class ReviewsActivity extends AppCompatActivity {
+    @Bind(R.id.reviews_parent) CoordinatorLayout parent;
     @Bind(R.id.reviews) ListView myReviews;
     @Bind(R.id.reviews_progressbar) ProgressBar progressBar;
-    @Bind(R.id.reviews_parent) CoordinatorLayout parent;
+    @Bind(R.id.error_tv) TextView errorTV;
 
     Integer classId;
 
@@ -87,14 +89,7 @@ public class ReviewsActivity extends AppCompatActivity {
             classId = id2;
         }
 
-        RetrofitSingleton.getInstance()
-                .getMatchingService()
-                .reviews(null, //The main feed is already a list of school specific reviews
-                        idType.equals(Constants.SUBJECT_ID) ? id : null,
-                        classId,
-                        idType.equals(Constants.PROF_ID) ? id : null,
-                        idType.equals(Constants.USER_ID) ? id : null, offset)
-                .enqueue(new GetReviewsCallback(this));
+        getReviews();
     }
 
     @Override
@@ -143,6 +138,15 @@ public class ReviewsActivity extends AppCompatActivity {
         }
     }
 
+    @OnClick(R.id.error_tv)
+    public void tryLoadingReviewsAgain() {
+        errorTV.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);
+        myReviews.setVisibility(View.VISIBLE);
+
+        getReviews();
+    }
+
     @OnItemClick(R.id.reviews)
     public void onReviewClick(AdapterView<?> parent, View view, int position, long id) {
         ReviewBundle review = mainFeedAdapter.getItem(position);
@@ -186,6 +190,9 @@ public class ReviewsActivity extends AppCompatActivity {
     public void failedReviewFetch(ReviewFetchStatus failedFetch) {
         if (failedFetch.getContext().equals(this)) {
             progressBar.setVisibility(View.GONE);
+            myReviews.setVisibility(View.GONE);
+            errorTV.setVisibility(View.VISIBLE);
+
             if (failedFetch.getStatus() != -1) {
                 Utils.showSnackBar(this, parent, R.color.colorPrimary,
                         getString(R.string.invalid_review_request));
@@ -193,8 +200,17 @@ public class ReviewsActivity extends AppCompatActivity {
                 Utils.showSnackBar(this, parent, R.color.colorPrimary,
                         getString(R.string.failed_review_request));
             }
-
-            myReviews.setVisibility(View.GONE);
         }
+    }
+
+    public void getReviews() {
+        RetrofitSingleton.getInstance()
+                .getMatchingService()
+                .reviews(null, //The main feed is already a list of school specific reviews
+                        idType.equals(Constants.SUBJECT_ID) ? id : null,
+                        classId,
+                        idType.equals(Constants.PROF_ID) ? id : null,
+                        idType.equals(Constants.USER_ID) ? id : null, offset)
+                .enqueue(new GetReviewsCallback(this));
     }
 }

@@ -92,7 +92,7 @@
 
                     <!--Date-->
                     <TextView
-                        android:id="@+id/main_feed_date_tv"
+                        android:id="@+id/main_time_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 

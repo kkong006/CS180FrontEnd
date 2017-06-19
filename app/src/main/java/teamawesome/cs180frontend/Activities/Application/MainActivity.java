@@ -56,6 +56,7 @@ import teamawesome.cs180frontend.Activities.Onboarding.LoginActivity;
 import teamawesome.cs180frontend.Activities.Settings.SettingsActivity;
 import teamawesome.cs180frontend.Adapters.MainFeedAdapter;
 import teamawesome.cs180frontend.Adapters.NavDrawerAdapter;
+import teamawesome.cs180frontend.Listeners.AnimationListener.Generic.GenericAnimationListener;
 import teamawesome.cs180frontend.Misc.Constants;
 import teamawesome.cs180frontend.Misc.DataSingleton;
 import teamawesome.cs180frontend.Misc.Utils;
@@ -63,7 +64,7 @@ import teamawesome.cs180frontend.R;
 
 public class MainActivity extends AppCompatActivity {
 
-    @Bind(R.id.toolbar) Toolbar mToolbar;
+    @Bind(R.id.toolbar) Toolbar toolbar;
     @Bind(R.id.drawer_layout) DrawerLayout mDrawerLayout;
     @Bind(R.id.drawer_list) ListView mDrawerList;
     @Bind(R.id.main_layout) CoordinatorLayout parent;
@@ -111,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
         data = DataSingleton.getInstance();
         EventBus.getDefault().register(this);
 
-        setSupportActionBar(mToolbar);
+        setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(getString(R.string.home));
 
         if (Utils.getUserId(this) <= 0) {
@@ -152,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
         setUpNavBar();
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, mDrawerLayout, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
+                this, mDrawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
             @Override
             public void onDrawerStateChanged(int state) {
                 Utils.hideKeyboard(parent, getApplicationContext());
@@ -207,7 +208,9 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.action_settings) {
             Intent i = new Intent(this, SettingsActivity.class);
             startActivityForResult(i, 2);
-            return true;
+        } else if (id == R.id.action_submit_data) {
+            Intent i = new Intent(this, SubmitDataActivity.class);
+            startActivity(i);
         }
 
         return super.onOptionsItemSelected(item);
@@ -338,7 +341,9 @@ public class MainActivity extends AppCompatActivity {
         if (!verifiedDisabled) {
             verifiedDisabled = true; //probably don't need this, just in case though
             verifiedHidden = true;
-            AlphaAnimation hide = Utils.createHideAnimation(mainVerifyLayout);
+            AlphaAnimation hide = new AlphaAnimation(1.0f, 0.0f);
+            hide.setAnimationListener(new GenericAnimationListener(View.GONE, mainVerifyLayout));
+            hide.setDuration(500);
             mainVerifyLayout.startAnimation(hide);
         }
     }
@@ -391,7 +396,7 @@ public class MainActivity extends AppCompatActivity {
                     getString(R.string.error_getting_data));
         }
 
-        mainFeedList.setVisibility(View.GONE);
+        mainSWL.setVisibility(View.GONE);
         errorTV.setText(getString(R.string.fetch_data_again));
         errorTV.setVisibility(View.VISIBLE);
     }
@@ -399,7 +404,7 @@ public class MainActivity extends AppCompatActivity {
     @Subscribe
     public void failedPageFetch(ReviewFetchStatus failedFetch) {
         if (failedFetch.getContext().equals(this)) {
-            initialLoad = false;
+            isRefreshing = false;
             progressDialog.dismiss();
             if (failedFetch.getStatus() != -1) {
                 Utils.showSnackBar(this, parent, R.color.colorPrimary,
@@ -445,23 +450,25 @@ public class MainActivity extends AppCompatActivity {
 
     @Subscribe
     public void onVerifyResp(VerifyResp resp) {
+        progressDialog.dismiss();
         mainVerifyLayout.setVisibility(View.GONE);
         Utils.setVerified(this, true);
-        progressDialog.dismiss();
         Utils.showSnackBar(this, parent, R.color.colorPrimary, getString(R.string.verify_success));
     }
 
     @Subscribe
     public void onVerifyFailed(VerifyStatus status) {
         if (status.getContext().equals(this)) {
-            verifiedDisabled = false;
+            progressDialog.dismiss();
             Utils.failedVerifySnackBar(progressDialog, parent, R.color.colorPrimary, status.getStatus(), this);
+            verifiedDisabled = false;
         }
     }
 
     @Subscribe
     public void onDataFetched(CacheDataBundle data) {
         DataSingleton.getInstance().cacheDataBundle(this, data);
+        Utils.setVerified(this, data.isVerified());
         System.out.println("Liked: " + data.getReviewRatings().getLiked().size());
         System.out.println("Disliked: " + data.getReviewRatings().getDisliked().size());
         getFeed(offset);
@@ -499,11 +506,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void logout() {
         Utils.nukeUserData(this);
-        //drawerAdapter.changeLoginElem();
-        //setButtons();
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
         finish();
+        overridePendingTransition(R.anim.slide_right_in_250, R.anim.slide_right_out_250);
     }
 
     public void setUpNavBar() {
@@ -529,6 +535,8 @@ public class MainActivity extends AppCompatActivity {
     private void getData() {
         progressDialog.setMessage(getString(R.string.loading));
         progressDialog.show();
+        System.out.println(Utils.getSchoolId(this));
+        System.out.println(Utils.getUserId(this));
         RetrofitSingleton.getInstance()
                 .getMatchingService()
                 .getData(Utils.getSchoolId(this), Utils.getUserId(this))
@@ -582,10 +590,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         };
-    }
-
-    private void initOnRefreshListener() {
-
     }
 
     public void addToFeed(ReviewPageBundle page) {

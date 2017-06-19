@@ -10,4 +10,6 @@
     <string name="fa_star_half">{fa-star-half}</string>
     <string name="thumbs_up_icon">{fa-thumbs-up}</string>
     <string name="thumbs_down_icon">{fa-thumbs-down}</string>
+    <string name="fa_plus_circle">{fa-plus-circle}</string>
+    <string name="fa_minus_circle">{fa-minus-circle}</string>
 </resources>

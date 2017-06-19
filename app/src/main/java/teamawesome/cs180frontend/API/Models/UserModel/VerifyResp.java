@@ -8,11 +8,11 @@ import java.io.Serializable;
 public class VerifyResp implements Serializable {
     @SerializedName("id")
     @Expose
-    public int id;
+    private int id;
 
     @SerializedName("verified")
     @Expose
-    public boolean verified;
+    private boolean verified;
 
     public int getId() { return id; }
 

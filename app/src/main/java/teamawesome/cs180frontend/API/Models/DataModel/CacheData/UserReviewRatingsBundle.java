@@ -6,10 +6,6 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 import java.util.List;
 
-/**
- * Created by jman0_000 on 1/13/2017.
- */
-
 public class UserReviewRatingsBundle implements Serializable {
     @SerializedName("liked")
     @Expose

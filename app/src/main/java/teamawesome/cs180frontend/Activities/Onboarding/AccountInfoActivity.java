@@ -114,7 +114,7 @@ public class AccountInfoActivity extends AppCompatActivity {
 
         AlphaAnimation hideOnboardText = new AlphaAnimation(1.0f, 0.0f);
         hideOnboardText.setAnimationListener(new UpdateTextAnim1(onboardText1,
-                loadingTextView, getString(R.string.enter_school), hideLoadingText, View.INVISIBLE));
+                loadingTextView, getString(R.string.enter_school_now), hideLoadingText, View.INVISIBLE));
         hideOnboardText.setDuration(750);
         onboardText1.startAnimation(hideOnboardText);
     }
@@ -183,7 +183,7 @@ public class AccountInfoActivity extends AppCompatActivity {
         String schoolName = schoolAC.getText().toString();
 
         if (schoolName.length() == 0) {
-            schoolTIL.setError(getString(R.string.school_empty));
+            schoolTIL.setError(getString(R.string.enter_school));
             return;
         }
 
@@ -197,10 +197,10 @@ public class AccountInfoActivity extends AppCompatActivity {
 
         if (registerBundle == null) {
             registerBundle = new AccountBundle(phoneNumber.getText().toString(),
-                    password.getText().toString(), schoolId);
+                    Utils.getMD5Hash(password.getText().toString()), schoolId);
         } else {
             registerBundle.setLoginRegisterBundle(phoneNumber.getText().toString(),
-                    password.getText().toString(), schoolId);
+                    Utils.getMD5Hash(password.getText().toString()), schoolId);
         }
 
         if (!textHidden) {
@@ -234,10 +234,10 @@ public class AccountInfoActivity extends AppCompatActivity {
     public void failedDataResp(CacheReqStatus resp) {
         if (resp.getStatus() != -1) {
             Utils.showSnackBar(this, parent,
-                    R.color.colorPrimary, getString(R.string.data_doesnt_exist));
+                    R.color.colorAccent, getString(R.string.data_doesnt_exist));
         } else {
             Utils.showSnackBar(this, parent,
-                    R.color.colorPrimary, getString(R.string.error_getting_data));
+                    R.color.colorAccent, getString(R.string.error_getting_data));
         }
     }
 

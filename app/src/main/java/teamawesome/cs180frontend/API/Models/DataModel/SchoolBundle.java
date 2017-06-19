@@ -5,30 +5,34 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-/**
- * Created by KongK on 10/21/2016.
- */
-
 public class SchoolBundle implements Serializable, AbstractBundle {
 
     @SerializedName("school_id")
     @Expose
-    private int school_id;
+    private int schoolId;
 
     @SerializedName("school_name")
     @Expose
     private String name;
 
-    public SchoolBundle(int school_id, String name) {
-        this.school_id = school_id;
+    @SerializedName("system_type")
+    @Expose
+    private String systemType;
+
+    public SchoolBundle(int schoolId, String name) {
+        this.schoolId = schoolId;
         this.name = name;
     }
 
     public int getSchoolId() {
-        return school_id;
+        return schoolId;
     }
 
     public String getName() {
         return name;
+    }
+
+    public String getSystemType() {
+        return systemType;
     }
 }

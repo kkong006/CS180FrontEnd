@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.view.View;
-import android.view.animation.AlphaAnimation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
@@ -24,8 +23,8 @@ import java.util.Set;
 import java.util.TimeZone;
 
 import teamawesome.cs180frontend.API.APIConstants;
+import teamawesome.cs180frontend.API.Models.DataModel.SchoolBundle;
 import teamawesome.cs180frontend.API.Models.UserModel.UserRespBundle;
-import teamawesome.cs180frontend.Listeners.AnimationListener.Generic.GenericAnimationListener;
 import teamawesome.cs180frontend.R;
 
 public class Utils {
@@ -69,8 +68,12 @@ public class Utils {
         return SPSingleton.getInstance(context).getSp().getInt(Constants.SCHOOL_ID, 0);
     }
 
+    public static String getSystemType(Context context) {
+        return SPSingleton.getInstance(context).getSp().getString(Constants.SYSTEM_TYPE, "Quarter");
+    }
+
     public static boolean isVerified(Context context) {
-        return SPSingleton.getInstance(context).getSp().getBoolean(Constants.IS_VERIFIED, true);
+        return SPSingleton.getInstance(context).getSp().getBoolean(Constants.IS_VERIFIED, false);
     }
 
     public static void setVerified(Context context, boolean isVerified) {
@@ -91,22 +94,28 @@ public class Utils {
         return SPSingleton.getInstance(context).getSp().getString(Constants.PASSWORD, "");
     }
 
+    public static boolean doesSchoolExist(String school) {
+        return DataSingleton.getInstance().getSchoolId(school) != null;
+    }
 
     //save the user's info once they've logged in and/or registered
     public static void saveUserData(Context context, UserRespBundle userInfo, String password, String number) {
-        System.out.println(userInfo.getId());
-        System.out.println(userInfo.isVerified());
-        System.out.println(userInfo.getSchoolId());
-        System.out.println(password);
-        System.out.println(number);
-
         SharedPreferences sp = SPSingleton.getInstance(context).getSp();
         sp.edit().putInt(Constants.USER_ID, userInfo.getId()).commit();
         sp.edit().putBoolean(Constants.IS_VERIFIED, userInfo.isVerified()).commit();
         sp.edit().putInt(Constants.SCHOOL_ID, userInfo.getSchoolId()).commit();
+        sp.edit().putString(Constants.SYSTEM_TYPE, userInfo.getSystemType()).commit();
         sp.edit().putString(Constants.PASSWORD, password).commit();
         sp.edit().putString(Constants.PHONE_NUMBER, number).commit();
     }
+
+    public static void saveNewSchoolData(Context context, SchoolBundle newSchool) {
+        SPSingleton.getInstance(context).getSp().edit()
+                .putInt(Constants.SCHOOL_ID, newSchool.getSchoolId()).commit();
+        SPSingleton.getInstance(context).getSp().edit().
+                putString(Constants.SYSTEM_TYPE, newSchool.getSystemType());
+    }
+
 
     //Good night sweet prince
     public static void nukeUserData(Context context) {
@@ -155,13 +164,6 @@ public class Utils {
         } else {
             return 0;
         }
-    }
-
-    public static AlphaAnimation createHideAnimation(View v) {
-        AlphaAnimation hide = new AlphaAnimation(1.0f, 0.0f);
-        hide.setAnimationListener(new GenericAnimationListener(View.GONE, v));
-        hide.setDuration(500);
-        return hide;
     }
 
     public static void failedVerifySnackBar(ProgressDialog progressDialog, CoordinatorLayout parent,

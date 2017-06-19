@@ -1,6 +1,5 @@
 package teamawesome.cs180frontend.Activities.Application;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -21,7 +20,6 @@ import org.greenrobot.eventbus.Subscribe;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import retrofit2.Callback;
 import teamawesome.cs180frontend.API.Models.ReviewModel.RateReview;
 import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewBundle;
 import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewRatingResp;
@@ -36,7 +34,7 @@ public class ReadReviewActivity extends AppCompatActivity {
 
     @Bind(R.id.activity_read_review) CoordinatorLayout parent;
     @Bind(R.id.read_class_tv) TextView className;
-    @Bind(R.id.read_date_tv) TextView reviewDate;
+    @Bind(R.id.read_time_tv) TextView time;
     @Bind({R.id.read_rate_1, R.id.read_rate_2, R.id.read_rate_3,
             R.id.read_rate_4, R.id.read_rate_5}) TextView[] ratings;
     @Bind(R.id.read_review_tv) TextView reviewText;
@@ -160,7 +158,7 @@ public class ReadReviewActivity extends AppCompatActivity {
 
     public void loadReview() {
         className.setText(review.getClassName());
-        reviewDate.setText(Utils.getLocalTimeString(review.getReviewDate()));
+        time.setText(review.getTime());
         reviewText.setText(review.getReviewMsg());
 
         for(int i = 0; i < review.getRating() && i < 5; i++) {
@@ -171,8 +169,7 @@ public class ReadReviewActivity extends AppCompatActivity {
     }
 
     private void setUserRating(int newRating) {
-
-        if(newRating == 0) {
+        if (newRating == 0) {
             thumbsUp.setTextColor(getResources().getColor(R.color.colorGrey));
             thumbsDown.setTextColor(getResources().getColor(R.color.colorGrey));
         } else if(newRating == 1) {

@@ -2,10 +2,10 @@ package teamawesome.cs180frontend.Activities.Settings;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
@@ -20,6 +20,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import teamawesome.cs180frontend.API.APIConstants;
+import teamawesome.cs180frontend.API.Models.DataModel.SchoolBundle;
 import teamawesome.cs180frontend.API.Models.StatusModel.FailedUpdate;
 import teamawesome.cs180frontend.API.Models.StatusModel.VerifyStatus;
 import teamawesome.cs180frontend.API.Models.UserModel.UpdatePasswordStatus;
@@ -57,9 +58,9 @@ public class SettingElemActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private VerifyBundle bundle;
     private VerifyCallback verifyCallback;
+    private SchoolBundle newSchool;
 
-    private int mSchoolId;
-    private int newSchoolId;
+    private int schoolId;
     private String newPasswordHolder; //HOLDS THE NEW PASSWORD AS IT'S BEING CHANGED\
     private boolean makingAPICall = false;
     int lastClicked = -1;
@@ -87,7 +88,7 @@ public class SettingElemActivity extends AppCompatActivity {
 
         verifyCallback = new VerifyCallback(this);
 
-        mSchoolId = Utils.getSchoolId(this);
+        schoolId = Utils.getSchoolId(this);
 
         //fill school AC adapter
         SimpleACAdapter schoolAdapter = new SimpleACAdapter(this, R.layout.simple_list_item,
@@ -122,15 +123,15 @@ public class SettingElemActivity extends AppCompatActivity {
     public void changeSchool() {
         changeSchoolTIL.setError(null);
         Utils.hideKeyboard(parent, this);
-        Integer schoolId = DataSingleton.getInstance().getSchoolId(schoolAC.getText().toString());
-        if (schoolId != null) {
-            if (schoolId != Utils.getSchoolId(this)) {
-                newSchoolId = schoolId;
+        newSchool = DataSingleton.getInstance()
+                .getSchoolBundleByName(schoolAC.getText().toString());
+        if (newSchool != null) {
+            if (newSchool.getSchoolId() != Utils.getSchoolId(this)) {
 
                 UpdateUserBundle user = new UpdateUserBundle(Utils.getUserId(this),
                         Utils.getPassword(this),
                         Utils.getPassword(this),
-                        schoolId);
+                        newSchool.getSchoolId());
 
                 progressDialog.setMessage(getString(R.string.updating_account));
                 progressDialog.show();
@@ -166,7 +167,7 @@ public class SettingElemActivity extends AppCompatActivity {
             UpdateUserBundle user = new UpdateUserBundle(Utils.getUserId(this),
                     oldPassword,
                     newPassword,
-                    mSchoolId);
+                    schoolId);
 
             progressDialog.setMessage(getString(R.string.updating_account));
             progressDialog.show();
@@ -221,7 +222,7 @@ public class SettingElemActivity extends AppCompatActivity {
     public void onUpdateSchoolResp(UpdateSchoolStatus resp) {
         progressDialog.dismiss();
         if (resp.getStatus() == APIConstants.HTTP_STATUS_OK) {
-            SPSingleton.getInstance(this).getSp().edit().putInt(Constants.SCHOOL_ID, newSchoolId).commit();
+            Utils.saveNewSchoolData(this, newSchool);
             schoolAC.setText("");
             Intent intent = new Intent();
             setResult(RESULT_OK, intent);

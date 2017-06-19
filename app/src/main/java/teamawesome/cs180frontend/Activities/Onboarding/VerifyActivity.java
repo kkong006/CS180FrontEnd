@@ -19,7 +19,6 @@ import org.greenrobot.eventbus.Subscribe;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import teamawesome.cs180frontend.API.APIConstants;
 import teamawesome.cs180frontend.API.Models.StatusModel.VerifyStatus;
 import teamawesome.cs180frontend.API.Models.UserModel.VerifyBundle;
 import teamawesome.cs180frontend.API.Models.UserModel.VerifyResp;

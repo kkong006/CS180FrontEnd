@@ -1,27 +1,40 @@
 {
   "project_info": {
-    "project_number": "783227828067",
-    "project_id": "de-classify"
+    "project_number": "694513115541",
+    "project_id": "firebase-declassify"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:783227828067:android:ee7887bbeccd8a25",
+        "mobilesdk_app_id": "1:694513115541:android:ee7887bbeccd8a25",
         "android_client_info": {
           "package_name": "teamawesome.cs180frontend"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "694513115541-mrt2iavejgm4lcep9qq5l6i0p70pv1c7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "teamawesome.cs180frontend",
+            "certificate_hash": "44817ac2a0c9979c85985c78408eef1af8a5aec5"
+          }
+        },
+        {
+          "client_id": "694513115541-30d0blp2vm71cq93tnsar1gn70l9cmvt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
-          "current_key": "AIzaSyCsOCHK4crqaiH99YR0Z7w55YJ8uOa2ie8"
+          "current_key": "AIzaSyCmaPHT4VJ0o-TLMAfn_aiMCx7WZZfLE98"
         }
       ],
       "services": {
         "analytics_service": {
           "status": 2,
           "analytics_property": {
-            "tracking_id": "UA-87640312-1"
+            "tracking_id": "UA-83665447-3"
           }
         },
         "appinvite_service": {

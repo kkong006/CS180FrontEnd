@@ -3,7 +3,6 @@ package teamawesome.cs180frontend.Runnable;
 import android.content.Context;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;

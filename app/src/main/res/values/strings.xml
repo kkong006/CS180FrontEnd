@@ -16,11 +16,10 @@
     <!--Main Activity-->
     <string name="data_loaded">Data loaded!</string>
     <string name="verify_success">Successfully verified your account!</string>
+    <string name="review_posted">You have successfully posted a review!</string>
     <string name="data_doesnt_exist">Data doesn\'t exist.</string>
     <string name="error_getting_data">Unable to fetch data.</string>
-    <string name="fetch_data_again"> Data not available.\n Press here to try again</string>
-    <string name="invalid_review_request">Invalid request to fetch reviews.</string>
-    <string name="failed_review_request">Failed to fetch reviews. Try again later.</string>
+    <string name="fetch_data_again"> Data not available. Press here to try again</string>
     <string name="log_out">Successfully logged out!</string>
     <string name="fetch_feed_again">No reviews available. Swipe up to try again.</string>
 
@@ -64,7 +63,7 @@
     <string name="password_hint">Password (min. 8 chars)</string>
     <string name="onboard_loading">Just one moment...</string>
     <string name="done">Done</string>
-    <string name="enter_school">Now, enter in your school\'s name</string>
+    <string name="enter_school_now">Now, enter in your school\'s name</string>
     <string name="creating_account">Creating account...</string>
     <string name="account_exists">Account already exists. Please try a different number.</string>
     <string name="server_issue">Server unable to process request. Please try again later.</string>
@@ -98,7 +97,6 @@
     <string name="school_name_changed">School name changed!</string>
     <string name="school_dne">School does not exist</string>
     <string name="schools_dne">Schools do not exist</string>
-    <string name="school_empty">Please enter in a school</string>
     <string name="same_school_error">This is already your current school!</string>
     <string name="error_retrieving_data">Error retrieving data</string>
     <string name="account_update_success">Success!</string>
@@ -106,11 +104,18 @@
     <string name="enter_current_password">Enter current password</string>
     <string name="enter_new_password">Enter new password</string>
     <string name="please_sign_in">Please sign in</string>
-    <string name="change_school_blurb">Please enter a school name</string>
     <string name="change_password_blurb">Please enter your current password and your new password</string>
     <string name="old_password_error">Does not match current password</string>
     <string name="invalid_user_data">Unable to update account. Please re-check entered information.</string>
     <string name="update_failed">Failed to update data. Please try again later.</string>
+
+    <!-- Submit Data Activity -->
+    <string name="submit_data">Submit Data</string>
+    <string name="enter_system_type">Enter system type</string>
+    <string name="school_to_add">Please add this school: %s\n</string>
+    <string name="what_system_type">Looks like you want to add a new school. What system does it use?</string>
+    <string name="submit_data_header">Hello! I noticed that you were missing some data in your system, and would like to submit some for %s.</string>
+    <string name="empty_data">Please enter in some data before hitting the submit button.</string>
 
     <!--Read Review Activity-->
     <string name="students_like"> students like this review</string>
@@ -138,6 +143,7 @@
     <string name="select_valid_class">Class name does not exist.</string>
     <string name="invalid_rating">Select rating for professor</string>
     <string name="prof_or_class_DNE">Error: submitting review for class and/or professor that does not exist.</string>
+    <string name="type_review">Type your review here</string>
 
     <!--Prof Summary Activity-->
     <string name="search_professor_results_classes">Classes Taught:</string>
@@ -149,5 +155,5 @@
     <string name="my_reviews">My Reviews</string>
 
     <!--Admob-->
-    <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="banner_ad_unit_id">ca-app-pub-3366431309616914/4127395983</string>
 </resources>

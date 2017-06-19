@@ -1,9 +1,7 @@
 package teamawesome.cs180frontend.Misc.ViewHolders;
 
 
-import android.support.design.widget.CoordinatorLayout;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 import butterknife.Bind;

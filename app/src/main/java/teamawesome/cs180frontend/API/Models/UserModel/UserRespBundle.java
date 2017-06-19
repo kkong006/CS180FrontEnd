@@ -3,26 +3,24 @@ package teamawesome.cs180frontend.API.Models.UserModel;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-/**
- * container for user data
- *
- * Created by nicholas on 10/9/16.
- */
-
 //Response to logging in/registering
 public class UserRespBundle {
 
     @SerializedName("id")
     @Expose
-    public int id;
+    private int id;
 
     @SerializedName("verified")
     @Expose
-    public boolean verified;
+    private boolean verified;
 
     @SerializedName("school_id")
     @Expose
-    public int schoolId;
+    private int schoolId;
+
+    @SerializedName("system_type")
+    @Expose
+    private String systemType;
 
     public int getId() {
         return id;
@@ -41,4 +39,12 @@ public class UserRespBundle {
     }
 
     public void setSchoolId(int schoolId) { this.schoolId = schoolId; }
+
+    public String getSystemType() {
+        return systemType;
+    }
+
+    public void setSystemType(String systemType) {
+        this.systemType = systemType;
+    }
 }

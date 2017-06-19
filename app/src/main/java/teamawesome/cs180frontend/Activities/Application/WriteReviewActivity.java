@@ -10,9 +10,15 @@ import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -24,6 +30,7 @@ import teamawesome.cs180frontend.API.Models.StatusModel.PostReviewStatus;
 import teamawesome.cs180frontend.API.RetrofitSingleton;
 import teamawesome.cs180frontend.API.Services.Callbacks.PostReviewCallback;
 import teamawesome.cs180frontend.Adapters.SimpleACAdapter;
+import teamawesome.cs180frontend.Adapters.SimpleListAdapter;
 import teamawesome.cs180frontend.Misc.Constants;
 import teamawesome.cs180frontend.Misc.DataSingleton;
 import teamawesome.cs180frontend.Misc.Utils;
@@ -34,6 +41,8 @@ public class WriteReviewActivity extends AppCompatActivity {
     @Bind(R.id.activity_write_review) CoordinatorLayout parent;
     @Bind(R.id.write_professor_et) AutoCompleteTextView profAC;
     @Bind(R.id.write_class_et) AutoCompleteTextView classAC;
+    @Bind(R.id.when_spinner) Spinner whenSpinner;
+    @Bind(R.id.year_spinner) Spinner yearSpinner;
     @Bind(R.id.write_review_et) EditText reviewText;
     @Bind({R.id.write_rate_1, R.id.write_rate_2,
             R.id.write_rate_3, R.id.write_rate_4,
@@ -66,6 +75,8 @@ public class WriteReviewActivity extends AppCompatActivity {
         SimpleACAdapter classAdapter = new SimpleACAdapter(this, R.layout.simple_list_item,
                 DataSingleton.getInstance().getClassCache());
         classAC.setAdapter(classAdapter);
+        setIntervalAdapater();
+        setUpYearAdapter();
     }
 
     @Override
@@ -118,12 +129,14 @@ public class WriteReviewActivity extends AppCompatActivity {
             if(classId != null) {
                if(reviewText.length() >= 32) {
                    if(rating > 0) {
+                       progressDialog.show();
                        int userId = Utils.getUserId(this);
                        int schoolId = Utils.getSchoolId(this);
                        String password = Utils.getPassword(this);
-                       System.out.println("PROF ID " + profId + "\nCLASS ID " + classId + "\nSCHOOL_ID " + schoolId + "\nUSER ID " + userId + "\nPASSWORD " + password + "\nRATING " + rating + "\nREVIEW " + reviewText);
-                       UserReview r = new UserReview(userId, password, schoolId, subjectId, classId,
-                               profId, rating, reviewText);
+                       UserReview r = new UserReview(userId, password, schoolId,
+                               whenSpinner.getSelectedItem().toString(),
+                               Integer.valueOf(yearSpinner.getSelectedItem().toString()),
+                               subjectId, classId, profId, rating, reviewText);
                        submitReview(r);
                    } else {
                        Utils.showSnackBar(this, parent, R.color.colorPrimary,
@@ -172,7 +185,7 @@ public class WriteReviewActivity extends AppCompatActivity {
     @Subscribe
     public void reviewPosted(ReviewIDRespBundle r) {
         Intent intent = new Intent();
-        intent.putExtra(Constants.MESSAGE, getString(R.string.account_update_success));
+        intent.putExtra(Constants.MESSAGE, getString(R.string.review_posted));
         setResult(RESULT_OK, intent);
 
         progressDialog.dismiss();
@@ -187,11 +200,34 @@ public class WriteReviewActivity extends AppCompatActivity {
                     getString(R.string.already_submitted_review));
         } else if (status.getStatus() == APIConstants.HTTP_STATUS_UNAUTHORIZED) {
             Utils.showSnackBar(this, parent, R.color.colorPrimary,
-                    getString(R.string.prof_or_class_DNE));
+                    getString(R.string.verify_account_error));
         } else {
             Utils.showSnackBar(this, parent, R.color.colorPrimary,
                     getString(R.string.failed_to_submit_review));
         }
+    }
+
+    private void setIntervalAdapater() {
+        String[] intervalArr;
+        if (Utils.getSystemType(this).equals("Quarter")) {
+            intervalArr = getResources().getStringArray(R.array.quarters);
+        } else {
+            intervalArr = getResources().getStringArray(R.array.semesters);
+        }
+
+        SimpleListAdapter adapter = new SimpleListAdapter(this, Arrays.asList(intervalArr));
+        whenSpinner.setAdapter(adapter);
+    }
+
+    private void setUpYearAdapter() {
+        final int fiveYearsAgo = Calendar.getInstance().get(Calendar.YEAR) - 5;
+        List<String> yearList = new ArrayList<>();
+        for (int i = 0; i < 6; ++i) {
+            yearList.add(Integer.toString(i + fiveYearsAgo));
+        }
+
+        SimpleListAdapter yearAdapter = new SimpleListAdapter(this, yearList);
+        yearSpinner.setAdapter(yearAdapter);
     }
 
     private void setStarColor(int count) {
@@ -205,8 +241,7 @@ public class WriteReviewActivity extends AppCompatActivity {
         }
     }
 
-    public void submitReview(UserReview r) {
-        progressDialog.show();
+    private void submitReview(UserReview r) {
         PostReviewCallback callback = new PostReviewCallback();
         RetrofitSingleton.getInstance().getMatchingService()
                 .review(r)

@@ -11,7 +11,6 @@ import com.google.android.gms.ads.AdRequest;
 import java.util.List;
 
 import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewBundle;
-import teamawesome.cs180frontend.Misc.Utils;
 import teamawesome.cs180frontend.Misc.ViewHolders.MainFeedViewHolder;
 import teamawesome.cs180frontend.R;
 
@@ -26,8 +25,11 @@ public class MainFeedAdapter extends BaseAdapter{
         this.reviewList = reviewList;
 
         this.adRequest = new AdRequest.Builder()
+                .addTestDevice("EF1536FC033B268C4107DA25CBABD3CE")
                 .addKeyword("college")
                 .addKeyword("university")
+                .addKeyword("education")
+                .tagForChildDirectedTreatment(true)
                 .build();
     }
 
@@ -86,7 +88,7 @@ public class MainFeedAdapter extends BaseAdapter{
                 }
             } else {
                 renderAdLayout(holder);
-            }
+            }  
         }
 
         return convertView;
@@ -99,7 +101,7 @@ public class MainFeedAdapter extends BaseAdapter{
 
         holder.professorTV.setText(reviewList.get(position).getProfName());
         holder.classNameTV.setText(reviewList.get(position).getClassName());
-        holder.dateTV.setText(Utils.getLocalTimeString(reviewList.get(position).getReviewDate()));
+        holder.timeTV.setText(reviewList.get(position).getTime());
         holder.reviewTV.setText(reviewList.get(position).getReviewMsg());
         for (int i = 0; i < 5; i++) {
             if (i < reviewList.get(position).getRating()) {

@@ -20,6 +20,7 @@ public class VerifyCallback implements Callback<VerifyResp> {
 
     @Override
     public void onResponse(Call<VerifyResp> call, Response<VerifyResp> resp) {
+        System.out.println(resp.code());
         switch(resp.code()) {
             case APIConstants.HTTP_STATUS_OK:
                 EventBus.getDefault().post(resp.body());
