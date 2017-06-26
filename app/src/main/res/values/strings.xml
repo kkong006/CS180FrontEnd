@@ -112,7 +112,8 @@
     <!-- Submit Data Activity -->
     <string name="submit_data">Submit Data</string>
     <string name="enter_system_type">Enter system type</string>
-    <string name="school_to_add">Please add this school: %s\n</string>
+    <string name="subject_code">Subject code</string>
+    <string name="school_to_add">Please add this school to your system: %s\n</string>
     <string name="what_system_type">Looks like you want to add a new school. What system does it use?</string>
     <string name="submit_data_header">Hello! I noticed that you were missing some data in your system, and would like to submit some for %s.</string>
     <string name="empty_data">Please enter in some data before hitting the submit button.</string>

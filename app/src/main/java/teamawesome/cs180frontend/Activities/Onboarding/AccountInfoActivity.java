@@ -26,8 +26,8 @@ import teamawesome.cs180frontend.API.APIConstants;
 import teamawesome.cs180frontend.API.Models.DataModel.CacheData.CacheDataBundle;
 import teamawesome.cs180frontend.API.Models.StatusModel.CacheReqStatus;
 import teamawesome.cs180frontend.API.Models.StatusModel.LoginRegisterStatus;
-import teamawesome.cs180frontend.API.Models.UserModel.AccountBundle;
-import teamawesome.cs180frontend.API.Models.UserModel.UserRespBundle;
+import teamawesome.cs180frontend.API.Models.AccountModel.AccountBundle;
+import teamawesome.cs180frontend.API.Models.AccountModel.AccountRespBundle;
 import teamawesome.cs180frontend.API.RetrofitSingleton;
 import teamawesome.cs180frontend.API.Services.Callbacks.LoginRegisterCallback;
 import teamawesome.cs180frontend.Adapters.SimpleACAdapter;
@@ -87,55 +87,6 @@ public class AccountInfoActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         overridePendingTransition(R.anim.slide_right_in_250, R.anim.slide_right_out_250);
-    }
-
-    private void createProgressDialog() {
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setCancelable(false);
-        progressDialog.setMessage(getString(R.string.creating_account));
-    }
-
-    private void initAnimation() {
-        handler = new Handler();
-        handler.postDelayed(new InitOnboardRunnable(this, onboardText1,
-                infoLayout1, next,
-                View.VISIBLE), 100);
-    }
-
-    public void setUpSchoolAC() {
-        SimpleACAdapter adapter = new SimpleACAdapter(this, R.layout.simple_list_item,
-                DataSingleton.getInstance().getSchoolCache());
-        schoolAC.setAdapter(adapter);
-
-        AlphaAnimation hideLoadingText = new AlphaAnimation(1.0f, 0.0f);
-        hideLoadingText.setAnimationListener(new AnimListener1(this, loadingTextView,
-                schoolLayout, done, View.GONE));
-        hideLoadingText.setDuration(750);
-
-        AlphaAnimation hideOnboardText = new AlphaAnimation(1.0f, 0.0f);
-        hideOnboardText.setAnimationListener(new UpdateTextAnim1(onboardText1,
-                loadingTextView, getString(R.string.enter_school_now), hideLoadingText, View.INVISIBLE));
-        hideOnboardText.setDuration(750);
-        onboardText1.startAnimation(hideOnboardText);
-    }
-
-    public View checkNumberAndPass() {
-        phoneNumberTIL.setError(null);
-        passwordTIL.setError(null);
-        phoneNumberTIL.clearFocus();
-        passwordTIL.clearFocus();
-
-        if (phoneNumber.getText().toString().length() < 10) {
-            phoneNumberTIL.setError(getString(R.string.error_invalid_number));
-            return phoneNumberTIL;
-        }
-
-        if (password.getText().toString().length() < 8) {
-            passwordTIL.setError(getString(R.string.error_invalid_password));
-            return passwordTIL;
-        }
-
-        return null;
     }
 
     @OnClick(R.id.next)
@@ -242,7 +193,7 @@ public class AccountInfoActivity extends AppCompatActivity {
     }
 
     @Subscribe //listening to FinishEvent to ensure that finishing activity chaining will happen
-    public void onRegister(FinishEvent<UserRespBundle> bundle) {
+    public void onRegister(FinishEvent<AccountRespBundle> bundle) {
         Utils.saveUserData(this, bundle.getObject(), registerBundle.getPassword(),
                 registerBundle.getPhoneNumber());
         Intent intent = new Intent(this, VerifyActivity.class);
@@ -268,6 +219,55 @@ public class AccountInfoActivity extends AppCompatActivity {
         phoneNumberTIL.setEnabled(true);
         passwordTIL.setEnabled(true);
         done.setClickable(true);
+    }
+
+    private void createProgressDialog() {
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setCancelable(false);
+        progressDialog.setMessage(getString(R.string.creating_account));
+    }
+
+    private void initAnimation() {
+        handler = new Handler();
+        handler.postDelayed(new InitOnboardRunnable(this, onboardText1,
+                infoLayout1, next,
+                View.VISIBLE), 100);
+    }
+
+    public void setUpSchoolAC() {
+        SimpleACAdapter adapter = new SimpleACAdapter(this, R.layout.simple_list_item,
+                DataSingleton.getInstance().getSchoolCache());
+        schoolAC.setAdapter(adapter);
+
+        AlphaAnimation hideLoadingText = new AlphaAnimation(1.0f, 0.0f);
+        hideLoadingText.setAnimationListener(new AnimListener1(this, loadingTextView,
+                schoolLayout, done, View.GONE));
+        hideLoadingText.setDuration(750);
+
+        AlphaAnimation hideOnboardText = new AlphaAnimation(1.0f, 0.0f);
+        hideOnboardText.setAnimationListener(new UpdateTextAnim1(onboardText1,
+                loadingTextView, getString(R.string.enter_school_now), hideLoadingText, View.INVISIBLE));
+        hideOnboardText.setDuration(750);
+        onboardText1.startAnimation(hideOnboardText);
+    }
+
+    public View checkNumberAndPass() {
+        phoneNumberTIL.setError(null);
+        passwordTIL.setError(null);
+        phoneNumberTIL.clearFocus();
+        passwordTIL.clearFocus();
+
+        if (phoneNumber.getText().toString().length() < 10) {
+            phoneNumberTIL.setError(getString(R.string.error_invalid_number));
+            return phoneNumberTIL;
+        }
+
+        if (password.getText().toString().length() < 8) {
+            passwordTIL.setError(getString(R.string.error_invalid_password));
+            return passwordTIL;
+        }
+
+        return null;
     }
 
 }

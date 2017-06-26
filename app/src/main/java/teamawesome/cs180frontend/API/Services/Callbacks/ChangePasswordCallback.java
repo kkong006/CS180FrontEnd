@@ -7,12 +7,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import teamawesome.cs180frontend.API.APIConstants;
 import teamawesome.cs180frontend.API.Models.StatusModel.FailedUpdate;
-import teamawesome.cs180frontend.API.Models.UserModel.UpdatePasswordStatus;
+import teamawesome.cs180frontend.API.Models.AccountModel.UpdatePasswordStatus;
 import teamawesome.cs180frontend.Misc.Utils;
-
-/**
- * Created by KongK on 10/25/2016.
- */
 
 public class ChangePasswordCallback implements Callback<Void> {
 

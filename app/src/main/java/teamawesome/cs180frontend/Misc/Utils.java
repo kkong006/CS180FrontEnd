@@ -24,7 +24,7 @@ import java.util.TimeZone;
 
 import teamawesome.cs180frontend.API.APIConstants;
 import teamawesome.cs180frontend.API.Models.DataModel.SchoolBundle;
-import teamawesome.cs180frontend.API.Models.UserModel.UserRespBundle;
+import teamawesome.cs180frontend.API.Models.AccountModel.AccountRespBundle;
 import teamawesome.cs180frontend.R;
 
 public class Utils {
@@ -72,6 +72,13 @@ public class Utils {
         return SPSingleton.getInstance(context).getSp().getString(Constants.SYSTEM_TYPE, "Quarter");
     }
 
+    public static void setSystemType(Context context, String systemType) {
+        SPSingleton.getInstance(context).getSp()
+                .edit()
+                .putString(Constants.SYSTEM_TYPE, systemType)
+                .commit();
+    }
+
     public static boolean isVerified(Context context) {
         return SPSingleton.getInstance(context).getSp().getBoolean(Constants.IS_VERIFIED, false);
     }
@@ -98,8 +105,20 @@ public class Utils {
         return DataSingleton.getInstance().getSchoolId(school) != null;
     }
 
+    public static boolean changedSchool(Context context) {
+        SharedPreferences sp = SPSingleton.getInstance(context).getSp();
+        return sp.getBoolean(Constants.CHANGED_SCHOOL,true);
+    }
+
+    public static void setChangeSchool(Context context, boolean changedSchool) {
+        SPSingleton.getInstance(context).getSp()
+                .edit()
+                .putBoolean(Constants.CHANGED_SCHOOL, changedSchool)
+                .commit();
+    }
+
     //save the user's info once they've logged in and/or registered
-    public static void saveUserData(Context context, UserRespBundle userInfo, String password, String number) {
+    public static void saveUserData(Context context, AccountRespBundle userInfo, String password, String number) {
         SharedPreferences sp = SPSingleton.getInstance(context).getSp();
         sp.edit().putInt(Constants.USER_ID, userInfo.getId()).commit();
         sp.edit().putBoolean(Constants.IS_VERIFIED, userInfo.isVerified()).commit();
@@ -109,13 +128,12 @@ public class Utils {
         sp.edit().putString(Constants.PHONE_NUMBER, number).commit();
     }
 
-    public static void saveNewSchoolData(Context context, SchoolBundle newSchool) {
+    public static void saveSchoolData(Context context, SchoolBundle newSchool) {
         SPSingleton.getInstance(context).getSp().edit()
                 .putInt(Constants.SCHOOL_ID, newSchool.getSchoolId()).commit();
         SPSingleton.getInstance(context).getSp().edit().
-                putString(Constants.SYSTEM_TYPE, newSchool.getSystemType());
+                putString(Constants.SYSTEM_TYPE, newSchool.getSystemType()).commit();
     }
-
 
     //Good night sweet prince
     public static void nukeUserData(Context context) {

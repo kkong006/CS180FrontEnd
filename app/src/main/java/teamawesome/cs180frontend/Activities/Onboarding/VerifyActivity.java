@@ -20,8 +20,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import teamawesome.cs180frontend.API.Models.StatusModel.VerifyStatus;
-import teamawesome.cs180frontend.API.Models.UserModel.VerifyBundle;
-import teamawesome.cs180frontend.API.Models.UserModel.VerifyResp;
+import teamawesome.cs180frontend.API.Models.AccountModel.VerifyBundle;
+import teamawesome.cs180frontend.API.Models.AccountModel.VerifyResp;
 import teamawesome.cs180frontend.API.RetrofitSingleton;
 import teamawesome.cs180frontend.API.Services.Callbacks.VerifyCallback;
 import teamawesome.cs180frontend.Activities.Application.MainActivity;
@@ -54,19 +54,6 @@ public class VerifyActivity extends AppCompatActivity {
         callback = new VerifyCallback(this);
         createProgressDialog();
         initAnimation();
-    }
-
-    private void createProgressDialog() {
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setCancelable(false);
-        progressDialog.setMessage(getString(R.string.verifying));
-    }
-
-    private void initAnimation() {
-        handler = new Handler();
-        handler.postDelayed(new InitOnboardRunnable(this, verifyText,
-                verifyTIL, buttonLayout,
-                View.VISIBLE), 100);
     }
 
     @OnClick(R.id.onboard_verify)
@@ -115,5 +102,18 @@ public class VerifyActivity extends AppCompatActivity {
     @Subscribe
     public void onVerifyFailure(VerifyStatus status) {
         Utils.failedVerifySnackBar(null, parent, R.color.colorAccent, status.getStatus(), this);
+    }
+
+    private void createProgressDialog() {
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setCancelable(false);
+        progressDialog.setMessage(getString(R.string.verifying));
+    }
+
+    private void initAnimation() {
+        handler = new Handler();
+        handler.postDelayed(new InitOnboardRunnable(this, verifyText,
+                verifyTIL, buttonLayout,
+                View.VISIBLE), 100);
     }
 }

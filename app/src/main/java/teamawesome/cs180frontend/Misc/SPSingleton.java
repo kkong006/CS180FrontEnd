@@ -4,10 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-/**
- * Created by jman0_000 on 10/27/2016.
- */
-
 public class SPSingleton {
     SharedPreferences sp;
     private static SPSingleton instance = null;

@@ -18,8 +18,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import teamawesome.cs180frontend.API.Models.StatusModel.LoginRegisterStatus;
-import teamawesome.cs180frontend.API.Models.UserModel.AccountBundle;
-import teamawesome.cs180frontend.API.Models.UserModel.UserRespBundle;
+import teamawesome.cs180frontend.API.Models.AccountModel.AccountBundle;
+import teamawesome.cs180frontend.API.Models.AccountModel.AccountRespBundle;
 import teamawesome.cs180frontend.API.RetrofitSingleton;
 import teamawesome.cs180frontend.API.Services.Callbacks.LoginRegisterCallback;
 import teamawesome.cs180frontend.Activities.Application.MainActivity;
@@ -142,7 +142,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     @Subscribe //Successful response
-    public void onLogin(UserRespBundle resp) {
+    public void onLogin(AccountRespBundle resp) {
         if (!isRegistering) {
             progressDialog.dismiss();
             Utils.saveUserData(this, resp, accountBundle.getPassword(),

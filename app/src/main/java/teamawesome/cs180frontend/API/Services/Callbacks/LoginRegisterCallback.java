@@ -7,11 +7,11 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import teamawesome.cs180frontend.API.APIConstants;
 import teamawesome.cs180frontend.API.Models.StatusModel.LoginRegisterStatus;
-import teamawesome.cs180frontend.API.Models.UserModel.UserRespBundle;
+import teamawesome.cs180frontend.API.Models.AccountModel.AccountRespBundle;
 
-public class LoginRegisterCallback implements Callback<UserRespBundle> {
+public class LoginRegisterCallback implements Callback<AccountRespBundle> {
     @Override
-    public void onResponse(Call<UserRespBundle> call, Response<UserRespBundle> resp) {
+    public void onResponse(Call<AccountRespBundle> call, Response<AccountRespBundle> resp) {
         System.out.println(resp.code());
         switch (resp.code()) {
             case (APIConstants.HTTP_STATUS_OK):
@@ -23,7 +23,7 @@ public class LoginRegisterCallback implements Callback<UserRespBundle> {
     }
 
     @Override
-    public void onFailure(Call<UserRespBundle> call, Throwable t) {
+    public void onFailure(Call<AccountRespBundle> call, Throwable t) {
         EventBus.getDefault().post(new LoginRegisterStatus(-1));
     }
 }

@@ -8,10 +8,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import teamawesome.cs180frontend.API.Services.MatchingService;
 import teamawesome.cs180frontend.API.Services.UserService;
 
-/**
- * Created by KongK on 10/21/2016.
- */
-
 public class RetrofitSingleton {
     private static RetrofitSingleton instance;
     private UserService userService;

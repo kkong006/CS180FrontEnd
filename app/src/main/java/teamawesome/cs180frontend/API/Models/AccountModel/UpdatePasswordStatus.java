@@ -1,8 +1,4 @@
-package teamawesome.cs180frontend.API.Models.UserModel;
-
-/**
- * Created by jonathan on 1/26/17.
- */
+package teamawesome.cs180frontend.API.Models.AccountModel;
 
 public class UpdatePasswordStatus {
     private int status;

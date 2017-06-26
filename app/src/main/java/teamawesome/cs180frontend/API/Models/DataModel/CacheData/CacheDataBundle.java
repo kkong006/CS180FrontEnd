@@ -11,7 +11,11 @@ import teamawesome.cs180frontend.API.Models.DataModel.ProfBundle;
 import teamawesome.cs180frontend.API.Models.DataModel.SchoolBundle;
 import teamawesome.cs180frontend.API.Models.DataModel.SubjectBundle;
 
-public class CacheDataBundle implements Serializable{
+public class CacheDataBundle implements Serializable {
+    @SerializedName("school_id")
+    @Expose
+    private int schoolId;
+
     @SerializedName("verified")
     @Expose
     private boolean verified;
@@ -39,6 +43,10 @@ public class CacheDataBundle implements Serializable{
     @SerializedName("professors")
     @Expose
     private List<ProfBundle> profs;
+
+    public int getSchoolId() {
+        return schoolId;
+    }
 
     public boolean isVerified() {
         return verified;

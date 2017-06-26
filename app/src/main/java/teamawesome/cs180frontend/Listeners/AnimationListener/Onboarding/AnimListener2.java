@@ -40,7 +40,7 @@ public class AnimListener2 implements Animation.AnimationListener {
                     GetCacheDataCallback callback = new GetCacheDataCallback();
                     RetrofitSingleton.getInstance()
                             .getMatchingService()
-                            .getData(0, null).enqueue(callback);
+                            .getData(null, null).enqueue(callback);
                 } else {
                     EventBus.getDefault().post(true);
                 }

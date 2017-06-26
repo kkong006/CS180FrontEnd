@@ -46,8 +46,8 @@ import teamawesome.cs180frontend.API.Models.StatusModel.CacheReqStatus;
 import teamawesome.cs180frontend.API.Models.StatusModel.ReviewFetchStatus;
 import teamawesome.cs180frontend.API.Models.StatusModel.ReviewRatingStatus;
 import teamawesome.cs180frontend.API.Models.StatusModel.VerifyStatus;
-import teamawesome.cs180frontend.API.Models.UserModel.VerifyBundle;
-import teamawesome.cs180frontend.API.Models.UserModel.VerifyResp;
+import teamawesome.cs180frontend.API.Models.AccountModel.VerifyBundle;
+import teamawesome.cs180frontend.API.Models.AccountModel.VerifyResp;
 import teamawesome.cs180frontend.API.RetrofitSingleton;
 import teamawesome.cs180frontend.API.Services.Callbacks.GetCacheDataCallback;
 import teamawesome.cs180frontend.API.Services.Callbacks.GetReviewsCallback;
@@ -164,7 +164,6 @@ public class MainActivity extends AppCompatActivity {
         toggle.syncState();
 
         //PREVENT USER FROM GETTING ACCESS TO THE WRITE REVIEW ACTIVITY
-        setButtons();
         loadProgressDialog();
 
         setUpAdapter();
@@ -226,21 +225,7 @@ public class MainActivity extends AppCompatActivity {
             progressDialog.setCancelable(false);
         }
 
-        if (requestCode == 1) {
-            if (resultCode == RESULT_OK) {
-                drawerAdapter.changeLoginElem();
-                progressDialog.setMessage(getString(R.string.loading));
-                progressDialog.show();
-
-                isLoading = true;
-
-                RetrofitSingleton.getInstance()
-                        .getMatchingService()
-                        .getData(Utils.getSchoolId(this), Utils.getUserId(this))
-                        .enqueue(new GetCacheDataCallback());
-            }
-            setButtons();
-        } else if (requestCode == 2) {
+        if (requestCode == 2) {
             if (resultCode == RESULT_OK) {
                 mainSWL.setRefreshing(false);
                 errorTV.setVisibility(View.GONE);
@@ -249,15 +234,11 @@ public class MainActivity extends AppCompatActivity {
                 lastSelected = 0;
                 isLoading = true;
 
-                System.out.println(Utils.getSchoolId(this));
                 mainFeedAdapter.clear();
                 progressDialog.setMessage(getString(R.string.loading));
                 progressDialog.show();
 
-                RetrofitSingleton.getInstance()
-                        .getMatchingService()
-                        .getData(Utils.getSchoolId(this), Utils.getUserId(this))
-                        .enqueue(new GetCacheDataCallback());
+                getData();
             }
         } else if (requestCode == 3) {
             if (resultCode == RESULT_OK) {
@@ -364,13 +345,7 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, SearchActivity.class);
             startActivity(intent);
         } else if (position == 4) {
-            //Logout
-            if (drawerAdapter.getItem(position).equals(getString(R.string.login))) {
-                Intent intent = new Intent(this, LoginActivity.class);
-                startActivityForResult(intent, 1);
-            } else {
-                logout();
-            }
+            logout();
         }
     }
 
@@ -535,11 +510,10 @@ public class MainActivity extends AppCompatActivity {
     private void getData() {
         progressDialog.setMessage(getString(R.string.loading));
         progressDialog.show();
-        System.out.println(Utils.getSchoolId(this));
-        System.out.println(Utils.getUserId(this));
+
         RetrofitSingleton.getInstance()
                 .getMatchingService()
-                .getData(Utils.getSchoolId(this), Utils.getUserId(this))
+                .getData(Utils.getUserId(this), Utils.changedSchool(this))
                 .enqueue(new GetCacheDataCallback());
     }
 
@@ -553,15 +527,6 @@ public class MainActivity extends AppCompatActivity {
                         null, null, null,
                         null, offset)
                 .enqueue(new GetReviewsCallback(this));
-    }
-
-    //Show/hide the FAB and tool bar
-    private void setButtons() {
-        if (Utils.getUserId(this) < 1) {
-            fab.setVisibility(View.GONE);
-        } else {
-            fab.setVisibility(View.VISIBLE);
-        }
     }
 
     private void setOnScrollListener() {
@@ -658,6 +623,5 @@ public class MainActivity extends AppCompatActivity {
             }
         }, 150);
     }
-
 
 }

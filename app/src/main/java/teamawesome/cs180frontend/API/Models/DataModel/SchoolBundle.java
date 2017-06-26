@@ -19,9 +19,9 @@ public class SchoolBundle implements Serializable, AbstractBundle {
     @Expose
     private String systemType;
 
-    public SchoolBundle(int schoolId, String name) {
+    public SchoolBundle( int schoolId, String systemType) {
+        this.systemType = systemType;
         this.schoolId = schoolId;
-        this.name = name;
     }
 
     public int getSchoolId() {

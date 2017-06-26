@@ -1,4 +1,4 @@
-package teamawesome.cs180frontend.API.Models.UserModel;
+package teamawesome.cs180frontend.API.Models.AccountModel;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

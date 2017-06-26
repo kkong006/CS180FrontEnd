@@ -23,11 +23,11 @@ import teamawesome.cs180frontend.API.APIConstants;
 import teamawesome.cs180frontend.API.Models.DataModel.SchoolBundle;
 import teamawesome.cs180frontend.API.Models.StatusModel.FailedUpdate;
 import teamawesome.cs180frontend.API.Models.StatusModel.VerifyStatus;
-import teamawesome.cs180frontend.API.Models.UserModel.UpdatePasswordStatus;
-import teamawesome.cs180frontend.API.Models.UserModel.UpdateSchoolStatus;
-import teamawesome.cs180frontend.API.Models.UserModel.UpdateUserBundle;
-import teamawesome.cs180frontend.API.Models.UserModel.VerifyBundle;
-import teamawesome.cs180frontend.API.Models.UserModel.VerifyResp;
+import teamawesome.cs180frontend.API.Models.AccountModel.UpdatePasswordStatus;
+import teamawesome.cs180frontend.API.Models.AccountModel.UpdateSchoolStatus;
+import teamawesome.cs180frontend.API.Models.AccountModel.UpdateAccountBundle;
+import teamawesome.cs180frontend.API.Models.AccountModel.VerifyBundle;
+import teamawesome.cs180frontend.API.Models.AccountModel.VerifyResp;
 import teamawesome.cs180frontend.API.RetrofitSingleton;
 import teamawesome.cs180frontend.API.Services.Callbacks.ChangePasswordCallback;
 import teamawesome.cs180frontend.API.Services.Callbacks.ChangeSchoolCallback;
@@ -35,7 +35,6 @@ import teamawesome.cs180frontend.API.Services.Callbacks.VerifyCallback;
 import teamawesome.cs180frontend.Adapters.SimpleACAdapter;
 import teamawesome.cs180frontend.Misc.Constants;
 import teamawesome.cs180frontend.Misc.DataSingleton;
-import teamawesome.cs180frontend.Misc.SPSingleton;
 import teamawesome.cs180frontend.Misc.Utils;
 import teamawesome.cs180frontend.R;
 
@@ -128,13 +127,15 @@ public class SettingElemActivity extends AppCompatActivity {
         if (newSchool != null) {
             if (newSchool.getSchoolId() != Utils.getSchoolId(this)) {
 
-                UpdateUserBundle user = new UpdateUserBundle(Utils.getUserId(this),
+                UpdateAccountBundle user = new UpdateAccountBundle(Utils.getUserId(this),
                         Utils.getPassword(this),
                         Utils.getPassword(this),
                         newSchool.getSchoolId());
 
                 progressDialog.setMessage(getString(R.string.updating_account));
                 progressDialog.show();
+
+                Utils.setChangeSchool(this, true);
                 ChangeSchoolCallback callback = new ChangeSchoolCallback();
                 RetrofitSingleton.getInstance()
                         .getUserService()
@@ -164,7 +165,7 @@ public class SettingElemActivity extends AppCompatActivity {
             focusView = newPasswordET;
         } else if (oldPassword.equals(Utils.getPassword(this))) {
             newPasswordHolder = newPassword;
-            UpdateUserBundle user = new UpdateUserBundle(Utils.getUserId(this),
+            UpdateAccountBundle user = new UpdateAccountBundle(Utils.getUserId(this),
                     oldPassword,
                     newPassword,
                     schoolId);
@@ -222,7 +223,8 @@ public class SettingElemActivity extends AppCompatActivity {
     public void onUpdateSchoolResp(UpdateSchoolStatus resp) {
         progressDialog.dismiss();
         if (resp.getStatus() == APIConstants.HTTP_STATUS_OK) {
-            Utils.saveNewSchoolData(this, newSchool);
+            Utils.setChangeSchool(this, false);
+            Utils.saveSchoolData(this, newSchool);
             schoolAC.setText("");
             Intent intent = new Intent();
             setResult(RESULT_OK, intent);
@@ -237,7 +239,6 @@ public class SettingElemActivity extends AppCompatActivity {
     public void onUpdatePasswordResp(UpdatePasswordStatus resp) {
         progressDialog.dismiss();
         if (resp.getStatus() == APIConstants.HTTP_STATUS_OK) {
-            System.out.println(newPasswordHolder);
             Utils.savePassword(this, newPasswordHolder);
             oldPasswordET.setText("");
             newPasswordET.setText("");

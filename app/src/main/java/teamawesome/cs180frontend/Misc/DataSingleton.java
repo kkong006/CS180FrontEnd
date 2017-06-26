@@ -86,6 +86,13 @@ public class DataSingleton {
             professorMap.put(p.getName(), p.getProfessorId());
         }
 
+        if (Utils.changedSchool(context)) {
+            Utils.saveSchoolData(context,
+                    new SchoolBundle(data.getSchoolId(), data.getSystemType()));
+            Utils.setSystemType(context, data.getSystemType());
+            Utils.setChangeSchool(context, false);
+        }
+        
         cacheReviewRatings(context, data.getReviewRatings().getLiked(),
                 data.getReviewRatings().getDisliked());
     }
@@ -175,7 +182,8 @@ public class DataSingleton {
 
     public Integer getSchoolId(String schoolName) {
         //NOTE: ONLY OBJECTS CAN BE NULL NOT PRIMITIVES
-        return schoolMap.get(schoolName).getSchoolId(); //RETURNS NULL IF NO MATCH FOUND
+        SchoolBundle school = schoolMap.get(schoolName);
+        return school != null ? school.getSchoolId() : null; //RETURNS NULL IF NO MATCH FOUND
     }
 
     public SchoolBundle getSchoolBundleByName(String schoolName) {

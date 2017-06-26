@@ -5,10 +5,6 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-/**
- * Created by KongK on 11/7/2016.
- */
-
 public class ReviewIDRespBundle implements Serializable {
 
     @SerializedName("review_id")

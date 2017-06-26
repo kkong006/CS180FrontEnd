@@ -19,6 +19,7 @@ public class Constants {
     2 values at most and using an array obfuscates things    */
     public static final String USER_ID = "USER_ID";
     public static final String SYSTEM_TYPE = "SYSTEM_TYPE";
+    public static final String CHANGED_SCHOOL = "CHANGED_SCHOOL";
 
     public static final String PROF_NAME = "PROF_NAME";
     public static final String PROF_ID = "PROF_ID";

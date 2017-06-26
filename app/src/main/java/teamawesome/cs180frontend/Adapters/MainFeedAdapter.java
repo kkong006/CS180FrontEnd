@@ -25,7 +25,6 @@ public class MainFeedAdapter extends BaseAdapter{
         this.reviewList = reviewList;
 
         this.adRequest = new AdRequest.Builder()
-                .addTestDevice("EF1536FC033B268C4107DA25CBABD3CE")
                 .addKeyword("college")
                 .addKeyword("university")
                 .addKeyword("education")

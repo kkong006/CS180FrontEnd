@@ -7,12 +7,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import teamawesome.cs180frontend.API.APIConstants;
 import teamawesome.cs180frontend.API.Models.StatusModel.FailedUpdate;
-import teamawesome.cs180frontend.API.Models.UserModel.UpdateSchoolStatus;
+import teamawesome.cs180frontend.API.Models.AccountModel.UpdateSchoolStatus;
 import teamawesome.cs180frontend.Misc.Utils;
-
-/**
- * Created by jonathan on 1/26/17.
- */
 
 public class ChangeSchoolCallback implements Callback<Void> {
     @Override

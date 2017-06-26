@@ -5,10 +5,6 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-/**
- * Created by jman0_000 on 10/31/2016.
- */
-
 public class SubjectBundle implements Serializable {
     @SerializedName("subject_id")
     @Expose

@@ -10,10 +10,6 @@ import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewRatingResp;
 import teamawesome.cs180frontend.API.Models.StatusModel.ReviewRatingStatus;
 import teamawesome.cs180frontend.Misc.Utils;
 
-/**
- * Created by KongK on 10/26/2016.
- */
-
 public class PostReviewRatingCallback implements Callback<ReviewRatingResp> {
 
     @Override

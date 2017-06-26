@@ -10,14 +10,10 @@ import teamawesome.cs180frontend.API.Models.DataModel.CacheData.CacheDataBundle;
 import teamawesome.cs180frontend.API.Models.StatusModel.CacheReqStatus;
 import teamawesome.cs180frontend.Misc.Utils;
 
-/**
- * Created by jman0_000 on 10/31/2016.
- */
-
 public class GetCacheDataCallback implements Callback<CacheDataBundle> {
     @Override
     public void onResponse(Call<CacheDataBundle> call, Response<CacheDataBundle> resp) {
-        System.out.println(resp.code());
+        System.out.println("Data: " + resp.code());
         switch (resp.code()) {
             case APIConstants.HTTP_STATUS_OK:
                 EventBus.getDefault().post(resp.body());

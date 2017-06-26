@@ -1,9 +1,5 @@
 package teamawesome.cs180frontend.API;
 
-/**
- * Created by jman0_000 on 10/27/2016.
- */
-
 public class APIConstants {
     public static final String BASE_URL = "https://cs180team7.herokuapp.com";
 

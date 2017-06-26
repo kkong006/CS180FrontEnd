@@ -9,10 +9,6 @@ import teamawesome.cs180frontend.API.APIConstants;
 import teamawesome.cs180frontend.API.Models.ReviewModel.ReviewIDRespBundle;
 import teamawesome.cs180frontend.API.Models.StatusModel.PostReviewStatus;
 
-/**
- * Created by KongK on 10/29/2016.
- */
-
 public class PostReviewCallback implements Callback<ReviewIDRespBundle> {
     @Override
     public void onResponse(Call<ReviewIDRespBundle> call, Response<ReviewIDRespBundle> resp) {

@@ -1,15 +1,11 @@
-package teamawesome.cs180frontend.API.Models.UserModel;
+package teamawesome.cs180frontend.API.Models.AccountModel;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-/**
- * Created by KongK on 10/21/2016.
- */
-
-public class UpdateUserBundle implements Serializable{
+public class UpdateAccountBundle implements Serializable{
     @SerializedName("id")
     @Expose
     private int id;
@@ -26,7 +22,7 @@ public class UpdateUserBundle implements Serializable{
     @Expose
     private int school_id;
 
-    public UpdateUserBundle(int id, String password, String new_password, int school_id) {
+    public UpdateAccountBundle(int id, String password, String new_password, int school_id) {
         this.id = id;
         this.password = password;
         this.new_password = new_password;

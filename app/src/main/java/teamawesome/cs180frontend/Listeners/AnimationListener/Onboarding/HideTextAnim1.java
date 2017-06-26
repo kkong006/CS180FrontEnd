@@ -4,13 +4,9 @@ import android.app.ProgressDialog;
 import android.view.animation.Animation;
 import android.widget.TextView;
 
-import teamawesome.cs180frontend.API.Models.UserModel.AccountBundle;
+import teamawesome.cs180frontend.API.Models.AccountModel.AccountBundle;
 import teamawesome.cs180frontend.API.RetrofitSingleton;
 import teamawesome.cs180frontend.API.Services.Callbacks.LoginRegisterCallback;
-
-/**
- * Created by jonathan on 3/8/17.
- */
 
 public class HideTextAnim1 implements Animation.AnimationListener {
     private int visibility;

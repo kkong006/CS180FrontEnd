@@ -9,7 +9,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import teamawesome.cs180frontend.API.APIConstants;
 import teamawesome.cs180frontend.API.Models.StatusModel.VerifyStatus;
-import teamawesome.cs180frontend.API.Models.UserModel.VerifyResp;
+import teamawesome.cs180frontend.API.Models.AccountModel.VerifyResp;
 
 public class VerifyCallback implements Callback<VerifyResp> {
     private Context context;
