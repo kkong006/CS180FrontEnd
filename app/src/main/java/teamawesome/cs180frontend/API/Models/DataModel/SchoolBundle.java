@@ -13,7 +13,7 @@ public class SchoolBundle implements Serializable, AbstractBundle {
 
     @SerializedName("school_name")
     @Expose
-    private String name;
+    private String schoolName;
 
     @SerializedName("system_type")
     @Expose
@@ -28,8 +28,9 @@ public class SchoolBundle implements Serializable, AbstractBundle {
         return schoolId;
     }
 
+    @Override
     public String getName() {
-        return name;
+        return schoolName;
     }
 
     public String getSystemType() {

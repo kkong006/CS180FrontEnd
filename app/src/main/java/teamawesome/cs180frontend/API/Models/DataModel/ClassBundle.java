@@ -22,13 +22,13 @@ public class ClassBundle implements Serializable, AbstractBundle {
 
     @SerializedName("class_name")
     @Expose
-    private String name;
+    private String className;
 
     public ClassBundle(int subjectId, int classId, int schoolId, String className) {
         this.subjectId = subjectId;
         this.classId = classId;
         this.schoolId = schoolId;
-        this.name = className;
+        this.className = className;
     }
 
     public int getSchoolId() {
@@ -51,9 +51,10 @@ public class ClassBundle implements Serializable, AbstractBundle {
         this.classId = classId;
     }
 
+    @Override
     public String getName() {
-        return name;
+        return this.className;
     }
 
-    public void setName(String name) { this.name = name; }
+    public void setName(String className) { this.className = className; }
 }

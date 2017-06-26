@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/parent_account_info"
     android:layout_width="match_parent"
@@ -14,46 +15,46 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/onboard_text_1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/activity_horizontal_margin"
-            android:visibility="invisible"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:gravity="center_horizontal"
-            android:textColor="@color/colorWhite"
             android:text="@string/enter_info"
-            android:id="@+id/onboard_text_1"/>
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="@color/colorWhite"
+            android:visibility="invisible" />
 
         <LinearLayout
+            android:id="@+id/info_layout_1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="invisible"
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:orientation="vertical"
-            android:id="@+id/info_layout_1">
+            android:visibility="invisible">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:orientation="vertical"
-                android:layout_height="85dp">
+                android:layout_height="85dp"
+                android:orientation="vertical">
 
                 <android.support.design.widget.TextInputLayout
+                    android:id="@+id/onboard_phone_number_TIL"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColorHint="@color/colorWhite"
-                    android:id="@+id/onboard_phone_number_TIL">
+                    android:textColorHint="@color/colorWhite">
 
-                <EditText
-                    style="@style/WhiteTextTheme"
-                    android:id="@+id/onboarding_number"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/phone_number"
-                    android:inputType="number"
-                    android:textSize="18sp"
-                    android:maxLength="10"
-                    android:maxLines="1" />
+                    <EditText
+                        android:id="@+id/onboarding_number"
+                        style="@style/WhiteTextTheme"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/phone_number"
+                        android:inputType="number"
+                        android:maxLength="10"
+                        android:maxLines="1"
+                        android:textSize="18sp" />
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -61,79 +62,82 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:orientation="vertical"
-                android:layout_height="85dp">
+                android:layout_height="85dp"
+                android:orientation="vertical">
 
                 <android.support.design.widget.TextInputLayout
+                    android:id="@+id/onboarding_password_til"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColorHint="@color/colorWhite"
-                    android:id="@+id/onboarding_password_til">
+                    android:orientation="vertical"
+                    app:passwordToggleEnabled="true"
+                    app:passwordToggleTint="@color/colorWhite"
+                    android:textColorHint="@color/colorWhite">
 
                     <EditText
-                        style="@style/WhiteTextTheme"
                         android:id="@+id/onboarding_password"
-                        android:digits="@string/password_digits"
+                        style="@style/WhiteTextTheme"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:digits="@string/password_digits"
                         android:hint="@string/password_hint"
-                        android:maxLength="16"
                         android:inputType="textPassword"
-                        android:textSize="18sp"
-                        android:maxLines="1" />
+                        android:maxLength="16"
+                        android:maxLines="1"
+                        android:textSize="18sp" />
 
                 </android.support.design.widget.TextInputLayout>
 
             </LinearLayout>
 
             <Button
+                android:id="@+id/next"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="invisible"
-                android:background="@color/colorAccent"
                 android:layout_gravity="end"
-                android:textColor="@color/colorWhite"
+                android:background="@color/colorAccent"
                 android:text="@string/next"
-                android:id="@+id/next"/>
+                android:textColor="@color/colorWhite"
+                android:visibility="invisible" />
 
             <TextView
+                android:id="@+id/loading_schools"
                 style="@style/WhiteTextTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:visibility="invisible"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:text="@string/onboard_loading"
-                android:id="@+id/loading_schools" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:visibility="invisible" />
 
             <LinearLayout
+                android:id="@+id/school_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:visibility="invisible"
-                android:id="@+id/school_layout">
+                android:visibility="invisible">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:orientation="vertical"
-                    android:layout_height="85dp">
+                    android:layout_height="85dp"
+                    android:orientation="vertical">
 
                     <android.support.design.widget.TextInputLayout
+                        android:id="@+id/onboarding_school_TIL"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColorHint="@color/colorWhite"
-                        android:id="@+id/onboarding_school_TIL">
+                        android:textColorHint="@color/colorWhite">
 
                         <AutoCompleteTextView
+                            android:id="@+id/onboarding_school_ac"
                             style="@style/WhiteTextTheme"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/enter_school_name"
-                            android:inputType="text"
                             android:imeOptions="actionDone"
+                            android:inputType="text"
                             android:maxLines="1"
-                            android:textSize="18sp"
-                            android:id="@+id/onboarding_school_ac">
+                            android:textSize="18sp">
                         </AutoCompleteTextView>
 
                     </android.support.design.widget.TextInputLayout>
@@ -141,14 +145,14 @@
                 </LinearLayout>
 
                 <Button
+                    android:id="@+id/done"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:visibility="invisible"
-                    android:background="@color/colorAccent"
                     android:layout_gravity="end"
-                    android:textColor="@color/colorWhite"
+                    android:background="@color/colorAccent"
                     android:text="@string/done"
-                    android:id="@+id/done"/>
+                    android:textColor="@color/colorWhite"
+                    android:visibility="invisible" />
 
             </LinearLayout>
 

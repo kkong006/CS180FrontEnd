@@ -9,14 +9,14 @@ public class ReviewIDRespBundle implements Serializable {
 
     @SerializedName("review_id")
     @Expose
-    private int review_id;
+    private int reviewId;
 
 
-    public ReviewIDRespBundle(int review_id) {
-        this.review_id = review_id;
+    public ReviewIDRespBundle(int reviewId) {
+        this.reviewId = reviewId;
     }
 
     public int getReviewId() {
-        return review_id;
+        return reviewId;
     }
 }

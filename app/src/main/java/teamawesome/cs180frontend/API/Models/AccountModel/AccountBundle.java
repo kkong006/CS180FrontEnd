@@ -24,10 +24,10 @@ public class AccountBundle implements Serializable {
         this.schoolId = schoolId;
     }
 
-    public void setLoginRegisterBundle(String phoneNumber, String password, int school_id) {
+    public void setLoginRegisterBundle(String phoneNumber, String password, int schoolId) {
         this.phoneNumber = phoneNumber;
         this.password = password;
-        this.schoolId = school_id;
+        this.schoolId = schoolId;
     }
 
     public String getPhoneNumber() {

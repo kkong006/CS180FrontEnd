@@ -11,6 +11,5 @@ public final class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         Iconify.with(new FontAwesomeModule());
-
     }
 }

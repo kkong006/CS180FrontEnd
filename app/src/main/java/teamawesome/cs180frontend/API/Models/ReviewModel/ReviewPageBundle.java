@@ -32,8 +32,4 @@ public class ReviewPageBundle {
     public void setReviews(List<ReviewBundle> reviews) {
         this.reviews = reviews;
     }
-
-    /*public void add(int index, ReviewBundle review) {
-        this.reviews.add(index, review);
-    }*/
 }

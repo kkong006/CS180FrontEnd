@@ -160,6 +160,8 @@ public class Utils {
         return result.toString();
     }
 
+    /*
+    //Unused for now
     public static String getLocalTimeString(String timestamp) {
         try {
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
@@ -172,6 +174,7 @@ public class Utils {
             return null;
         }
     }
+    */
 
     //retrieve how the user voted on a review (up or down)
     public static int getReviewRating(int reviewId) {

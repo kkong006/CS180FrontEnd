@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-public class SubjectBundle implements Serializable {
+public class SubjectBundle implements Serializable, AbstractBundle {
     @SerializedName("subject_id")
     @Expose
     private int subjectId;
@@ -53,7 +53,8 @@ public class SubjectBundle implements Serializable {
         this.subjectIdent = subjectIdent;
     }
 
-    public String getSubjectName() {
+    @Override
+    public String getName() {
         return subjectName;
     }
 

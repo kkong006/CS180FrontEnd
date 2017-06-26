@@ -16,17 +16,17 @@ public class RateReview {
 
     @SerializedName("review_id")
     @Expose
-    private int review_id;
+    private int reviewId;
 
     @SerializedName("review_rating")
     @Expose
-    private int review_rating;
+    private int reviewRating;
 
 
-    public RateReview(int id, String password, int review_id, int review_rating) {
+    public RateReview(int id, String password, int reviewId, int reviewRating) {
         this.id = id;
         this.password = password;
-        this.review_id = review_id;
-        this.review_rating = review_rating;
+        this.reviewId = reviewId;
+        this.reviewRating = reviewRating;
     }
 }

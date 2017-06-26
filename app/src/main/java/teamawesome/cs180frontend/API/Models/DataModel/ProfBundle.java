@@ -13,18 +13,19 @@ public class ProfBundle implements Serializable, AbstractBundle {
 
     @SerializedName("prof_name")
     @Expose
-    private String name;
+    private String profName;
 
-    public ProfBundle(int prof_id, String prof_name) {
+    public ProfBundle(int prof_id, String profName) {
         this.prof_id = prof_id;
-        this.name = prof_name;
+        this.profName = profName;
     }
 
     public int getProfessorId() {
         return prof_id;
     }
 
+    @Override
     public String getName() {
-        return name;
+        return profName;
     }
 }

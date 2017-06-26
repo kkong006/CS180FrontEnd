@@ -123,6 +123,9 @@
     <string name="students_dislike"> students dislike this review</string>
     <string name="you_like"> you like this review</string>
     <string name="you_dislike"> you dislike this review</string>
+    <string formatted="false" name="report_template">
+        Please remove review %d for the following reason: %s.
+    </string>
     <string name="share_template" formatted="false">
         Check out this review for %s taught by %s for %s; I think you\'ll like it!\n\n%s
     </string>

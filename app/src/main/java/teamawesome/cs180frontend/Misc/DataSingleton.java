@@ -97,30 +97,6 @@ public class DataSingleton {
                 data.getReviewRatings().getDisliked());
     }
 
-    public List<SchoolBundle> cacheSchools(List<SchoolBundle> schools) {
-        this.schoolCache.clear();
-        this.schoolCache.addAll(schools);
-        return this.schoolCache;
-    }
-
-    public List<SubjectBundle> cacheSubjects(List<SubjectBundle> subjects) {
-        this.subjectCache.clear();
-        this.subjectCache.addAll(subjects);
-        return this.subjectCache;
-    }
-
-    public List<ClassBundle> cacheClasses(List<ClassBundle> classes) {
-        this.classCache.clear();
-        this.classCache.addAll(classes);
-        return this.classCache;
-    }
-
-    public List<ProfBundle> cacheProfessors(List<ProfBundle> profs) {
-        this.professorCache.clear();
-        this.professorCache.addAll(profs);
-        return this.professorCache;
-    }
-
     public void cacheReviewRatings(Context context, List<ReviewId> liked, List<ReviewId> disliked) {
         Set<String> cachedLiked = SPSingleton.getInstance(context)
                 .getSp()
@@ -225,15 +201,5 @@ public class DataSingleton {
     public HashSet<Integer> getDislikedSet() {
         return dislikedSet;
     }
-
-    public HashMap<String, SchoolBundle> getSchoolMap() {
-        return schoolMap;
-    }
-
-    public void setSchoolMap(HashMap<String, SchoolBundle> schoolMap) { this.schoolMap = schoolMap; }
-
-    public HashMap<String, Integer> getSubjectMap() { return subjectMap; }
-
-    public void setSubjectMap(HashMap<String, Integer> subjectMap) { this.subjectMap = subjectMap; }
 
 }

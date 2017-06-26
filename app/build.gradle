@@ -9,8 +9,8 @@ android {
         applicationId "teamawesome.cs180frontend"
         minSdkVersion 18
         targetSdkVersion 25
-        versionCode 6
-        versionName "1.05"
+        versionCode 7
+        versionName "1.06"
     }
 
     buildTypes {

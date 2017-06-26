@@ -16,20 +16,20 @@ public class UpdateAccountBundle implements Serializable{
 
     @SerializedName("new_password")
     @Expose
-    private String new_password;
+    private String newPassword;
 
     @SerializedName("school_id")
     @Expose
-    private int school_id;
+    private int schoolId;
 
-    public UpdateAccountBundle(int id, String password, String new_password, int school_id) {
+    public UpdateAccountBundle(int id, String password, String newPassword, int schoolId) {
         this.id = id;
         this.password = password;
-        this.new_password = new_password;
-        this.school_id = school_id;
+        this.newPassword = newPassword;
+        this.schoolId = schoolId;
     }
 
     public void setPassword(String new_password) {
-        this.new_password = new_password;
+        this.newPassword = new_password;
     }
 }

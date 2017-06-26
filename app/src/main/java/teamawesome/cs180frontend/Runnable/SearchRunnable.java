@@ -40,7 +40,7 @@ public class SearchRunnable implements Runnable{
         } else if (type.equals(context.getString(R.string.subjects))) {
             for (SubjectBundle s : DataSingleton.getInstance().getSubjectCache()) {
                 String subjectIdent = s.getSubjectIdent();
-                String subjectName = s.getSubjectName();
+                String subjectName = s.getName();
                 if (subjectIdent.equals(queryParam.toUpperCase()) ||
                         subjectName.contains(queryParam)) {
                     results.add(subjectIdent + " (" + subjectName + ")");

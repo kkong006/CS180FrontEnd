@@ -3,6 +3,7 @@ package teamawesome.cs180frontend.Activities.Application;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AlertDialog;
@@ -16,6 +17,8 @@ import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+
+import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -45,6 +48,7 @@ public class ReadReviewActivity extends AppCompatActivity {
 
     ReviewBundle review;
     AlertDialog alertDialog;
+    String[] reportArr;
     final Context context = this;
 
     private int userRating = 0;
@@ -58,6 +62,8 @@ public class ReadReviewActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        reportArr = getResources().getStringArray(R.array.report_option_array);
 
         if(Utils.getUserId(this) == 0) {
             thumbsUp.setVisibility(View.GONE);
@@ -186,7 +192,6 @@ public class ReadReviewActivity extends AppCompatActivity {
             isRatingProcessing = true;
             int userId = Utils.getUserId(this);
             String password = Utils.getPassword(this);
-            //System.out.println("USER ID " + userId + "\nPASSWORD " + password + "\nREVIEW ID " + mReviewId + "\nUSER RATING " + userRating + "\nNEW USER RATING " + newUserRating);
             RateReview r = new RateReview(userId, password, review.getReviewId(), newUserRating);
             PostReviewRatingCallback callback = new PostReviewRatingCallback();
             RetrofitSingleton.getInstance().getMatchingService()
@@ -199,10 +204,21 @@ public class ReadReviewActivity extends AppCompatActivity {
         if (alertDialog == null) {
             alertDialog = new AlertDialog.Builder(this)
                     .setTitle(R.string.report)
-                    .setItems(R.array.report_option_array, new DialogInterface.OnClickListener() {
+                    .setItems(reportArr, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            Toast.makeText(context, R.string.review_reported, Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:"));
+                            intent.putExtra(Intent.EXTRA_EMAIL, new String[]{Constants.EMAIL});
+                            intent.putExtra(
+                                    Intent.EXTRA_SUBJECT,
+                                    String.format(Locale.US, "Report for review %d", review.getReviewId()));
+                                    intent.putExtra(Intent.EXTRA_TEXT,
+                                            String.format(getString(R.string.report_template),
+                                                    review.getReviewId(),
+                                                    reportArr[which]));
+                            if (intent.resolveActivity(getPackageManager()) != null) {
+                                startActivity(intent);
+                            }
                         }
                     }).create();
         }
