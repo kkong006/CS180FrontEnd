@@ -452,6 +452,8 @@ public class MainActivity extends AppCompatActivity {
     @Subscribe
     public void reviewsResp(final ReviewPageBundle page) {
         if (page.getContext().equals(this)) {
+            mainSWL.setVisibility(View.VISIBLE);
+
             System.out.println("REVIEW COUNT " + page.getReviews().size());
             offset += page.getReviews().size();
 
